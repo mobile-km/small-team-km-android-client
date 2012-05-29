@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="50dp"
+>
+	<ImageView 
+		android:id="@+id/user_avatar"
+		style="@style/feed_list_item_avatar"
+		android:src="@drawable/user_default_avatar_normal"
+		android:layout_centerVertical="true"
+		android:layout_alignParentLeft="true"
+	 	android:visibility="gone"
+	/>
+	<TextView 
+		android:id="@+id/user_name" 
+		style="@style/feed_list_item_name"
+		android:text=""
+		android:layout_alignParentTop="true"
+		android:layout_toRightOf="@+id/user_avatar"
+		android:gravity="bottom"
+		android:visibility="gone"
+	/>
+	<TextView 
+		android:id="@+id/updated_at"
+	    style="@style/feed_list_item_created_at" 
+	    android:layout_alignParentBottom="true"
+	    android:layout_toRightOf="@+id/user_avatar"
+	    android:text=""
+	    android:gravity="top"
+	    android:visibility="gone"
+	/>
+</RelativeLayout>

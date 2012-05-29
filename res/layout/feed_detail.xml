@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 主题详细信息页 -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/body"
+>
+
+	<RelativeLayout
+		style="@style/head_bar"
+	>
+		<TextView
+			style="@style/head_bar_text_center" 
+			android:text="主题详情"
+		/>
+		<Button 
+			style="@style/head_bar_button_go_back"
+		/>
+	</RelativeLayout>
+
+	<ScrollView
+		android:id="@+id/feed_detail_scroll"
+		android:scrollbars="vertical"
+		android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+	>    
+		<LinearLayout
+			android:orientation="vertical"
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="fill_parent"
+  		>
+  			<!-- 作者信息 -->
+			<include 
+				layout="@layout/part_feed_userinfo"
+			/>
+			
+			<LinearLayout
+				android:orientation="vertical"
+				style="@style/feed_detail_content"
+			>
+				<RelativeLayout
+					android:id="@+id/feed_detail_photos"
+					android:orientation="vertical"
+					android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"
+		        	android:paddingBottom="9dp"
+		        	android:visibility="gone"
+				>
+					<com.mindpin.widget.MindpinImageSwitcher
+						android:layout_gravity="center"
+				    	android:id="@+id/feed_detail_photos_image_switcher"
+						android:layout_width="302dp"
+		        		android:layout_height="302dp"
+	        		/>
+	        		<TextView
+	        			android:id="@+id/feed_detail_photos_footer"
+	        			android:layout_width="300dp"
+	        			android:layout_height="32dp"
+	        			android:background="#99000000"
+	        			android:textColor="#fff"
+	        			android:gravity="center"
+	        			android:layout_alignParentBottom="true"
+	        			android:layout_centerHorizontal="true"
+	        		/>
+				</RelativeLayout>
+				
+			    <TextView 
+			    	android:id="@+id/feed_title"
+			    	style="@style/feed_list_item_title"
+			    />
+			    <TextView 
+			    	android:id="@+id/feed_detail"
+			    	style="@style/feed_list_item_text"
+			    />
+			    <Button
+					android:id="@+id/send_feed_comment_bn"
+					android:text="发送评论"
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content"
+					/>
+			    <Button
+					android:id="@+id/feed_comment_list"
+					android:text="评论列表"
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content"
+					/>
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

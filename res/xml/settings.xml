@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:title="设置"
+>
+	<ListPreference
+		android:entries="@array/upload_photo_quality_entry" 
+		android:entryValues="@array/upload_photo_quality_value"
+		android:title="上传图片质量"
+		android:key="@string/upload_photo_quality"
+		android:summary="发送主题时，上传的图片的质量"
+		android:defaultValue="0"
+	></ListPreference>
+</PreferenceScreen>

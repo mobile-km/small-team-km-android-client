@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- “关于”页面 -->
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/body"
+>	
+  	<com.mindpin.widget.view.HeadBar
+  		style="@style/head_bar"
+  		title="关于…"
+  	/>
+	
+	<ScrollView
+		android:scrollbars="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#000"
+	>
+		<LinearLayout 
+			style="@style/main"
+			android:background="#111"
+		>
+			<WebView 
+				android:id="@+id/webView1" 
+				android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:padding="0dp"
+				android:layout_margin="0dp"
+				android:visibility="gone"
+			>
+			</WebView>
+			
+			<ImageView 
+				style="@style/mindpin_logo_about"
+			/>
+			<TextView
+				android:text="@string/app_version_full" 
+				style="@style/about_text"
+			/>
+			<TextView
+				android:text="程序：fushang318" 
+				style="@style/about_text"
+			/>
+			<TextView
+				android:text="设计与美术：ben7th" 
+				style="@style/about_text"
+			/>
+			
+			<TextView
+				android:text="参与测试：fushang318, ben7th, liyutong, 月如卡卡, cagia" 
+				style="@style/about_text"
+			/>
+			
+			<TextView
+				android:text="感谢您的使用:)" 
+				style="@style/about_text"
+			/>
+			
+			<Button 
+				android:text="访问我们的网站"
+				style="@style/about_site_button"
+				android:layout_marginBottom="10dp"
+				android:onClick="open_mindpin_website"
+			/>
+			
+			<TextView
+				android:text="更新记录：" 
+				style="@style/about_text"
+			/>
+			
+			<TextView
+				android:text="2011年11月8日，0.0.14a\n加入人际关系浏览" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年11月7日，0.0.13\n加入主题的评论，评论浏览" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年11月3日，0.0.12\n加入多图片手势切换" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月29日，0.0.11\n调整优化主题列表和详情页面显示样式" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月24日，0.0.10\n加入本地图片缓存" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月21日，0.0.9\n加入多账号管理和切换" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月19日，0.0.8\n加入主题详情查看" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月17日，0.0.7\n优化数据同步机制，为用户数据建立本地缓存" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月13日，0.0.6\n界面调整，加入本地存储" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年10月10日，0.0.5\n服务端API调整，框架重构，修改大量BUG" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月30日，0.0.4\n加入主题浏览，界面调整，速度优化" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月19日，0.0.3b\n加入草稿管理" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月16日，0.0.3a\n加入照片上传，调整优化界面" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月10日，0.0.2\n加入收集册管理" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月6日，0.0.1\n加入主题创建" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月5日\n主界面导航" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月4日\n基础HTTP协议框架" 
+				style="@style/about_text_s"
+			/>
+			
+			<TextView
+				android:text="2011年9月2日\n工程原型" 
+				style="@style/about_text_s"
+			/>
+	    </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

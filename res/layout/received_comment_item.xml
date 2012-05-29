@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <!-- 作者信息 -->
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="50dp"
+	>
+	
+		<ImageView 
+			android:id="@+id/user_avatar"
+			android:src="@drawable/user_default_avatar_normal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_alignParentLeft="true"
+		/>
+		<TextView
+			android:id="@+id/user_name" 
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_toRightOf="@+id/user_avatar"
+			android:gravity="bottom"
+		/>
+		<TextView
+			android:id="@+id/created_at"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:layout_toRightOf="@+id/user_avatar"
+		    android:gravity="top"
+		/>
+	</RelativeLayout>
+    
+    <!-- 评论内容 -->
+    <TextView
+    	android:id="@+id/feed_comment_content"
+   		android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"
+    />
+</LinearLayout>

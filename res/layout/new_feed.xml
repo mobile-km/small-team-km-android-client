@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:focusable="true"
+  	android:focusableInTouchMode="true"
+	style="@style/body"
+>
+	
+	<RelativeLayout 
+		style="@style/new_feed_layout_main"
+	>
+		<RelativeLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_above="@+id/bottom_bar"
+		>
+			<!-- 标题输入 -->
+			<EditText
+				android:id="@+id/feed_title_et"
+				android:singleLine="true"
+				android:hint="@string/new_feed_title_et"
+				android:layout_alignParentTop="true"
+				style="@style/new_feed_layout_title_inputer"
+			/>
+			
+			<!-- 图片展示栏 -->
+			<RelativeLayout
+				android:id="@+id/feed_captures_parent"
+				android:layout_below="@+id/feed_title_et"
+				style="@style/new_feed_layout_photo_shower"
+			>
+				<LinearLayout
+					android:id="@+id/new_feed_layout_photo_shower_top_line"
+					style="@style/new_feed_layout_photo_shower_top_line_open"
+				/>
+				<HorizontalScrollView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentTop="true"
+				>
+					<LinearLayout
+						android:id="@+id/feed_captures"
+						android:orientation="horizontal"
+					 	android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+					>
+					</LinearLayout>
+				</HorizontalScrollView>
+			</RelativeLayout>
+			
+			<!-- 正文输入 -->
+			<RelativeLayout
+				android:id="@+id/feed_detail_parent"
+				android:layout_below="@+id/feed_captures_parent"
+				android:layout_above="@+id/pulish_location_parent"
+				style="@style/new_feed_layout_detail_inputer_container"
+			>
+				<LinearLayout
+					android:id="@+id/feed_detail_inputer_top_line"
+					style="@style/new_feed_layout_detail_inputer_top_line"
+				/>
+				<EditText
+					android:id="@+id/feed_content_et"
+					android:layout_below="@+id/feed_detail_inputer_top_line"
+					android:hint="@string/new_feed_content_et"
+					style="@style/new_feed_layout_detail_inputer"
+				/>
+			</RelativeLayout>
+			
+			<LinearLayout
+				android:id="@+id/publish_location_parent"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_alignParentBottom="true"
+				android:orientation="horizontal"
+			>
+				<CheckBox
+					android:id="@+id/pulish_location"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentBottom="true"
+					android:text="发布地理信息"
+				/>
+				<Button
+					android:id="@+id/my_location"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="查看我的位置"
+				/>
+			</LinearLayout>
+		</RelativeLayout>
+		
+		<!-- 窗口底栏 -->
+		<LinearLayout
+			android:id="@+id/bottom_bar"
+			android:layout_alignParentBottom="true"
+			style="@style/bottom_bar"
+		>
+			<LinearLayout
+				style="@style/bottom_bar_top_line"
+			/>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="40dp"
+				android:layout_alignParentBottom="true"
+				android:background="#f1f1f1"
+				android:weightSum="12"
+			>	
+				<ImageButton
+					android:id="@+id/capture_bn"
+					android:layout_width="40dp"
+					android:layout_height="fill_parent"
+					android:padding="5dp"
+					android:adjustViewBounds="true"
+					android:scaleType="centerInside"
+					android:src="@drawable/btn_camera"
+					android:background="@drawable/capture_bn"
+				/>
+				
+				<LinearLayout
+					android:layout_width="1px"
+					android:layout_height="fill_parent"
+					android:background="#ccc"
+				/>
+				
+				<ImageButton
+					android:id="@+id/album_bn"
+					android:layout_width="40dp"
+					android:layout_height="fill_parent"
+					android:padding="5dp"
+					android:adjustViewBounds="true"
+					android:scaleType="centerInside"
+					android:src="@drawable/btn_album"
+					android:background="@drawable/capture_bn"
+				/>
+
+				<LinearLayout 
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:weightSum="1"
+				>
+					<LinearLayout
+						android:layout_width="1px"
+						android:layout_height="fill_parent"
+						android:background="#ccc"
+					/>
+					<Button
+						android:id="@+id/select_collections_bn"
+						android:text="@string/feed_select_collections"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:layout_weight="1"
+						android:background="@drawable/capture_bn"
+					/>
+	
+					<LinearLayout
+						android:layout_width="1px"
+						android:layout_height="fill_parent"
+						android:background="#ccc"
+					/>
+	
+					<Button
+						android:id="@+id/send_bn"
+						android:text="@string/send_bn"
+						android:layout_width="60dp"
+						android:layout_height="fill_parent"
+						
+					/>
+				</LinearLayout>
+			</LinearLayout>
+		
+		</LinearLayout>
+	
+	</RelativeLayout>
+</LinearLayout>

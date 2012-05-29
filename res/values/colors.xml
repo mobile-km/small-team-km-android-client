@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- 全局 -->
+	<color name="mindpin_bgc">#f4f4f4</color>
+	
+	<!-- 登录页面 -->
+    <color name="login_button_text_color">#FFFFFF</color>
+    <color name="darkgray">#A9A9A9</color>
+    <drawable name="feed_bn_pressed">#ddd</drawable>
+</resources>

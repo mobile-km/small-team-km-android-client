@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 主界面，包含功能选择 -->
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/body"
+>	
+	<include 
+		layout="@layout/part_head_bar_user_info"
+	/>
+	
+	<RelativeLayout 
+		style="@style/new_feed_layout_main"
+	>
+		<!-- 主栏，显示图标和进度条 -->
+		<TableLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+		>
+			<TableRow>
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_new_feed_button_background" 
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_new_feed_click"
+					/>
+					<TextView
+						android:text="@string/main_bn_new_feed"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+				
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_camera_button_background"
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_camera_click"
+					/>
+					<TextView
+						android:text="@string/main_bn_camera"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+			</TableRow>
+			
+			<TableRow>
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_feed_button_background"
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_feeds_click"
+					/>
+					<TextView
+						android:text="@string/main_bn_feeds"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+				
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_collection_button_background" 
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_collections_click"
+					/>
+					<TextView
+						android:text="@string/main_bn_collections"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+			</TableRow>
+
+			<TableRow>
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_feed_button_background"
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_received_comments_click"
+					/>
+					<TextView
+						android:text="收到的评论"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+				<LinearLayout
+					style="@style/main_layout_table_item"
+				>
+					<LinearLayout
+						android:background="@drawable/main_feed_button_background"
+						style="@style/main_layout_table_item_image"
+						android:onClick="main_button_followings_click"
+					/>
+					<TextView
+						android:text="我的关注"
+						style="@style/main_layout_table_item_text"
+					/>
+				</LinearLayout>
+			</TableRow>			
+			
+		</TableLayout>
+		
+		<!-- 同步进度条和提示文字 -->
+		<LinearLayout 
+			android:layout_alignParentBottom="true"
+			style="@style/bottom_bar"
+		>	
+			<LinearLayout
+				style="@style/bottom_bar_top_line"
+			/>
+			<TextView 
+				android:id="@+id/main_data_syn_text" 
+				android:layout_height="20dp" 
+				android:layout_width="fill_parent" 
+				android:gravity="center"
+				android:textSize="13dp"
+			/>
+			
+			<ProgressBar 
+				android:id="@+id/main_data_syn_progress_bar" 
+				style="@android:style/Widget.ProgressBar.Horizontal"
+				android:layout_height="20dp" 
+				android:layout_width="fill_parent"
+				android:visibility="gone"
+			/>
+		</LinearLayout>
+	</RelativeLayout>
+</LinearLayout>

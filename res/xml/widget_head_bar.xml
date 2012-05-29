@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/head_bar"
+>
+	<TextView
+		android:id="@+id/widget_head_bar_title"
+		style="@style/head_bar_text_center" 
+	/>
+	<Button 
+		style="@style/head_bar_button_go_back"
+	/>
+</RelativeLayout>

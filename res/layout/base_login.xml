@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 登录界面 -->
+
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/body"
+>
+	<LinearLayout
+		style="@style/head_bar"
+	>
+		<ImageView 
+			android:src="@drawable/logo_head_bar"
+			android:layout_height="40dp" android:layout_width="220dp"
+			android:layout_marginTop="5dp"
+		/>
+		<TextView
+			android:text="@string/app_version"
+			style="@style/head_bar_text"
+			android:textStyle="bold"
+		/>
+	</LinearLayout>
+	
+	<LinearLayout
+		style="@style/main"
+		android:background="@drawable/ibg_login"
+	>
+		<TextView
+			android:text="感谢参与程序测试，请在下方登录："
+			android:textSize="16dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"
+			android:gravity="center"
+			android:textColor="#fff"
+		/>
+		<EditText 
+			android:id="@+id/email_et"
+			android:inputType="textEmailAddress" 
+			android:imeOptions="actionDone"
+			android:hint="@string/login_email"
+			style="@style/login_layout_inputer"
+		></EditText>
+		<EditText 
+			android:id="@+id/password_et"
+			android:inputType="textPassword" 
+			android:imeOptions="actionDone"
+			android:hint="@string/login_password"
+			style="@style/login_layout_inputer"
+		></EditText>
+		<Button
+			android:id="@+id/login_button" 
+			android:text="@string/login_login"
+			style="@style/login_layout_button"
+			android:onClick="login_button_click"
+		></Button>
+	</LinearLayout>
+</LinearLayout>
+
+
+
+
+
+
+

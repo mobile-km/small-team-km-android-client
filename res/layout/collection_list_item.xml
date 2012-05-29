@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 收集册列表项 -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"   
+    android:layout_width="fill_parent"   
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+>
+	<TextView
+	    android:id="@+id/collection_id"  
+	    android:layout_height="wrap_content"   
+	    android:layout_width="wrap_content"   
+	    android:textSize="18dp"
+	    android:visibility="gone"
+    />
+	<TextView
+		android:id="@+id/collection_title"   
+	    android:layout_height="wrap_content"   
+	    android:layout_width="wrap_content"
+	    android:textSize="18dp"
+    />
+    
+    <Button
+    	android:id="@+id/edit_collection"
+    	android:text="改名"
+    	android:layout_height="wrap_content"   
+	    android:layout_width="wrap_content"
+	    android:visibility="gone"
+    />
+    <Button
+    	android:id="@+id/destroy_collection"
+    	android:text="删除"
+    	android:layout_height="wrap_content"   
+	    android:layout_width="wrap_content"
+	    android:visibility="gone"
+    />
+</LinearLayout>  
