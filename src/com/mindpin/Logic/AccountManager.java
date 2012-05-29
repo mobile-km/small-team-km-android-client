@@ -31,9 +31,6 @@ public class AccountManager {
 	}
 
 	public static void login(String cookies, String info) throws Exception {
-		//Log.d("AccountManager login", cookies);
-		//Log.d("AccountManager login", info);
-		
 		AccountUser account_user = new AccountUser(cookies, info);
 		
 		if (AccountUserDBHelper.save(account_user)) {

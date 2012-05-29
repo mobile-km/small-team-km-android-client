@@ -30,7 +30,7 @@ import com.mindpin.model.database.FeedDBHelper;
 
 public class HttpApi {
 	
-	public static final String SITE = "http://www.mindpin.com";
+	public static final String SITE = "http://192.168.1.28:9527";
 	
 	// 各种路径常量
 	public static final String 用户登录				= "/login";
@@ -66,8 +66,7 @@ public class HttpApi {
 			@Override
 			public Boolean on_success(String response_text) throws Exception{
 				JSONObject json = new JSONObject(response_text);
-				String user_info = ((JSONObject)json.get("user")).toString();
-				AccountManager.login(get_cookies(), user_info);
+				AccountManager.login(get_cookies(), json.toString());
 				return true;
 			}
 		}.go();

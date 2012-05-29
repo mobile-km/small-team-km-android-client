@@ -44,14 +44,11 @@ public class MainActivity extends MindpinBaseActivity {
 				BroadcastReceiverConstants.ACTION_SYN_DATA_UI));
 		
 		// load view
-		if(current_user().v2_activate){
-			setContentView(R.layout.base_main);
-			data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
-			data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
-			start_syn_data();
-		}else{
-			setContentView(R.layout.base_main_not_activate);
-		}
+		setContentView(R.layout.base_main);
+		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
+		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
+		start_syn_data();
+
 		update_account_info();			
 	}
 	

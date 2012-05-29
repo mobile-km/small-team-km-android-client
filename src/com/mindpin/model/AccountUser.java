@@ -12,7 +12,6 @@ public class AccountUser extends BaseModel {
 	public int user_id;
 	public String name;
 	public String sign;
-	public boolean v2_activate;
 	public String avatar_url;
 	
 	// 用一个特殊的user实例来表示一个空user
@@ -32,7 +31,6 @@ public class AccountUser extends BaseModel {
 		this.user_id     = json.getInt("id");
 		this.name        = json.getString("name");
 		this.sign        = json.getString("sign");
-		this.v2_activate = json.getBoolean("v2_activate");
 		this.avatar_url  = json.getString("avatar_url");
 	}
 }
