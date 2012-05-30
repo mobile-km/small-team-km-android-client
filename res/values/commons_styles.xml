@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="body">
+    <item name="android:orientation">vertical</item>
+	  <item name="android:layout_width">fill_parent</item>
+	  <item name="android:layout_height">fill_parent</item>
+	</style>
+
+	<style name="padding_10_body" parent="body">
+    <item name="android:padding">10dp</item>
+	</style>
+
+  <style name="no_padding_body" parent="body">
+    <item name="android:padding">0dp</item>
+  </style>
+
+  <style name="list_item">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:padding">10dp</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+</resources>

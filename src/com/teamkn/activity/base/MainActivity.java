@@ -11,10 +11,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -31,7 +34,10 @@ import com.teamkn.receiver.BroadcastReceiverConstants;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
 public class MainActivity extends MindpinBaseActivity {
-  public final static int REQUEST_CODE_NEW_TEXT = 0;
+  public class RequestCode{
+    public final static int NEW_TEXT = 0;
+    public final static int EDIT_TEXT = 1;
+  }
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
 	final private SynDataUIBroadcastReceiver syn_data_broadcast_receiver = new SynDataUIBroadcastReceiver();
@@ -67,6 +73,20 @@ public class MainActivity extends MindpinBaseActivity {
     NoteListAdapter note_list_adapter = new NoteListAdapter(this);
     note_list_adapter.add_items(notes);
     note_list.setAdapter(note_list_adapter);
+    
+    note_list.setOnItemClickListener(new OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> list_view, View list_item, int item_id,
+          long position) {
+        TextView uuid_tv = (TextView)list_item.findViewById(R.id.note_uuid_tv);
+        String uuid = (String) uuid_tv.getText();
+        
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, EditNoteActivity.class);
+        intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
+        startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+      }
+    });
   }
 
   //同步操作
@@ -86,8 +106,8 @@ public class MainActivity extends MindpinBaseActivity {
 	
 	public void click_new_text(View view){
 	  Intent intent = new Intent();
-	  intent.setClass(this, NewNoteActivity.class);
-	  startActivityForResult(intent,REQUEST_CODE_NEW_TEXT);
+	  intent.setClass(this, EditNoteActivity.class);
+	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
 	}
 	
 	public void click_new_photo(View view){
@@ -154,7 +174,10 @@ public class MainActivity extends MindpinBaseActivity {
 			return;
 		}
 		switch(requestCode){
-		  case REQUEST_CODE_NEW_TEXT:
+		  case MainActivity.RequestCode.NEW_TEXT:
+		    load_list();
+		    break;
+		  case MainActivity.RequestCode.EDIT_TEXT:
 		    load_list();
 		    break;
 		}

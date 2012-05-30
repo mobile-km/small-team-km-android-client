@@ -25,7 +25,7 @@
 		<activity android:name=".activity.base.MindpinSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 		<activity android:name=".activity.base.AccountManagerActivity"></activity>
 		
-		<activity android:name=".activity.base.NewNoteActivity" android:windowSoftInputMode="adjustResize">
+		<activity android:name=".activity.base.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
 		
 

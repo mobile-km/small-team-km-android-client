@@ -13,19 +13,33 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class NewNoteActivity extends MindpinBaseActivity {
+public class EditNoteActivity extends MindpinBaseActivity {
   private EditText note_content_et;
+  private String note_uuid;
+  private Note note;
+  
+  public class Extra{
+    public static final String NOTE_UUID = "note_uuid";
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.new_note);
-    find_views();
-  }
-
-  private void find_views() {
+    setContentView(R.layout.edit_note);
+    
+    note_uuid = getIntent().getStringExtra(EditNoteActivity.Extra.NOTE_UUID);
     note_content_et = (EditText) findViewById(R.id.note_content_et);
+    
+    if(note_uuid != null){
+      note = NoteDBHelper.find(note_uuid);
+      note_content_et.setText(note.content);
+    }
   }
+  
+  private boolean is_edit_note(){
+    return note != null;
+  }
+  
 
   public void click_save_note_bn(View view) {
     String note_content = note_content_et.getText().toString();
@@ -42,7 +56,13 @@ public class NewNoteActivity extends MindpinBaseActivity {
       @Override
       public Void do_in_background(String... params) throws Exception {
         String note_content = params[0];
-        NoteDBHelper.save(new Note(note_content));
+        
+        if(is_edit_note()){
+          note.content = note_content;
+          NoteDBHelper.save(note);
+        }else{
+          NoteDBHelper.save(new Note(note_content));
+        }
         return null;
       }
 

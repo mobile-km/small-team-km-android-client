@@ -23,7 +23,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
               Constants.TABLE_NOTES__IS_REMOVED,
               Constants.TABLE_NOTES__CREATED_AT,
               Constants.TABLE_NOTES__UPDATED_AT }, null, null, null, null,
-          Constants.KEY_ID + " ASC");
+          Constants.KEY_ID + " DESC");
 
       while (cursor.moveToNext()) {
         Note note = build_note_by_cursor(cursor);
@@ -77,7 +77,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
         db.insert(Constants.TABLE_NOTES, null, values);
       } else {
         db.update(Constants.TABLE_NOTES, values, Constants.TABLE_NOTES__UUID
-            + " = " + note.uuid, null);
+            + " = '" + note.uuid + "'", null);
       }
 
       return true;
