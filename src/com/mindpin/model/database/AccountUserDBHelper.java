@@ -2,17 +2,13 @@ package com.mindpin.model.database;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-import com.mindpin.database.Constants;
-import com.mindpin.database.FeedDraft;
 import com.mindpin.model.AccountUser;
 import com.mindpin.model.base.BaseModelDBHelper;
-import com.mindpin.model.cache.CollectionsCache;
+import com.mindpin.model.base.Constants;
 
 public class AccountUserDBHelper extends BaseModelDBHelper {
 	
@@ -83,10 +79,6 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 					account_user.user_id 
 				}
 			);
-			
-			// É¾³ýÊÕ¼¯²á»º´æ£¬²Ý¸å
-			CollectionsCache.delete(user_id);
-			FeedDraft.destroy_all(user_id);
 			
 			return true;
 		} catch (Exception e) {

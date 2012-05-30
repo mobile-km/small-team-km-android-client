@@ -18,7 +18,7 @@
 		android:background="#000"
 	>
 		<LinearLayout 
-			style="@style/main"
+			style="@style/padding_10_body"
 			android:background="#111"
 		>
 			<WebView 

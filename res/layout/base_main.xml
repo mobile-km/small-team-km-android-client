@@ -11,106 +11,43 @@
 	/>
 	
 	<RelativeLayout 
-		style="@style/new_feed_layout_main"
+		style="@style/no_padding_body"
 	>
 		<!-- 主栏，显示图标和进度条 -->
-		<TableLayout
+		<LinearLayout
+		  android:id="@+id/base_main_action"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
+			android:orientation="horizontal"
 		>
-			<TableRow>
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_new_feed_button_background" 
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_new_feed_click"
-					/>
-					<TextView
-						android:text="@string/main_bn_new_feed"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-				
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_camera_button_background"
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_camera_click"
-					/>
-					<TextView
-						android:text="@string/main_bn_camera"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-			</TableRow>
-			
-			<TableRow>
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_feed_button_background"
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_feeds_click"
-					/>
-					<TextView
-						android:text="@string/main_bn_feeds"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-				
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_collection_button_background" 
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_collections_click"
-					/>
-					<TextView
-						android:text="@string/main_bn_collections"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-			</TableRow>
-
-			<TableRow>
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_feed_button_background"
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_received_comments_click"
-					/>
-					<TextView
-						android:text="收到的评论"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-				<LinearLayout
-					style="@style/main_layout_table_item"
-				>
-					<LinearLayout
-						android:background="@drawable/main_feed_button_background"
-						style="@style/main_layout_table_item_image"
-						android:onClick="main_button_followings_click"
-					/>
-					<TextView
-						android:text="我的关注"
-						style="@style/main_layout_table_item_text"
-					/>
-				</LinearLayout>
-			</TableRow>			
-			
-		</TableLayout>
+		
+	    <Button
+	      android:id="@+id/new_text"
+	      android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	      android:text="@string/new_text"
+	      android:onClick="click_new_text"
+	    ></Button>
+	    <Button
+	      android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	      android:id="@+id/new_photo" 
+	      android:text="@string/new_photo"
+	      android:onClick="click_new_photo"
+	    ></Button>
+		</LinearLayout>
+		
+		 <ListView 
+		   android:id="@+id/note_list"
+		   android:layout_height="fill_parent"
+		   android:layout_width="fill_parent"
+		   android:layout_below="@+id/base_main_action"
+		   android:layout_above="@+id/base_main_syn_bar"
+		 />
 		
 		<!-- 同步进度条和提示文字 -->
-		<LinearLayout 
+		<LinearLayout
+		  android:id="@+id/base_main_syn_bar"
 			android:layout_alignParentBottom="true"
 			style="@style/bottom_bar"
 		>	

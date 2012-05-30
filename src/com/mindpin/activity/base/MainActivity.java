@@ -1,5 +1,8 @@
 package com.mindpin.activity.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -13,27 +16,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.mindpin.R;
 import com.mindpin.Logic.AccountManager;
-import com.mindpin.Logic.CameraLogic;
-import com.mindpin.activity.collection.CollectionListActivity;
-import com.mindpin.activity.comment.ReceivedCommentListActivity;
-import com.mindpin.activity.contacts.ContactsActivity;
-import com.mindpin.activity.contacts.FollowingGridActivity;
-import com.mindpin.activity.feed.FeedListActivity;
-import com.mindpin.activity.sendfeed.NewFeedActivity;
 import com.mindpin.base.activity.MindpinBaseActivity;
 import com.mindpin.base.utils.BaseUtils;
 import com.mindpin.cache.image.ImageCache;
+import com.mindpin.model.Note;
+import com.mindpin.model.database.NoteDBHelper;
 import com.mindpin.receiver.BroadcastReceiverConstants;
+import com.mindpin.widget.adapter.NoteListAdapter;
 
 public class MainActivity extends MindpinBaseActivity {
+  public final static int REQUEST_CODE_NEW_TEXT = 0;
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
 	final private SynDataUIBroadcastReceiver syn_data_broadcast_receiver = new SynDataUIBroadcastReceiver();
+  private ListView note_list;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,8 @@ public class MainActivity extends MindpinBaseActivity {
 		
 		// load view
 		setContentView(R.layout.base_main);
+		note_list = (ListView) findViewById(R.id.note_list);
+    load_list();
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
 		start_syn_data();
@@ -52,14 +55,20 @@ public class MainActivity extends MindpinBaseActivity {
 		update_account_info();			
 	}
 	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		// 注册过的receiver，一定要在onDestroy时反注册，否则会有leak异常，导致程序崩溃
-		unregisterReceiver(syn_data_broadcast_receiver);
-	}
-	
-	//同步操作
+	private void load_list() {
+	  List<Note> notes = new ArrayList<Note>();
+    try {
+      notes = NoteDBHelper.all();
+    } catch (Exception e) {
+      BaseUtils.toast("读取 note 列表失败");
+      e.printStackTrace();
+    }
+    NoteListAdapter note_list_adapter = new NoteListAdapter(this);
+    note_list_adapter.add_items(notes);
+    note_list.setAdapter(note_list_adapter);
+  }
+
+  //同步操作
 	private void start_syn_data() {
 		sendBroadcast(new Intent("com.mindpin.action.start_syn_data"));
 	}
@@ -73,35 +82,24 @@ public class MainActivity extends MindpinBaseActivity {
 		ImageCache.load_cached_image(current_user().avatar_url, account_avatar_imgview);
 	}
 	
-	//设置 new_feed 按钮点击事件
-	public void main_button_new_feed_click(View view){
-		open_activity(NewFeedActivity.class);
+	
+	public void click_new_text(View view){
+	  Intent intent = new Intent();
+	  intent.setClass(this, NewNoteActivity.class);
+	  startActivityForResult(intent,REQUEST_CODE_NEW_TEXT);
 	}
 	
-	//设置 camera 按钮点击事件
-	public void main_button_camera_click(View view){
-		CameraLogic.call_system_camera(this);
+	public void click_new_photo(View view){
+	  BaseUtils.toast("正在施工");
 	}
 	
-	//设置 feeds 按钮点击事件
-	public void main_button_feeds_click(View view){
-		open_activity(FeedListActivity.class);
-	}
+	@Override
+  protected void onDestroy() {
+    super.onDestroy();
+    // 注册过的receiver，一定要在onDestroy时反注册，否则会有leak异常，导致程序崩溃
+    unregisterReceiver(syn_data_broadcast_receiver);
+  }
 	
-	//设置collections按钮点击事件
-	public void main_button_collections_click(View view){
-		open_activity(CollectionListActivity.class);
-	}
-	
-	public void main_button_received_comments_click(View view){
-		open_activity(ReceivedCommentListActivity.class);
-	}
-	
-	public void main_button_followings_click(View view){
-		open_activity(FollowingGridActivity.class);
-	}
-	
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -116,9 +114,6 @@ public class MainActivity extends MindpinBaseActivity {
 			break;
 		case R.id.menu_setting:
 			open_activity(MindpinSettingActivity.class);
-			break;
-		case R.id.menu_contacts:
-			open_activity(ContactsActivity.class);
 			break;
 		case R.id.menu_account_management:
 			open_activity(AccountManagerActivity.class);
@@ -157,13 +152,10 @@ public class MainActivity extends MindpinBaseActivity {
 		if(resultCode != Activity.RESULT_OK){
 			return;
 		}
-		
-		switch (requestCode) {
-		case CameraLogic.REQUEST_CODE_CAPTURE:
-			Intent intent = new Intent(getApplicationContext(), NewFeedActivity.class);
-			intent.putExtra(CameraLogic.HAS_IMAGE_CAPTURE, true);
-			startActivity(intent);
-			break;
+		switch(requestCode){
+		  case REQUEST_CODE_NEW_TEXT:
+		    load_list();
+		    break;
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

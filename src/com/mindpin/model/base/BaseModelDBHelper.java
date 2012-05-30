@@ -3,8 +3,6 @@ package com.mindpin.model.base;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mindpin.application.MindpinApplication;
-import com.mindpin.database.Constants;
-import com.mindpin.database.MindpinDBHelper;
 
 abstract public class BaseModelDBHelper {
 	final private static MindpinDBHelper get_db_helper() {

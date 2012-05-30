@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <!-- 主题 -->
 	<style name="Theme.mindpin" parent="@android:Theme.Light.NoTitleBar">
 		<item name="android:windowBackground">@color/mindpin_bgc</item>
 		<item name="android:listViewStyle">@style/mindpin_list_theme</item>
@@ -14,11 +15,19 @@
         <item name="android:background">@color/mindpin_bgc</item>
     </style>
     
-    <!-- 以下为其他 -->
+    <!-- 公用 -->
     <style name="body">
     	<item name="android:orientation">vertical</item>
     	<item name="android:layout_width">fill_parent</item>
     	<item name="android:layout_height">fill_parent</item>
+    </style>
+    
+    <style name="padding_10_body" parent="body">
+      <item name="android:padding">10dp</item>
+    </style>
+    
+    <style name="no_padding_body" parent="body">
+      <item name="android:padding">0dp</item>
     </style>
     
     <!-- title_bar -->
@@ -78,15 +87,6 @@
 		<item name="android:layout_marginRight">9dp</item>
     </style>
     
-    
-    <!-- main -->
-    <style name="main">
-    	<item name="android:orientation">vertical</item>
-    	<item name="android:layout_width">fill_parent</item>
-    	<item name="android:layout_height">fill_parent</item>
-    	<item name="android:padding">10dp</item>
-    </style>
-    
     <!-- bottom_bar -->
     <style name="bottom_bar">
     	<item name="android:orientation">vertical</item>
@@ -100,7 +100,7 @@
     	<item name="android:background">#ccc</item>
    	</style>
     <style name="bottom_bar_button">
-		<item name="android:layout_width">fill_parent</item>
+		  <item name="android:layout_width">fill_parent</item>
     	<item name="android:layout_height">40dp</item>
     	<item name="android:textSize">15dp</item>
     	<item name="android:background">@drawable/bg_button</item>
@@ -263,28 +263,13 @@
    		<item name="android:textSize">16dp</item>
    	</style>
    	
-   	<!-- new_feed_layout -->
-   	<style name="new_feed_layout_main" parent="@style/main">
-   		<item name="android:padding">0dp</item>
-   	</style>
-    <style name="new_feed_layout_title_inputer">
-    	<item name="android:textSize">18dp</item>
-    	<item name="android:layout_width">fill_parent</item>
-    	<item name="android:layout_height">wrap_content</item>
-    	<item name="android:background">@drawable/inputer_new_feed_title_background</item>
-   	</style>
-   	
-   	<!-- ## detial_inputer -->
-    <style name="new_feed_layout_detail_inputer_container">
-    	<item name="android:layout_width">fill_parent</item>
-    	<item name="android:layout_height">fill_parent</item>
-   	</style>
-    <style name="new_feed_layout_detail_inputer_top_line">
+   	<!-- ## new_note -->
+    <style name="note_content_inputer_top_line">
     	<item name="android:layout_width">fill_parent</item>
     	<item name="android:layout_height">1dp</item>
     	<item name="android:background">#ddd</item>
    	</style>
-    <style name="new_feed_layout_detail_inputer">
+    <style name="note_content_inputer_layout">
     	<item name="android:textSize">18dp</item>
     	<item name="android:gravity">top</item>    	
     	<item name="android:layout_width">fill_parent</item>
