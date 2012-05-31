@@ -58,10 +58,9 @@ public class EditNoteActivity extends MindpinBaseActivity {
         String note_content = params[0];
         
         if(is_edit_note()){
-          note.content = note_content;
-          NoteDBHelper.save(note);
+          NoteDBHelper.update(note_uuid, note_content);
         }else{
-          NoteDBHelper.save(new Note(note_content));
+          NoteDBHelper.create(note_content);
         }
         return null;
       }

@@ -27,9 +27,4 @@ public class Note extends BaseModel {
     this.updated_at = updated_at;
   }
   
-  public Note(String content){
-    this.content = content;
-    this.uuid = UUID.randomUUID().toString();
-  }
-
 }

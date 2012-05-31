@@ -2,6 +2,7 @@ package com.teamkn.model.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -51,35 +52,46 @@ public class NoteDBHelper extends BaseModelDBHelper {
     return new Note(id, uuid, content, is_removed, created_at,
         updated_at);
   }
-
-  final public static boolean save(final Note note) {
+  
+  final public static boolean create(String note_content){
     long current_timemillis = System.currentTimeMillis();
-    Log.d("mindpin", note.is_nil() + "");
-    if (note.is_nil()){
-      return false;
-    }
+    SQLiteDatabase db = get_write_db();
+    String uuid = UUID.randomUUID().toString();
     
+    try {
+      // 保存数据库信息
+      ContentValues values = new ContentValues();
+      values.put(Constants.TABLE_NOTES__UUID, uuid);
+      values.put(Constants.TABLE_NOTES__CONTENT, note_content);
+      values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
+      values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
+      values.put(Constants.TABLE_NOTES__CREATED_AT, current_timemillis);
+      db.insert(Constants.TABLE_NOTES, null, values);
+      return true;
+    } catch (Exception e) {
+      Log.e("NoteDBHelper", "save", e);
+      return false;
+    } finally {
+      db.close();
+    }
+  }
+
+  final public static boolean update(String uuid,String note_content) {
+    long current_timemillis = System.currentTimeMillis();
     SQLiteDatabase db = get_write_db();
 
     try {
       // 保存数据库信息
       ContentValues values = new ContentValues();
-      values.put(Constants.TABLE_NOTES__UUID, note.uuid);
-      values.put(Constants.TABLE_NOTES__CONTENT, note.content);
+      values.put(Constants.TABLE_NOTES__UUID, uuid);
+      values.put(Constants.TABLE_NOTES__CONTENT, note_content);
       values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
       values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
       
+      int row_count = db.update(Constants.TABLE_NOTES, values, Constants.TABLE_NOTES__UUID
+          + " = '" + uuid + "'", null);
       
-      Note o_note = find(note.uuid);
-
-      if (o_note.is_nil()) {
-        values.put(Constants.TABLE_NOTES__CREATED_AT, current_timemillis);
-        db.insert(Constants.TABLE_NOTES, null, values);
-      } else {
-        db.update(Constants.TABLE_NOTES, values, Constants.TABLE_NOTES__UUID
-            + " = '" + note.uuid + "'", null);
-      }
-
+      if(row_count != 1){return false;}
       return true;
     } catch (Exception e) {
       Log.e("NoteDBHelper", "save", e);
