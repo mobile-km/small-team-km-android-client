@@ -52,7 +52,7 @@ public class EditNoteActivity extends MindpinBaseActivity {
   }
 
   private void save_note(String note_content) {
-    new MindpinAsyncTask<String, Void, Void>(this, R.string.login_now_login) {
+    new MindpinAsyncTask<String, Void, Void>(this, R.string.saving) {
       @Override
       public Void do_in_background(String... params) throws Exception {
         String note_content = params[0];

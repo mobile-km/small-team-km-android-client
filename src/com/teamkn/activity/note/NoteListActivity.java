@@ -1,6 +1,7 @@
 package com.teamkn.activity.note;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
@@ -10,9 +11,16 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.widget.adapter.NoteListAdapter;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,13 +59,51 @@ public class NoteListActivity extends MindpinBaseActivity {
           int item_id, long position) {
         TextView uuid_tv = (TextView) list_item.findViewById(R.id.note_uuid_tv);
         String uuid = (String) uuid_tv.getText();
-
+        
         Intent intent = new Intent();
         intent.setClass(NoteListActivity.this, EditNoteActivity.class);
         intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
         startActivityForResult(intent, NoteListActivity.RequestCode.EDIT_TEXT);
       }
     });
+    
+    note_list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+      @Override
+      public void onCreateContextMenu(ContextMenu menu, View v,
+          ContextMenuInfo menuInfo) {
+        menu.add(Menu.NONE, 0, 0, "删除");
+      }
+    });
+  }
+  
+  
+  @Override
+  public boolean onContextItemSelected(MenuItem item) {
+    AdapterView.AdapterContextMenuInfo menuInfo;
+    menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+    
+    TextView note_uuid_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_uuid_tv);
+    String uuid = (String) note_uuid_tv.getText();
+    destroy_note_confirm(uuid);
+    
+    return super.onContextItemSelected(item);
+  }
+
+  private void destroy_note_confirm(final String uuid) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(NoteListActivity.this); //这里只能用this，不能用appliction_context
+    
+    builder
+      .setMessage("确认要删除吗？")
+      .setPositiveButton(R.string.dialog_ok,
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog,
+              int which) {
+            NoteDBHelper.destroy(uuid);
+            load_list();
+          }
+        })
+      .setNegativeButton(R.string.dialog_cancel, null)
+      .show();
   }
 
   // 处理其他activity界面的回调

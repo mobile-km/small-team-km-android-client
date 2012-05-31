@@ -48,6 +48,7 @@
     <string name="note_content_et">文本内容</string>
     <string name="note_content_valid_blank">主题内容不能为空</string> 
     <string name="save_note_bn">保存</string>
+    <string name="saving">正在保存...</string>
     
     
     

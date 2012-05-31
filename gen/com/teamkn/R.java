@@ -142,12 +142,12 @@ public final class R {
         public static final int main=0x7f0a0000;
     }
     public static final class string {
-        public static final int account_delete_button=0x7f090031;
-        public static final int account_edit_button=0x7f09002f;
-        public static final int account_edit_button_close=0x7f090030;
+        public static final int account_delete_button=0x7f090032;
+        public static final int account_edit_button=0x7f090030;
+        public static final int account_edit_button_close=0x7f090031;
         /**  账号管理 
          */
-        public static final int account_manager_title=0x7f09002e;
+        public static final int account_manager_title=0x7f09002f;
         public static final int app_authenticate_exception=0x7f09000d;
         public static final int app_data_syn_fail=0x7f09000f;
         public static final int app_intent_connection_exception=0x7f09000c;
@@ -162,7 +162,7 @@ public final class R {
          */
         public static final int base_main_show_note_list=0x7f09001d;
         public static final int button_go_back=0x7f090010;
-        public static final int cancel_bn=0x7f090029;
+        public static final int cancel_bn=0x7f09002a;
         public static final int dialog_cancel=0x7f090015;
         public static final int dialog_close_app_text=0x7f090013;
         /**  各种dialog 
@@ -183,12 +183,12 @@ public final class R {
         public static final int mapabc_api_key=0x7f090000;
         public static final int menu_about=0x7f090020;
         public static final int menu_account_management=0x7f090021;
-        public static final int menu_change_collection_name=0x7f09002c;
+        public static final int menu_change_collection_name=0x7f09002d;
         /**  收集册主题列表页面 
          */
-        public static final int menu_delete_collection=0x7f09002b;
+        public static final int menu_delete_collection=0x7f09002c;
         public static final int menu_setting=0x7f090022;
-        public static final int new_collection=0x7f09002a;
+        public static final int new_collection=0x7f09002b;
         public static final int new_photo=0x7f09001f;
         public static final int new_text=0x7f09001e;
         /**  新建文本页面 
@@ -202,16 +202,17 @@ public final class R {
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
         public static final int save_note_bn=0x7f090025;
+        public static final int saving=0x7f090026;
         /**  选择收集册页面 
          */
-        public static final int send_tsina=0x7f090027;
+        public static final int send_tsina=0x7f090028;
         /**  显示照片页面 
          */
-        public static final int show_capture_image_back=0x7f090026;
-        public static final int submit_bn=0x7f090028;
+        public static final int show_capture_image_back=0x7f090027;
+        public static final int submit_bn=0x7f090029;
         /**  设置页面 
          */
-        public static final int upload_photo_quality=0x7f09002d;
+        public static final int upload_photo_quality=0x7f09002e;
     }
     public static final class style {
         /**  主题 

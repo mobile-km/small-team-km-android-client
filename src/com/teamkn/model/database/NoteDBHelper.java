@@ -23,7 +23,9 @@ public class NoteDBHelper extends BaseModelDBHelper {
               Constants.TABLE_NOTES__CONTENT,
               Constants.TABLE_NOTES__IS_REMOVED,
               Constants.TABLE_NOTES__CREATED_AT,
-              Constants.TABLE_NOTES__UPDATED_AT }, null, null, null, null,
+              Constants.TABLE_NOTES__UPDATED_AT }, 
+              Constants.TABLE_NOTES__IS_REMOVED + " = ? ", new String[]{"0"}, 
+              null, null,
           Constants.KEY_ID + " DESC");
 
       while (cursor.moveToNext()) {
@@ -88,8 +90,9 @@ public class NoteDBHelper extends BaseModelDBHelper {
       values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
       values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
       
-      int row_count = db.update(Constants.TABLE_NOTES, values, Constants.TABLE_NOTES__UUID
-          + " = '" + uuid + "'", null);
+      int row_count = db.update(Constants.TABLE_NOTES, 
+          values, Constants.TABLE_NOTES__UUID + " = ? ", 
+          new String[]{uuid});
       
       if(row_count != 1){return false;}
       return true;
@@ -128,6 +131,27 @@ public class NoteDBHelper extends BaseModelDBHelper {
     } catch (Exception e) {
       Log.e("NoteDBHelper", "find", e);
       return Note.NIL_NOTE;
+    } finally {
+      db.close();
+    }
+  }
+
+  public static boolean destroy(String uuid) {
+    SQLiteDatabase db = get_write_db();
+    
+    try {
+      // 删除数据库信息
+      ContentValues values = new ContentValues();
+      values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
+      
+      int row_count = db.update(Constants.TABLE_NOTES,
+          values, Constants.TABLE_NOTES__UUID + " = ?", new String[]{uuid});
+      
+      if(row_count != 1){return false;}
+      return true;
+    } catch (Exception e) {
+      Log.e("NoteDBHelper", "destroy", e);
+      return false;
     } finally {
       db.close();
     }
