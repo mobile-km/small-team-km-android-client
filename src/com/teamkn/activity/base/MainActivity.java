@@ -2,7 +2,6 @@ package com.teamkn.activity.base;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -11,37 +10,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
+import com.teamkn.activity.note.EditNoteActivity;
+import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.MindpinBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.cache.image.ImageCache;
-import com.teamkn.model.Note;
-import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.receiver.BroadcastReceiverConstants;
-import com.teamkn.widget.adapter.NoteListAdapter;
 
 public class MainActivity extends MindpinBaseActivity {
   public class RequestCode{
     public final static int NEW_TEXT = 0;
-    public final static int EDIT_TEXT = 1;
   }
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
 	final private SynDataUIBroadcastReceiver syn_data_broadcast_receiver = new SynDataUIBroadcastReceiver();
-  private ListView note_list;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,56 +44,15 @@ public class MainActivity extends MindpinBaseActivity {
 		
 		// load view
 		setContentView(R.layout.base_main);
-		note_list = (ListView) findViewById(R.id.note_list);
-    load_list();
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
 		start_syn_data();
-
-		update_account_info();			
 	}
 	
-	private void load_list() {
-	  List<Note> notes = new ArrayList<Note>();
-    try {
-      notes = NoteDBHelper.all();
-    } catch (Exception e) {
-      BaseUtils.toast("读取 note 列表失败");
-      e.printStackTrace();
-    }
-    NoteListAdapter note_list_adapter = new NoteListAdapter(this);
-    note_list_adapter.add_items(notes);
-    note_list.setAdapter(note_list_adapter);
-    
-    note_list.setOnItemClickListener(new OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> list_view, View list_item, int item_id,
-          long position) {
-        TextView uuid_tv = (TextView)list_item.findViewById(R.id.note_uuid_tv);
-        String uuid = (String) uuid_tv.getText();
-        
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, EditNoteActivity.class);
-        intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
-        startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
-      }
-    });
-  }
-
   //同步操作
 	private void start_syn_data() {
 		sendBroadcast(new Intent("com.mindpin.action.start_syn_data"));
 	}
-	
-	// 在界面上刷新头像和用户名
-	private void update_account_info(){
-		TextView account_name_textview   = (TextView) findViewById(R.id.account_name);
-		ImageView account_avatar_imgview = (ImageView)findViewById(R.id.account_avatar);
-		
-		account_name_textview.setText(current_user().name);
-		ImageCache.load_cached_image(current_user().avatar_url, account_avatar_imgview);
-	}
-	
 	
 	public void click_new_text(View view){
 	  Intent intent = new Intent();
@@ -110,8 +60,8 @@ public class MainActivity extends MindpinBaseActivity {
 	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
 	}
 	
-	public void click_new_photo(View view){
-	  BaseUtils.toast("正在施工");
+	public void show_note_list(View view){
+	  open_activity(NoteListActivity.class);
 	}
 	
 	@Override
@@ -167,7 +117,7 @@ public class MainActivity extends MindpinBaseActivity {
 		 return super.onKeyDown(keyCode, event);
 	}
 	
-	//处理其他activity界面的回调，例如照相
+	//处理其他activity界面的回调
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode != Activity.RESULT_OK){
@@ -175,10 +125,7 @@ public class MainActivity extends MindpinBaseActivity {
 		}
 		switch(requestCode){
 		  case MainActivity.RequestCode.NEW_TEXT:
-		    load_list();
-		    break;
-		  case MainActivity.RequestCode.EDIT_TEXT:
-		    load_list();
+		    BaseUtils.toast("创建成功");
 		    break;
 		}
 		
@@ -215,7 +162,6 @@ public class MainActivity extends MindpinBaseActivity {
 				data_syn_progress_bar.setProgress(100);
 				
 				AccountManager.touch_last_syn_time();
-				update_account_info();
 				break;
 			case 101:
 				// 界面显示同步结束

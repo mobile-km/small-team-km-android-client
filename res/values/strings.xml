@@ -19,6 +19,7 @@
     <string name="app_data_syn_fail">数据同步失败</string>
     
     <string name="button_go_back">返回</string>
+    <string name="laceholder">占位</string>
     
     <!-- 各种dialog -->
     <string name="dialog_close_app_title">关闭mindpin</string>
@@ -36,6 +37,7 @@
     <string name="login_now_login">正在登录…</string>
     
     <!-- 登录成功后的主页面 -->
+    <string name="base_main_show_note_list">笔记列表</string>
     <string name="new_text">新建文本</string>
     <string name="new_photo">新照片</string>
     <string name="menu_about">关于…</string>

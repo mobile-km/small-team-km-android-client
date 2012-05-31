@@ -1,4 +1,4 @@
-package com.teamkn.activity.base;
+package com.teamkn.activity.note;
 
 import com.teamkn.R;
 import com.teamkn.base.activity.MindpinBaseActivity;

@@ -25,9 +25,10 @@
 		<activity android:name=".activity.base.MindpinSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 		<activity android:name=".activity.base.AccountManagerActivity"></activity>
 		
-		<activity android:name=".activity.base.EditNoteActivity" android:windowSoftInputMode="adjustResize">
+		<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
-		
+		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
+		</activity>
 
 		<!-- sendfeed -->
 		<activity android:name=".activity.sendfeed.NewFeedActivity" android:windowSoftInputMode="adjustResize" >

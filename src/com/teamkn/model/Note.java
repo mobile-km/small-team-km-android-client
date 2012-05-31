@@ -1,7 +1,5 @@
 package com.teamkn.model;
 
-import java.util.UUID;
-
 import com.teamkn.model.base.BaseModel;
 
 public class Note extends BaseModel {

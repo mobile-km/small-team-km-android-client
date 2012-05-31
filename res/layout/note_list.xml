@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 笔记列表 -->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/body"
+>	
+	<include
+		layout="@layout/part_head_bar_user_info"
+	/>
+	<ListView 
+	  android:id="@+id/note_list"
+	 style="@style/no_padding_body"
+	/>
+</LinearLayout>
