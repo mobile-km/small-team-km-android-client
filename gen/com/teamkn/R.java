@@ -95,9 +95,9 @@ public final class R {
         public static final int menu_account_management=0x7f0b002f;
         public static final int menu_setting=0x7f0b002e;
         public static final int new_text=0x7f0b0006;
-        public static final int note_content_et=0x7f0b0014;
-        public static final int note_content_inputer_top_line=0x7f0b0013;
+        public static final int note_content_et=0x7f0b0013;
         public static final int note_content_tv=0x7f0b0020;
+        public static final int note_image_iv=0x7f0b0014;
         public static final int note_list=0x7f0b0021;
         public static final int note_uuid_tv=0x7f0b001f;
         public static final int password_et=0x7f0b0003;

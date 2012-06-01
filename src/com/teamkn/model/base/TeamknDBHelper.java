@@ -7,18 +7,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TeamknDBHelper extends SQLiteOpenHelper{
 	private static final String create_table_users = "create table " +
-			Constants.TABLE_USERS + "(" + 
-			Constants.KEY_ID + " integer primary key autoincrement, "+
+			Constants.TABLE_USERS          + "(" + 
+			Constants.KEY_ID               + " integer primary key autoincrement, "+
 			Constants.TABLE_USERS__USER_ID + " integer not null, "+
-			Constants.TABLE_USERS__NAME + " text not null, "+
+			Constants.TABLE_USERS__NAME    + " text not null, "+
 			Constants.TABLE_USERS__COOKIES + " text not null, "+
-			Constants.TABLE_USERS__INFO + " text not null);";
+			Constants.TABLE_USERS__INFO    + " text not null);";
 	
 	private static final String create_table_notes = "create table " +
-	    Constants.TABLE_NOTES + "(" +
-	    Constants.KEY_ID + " integer primary key, " +
-	    Constants.TABLE_NOTES__UUID + " text not null, " +
-	    Constants.TABLE_NOTES__CONTENT + " text not null, " +
+	    Constants.TABLE_NOTES             + "(" +
+	    Constants.KEY_ID                  + " integer primary key, " +
+	    Constants.TABLE_NOTES__UUID       + " text not null, " +
+	    Constants.TABLE_NOTES__CONTENT    + " text, " +
+	    Constants.TABLE_NOTES__TYPE       + " text not null, " +
 	    Constants.TABLE_NOTES__IS_REMOVED + " integer not null DEFAULT  0, " +
 	    Constants.TABLE_NOTES__CREATED_AT + " long not null, " +
 	    Constants.TABLE_NOTES__UPDATED_AT + " long not null);";

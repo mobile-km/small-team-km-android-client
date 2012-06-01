@@ -21,6 +21,7 @@ import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.receiver.BroadcastReceiverConstants;
 
 public class MainActivity extends TeamknBaseActivity {
@@ -55,6 +56,7 @@ public class MainActivity extends TeamknBaseActivity {
 	public void click_new_text(View view){
 	  Intent intent = new Intent();
 	  intent.setClass(this, EditNoteActivity.class);
+	  intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, NoteDBHelper.Type.TEXT);
 	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
 	}
 	
@@ -133,8 +135,12 @@ public class MainActivity extends TeamknBaseActivity {
 		    break;
 		  case MainActivity.RequestCode.FROM_ALBUM:
 		    Uri uri  = data.getData();
-		    System.out.println(uri);
 		    
+		    Intent intent = new Intent();
+		    intent.setData(uri);
+		    intent.setClass(MainActivity.this, EditNoteActivity.class);
+		    intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, NoteDBHelper.Type.IMAGE);
+		    startActivity(intent);
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

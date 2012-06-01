@@ -6,6 +6,7 @@ public class Note extends BaseModel {
   public int id;
   public String uuid;
   public String content;
+  private String type;
   public int is_removed;
   public long created_at;
   public long updated_at;
@@ -15,11 +16,12 @@ public class Note extends BaseModel {
     set_nil();
   }
 
-  public Note(int id, String uuid, String content, int is_removed,
+  public Note(int id, String uuid, String content,String type, int is_removed,
       long created_at, long updated_at) {
     this.id = id;
     this.uuid = uuid;
     this.content = content;
+    this.type = type;
     this.is_removed = is_removed;
     this.created_at = created_at;
     this.updated_at = updated_at;

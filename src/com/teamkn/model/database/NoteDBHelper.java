@@ -14,18 +14,20 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class NoteDBHelper extends BaseModelDBHelper {
+  public class Type{
+    public static final String TEXT = "TEXT";
+    public static final String IMAGE = "IMAGE";
+  }
+  
+  
   final public static List<Note> all() throws Exception {
     SQLiteDatabase db = get_read_db();
     List<Note> notes = new ArrayList<Note>();
     try {
       Cursor cursor = db.query(Constants.TABLE_NOTES,
-          new String[] { Constants.KEY_ID, Constants.TABLE_NOTES__UUID,
-              Constants.TABLE_NOTES__CONTENT,
-              Constants.TABLE_NOTES__IS_REMOVED,
-              Constants.TABLE_NOTES__CREATED_AT,
-              Constants.TABLE_NOTES__UPDATED_AT }, 
-              Constants.TABLE_NOTES__IS_REMOVED + " = ? ", new String[]{"0"}, 
-              null, null,
+          get_columns(), 
+          Constants.TABLE_NOTES__IS_REMOVED + " = ? ", new String[]{"0"}, 
+          null, null,
           Constants.KEY_ID + " DESC");
 
       while (cursor.moveToNext()) {
@@ -48,10 +50,11 @@ public class NoteDBHelper extends BaseModelDBHelper {
     int id = cursor.getInt(0);
     String uuid = cursor.getString(1);
     String content = cursor.getString(2);
-    int is_removed = cursor.getInt(3);
-    long created_at = cursor.getLong(4);
-    long updated_at = cursor.getLong(5);
-    return new Note(id, uuid, content, is_removed, created_at,
+    String type = cursor.getString(3);
+    int is_removed = cursor.getInt(4);
+    long created_at = cursor.getLong(5);
+    long updated_at = cursor.getLong(6);
+    return new Note(id, uuid, content,type, is_removed, created_at,
         updated_at);
   }
   
@@ -65,6 +68,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
       ContentValues values = new ContentValues();
       values.put(Constants.TABLE_NOTES__UUID, uuid);
       values.put(Constants.TABLE_NOTES__CONTENT, note_content);
+      values.put(Constants.TABLE_NOTES__TYPE, Type.TEXT);
       values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
       values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
       values.put(Constants.TABLE_NOTES__CREATED_AT, current_timemillis);
@@ -87,7 +91,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
       ContentValues values = new ContentValues();
       values.put(Constants.TABLE_NOTES__UUID, uuid);
       values.put(Constants.TABLE_NOTES__CONTENT, note_content);
-      values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
       values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
       
       int row_count = db.update(Constants.TABLE_NOTES, 
@@ -110,12 +113,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
     
     try {
       Cursor cursor = db.query(
-        Constants.TABLE_NOTES, new String[] { 
-            Constants.KEY_ID, Constants.TABLE_NOTES__UUID,
-            Constants.TABLE_NOTES__CONTENT,
-            Constants.TABLE_NOTES__IS_REMOVED,
-            Constants.TABLE_NOTES__CREATED_AT,
-            Constants.TABLE_NOTES__UPDATED_AT }, 
+        Constants.TABLE_NOTES, get_columns(), 
         Constants.TABLE_NOTES__UUID + " = " + "'" + uuid + "'", 
         null, null, null, null
       );
@@ -155,6 +153,16 @@ public class NoteDBHelper extends BaseModelDBHelper {
     } finally {
       db.close();
     }
+  }
+  
+  public static String[] get_columns(){
+    return new String[] { 
+        Constants.KEY_ID, Constants.TABLE_NOTES__UUID,
+        Constants.TABLE_NOTES__CONTENT,
+        Constants.TABLE_NOTES__TYPE,
+        Constants.TABLE_NOTES__IS_REMOVED,
+        Constants.TABLE_NOTES__CREATED_AT,
+        Constants.TABLE_NOTES__UPDATED_AT };
   }
 
 }

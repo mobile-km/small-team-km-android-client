@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    style="@style/no_padding_body"
->
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:focusable="true"
+  android:focusableInTouchMode="true"
+  style="@style/no_padding_body"
+  >
   
-	<RelativeLayout
+	<!-- 正文输入 -->
+	<LinearLayout
+	  android:layout_alignParentTop="true"
 	  android:layout_width="fill_parent"
 	  android:layout_height="fill_parent"
 	  android:layout_above="@+id/bottom_bar"
-	>
-	  <!-- 正文输入 -->
-	    <LinearLayout
-	      android:id="@+id/note_content_inputer_top_line"
-	      style="@style/note_content_inputer_top_line"
-	    />
-      <EditText
-        android:id="@+id/note_content_et"
-        android:layout_below="@+id/note_content_inputer_top_line"
-        android:hint="@string/note_content_et"
-        style="@style/note_content_inputer_layout"
+    >
+    <EditText
+      android:id="@+id/note_content_et"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:hint="@string/note_content_et"
+      style="@style/note_content_inputer_layout"
+      android:visibility="gone"
       />
-    </RelativeLayout>
+    <ImageView
+      android:id="@+id/note_image_iv"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:visibility="gone"
+      />
+    </LinearLayout>
     
 	<!-- 窗口底栏 -->
 	<LinearLayout
