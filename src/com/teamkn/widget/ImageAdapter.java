@@ -1,16 +1,14 @@
 package com.teamkn.widget;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-
 import com.teamkn.R;
-import com.teamkn.application.MindpinApplication;
+import com.teamkn.application.TeamknApplication;
 
 public class ImageAdapter extends BaseAdapter {
 	private ArrayList<String> image_urls;
@@ -36,7 +34,7 @@ public class ImageAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Context context = MindpinApplication.context;
+		Context context = TeamknApplication.context;
 		ImageView image_view = new ImageView(context);
 
 		image_view.setBackgroundResource(R.drawable.bg_image_loading);

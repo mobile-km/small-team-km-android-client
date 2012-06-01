@@ -6,9 +6,9 @@ import android.provider.Contacts.Phones;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 
-public class ContactsActivity extends MindpinBaseActivity {
+public class ContactsActivity extends TeamknBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -1,8 +1,8 @@
 package com.teamkn.activity.note;
 
 import com.teamkn.R;
-import com.teamkn.base.activity.MindpinBaseActivity;
-import com.teamkn.base.task.MindpinAsyncTask;
+import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class EditNoteActivity extends MindpinBaseActivity {
+public class EditNoteActivity extends TeamknBaseActivity {
   private EditText note_content_et;
   private String note_uuid;
   private Note note;
@@ -52,7 +52,7 @@ public class EditNoteActivity extends MindpinBaseActivity {
   }
 
   private void save_note(String note_content) {
-    new MindpinAsyncTask<String, Void, Void>(this, R.string.saving) {
+    new TeamknAsyncTask<String, Void, Void>(this, R.string.saving) {
       @Override
       public Void do_in_background(String... params) throws Exception {
         String note_content = params[0];

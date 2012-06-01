@@ -6,7 +6,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	style="@style/body"
 >	
-  	<com.mindpin.widget.view.HeadBar
+  	<com.teamkn.widget.view.HeadBar
   		style="@style/head_bar"
   		title="关于…"
   	/>
@@ -32,7 +32,7 @@
 			</WebView>
 			
 			<ImageView 
-				style="@style/mindpin_logo_about"
+				style="@style/teamkn_logo_about"
 			/>
 			<TextView
 				android:text="@string/app_version_full" 
@@ -61,7 +61,7 @@
 				android:text="访问我们的网站"
 				style="@style/about_site_button"
 				android:layout_marginBottom="10dp"
-				android:onClick="open_mindpin_website"
+				android:onClick="open_teamkn_website"
 			/>
 			
 			<TextView

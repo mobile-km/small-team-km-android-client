@@ -9,15 +9,15 @@ import org.apache.http.entity.mime.MultipartEntity;
 
 import com.teamkn.Logic.HttpApi;
 
-public abstract class MindpinPostRequest<TResult> extends MindpinHttpRequest<TResult> {
+public abstract class TeamknPostRequest<TResult> extends TeamknHttpRequest<TResult> {
 	// 一般文本参数的请求
-	public MindpinPostRequest(final String request_path, final NameValuePair...nv_pairs) throws UnsupportedEncodingException{
+	public TeamknPostRequest(final String request_path, final NameValuePair...nv_pairs) throws UnsupportedEncodingException{
 		HttpEntity entity = build_entity(nv_pairs);
 		this.http_uri_request = build_http_post(entity, request_path);
 	}
 	
 	// 上传文件之类的请求
-	public MindpinPostRequest(final String request_path, final ParamFile...param_files){
+	public TeamknPostRequest(final String request_path, final ParamFile...param_files){
 		HttpEntity entity = build_entity(param_files);
 		this.http_uri_request = build_http_post(entity, request_path);
 	}

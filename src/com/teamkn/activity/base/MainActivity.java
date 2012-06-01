@@ -1,7 +1,5 @@
 package com.teamkn.activity.base;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -9,26 +7,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.cache.image.ImageCache;
 import com.teamkn.receiver.BroadcastReceiverConstants;
 
-public class MainActivity extends MindpinBaseActivity {
+public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{
     public final static int NEW_TEXT = 0;
+    public final static int FROM_ALBUM = 1;
   }
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
@@ -51,13 +49,19 @@ public class MainActivity extends MindpinBaseActivity {
 	
   //同步操作
 	private void start_syn_data() {
-		sendBroadcast(new Intent("com.mindpin.action.start_syn_data"));
+		sendBroadcast(new Intent("com.teamkn.action.start_syn_data"));
 	}
 	
 	public void click_new_text(View view){
 	  Intent intent = new Intent();
 	  intent.setClass(this, EditNoteActivity.class);
 	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
+	}
+	
+	public void click_from_album(View view){
+	  Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
+    intent.setType("image/*");
+    startActivityForResult(intent,MainActivity.RequestCode.FROM_ALBUM);
 	}
 	
 	public void show_note_list(View view){
@@ -84,7 +88,7 @@ public class MainActivity extends MindpinBaseActivity {
 			open_activity(AboutActivity.class);
 			break;
 		case R.id.menu_setting:
-			open_activity(MindpinSettingActivity.class);
+			open_activity(TeamknSettingActivity.class);
 			break;
 		case R.id.menu_account_management:
 			open_activity(AccountManagerActivity.class);
@@ -127,6 +131,10 @@ public class MainActivity extends MindpinBaseActivity {
 		  case MainActivity.RequestCode.NEW_TEXT:
 		    BaseUtils.toast("创建成功");
 		    break;
+		  case MainActivity.RequestCode.FROM_ALBUM:
+		    Uri uri  = data.getData();
+		    System.out.println(uri);
+		    
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

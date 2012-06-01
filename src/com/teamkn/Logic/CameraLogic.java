@@ -20,7 +20,7 @@ public class CameraLogic {
 	public static void call_system_camera(Activity activity) {
 		Intent intent = get_photo_capture_intent();
 		String name = capture_name_by_time();
-		IMAGE_CAPTURE_TEMP_PATH = new File(FileDirs.MINDPIN_CAPTURE_DIR, name);
+		IMAGE_CAPTURE_TEMP_PATH = new File(FileDirs.TEAMKN_CAPTURE_DIR, name);
 		Uri uri = Uri.fromFile(IMAGE_CAPTURE_TEMP_PATH);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		activity.startActivityForResult(intent, CameraLogic.REQUEST_CODE_CAPTURE);

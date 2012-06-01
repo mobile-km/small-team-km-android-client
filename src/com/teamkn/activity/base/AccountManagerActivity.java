@@ -13,12 +13,12 @@ import android.widget.ListView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.AccountUserDBHelper;
 import com.teamkn.widget.adapter.AccountListAdapter;
 
-public class AccountManagerActivity extends MindpinBaseActivity {
+public class AccountManagerActivity extends TeamknBaseActivity {
 	
 	private ListView list_view;
 	private AccountListAdapter adapter;
@@ -108,7 +108,7 @@ public class AccountManagerActivity extends MindpinBaseActivity {
 				if (AccountUserDBHelper.count() > 0) {
 					// 如果还有用户，则选择所有用户中的第一个，切换之
 					AccountManager.switch_account(AccountUserDBHelper.all().get(0));
-					// open main_activity 堆栈会被MindpinBaseActivity自动清理
+					// open main_activity 堆栈会被TeamknBaseActivity自动清理
 					open_activity(MainActivity.class);
 				} else {
 					// 如果没有用户了，则关闭所有已经打开的界面，再打开登录界面

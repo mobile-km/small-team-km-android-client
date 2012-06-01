@@ -1,7 +1,7 @@
 package com.teamkn.model.base;
 
 public class Constants {
-	public static final String DATABASE_NAME = "mindpin";
+	public static final String DATABASE_NAME = "teamkn";
 	public static final int DATABASE_VERSION = 11;
 	public static final String KEY_ID="_id";
 	

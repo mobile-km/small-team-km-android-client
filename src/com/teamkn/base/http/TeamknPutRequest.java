@@ -8,8 +8,8 @@ import org.apache.http.client.methods.HttpPut;
 
 import com.teamkn.Logic.HttpApi;
 
-public abstract class MindpinPutRequest<TResult> extends MindpinHttpRequest<TResult> {
-	public MindpinPutRequest(final String request_path, final NameValuePair...nv_pairs) throws UnsupportedEncodingException{
+public abstract class TeamknPutRequest<TResult> extends TeamknHttpRequest<TResult> {
+	public TeamknPutRequest(final String request_path, final NameValuePair...nv_pairs) throws UnsupportedEncodingException{
 		HttpEntity entity = build_entity(nv_pairs);
 		this.http_uri_request = build_http_put(entity, request_path);
 	}

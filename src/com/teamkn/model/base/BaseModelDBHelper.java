@@ -1,12 +1,11 @@
 package com.teamkn.model.base;
 
 import android.database.sqlite.SQLiteDatabase;
-
-import com.teamkn.application.MindpinApplication;
+import com.teamkn.application.TeamknApplication;
 
 abstract public class BaseModelDBHelper {
-	final private static MindpinDBHelper get_db_helper() {
-		return new MindpinDBHelper(MindpinApplication.context,
+	final private static TeamknDBHelper get_db_helper() {
+		return new TeamknDBHelper(TeamknApplication.context,
 				Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
 	}
 

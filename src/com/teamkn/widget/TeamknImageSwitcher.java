@@ -14,14 +14,14 @@ import com.teamkn.R;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.cache.image.ImageCache;
 
-public class MindpinImageSwitcher extends ViewAnimator {
+public class TeamknImageSwitcher extends ViewAnimator {
 	private List<String> image_urls;
 	//private List<Double> image_ratios;
 	
 	private float event_down_x;
 	private TextView footer;
 
-	public MindpinImageSwitcher(Context context, AttributeSet attrs) {
+	public TeamknImageSwitcher(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
@@ -65,7 +65,7 @@ public class MindpinImageSwitcher extends ViewAnimator {
 	public boolean onTouchEvent(MotionEvent event) {
 		int action = event.getAction();
 
-		//System.out.println("mindpin image switch touch");
+		//System.out.println("Teamkn image switch touch");
 		//System.out.println(action);
 
 		switch (action) {

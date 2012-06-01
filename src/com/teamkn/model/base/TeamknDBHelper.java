@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class MindpinDBHelper extends SQLiteOpenHelper{
+public class TeamknDBHelper extends SQLiteOpenHelper{
 	private static final String create_table_users = "create table " +
 			Constants.TABLE_USERS + "(" + 
 			Constants.KEY_ID + " integer primary key autoincrement, "+
@@ -24,7 +24,7 @@ public class MindpinDBHelper extends SQLiteOpenHelper{
 	    Constants.TABLE_NOTES__UPDATED_AT + " long not null);";
 	    
 	
-	public MindpinDBHelper(Context context, String name, CursorFactory factory,
+	public TeamknDBHelper(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
 	}

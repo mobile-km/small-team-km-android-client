@@ -13,7 +13,7 @@ import com.teamkn.base.utils.FileDirs;
 public class CompressPhoto {
 
 	public static String get_compress_file_path(String original_file_path){
-		int quality_size = MindpinPreferences.get_photo_quality();
+		int quality_size = TeamknPreferences.get_photo_quality();
 		if(quality_size == 0){
 			return original_file_path;
 		}
@@ -30,10 +30,10 @@ public class CompressPhoto {
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(original_file_path,options);
         
-        File file=new File(FileDirs.MINDPIN_DIR, "upload_tmp.png");
+        File file=new File(FileDirs.TEAMKN_TEMP_DIR, "upload_tmp.png");
         if(file.exists()){
         	file.delete();
-        	file=new File(FileDirs.MINDPIN_DIR, "upload_tmp.png");
+        	file=new File(FileDirs.TEAMKN_TEMP_DIR, "upload_tmp.png");
         }
         try {
             FileOutputStream out=new FileOutputStream(file);

@@ -11,7 +11,7 @@ import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
 
-abstract public class MindpinBaseActivity extends Activity {
+abstract public class TeamknBaseActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

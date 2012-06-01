@@ -5,20 +5,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
-import com.teamkn.base.activity.MindpinBaseActivity;
-import com.teamkn.base.adapter.MindpinBaseAdapter;
+import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.AccountUserDBHelper;
 
-public class AccountListAdapter extends MindpinBaseAdapter<AccountUser> {
+public class AccountListAdapter extends TeamknBaseAdapter<AccountUser> {
 	
 	private boolean is_edit_mode = false;
 
-	public AccountListAdapter(MindpinBaseActivity activity) {
+	public AccountListAdapter(TeamknBaseActivity activity) {
 		super(activity);
 	}
 

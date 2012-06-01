@@ -62,13 +62,13 @@ public class ImageCache {
 	// 根据图像url，获取本地的磁盘缓存文件路径
 	// 规则是：
 	// ->
-	// /mindpin/cache/downloaded_image/ uri.hashCode()+".cache"
+	// /teamkn/image_cache/ uri.hashCode()+".cache"
 	public static File get_cache_file(String image_url) {
 		try {
 			URI uri = new URI(image_url);
 			String filename = uri.hashCode() + ".cache";
 			File cache_file = new File(
-					FileDirs.mindpin_downloaded_image_cache_dir(), filename);
+					FileDirs.TEAMKN_IMAGE_CACHE_DIR, filename);
 
 			return cache_file;
 		} catch (Exception e) {

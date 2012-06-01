@@ -91,7 +91,7 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 	// 保存
 	final public static boolean save(final AccountUser account_user){
 		
-		Log.d("mindpin",account_user.is_nil()+"");
+		Log.d("teamkn",account_user.is_nil()+"");
 		
 		if(account_user.is_nil()) return false;
 		SQLiteDatabase db = get_write_db();

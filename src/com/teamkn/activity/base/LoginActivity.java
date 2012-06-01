@@ -6,11 +6,11 @@ import android.widget.EditText;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.base.activity.MindpinBaseActivity;
-import com.teamkn.base.task.MindpinAsyncTask;
+import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 
-public class LoginActivity extends MindpinBaseActivity {
+public class LoginActivity extends TeamknBaseActivity {
 	private String email;
 	private String password;
 	
@@ -54,7 +54,7 @@ public class LoginActivity extends MindpinBaseActivity {
 	
 	//显示正在登录，并在一个线程中进行登录
 	private void do_login(){		
-		new MindpinAsyncTask<String, Void, Void>(this, R.string.login_now_login){
+		new TeamknAsyncTask<String, Void, Void>(this, R.string.login_now_login){
 			@Override
 			public Void do_in_background(String... params) throws Exception {
 				String email = params[0];

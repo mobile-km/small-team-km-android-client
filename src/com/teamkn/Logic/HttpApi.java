@@ -3,7 +3,7 @@ package com.teamkn.Logic;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import com.teamkn.base.http.MindpinPostRequest;
+import com.teamkn.base.http.TeamknPostRequest;
 
 public class HttpApi {
 	
@@ -17,7 +17,7 @@ public class HttpApi {
 	// LoginActivity
 	// 用户登录请求
 	public static boolean user_authenticate(String email, String password) throws Exception {
-		return new MindpinPostRequest<Boolean>(
+		return new TeamknPostRequest<Boolean>(
 			用户登录, 
 			new BasicNameValuePair("email", email),
 			new BasicNameValuePair("password", password)

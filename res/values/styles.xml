@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- 主题 -->
-	<style name="Theme.mindpin" parent="@android:Theme.Light.NoTitleBar">
-		<item name="android:windowBackground">@color/mindpin_bgc</item>
-		<item name="android:listViewStyle">@style/mindpin_list_theme</item>
+	<style name="Theme.teamkn" parent="@android:Theme.Light.NoTitleBar">
+		<item name="android:windowBackground">@color/teamkn_bgc</item>
+		<item name="android:listViewStyle">@style/teamkn_list_theme</item>
 	</style>
 
 	<!-- 主题公共元素 -->
-	<style name="mindpin_list_theme" parent="@android:style/Widget.ListView.White">
+	<style name="teamkn_list_theme" parent="@android:style/Widget.ListView.White">
 		<item name="android:smoothScrollbar">true</item>
 		<item name="android:fastScrollEnabled">true</item>
 		<item name="android:cacheColorHint">@android:color/transparent</item>
 		<item name="android:listSelector">@android:drawable/list_selector_background</item>
-		<item name="android:background">@color/mindpin_bgc</item>
+		<item name="android:background">@color/teamkn_bgc</item>
 	</style>
     
    <!-- 公用 -->
@@ -178,7 +178,7 @@
     </style>
 
 	<!-- base_about_layout -->
-    <style name="mindpin_logo_about">
+    <style name="teamkn_logo_about">
     	<item name="android:src">@drawable/logo_about</item>
     	<item name="android:layout_width">440px</item>
     	<item name="android:layout_height">80px</item>
@@ -317,7 +317,7 @@
     	<item name="android:textColor">#FFFFFF</item>
    	</style>
    	
-   	<style name="mindpin.alert_dialog" parent="@android:Theme.Dialog">
+   	<style name="teamkn.alert_dialog" parent="@android:Theme.Dialog">
 		<item name="android:windowFrame">@null</item>
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:windowIsFloating">true</item>
@@ -325,8 +325,8 @@
 		<item name="android:backgroundDimEnabled">true</item>
 	</style>
 	
-	<!-- mindpin自定义的 progress_dialog 用于 正在登录 等场合 -->
-   	<style name="mindpin_progress_dialog">
+	<!-- teamkn自定义的 progress_dialog 用于 正在登录 等场合 -->
+   	<style name="teamkn_progress_dialog">
 		<item name="android:windowFrame">@null</item>
 		<item name="android:windowNoTitle">true</item> <!-- 标题栏 -->
 		<item name="android:windowContentOverlay">@null</item>
@@ -337,6 +337,6 @@
 		<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
 		<item name="android:windowIsTranslucent">true</item>
 		
-		<item name="android:background">@drawable/mindpin_process_dialog_background</item>
+		<item name="android:background">@drawable/teamkn_process_dialog_background</item>
 	</style>
 </resources>

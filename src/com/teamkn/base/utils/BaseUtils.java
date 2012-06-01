@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -31,14 +30,13 @@ import android.net.NetworkInfo;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.Toast;
-
-import com.teamkn.application.MindpinApplication;
+import com.teamkn.application.TeamknApplication;
 
 public class BaseUtils {
 	
 	
 	public static int dp_to_px(int dip) {
-		Resources r = MindpinApplication.context.getResources();
+		Resources r = TeamknApplication.context.getResources();
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
 	}
 	
@@ -198,7 +196,7 @@ public class BaseUtils {
     // 快速显示一个toast
     public static void toast(int string_resource_id){
     	Toast toast = Toast.makeText(
-    		MindpinApplication.context, 
+    	TeamknApplication.context, 
 			string_resource_id,
 			Toast.LENGTH_SHORT
 		);
@@ -208,7 +206,7 @@ public class BaseUtils {
     
     public static void toast(String string){
     	Toast toast = Toast.makeText(
-    		MindpinApplication.context, 
+    	TeamknApplication.context, 
 			string,
 			Toast.LENGTH_SHORT
 		);

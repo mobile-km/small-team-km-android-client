@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- 全局 -->
-    <string name="app_name">小团队知识管理</string>
+    <string name="app_name">teamkn</string>
     <string name="app_version">0.0.9 pre</string>
     <string name="app_version_full">android客户端 0.0.9 pre</string>
     <string name="now_loading">正在载入…</string>
@@ -22,8 +22,8 @@
     <string name="laceholder">占位</string>
     
     <!-- 各种dialog -->
-    <string name="dialog_close_app_title">关闭mindpin</string>
-    <string name="dialog_close_app_text">确定要关闭mindpin么？</string>
+    <string name="dialog_close_app_title">退出程序</string>
+    <string name="dialog_close_app_text">是否退出 teamkn？</string>
     <string name="dialog_ok">确定</string>
     <string name="dialog_cancel">取消</string>
     
@@ -39,6 +39,7 @@
     <!-- 登录成功后的主页面 -->
     <string name="base_main_show_note_list">笔记列表</string>
     <string name="new_text">新建文本</string>
+    <string name="from_album">从相册</string>
     <string name="new_photo">新照片</string>
     <string name="menu_about">关于…</string>
     <string name="menu_account_management">账号管理</string>

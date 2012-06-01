@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class NoteListActivity extends MindpinBaseActivity {
+public class NoteListActivity extends TeamknBaseActivity {
   public class RequestCode {
     public final static int EDIT_TEXT = 1;
   }

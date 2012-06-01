@@ -7,10 +7,10 @@
 	<uses-sdk android:minSdkVersion="7" />
 
 	<application 
-		android:theme="@style/Theme.mindpin"
+		android:theme="@style/Theme.teamkn"
 		android:icon="@drawable/icon" 
 		android:label="@string/app_name"
-		android:name=".application.MindpinApplication"
+		android:name=".application.TeamknApplication"
 	>
 		<!-- base -->
 		<activity android:name=".activity.base.LoadingActivity" android:label="@string/app_name">
@@ -22,7 +22,7 @@
 		<activity android:name=".activity.base.LoginActivity" android:windowSoftInputMode="stateVisible"></activity>
 		<activity android:name=".activity.base.MainActivity"></activity>
 		<activity android:name=".activity.base.AboutActivity"></activity>
-		<activity android:name=".activity.base.MindpinSettingActivity" android:theme="@android:style/Theme.Black"></activity>
+		<activity android:name=".activity.base.TeamknSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 		<activity android:name=".activity.base.AccountManagerActivity"></activity>
 		
 		<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
@@ -69,7 +69,7 @@
 		<!-- 数据同步接收器 -->
 		<receiver android:name=".receiver.SynDataBroadcastReceiver">
 			<intent-filter>
-				<action android:name="com.mindpin.action.start_syn_data"/>
+				<action android:name="com.teamkn.action.start_syn_data"/>
 			</intent-filter>
 		</receiver>
 		

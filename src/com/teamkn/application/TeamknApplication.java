@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MindpinApplication extends Application {
+public class TeamknApplication extends Application {
 	public static Context context;
 	public static LayoutInflater mInflater;
 

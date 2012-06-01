@@ -1,6 +1,6 @@
 package com.teamkn.base.utils.location;
 
-import com.teamkn.application.MindpinApplication;
+import com.teamkn.application.TeamknApplication;
 
 import android.content.Context;
 import android.location.Location;
@@ -12,7 +12,7 @@ public class LocationManagerProxy {
 	private SimpleLocationListener listener;
 	
 	public LocationManagerProxy(){
-		this.location_manager = (LocationManager) MindpinApplication.context.getSystemService(Context.LOCATION_SERVICE);
+		this.location_manager = (LocationManager) TeamknApplication.context.getSystemService(Context.LOCATION_SERVICE);
 		this.listener = new SimpleLocationListener();
 	}
 

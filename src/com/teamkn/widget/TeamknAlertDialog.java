@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class MindpinAlertDialog extends Dialog {
+public class TeamknAlertDialog extends Dialog {
 	Context context;
 	String title;
 	String message;
@@ -27,12 +27,12 @@ public class MindpinAlertDialog extends Dialog {
 	DialogInterface.OnClickListener button2_listener;
 	DialogInterface.OnClickListener button3_listener;
 
-	public MindpinAlertDialog(Context context) {
-		super(context,R.style.mindpin_alert_dialog);
+	public TeamknAlertDialog(Context context) {
+		super(context,R.style.teamkn_alert_dialog);
 		this.context = context;
 	}
 
-	public MindpinAlertDialog(Context context, int theme) {
+	public TeamknAlertDialog(Context context, int theme) {
 		super(context, theme);
 		this.context = context;
 	}
@@ -40,7 +40,7 @@ public class MindpinAlertDialog extends Dialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.mindpin_alert_dialog);
+		this.setContentView(R.layout.teamkn_alert_dialog);
 
 		process_title();
 		process_message();
@@ -53,9 +53,9 @@ public class MindpinAlertDialog extends Dialog {
 	}
 
 	private void process_button() {
-		Button b1 = (Button) findViewById(R.id.mindpin_alert_dialog_button1);
-		Button b2 = (Button) findViewById(R.id.mindpin_alert_dialog_button2);
-		Button b3 = (Button) findViewById(R.id.mindpin_alert_dialog_button3);
+		Button b1 = (Button) findViewById(R.id.teamkn_alert_dialog_button1);
+		Button b2 = (Button) findViewById(R.id.teamkn_alert_dialog_button2);
+		Button b3 = (Button) findViewById(R.id.teamkn_alert_dialog_button3);
 		if (button1_lable == null) {
 			b1.setVisibility(View.GONE);
 		} else {
@@ -63,10 +63,10 @@ public class MindpinAlertDialog extends Dialog {
 			b1.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					if (button1_listener != null) {
-						button1_listener.onClick(MindpinAlertDialog.this,
+						button1_listener.onClick(TeamknAlertDialog.this,
 								DialogInterface.BUTTON_POSITIVE);
 					}
-					MindpinAlertDialog.this.dismiss();
+					TeamknAlertDialog.this.dismiss();
 				}
 			});
 		}
@@ -78,10 +78,10 @@ public class MindpinAlertDialog extends Dialog {
 			b2.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					if (button2_listener != null) {
-						button2_listener.onClick(MindpinAlertDialog.this,
+						button2_listener.onClick(TeamknAlertDialog.this,
 								DialogInterface.BUTTON_NEGATIVE);
 					}
-					MindpinAlertDialog.this.dismiss();
+					TeamknAlertDialog.this.dismiss();
 				}
 			});
 		}
@@ -93,31 +93,31 @@ public class MindpinAlertDialog extends Dialog {
 			b3.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					if (button3_listener != null) {
-						button3_listener.onClick(MindpinAlertDialog.this,
+						button3_listener.onClick(TeamknAlertDialog.this,
 								DialogInterface.BUTTON_NEUTRAL);
 					}
-					MindpinAlertDialog.this.dismiss();
+					TeamknAlertDialog.this.dismiss();
 				}
 			});
 		}
 
 		if (button1_lable == null && button2_lable == null
 				&& button3_lable == null) {
-			LinearLayout panel = (LinearLayout)findViewById(R.id.mindpin_alert_dialog_button_panel);
+			LinearLayout panel = (LinearLayout)findViewById(R.id.teamkn_alert_dialog_button_panel);
 			panel.setVisibility(View.GONE);
 		}
 	}
 
 	private void process_content_view() {
 		if (ContentView != null) {
-			ScrollView sv = (ScrollView) findViewById(R.id.mindpin_alert_dialog_content_panel_scrollView);
+			ScrollView sv = (ScrollView) findViewById(R.id.teamkn_alert_dialog_content_panel_scrollView);
 			sv.removeAllViews();
 			sv.addView(ContentView);
 		}
 	}
 
 	private void process_message() {
-		TextView view = (TextView) findViewById(R.id.mindpin_alert_dialog_message);
+		TextView view = (TextView) findViewById(R.id.teamkn_alert_dialog_message);
 		if (message == null || "".equals(message)) {
 			view.setVisibility(View.GONE);
 		} else {
@@ -127,10 +127,10 @@ public class MindpinAlertDialog extends Dialog {
 
 	private void process_title() {
 		if (title == null || "".equals(title)) {
-			LinearLayout top = (LinearLayout) findViewById(R.id.mindpin_alert_dialog_title_panel);
+			LinearLayout top = (LinearLayout) findViewById(R.id.teamkn_alert_dialog_title_panel);
 			top.setVisibility(View.GONE);
 		} else {
-			TextView view = (TextView) findViewById(R.id.mindpin_alert_dialog_title);
+			TextView view = (TextView) findViewById(R.id.teamkn_alert_dialog_title);
 			view.setText(title);
 		}
 	}

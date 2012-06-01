@@ -16,18 +16,9 @@ public class FileDirs {
 		return dir;
     }
     
-    public static File mindpin_downloaded_image_cache_dir(){
-    	return get_or_create_dir("/mindpin/cache/downloaded_image/");
-    }
-    
-    public static File mindpin_user_data_dir(int user_id){
-    	return get_or_create_dir("/mindpin/users/"+user_id+"/data/");
-    }
-    
-    public static File mindpin_user_cache_dir(int user_id){
-    	return get_or_create_dir("/mindpin/users/"+user_id+"/cache/");
-    }
-    
-    public final static File MINDPIN_DIR 	     = get_or_create_dir("/mindpin/");
-    public final static File MINDPIN_CAPTURE_DIR = get_or_create_dir("/mindpin/capture/");
+    public final static File TEAMKN_DIR             = get_or_create_dir("/teamkn");
+    public final static File TEAMKN_TEMP_DIR        = get_or_create_dir("/teamkn/temp");
+    public final static File TEAMKN_NOTES_DIR       = get_or_create_dir("/teamkn/notes");
+    public final static File TEAMKN_CAPTURE_DIR     = get_or_create_dir("/teamkn/capture");
+    public final static File TEAMKN_IMAGE_CACHE_DIR = get_or_create_dir("/teamkn/image_cache");
 }

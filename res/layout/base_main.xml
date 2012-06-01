@@ -33,9 +33,11 @@
         android:layout_width="160px"
         >
         <Button
-          android:text="@string/laceholder"
+          android:id="@+id/from_album"
+          android:text="@string/from_album"
           android:layout_height="fill_parent"
           android:layout_width="fill_parent"
+          android:onClick="click_from_album"
           />
         </LinearLayout>
       <LinearLayout

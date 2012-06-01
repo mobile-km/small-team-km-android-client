@@ -2,15 +2,14 @@ package com.teamkn.base.task;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager.AuthenticateException;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.widget.MindpinProgressDialog;
+import com.teamkn.widget.TeamknProgressDialog;
 
 // 基本请求处理框架，构建于 AsyncTask 之上
-public abstract class MindpinAsyncTask<TParams, TProgress, TResult> {
+public abstract class TeamknAsyncTask<TParams, TProgress, TResult> {
 	
 	public static final int SUCCESS = 200;
 	public static final int AUTHENTICATE_EXCEPTION = 9003;
@@ -23,7 +22,7 @@ public abstract class MindpinAsyncTask<TParams, TProgress, TResult> {
 		protected void onPreExecute(){
 			// 如果构造器传入了 progress_dialog_message 则显示一个提示框
 			if(null != progress_dialog_message && null != progress_dialog_activity){
-				progress_dialog = MindpinProgressDialog.show(progress_dialog_activity, progress_dialog_message);
+				progress_dialog = TeamknProgressDialog.show(progress_dialog_activity, progress_dialog_message);
 			}
 			on_start();
 		}
@@ -34,21 +33,21 @@ public abstract class MindpinAsyncTask<TParams, TProgress, TResult> {
 			//publishProgress(null);
 			
 			try {
-				Log.d("MindpinAsyncTask","开始执行");
+				Log.d("TeamknAsyncTask","开始执行");
 				inner_task_result = do_in_background(params);
 				return SUCCESS;
 			}
 			
 			catch (AuthenticateException e){
 				// 用户身份验证错误
-				Log.e("MindpinAsyncTask","用户身份验证错误");
+				Log.e("TeamknAsyncTask","用户身份验证错误");
 				e.printStackTrace();
 				return AUTHENTICATE_EXCEPTION;
 			} 
 			
 			catch (Exception e){
 				// 程序执行错误
-				Log.e("MindpinAsyncTask","程序执行错误");
+				Log.e("TeamknAsyncTask","程序执行错误");
 				e.printStackTrace();
 				return UNKNOWN_EXCEPTION;
 			}
@@ -116,27 +115,27 @@ public abstract class MindpinAsyncTask<TParams, TProgress, TResult> {
 	}
 	
 	
-	private MindpinBaseActivity progress_dialog_activity = null;
+	private TeamknBaseActivity progress_dialog_activity = null;
 	private String progress_dialog_message = null;
-	private MindpinProgressDialog progress_dialog = null;
+	private TeamknProgressDialog progress_dialog = null;
 	
 	private InnerTask inner_task = null;
 	private TResult inner_task_result = null;
 	
 	// 一般构造器，什么都不用传
-	public MindpinAsyncTask(){
+	public TeamknAsyncTask(){
 		super();
 	}
 	// 构造器2，传入activity，以及 progress_dialog 上面显示的文字
 	// 由于显示 progress dialog 必须用到activity，所以传进来
-	public MindpinAsyncTask(MindpinBaseActivity progress_dialog_activity, String process_dialog_message){
+	public TeamknAsyncTask(TeamknBaseActivity progress_dialog_activity, String process_dialog_message){
 		super();
 		this.progress_dialog_activity = progress_dialog_activity;
 		this.progress_dialog_message = process_dialog_message;
 	}
 	// 构造器3，传入activity，以及 progress_dialog 上面显示的文字的资源号
 	// 由于显示 progress dialog 必须用到activity，所以传进来
-	public MindpinAsyncTask(MindpinBaseActivity progress_dialog_activity, int process_dialog_message_resource_id){
+	public TeamknAsyncTask(TeamknBaseActivity progress_dialog_activity, int process_dialog_message_resource_id){
 		super();
 		this.progress_dialog_activity = progress_dialog_activity;
 		this.progress_dialog_message = progress_dialog_activity.getResources().getString(process_dialog_message_resource_id);

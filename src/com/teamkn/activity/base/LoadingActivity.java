@@ -3,10 +3,10 @@ package com.teamkn.activity.base;
 import android.os.Bundle;
 
 import com.teamkn.R;
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 
 //此乃应用注册入口
-public class LoadingActivity extends MindpinBaseActivity {
+public class LoadingActivity extends TeamknBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

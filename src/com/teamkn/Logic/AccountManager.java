@@ -6,19 +6,17 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
-import com.teamkn.application.MindpinApplication;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.AccountUserDBHelper;
 
 public class AccountManager {
-	final private static String PREFERENCES_NAME = "Mindpin";
-	final private static SharedPreferences SHARED_PREFERENCES = MindpinApplication.context
+	final private static String PREFERENCES_NAME = "Teamkn";
+	final private static SharedPreferences SHARED_PREFERENCES = TeamknApplication.context
 			.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
 
 	final private static String PREFERENCES_KEY_CURRENT_USER_ID = "current_user_id";

@@ -10,18 +10,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.base.adapter.MindpinBaseAdapter;
-import com.teamkn.base.task.MindpinAsyncTask;
+import com.teamkn.base.adapter.TeamknBaseAdapter;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 
 abstract public class ListMoreButton<M> extends LinearLayout {
-	private MindpinBaseAdapter<M> adapter;
+	private TeamknBaseAdapter<M> adapter;
 	
 	private TextView info_textview;
 	private ProgressBar loading_icon;
 	private View list_more_button;
 
-	public ListMoreButton(MindpinBaseAdapter<M> adapter) {
+	public ListMoreButton(TeamknBaseAdapter<M> adapter) {
 		super(adapter.activity);
 		
 		this.adapter = adapter;
@@ -54,7 +54,7 @@ abstract public class ListMoreButton<M> extends LinearLayout {
 
 			@Override
 			public void onClick(View v) {
-				new MindpinAsyncTask<String, Void, List<M>>() {
+				new TeamknAsyncTask<String, Void, List<M>>() {
 					@Override
 					public void on_start() {
 						start_loading();

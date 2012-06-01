@@ -23,7 +23,7 @@ import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.AccountManager.AuthenticateException;
 import com.teamkn.model.base.CookieHelper;
 
-public abstract class MindpinHttpRequest<TResult> {
+public abstract class TeamknHttpRequest<TResult> {
 	protected HttpUriRequest http_uri_request;
 	private DefaultHttpClient http_client;
 	
@@ -62,9 +62,9 @@ public abstract class MindpinHttpRequest<TResult> {
 			return on_success(responst_text);
 		case HttpStatus.SC_UNAUTHORIZED:
 			on_authenticate_exception();
-			throw new AuthenticateException(); //抛出未登录异常，会被 MindpinRunnable 接到并处理
+			throw new AuthenticateException(); //抛出未登录异常，会被 TeamknRunnable 接到并处理
 		default:
-			throw new Exception();	//不是 200 也不是 401 只能认为是出错了。会被 MindpinRunnable 接到并处理
+			throw new Exception();	//不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
 		}
 	}
 	

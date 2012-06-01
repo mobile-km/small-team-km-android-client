@@ -4,13 +4,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.base.activity.MindpinBaseActivity;
-import com.teamkn.base.adapter.MindpinBaseAdapter;
+import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.Note;
 
-public class NoteListAdapter extends MindpinBaseAdapter<Note> {
+public class NoteListAdapter extends TeamknBaseAdapter<Note> {
 
-  public NoteListAdapter(MindpinBaseActivity activity) {
+  public NoteListAdapter(TeamknBaseActivity activity) {
     super(activity);
   }
 

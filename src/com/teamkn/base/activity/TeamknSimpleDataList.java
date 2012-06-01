@@ -6,18 +6,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.teamkn.R;
-import com.teamkn.base.adapter.MindpinBaseAdapter;
-import com.teamkn.base.task.MindpinAsyncTask;
+import com.teamkn.base.adapter.TeamknBaseAdapter;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.widget.view.ListMoreButton;
 
-abstract public class MindpinSimpleDataList<M, A extends MindpinBaseAdapter<M>> {
+abstract public class TeamknSimpleDataList<M, A extends TeamknBaseAdapter<M>> {
 
 	private ListView list_view;
 	private A adapter;
 	
 	//private int per_page = 20;
 	
-	public MindpinSimpleDataList(ListView list_view, A adapter){
+	public TeamknSimpleDataList(ListView list_view, A adapter){
 		this.list_view = list_view;
 		this.adapter   = adapter;
 	}
@@ -32,7 +32,7 @@ abstract public class MindpinSimpleDataList<M, A extends MindpinBaseAdapter<M>> 
 	
 
 	public void load() {
-		new MindpinAsyncTask<String, Void, List<M>>(adapter.activity, R.string.now_loading) {
+		new TeamknAsyncTask<String, Void, List<M>>(adapter.activity, R.string.now_loading) {
 			@Override
 			public List<M> do_in_background(String... params)
 					throws Exception {

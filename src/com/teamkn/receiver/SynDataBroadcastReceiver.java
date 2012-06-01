@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.base.task.MindpinAsyncTask;
+import com.teamkn.base.task.TeamknAsyncTask;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +14,7 @@ public class SynDataBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-		new MindpinAsyncTask<String, Integer, Void>() {
+		new TeamknAsyncTask<String, Integer, Void>() {
 
 			public void on_start() {
 				send_progress_broadcast(context, 0);

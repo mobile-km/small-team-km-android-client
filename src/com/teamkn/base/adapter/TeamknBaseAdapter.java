@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.teamkn.base.activity.MindpinBaseActivity;
+import com.teamkn.base.activity.TeamknBaseActivity;
 
-public abstract class MindpinBaseAdapter<M> extends BaseAdapter {
-	public MindpinBaseActivity activity;
+public abstract class TeamknBaseAdapter<M> extends BaseAdapter {
+	public TeamknBaseActivity activity;
 	private List<M> items;
 	
-	public MindpinBaseAdapter(MindpinBaseActivity activity) {
+	public TeamknBaseAdapter(TeamknBaseActivity activity) {
 		this.activity = activity;
 		items = new ArrayList<M>();
 	}

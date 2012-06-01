@@ -3,21 +3,21 @@ package com.teamkn.base.runnable;
 import com.teamkn.Logic.AccountManager.AuthenticateException;
 import com.teamkn.Logic.HttpApi.IntentException;
 
-public abstract class MindpinRunnable implements Runnable {
+public abstract class TeamknRunnable implements Runnable {
 	public static final int METHOD_NOT_DEFINE_EXCEPTION = 9001;
 	public static final int INTENT_CONNECTION_EXCEPTION = 9002;
 	public static final int AUTHENTICATE_EXCEPTION = 9003;
 	public static final int UNKNOW_EXCEPTION = 9099;
 	
-	private MindpinHandler handler;
-	public MindpinRunnable(MindpinHandler handler){
+	private TeamknHandler handler;
+	public TeamknRunnable(TeamknHandler handler){
 		this.handler = handler;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			mindpin_run();
+			teamkn_run();
 		} 
 		
 		// 四种典型的全局通用错误
@@ -50,7 +50,7 @@ public abstract class MindpinRunnable implements Runnable {
 		}
 	}
 	
-	public abstract void mindpin_run() throws Exception;
+	public abstract void teamkn_run() throws Exception;
 	
 	public boolean on_intent_connection_exception(){
 		return true;
