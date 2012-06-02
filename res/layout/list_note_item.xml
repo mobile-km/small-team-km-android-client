@@ -5,12 +5,22 @@
     <TextView
         android:id="@+id/note_info_tv"
         android:visibility="gone"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ></TextView>
     <TextView
         android:id="@+id/note_content_tv"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ></TextView>
+    
+    <ImageView 
+      android:id="@+id/note_image_iv"
+      android:layout_width="84dp"
+      android:layout_height="84dp"
+      android:layout_marginRight="4dp"
+      android:layout_marginBottom="9dp"
+      android:adjustViewBounds="true"
+      android:visibility="gone"
+      />
 </LinearLayout>

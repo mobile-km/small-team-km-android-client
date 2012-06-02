@@ -1,12 +1,18 @@
 package com.teamkn.widget.adapter;
 
+import java.io.File;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.Note;
+import com.teamkn.model.database.NoteDBHelper;
 
 public class NoteListAdapter extends TeamknBaseAdapter<Note> {
   
@@ -26,6 +32,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
     ViewHolder view_holder = new ViewHolder();
     view_holder.note_info_tv = (TextView) view.findViewById(R.id.note_info_tv);
     view_holder.note_content_tv = (TextView) view.findViewById(R.id.note_content_tv);
+    view_holder.note_image_iv = (ImageView) view.findViewById(R.id.note_image_iv);
     return view_holder;
     
   }
@@ -38,12 +45,22 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
     view_holder.note_info_tv.setTag(R.id.tag_note_uuid,item.uuid);
     view_holder.note_info_tv.setTag(R.id.tag_note_type,item.type);
     
+    if(item.type.equals(NoteDBHelper.Type.IMAGE)){
+      String image_file_path = NoteDBHelper.note_image_file(item.uuid).getPath();
+      Bitmap bitmap = BitmapFactory.decodeFile(image_file_path);
+      view_holder.note_image_iv.setVisibility(View.VISIBLE);
+      view_holder.note_image_iv.setImageBitmap(bitmap);
+    }else{
+      view_holder.note_image_iv.setVisibility(View.GONE);
+    }
+    
     view_holder.note_content_tv.setText(item.content);
   }
   
   private class ViewHolder implements BaseViewHolder{
     TextView note_info_tv;
     TextView note_content_tv;
+    ImageView note_image_iv;
   }
 
 }

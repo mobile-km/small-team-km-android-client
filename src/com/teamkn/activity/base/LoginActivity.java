@@ -57,9 +57,10 @@ public class LoginActivity extends TeamknBaseActivity {
 		new TeamknAsyncTask<String, Void, Void>(this, R.string.login_now_login){
 			@Override
 			public Void do_in_background(String... params) throws Exception {
-				String email = params[0];
-				String password = params[1];
-				HttpApi.user_authenticate(email, password);
+			  // 为了在不联网的情况下使用，注释掉
+//				String email = params[0];
+//				String password = params[1];
+//				HttpApi.user_authenticate(email, password);
 				return null;
 			}
 
