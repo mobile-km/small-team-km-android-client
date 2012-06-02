@@ -134,12 +134,10 @@ public class MainActivity extends TeamknBaseActivity {
 		    BaseUtils.toast("创建成功");
 		    break;
 		  case MainActivity.RequestCode.FROM_ALBUM:
-		    Uri uri  = data.getData();
-		    
-		    Intent intent = new Intent();
-		    intent.setData(uri);
-		    intent.setClass(MainActivity.this, EditNoteActivity.class);
+		    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
+		    Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
 		    intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, NoteDBHelper.Type.IMAGE);
+		    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
 		    startActivity(intent);
 		}
 		

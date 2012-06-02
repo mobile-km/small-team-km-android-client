@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -27,6 +28,8 @@ import android.graphics.RectF;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -243,6 +246,20 @@ public class BaseUtils {
 		double lat = location.getLatitude();
 		double lng = location.getLongitude();
 		return lat + "," + lng;
+    }
+    
+    
+    public static String get_file_path_from_image_uri(Uri uri){
+      String[] proj = {MediaStore.Images.Media.DATA};
+      //好像是android多媒体数据库的封装接口，具体的看Android文档
+      Cursor cursor = MediaStore.Images.Media.query(TeamknApplication.context.getContentResolver(), 
+          uri, proj);
+      //按我个人理解 这个是获得用户选择的图片的索引值
+      int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+      //将光标移至开头 ，这个很重要，不小心很容易引起越界
+      cursor.moveToFirst();
+      //最后根据索引值获取图片路径
+      return cursor.getString(column_index);
     }
     
 }

@@ -47,7 +47,8 @@
     
     <!-- 新建文本页面 -->
     <string name="note_content_et">文本内容</string>
-    <string name="note_content_valid_blank">主题内容不能为空</string> 
+    <string name="note_content_valid_blank">主题内容不能为空</string>
+    <string name="note_image_valid_blank">图片不存在</string>
     <string name="save_note_bn">保存</string>
     <string name="saving">正在保存...</string>
     
@@ -70,4 +71,9 @@
     <string name="account_edit_button">编辑</string>
     <string name="account_edit_button_close">完成</string>
     <string name="account_delete_button">删除</string>
+    
+    <!-- view.getTag(key,value) 中的 key -->
+    <!-- 笔记列表项的 tag key -->
+		<item type="id" name="tag_note_uuid"></item>
+		<item type="id" name="tag_note_type"></item>
 </resources>

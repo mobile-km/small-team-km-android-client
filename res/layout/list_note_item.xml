@@ -3,7 +3,7 @@
     style="@style/list_item"
      >
     <TextView
-        android:id="@+id/note_uuid_tv"
+        android:id="@+id/note_info_tv"
         android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

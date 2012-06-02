@@ -6,7 +6,7 @@ public class Note extends BaseModel {
   public int id;
   public String uuid;
   public String content;
-  private String type;
+  public String type;
   public int is_removed;
   public long created_at;
   public long updated_at;

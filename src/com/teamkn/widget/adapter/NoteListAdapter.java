@@ -9,7 +9,7 @@ import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.Note;
 
 public class NoteListAdapter extends TeamknBaseAdapter<Note> {
-
+  
   public NoteListAdapter(TeamknBaseActivity activity) {
     super(activity);
   }
@@ -24,7 +24,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
       View view) {
     
     ViewHolder view_holder = new ViewHolder();
-    view_holder.note_uuid_tv = (TextView) view.findViewById(R.id.note_uuid_tv);
+    view_holder.note_info_tv = (TextView) view.findViewById(R.id.note_info_tv);
     view_holder.note_content_tv = (TextView) view.findViewById(R.id.note_content_tv);
     return view_holder;
     
@@ -35,13 +35,14 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
       BaseViewHolder holder,
       Note item, int position) {
     ViewHolder view_holder = (ViewHolder) holder;
+    view_holder.note_info_tv.setTag(R.id.tag_note_uuid,item.uuid);
+    view_holder.note_info_tv.setTag(R.id.tag_note_type,item.type);
     
-    view_holder.note_uuid_tv.setText(item.uuid);
     view_holder.note_content_tv.setText(item.content);
   }
   
   private class ViewHolder implements BaseViewHolder{
-    TextView note_uuid_tv;
+    TextView note_info_tv;
     TextView note_content_tv;
   }
 

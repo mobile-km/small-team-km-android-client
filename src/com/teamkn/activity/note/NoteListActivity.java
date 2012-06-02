@@ -1,10 +1,8 @@
 package com.teamkn.activity.note;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import com.teamkn.R;
-import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
@@ -57,12 +55,18 @@ public class NoteListActivity extends TeamknBaseActivity {
       @Override
       public void onItemClick(AdapterView<?> list_view, View list_item,
           int item_id, long position) {
-        TextView uuid_tv = (TextView) list_item.findViewById(R.id.note_uuid_tv);
-        String uuid = (String) uuid_tv.getText();
+        TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
+        String uuid = (String) info_tv.getTag(R.id.tag_note_uuid);
+        String type = (String) info_tv.getTag(R.id.tag_note_type);
         
-        Intent intent = new Intent();
-        intent.setClass(NoteListActivity.this, EditNoteActivity.class);
+        Intent intent = new Intent(NoteListActivity.this, EditNoteActivity.class);
         intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
+        intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, type);
+        
+        if(type == NoteDBHelper.Type.IMAGE){
+          String image_path = NoteDBHelper.note_image_file(uuid).getPath();
+          intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
+        }
         startActivityForResult(intent, NoteListActivity.RequestCode.EDIT_TEXT);
       }
     });
@@ -76,14 +80,13 @@ public class NoteListActivity extends TeamknBaseActivity {
     });
   }
   
-  
   @Override
   public boolean onContextItemSelected(MenuItem item) {
     AdapterView.AdapterContextMenuInfo menuInfo;
     menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
     
-    TextView note_uuid_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_uuid_tv);
-    String uuid = (String) note_uuid_tv.getText();
+    TextView note_info_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_info_tv);
+    String uuid = (String) note_info_tv.getTag(R.id.tag_note_uuid);
     destroy_note_confirm(uuid);
     
     return super.onContextItemSelected(item);
