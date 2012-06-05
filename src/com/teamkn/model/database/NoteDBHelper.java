@@ -3,6 +3,7 @@ package com.teamkn.model.database;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,17 +29,26 @@ public class NoteDBHelper extends BaseModelDBHelper {
   }
   
   
-  final public static List<Note> all() throws Exception {
+  final public static List<Note> all(boolean has_removed) throws Exception {
     SQLiteDatabase db = get_read_db();
     List<Note> notes = new ArrayList<Note>();
+    Cursor cursor;
     try {
-      Cursor cursor = db.query(Constants.TABLE_NOTES,
-          get_columns(), 
-          Constants.TABLE_NOTES__IS_REMOVED + " = ? ", new String[]{"0"}, 
-          null, null,
-          Constants.KEY_ID + " DESC");
+      if(has_removed){
+        cursor = db.query(Constants.TABLE_NOTES,
+            get_columns(), 
+            null, null, null, null,
+            Constants.KEY_ID + " DESC");
+      }else{
+        cursor = db.query(Constants.TABLE_NOTES,
+            get_columns(), 
+            Constants.TABLE_NOTES__IS_REMOVED + " = ? ", new String[]{"0"}, 
+            null, null,
+            Constants.KEY_ID + " DESC");
+      }
 
       while (cursor.moveToNext()) {
+        System.out.println("moveToNext");
         Note note = build_note_by_cursor(cursor);
         notes.add(note);
       }
@@ -67,7 +77,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
   }
   
   final public static boolean create_text_note(String note_content){
-    String uuid = create_sql_item(note_content,Type.TEXT);
+    String uuid = create_item(note_content,Type.TEXT);
     if(uuid != null){
       return true;
     }
@@ -75,7 +85,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
   }
   
   public static boolean create_image_note(String origin_image_path) {
-    String uuid = create_sql_item("",Type.IMAGE);
+    String uuid = create_item("",Type.IMAGE);
     File note_image_file = note_image_file(uuid);
     
     try {
@@ -88,41 +98,68 @@ public class NoteDBHelper extends BaseModelDBHelper {
     }
   }
   
-  final private static String create_sql_item(String note_content,String type){
-    long current_timemillis = System.currentTimeMillis();
+  public static void create_item(String uuid, String content, String type,
+      Integer is_removed, long updated_at) {
     SQLiteDatabase db = get_write_db();
-    String uuid = UUID.randomUUID().toString();
     
     try {
       // 保存数据库信息
       ContentValues values = new ContentValues();
       values.put(Constants.TABLE_NOTES__UUID, uuid);
-      values.put(Constants.TABLE_NOTES__CONTENT, note_content);
+      values.put(Constants.TABLE_NOTES__CONTENT, content);
       values.put(Constants.TABLE_NOTES__TYPE, type);
       values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
-      values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
-      values.put(Constants.TABLE_NOTES__CREATED_AT, current_timemillis);
+      values.put(Constants.TABLE_NOTES__UPDATED_AT, updated_at);
+      values.put(Constants.TABLE_NOTES__CREATED_AT, updated_at);
       db.insert(Constants.TABLE_NOTES, null, values);
-      return uuid;
     } catch (Exception e) {
-      Log.e("NoteDBHelper", "save", e);
-      return null;
+      Log.e("NoteDBHelper", "create_item", e);
     } finally {
       db.close();
     }
   }
+  
+  final private static String create_item(String note_content,String type){
+    long current_seconds = System.currentTimeMillis()/1000;
+    String uuid = UUID.randomUUID().toString();
+    create_item(uuid,note_content, type,0, current_seconds);
+    return uuid;
+  }
+  
+  final public static boolean update_time(String uuid, long seconds){
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_NOTES__UPDATED_AT, seconds);
+    
+    return update_columns(uuid,values);
+  }
+  
+  public static boolean update(String uuid, String content, Integer is_removed,
+      long updated_at) {
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_NOTES__CONTENT, content);
+    values.put(Constants.TABLE_NOTES__IS_REMOVED, is_removed);
+    values.put(Constants.TABLE_NOTES__UPDATED_AT, updated_at);
+    
+    return update_columns(uuid,values);
+  }
+  
 
   final public static boolean update(String uuid,String note_content) {
-    long current_timemillis = System.currentTimeMillis();
+    // 保存数据库信息
+    long current_seconds = System.currentTimeMillis()/1000;
+    
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_NOTES__CONTENT, note_content);
+    values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
+      
+    return update_columns(uuid,values);
+  }
+  
+  final public static boolean update_columns(String uuid,ContentValues values){
     SQLiteDatabase db = get_write_db();
 
     try {
       // 保存数据库信息
-      ContentValues values = new ContentValues();
-      values.put(Constants.TABLE_NOTES__UUID, uuid);
-      values.put(Constants.TABLE_NOTES__CONTENT, note_content);
-      values.put(Constants.TABLE_NOTES__UPDATED_AT, current_timemillis);
-      
       int row_count = db.update(Constants.TABLE_NOTES, 
           values, Constants.TABLE_NOTES__UUID + " = ? ", 
           new String[]{uuid});
@@ -130,7 +167,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
       if(row_count != 1){return false;}
       return true;
     } catch (Exception e) {
-      Log.e("NoteDBHelper", "save", e);
+      Log.e("NoteDBHelper", "update", e);
       return false;
     } finally {
       db.close();
@@ -165,29 +202,14 @@ public class NoteDBHelper extends BaseModelDBHelper {
   }
 
   public static boolean destroy(String uuid) {
-    SQLiteDatabase db = get_write_db();
+    // 保存数据库信息
+    long current_seconds = System.currentTimeMillis()/1000;
     
-    try {
-      // 删除数据库信息
-      ContentValues values = new ContentValues();
-      values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
+    values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
       
-      int row_count = db.update(Constants.TABLE_NOTES,
-          values, Constants.TABLE_NOTES__UUID + " = ?", new String[]{uuid});
-      
-      File dir = note_dir(uuid);
-      if(dir.exists()){
-        dir.deleteOnExit();
-      }
-      
-      if(row_count != 1){return false;}
-      return true;
-    } catch (Exception e) {
-      Log.e("NoteDBHelper", "destroy", e);
-      return false;
-    } finally {
-      db.close();
-    }
+    return update_columns(uuid,values);
   }
   
   public static String[] get_columns(){

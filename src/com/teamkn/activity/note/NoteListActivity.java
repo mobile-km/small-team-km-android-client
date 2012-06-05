@@ -42,7 +42,7 @@ public class NoteListActivity extends TeamknBaseActivity {
   private void load_list() {
     List<Note> notes = new ArrayList<Note>();
     try {
-      notes = NoteDBHelper.all();
+      notes = NoteDBHelper.all(false);
     } catch (Exception e) {
       BaseUtils.toast("读取 note 列表失败");
       e.printStackTrace();
