@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
+import com.teamkn.Logic.CameraLogic;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -27,6 +31,7 @@ public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{
     public final static int NEW_TEXT = 0;
     public final static int FROM_ALBUM = 1;
+    public final static int FROM_CAMERA = 2;
   }
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
@@ -64,6 +69,11 @@ public class MainActivity extends TeamknBaseActivity {
 	  Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
     intent.setType("image/*");
     startActivityForResult(intent,MainActivity.RequestCode.FROM_ALBUM);
+	}
+	
+	public void click_from_camera(View view){
+	  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	  startActivityForResult(intent, MainActivity.RequestCode.FROM_CAMERA);
 	}
 	
 	public void show_note_list(View view){
@@ -135,13 +145,23 @@ public class MainActivity extends TeamknBaseActivity {
 		    break;
 		  case MainActivity.RequestCode.FROM_ALBUM:
 		    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
-		    Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-		    intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.IMAGE);
-		    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
-		    startActivity(intent);
+		    
+		    start_edit_note_activity_by_image_path(image_path);
+		    break;
+		  case MainActivity.RequestCode.FROM_CAMERA:
+		    String path = data.getData().getPath();
+		    start_edit_note_activity_by_image_path(path);
+		    break;
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	private void start_edit_note_activity_by_image_path(String image_path){
+    Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+    intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.IMAGE);
+    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
+    startActivity(intent);
 	}
 	
 	// 同步服务广播接收器

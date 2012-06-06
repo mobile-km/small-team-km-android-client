@@ -40,7 +40,7 @@
     <string name="base_main_show_note_list">笔记列表</string>
     <string name="new_text">新建文本</string>
     <string name="from_album">从相册</string>
-    <string name="new_photo">新照片</string>
+    <string name="from_camera">拍照</string>
     <string name="menu_about">关于…</string>
     <string name="menu_account_management">账号管理</string>
     <string name="menu_setting">设置</string>

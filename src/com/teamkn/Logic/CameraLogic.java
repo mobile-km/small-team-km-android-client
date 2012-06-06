@@ -12,7 +12,7 @@ import android.provider.MediaStore;
 import com.teamkn.base.utils.FileDirs;
 
 public class CameraLogic {
-	public final static int REQUEST_CODE_CAPTURE = 0;
+	public final static int REQUEST_CODE_CAPTURE = 1234111;
 	public static File IMAGE_CAPTURE_TEMP_PATH;
 	public final static String HAS_IMAGE_CAPTURE = "has_image_capture";
 	
