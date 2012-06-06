@@ -3,14 +3,10 @@ package com.teamkn.receiver;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

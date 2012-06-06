@@ -10,7 +10,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
@@ -85,7 +84,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
   
   public static boolean create_image_note(String origin_image_path) {
     String uuid = create_item_by_kind("",Kind.IMAGE);
-    File note_image_file = note_image_file(uuid);
+    File note_image_file = Note.note_image_file(uuid);
     
     try {
       FileUtils.copyFile(new File(origin_image_path), note_image_file);
@@ -97,7 +96,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
     }
   }
   
-  public static void pull_new_item(String uuid, String content, String kind,
+  public static void create_new_item_from_pull_server(String uuid, String content, String kind,
       Integer is_removed, long updated_at) {
       // 保存数据库信息
       ContentValues values = new ContentValues();
@@ -112,7 +111,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
       create_item(values);
   }
   
-  public static boolean update_updated_at(String uuid, long seconds){
+  public static boolean touch_updated_at(String uuid, long seconds){
     ContentValues values = new ContentValues();
     values.put(Constants.TABLE_NOTES__UPDATED_AT, seconds);
     values.put(Constants.TABLE_NOTES__IS_SYND,1);
@@ -120,7 +119,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
     return update_columns(uuid,values);
   }
   
-  public static boolean pull(String uuid, String content, Integer is_removed,
+  public static boolean update_from_pull(String uuid, String content, Integer is_removed,
       long updated_at) {
     ContentValues values = new ContentValues();
     values.put(Constants.TABLE_NOTES__CONTENT, content);
@@ -177,14 +176,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
     values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
       
     return update_columns(uuid,values);
-  }
-  
-  public static File note_image_file(String uuid) {
-    File dir = note_dir(uuid);
-    if(!dir.exists()){
-      dir.mkdir();
-    }
-    return new File(dir,"image");
   }
   
   private static String create_item_by_kind(String note_content,String kind){
@@ -244,10 +235,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
         Constants.TABLE_NOTES__IS_REMOVED,
         Constants.TABLE_NOTES__CREATED_AT,
         Constants.TABLE_NOTES__UPDATED_AT };
-  }
-  
-  private static File note_dir(String uuid){
-    return new File(FileDirs.TEAMKN_NOTES_DIR, uuid);
   }
   
   private static Note build_note_by_cursor(Cursor cursor) {

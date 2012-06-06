@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -53,6 +51,34 @@ public class HttpApi {
 	}
 	
 	public static class Syn{
+	  public static class NoteBean{
+	    public String uuid;
+      public String content;
+      public String kind;
+      public Integer is_removed;
+      public long updated_at;
+      public String attachment_url;
+
+      private NoteBean(){}
+	    
+	    public static NoteBean build(JSONObject note_json) throws Exception{
+        String uuid = (String)note_json.get("uuid");
+        String content = (String)note_json.get("content");
+        String kind = (String)note_json.get("kind");
+        Integer is_removed = (Integer)note_json.get("is_removed");
+        long updated_at = (Integer)note_json.get("updated_at");
+        String attachment_url = (String)note_json.get("attachment_url");
+        NoteBean nb = new NoteBean();
+        nb.uuid = uuid;
+        nb.content = content;
+        nb.kind = kind;
+        nb.is_removed = is_removed;
+        nb.updated_at = updated_at;
+        nb.attachment_url = attachment_url;
+        return nb;
+	    }
+	  }
+	  
 	  public static class Action{
 	    public static final String DO_PUSH = "do_push";
 	    public static final String DO_PULL = "do_pull";
@@ -93,20 +119,15 @@ public class HttpApi {
               if(action.equals(HttpApi.Syn.Action.DO_PUSH)){
                 HttpApi.Syn.push(note);
               }else if(action.equals(HttpApi.Syn.Action.DO_PULL)){
+                
                 JSONObject note_json = (JSONObject)json.get("note");
                 System.out.println(note_json);
+                NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
                 
-                String uuid = (String)note_json.get("uuid");
-                String content = (String)note_json.get("content");
-                String kind = (String)note_json.get("kind");
-                Integer is_removed = (Integer)note_json.get("is_removed");
-                long updated_at = (Integer)note_json.get("updated_at");
-                String attachment_url = (String)note_json.get("attachment_url");
-                
-                if(kind.equals(NoteDBHelper.Kind.IMAGE)){
-                  HttpApi.Syn.pull_image(uuid,attachment_url);
+                if(note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)){
+                  HttpApi.Syn.pull_image(note_bean.uuid,note_bean.attachment_url);
                 }
-                NoteDBHelper.pull(uuid,content,is_removed,updated_at);
+                NoteDBHelper.update_from_pull(note_bean.uuid,note_bean.content,note_bean.is_removed,note_bean.updated_at);
               }
               
               return action;
@@ -122,7 +143,7 @@ public class HttpApi {
 	      int status_code = response.getStatusLine().getStatusCode();
 	      if (HttpStatus.SC_OK == status_code) {
 	        InputStream in = response.getEntity().getContent();
-	        File file = NoteDBHelper.note_image_file(uuid);
+	        File file = Note.note_image_file(uuid);
 	        FileOutputStream fos = new FileOutputStream(file);
 	        IOUtils.copy(in, fos);
 	      }
@@ -145,14 +166,14 @@ public class HttpApi {
                 HttpApi.Syn.push_image(note);
               }
               long seconds = Long.parseLong(response_text);
-              NoteDBHelper.update_updated_at(note.uuid, seconds);
+              NoteDBHelper.touch_updated_at(note.uuid, seconds);
               return null;
             }
       }.go();
     }
 
     public static boolean push_image(Note note) throws Exception {
-      File image = NoteDBHelper.note_image_file(note.uuid);
+      File image = Note.note_image_file(note.uuid);
       return new TeamknPostRequest<Boolean>(同步推送图片 + "?uuid=" + note.uuid,
           new ParamFile("image",image.getPath(),"image/jpeg")
           ) {
@@ -177,18 +198,12 @@ public class HttpApi {
                 JSONObject note_json = (JSONObject)json.get("note");
                 System.out.println(note_json);
                 
-                String uuid = (String)note_json.get("uuid");
-                String content = (String)note_json.get("content");
-                String kind = (String)note_json.get("kind");
-                Integer is_removed = (Integer)note_json.get("is_removed");
-                long updated_at = (Integer)note_json.get("updated_at");
-                String attachment_url = (String)note_json.get("attachment_url");
-                
-                if(kind.equals(NoteDBHelper.Kind.IMAGE)){
-                  HttpApi.Syn.pull_image(uuid,attachment_url);
+                NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
+                if(note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)){
+                  HttpApi.Syn.pull_image(note_bean.uuid,note_bean.attachment_url);
                 }
                 
-                NoteDBHelper.pull_new_item(uuid,content,kind,is_removed,updated_at);
+                NoteDBHelper.create_new_item_from_pull_server(note_bean.uuid,note_bean.content,note_bean.kind,note_bean.is_removed,note_bean.updated_at);
                 return true;
               }
               throw new Exception();

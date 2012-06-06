@@ -64,7 +64,7 @@ public class NoteListActivity extends TeamknBaseActivity {
         intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);
         
         if(kind == NoteDBHelper.Kind.IMAGE){
-          String image_path = NoteDBHelper.note_image_file(uuid).getPath();
+          String image_path = Note.note_image_file(uuid).getPath();
           intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
         }
         startActivityForResult(intent, NoteListActivity.RequestCode.EDIT_TEXT);
