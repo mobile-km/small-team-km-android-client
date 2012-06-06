@@ -3,6 +3,8 @@ package com.teamkn.Logic;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -59,11 +61,17 @@ public class HttpApi {
 	    public static final String SYN_HAS_NEXT = "syn_has_next";
 	  }
 	  
-	  public static String handshake() throws Exception {
-	    return new TeamknGetRequest<String>(同步握手) {
+	  public static HashMap handshake() throws Exception {
+	    return new TeamknGetRequest<HashMap>(同步握手) {
 	      @Override
-	      public String on_success(String response_text) throws Exception {
-	        return response_text;
+	      public HashMap on_success(String response_text) throws Exception {
+	        JSONObject json = new JSONObject(response_text);
+	        String uuid = (String)json.get("syn_task_uuid");
+	        Integer count = (Integer)json.get("note_count");
+	        HashMap map = new HashMap();
+	        map.put("syn_task_uuid", uuid);
+	        map.put("note_count",count);
+	        return map;
 	      }
 	    }.go();
 	  }
@@ -98,7 +106,7 @@ public class HttpApi {
                 if(kind.equals(NoteDBHelper.Kind.IMAGE)){
                   HttpApi.Syn.pull_image(uuid,attachment_url);
                 }
-                NoteDBHelper.update(uuid,content,is_removed,updated_at);
+                NoteDBHelper.pull(uuid,content,is_removed,updated_at);
               }
               
               return action;
@@ -137,7 +145,7 @@ public class HttpApi {
                 HttpApi.Syn.push_image(note);
               }
               long seconds = Long.parseLong(response_text);
-              NoteDBHelper.update_time(note.uuid, seconds);
+              NoteDBHelper.update_updated_at(note.uuid, seconds);
               return null;
             }
       }.go();
@@ -180,7 +188,7 @@ public class HttpApi {
                   HttpApi.Syn.pull_image(uuid,attachment_url);
                 }
                 
-                NoteDBHelper.create_item(uuid,content,kind,is_removed,updated_at);
+                NoteDBHelper.pull_new_item(uuid,content,kind,is_removed,updated_at);
                 return true;
               }
               throw new Exception();

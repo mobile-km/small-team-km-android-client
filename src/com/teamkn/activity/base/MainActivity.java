@@ -45,6 +45,7 @@ public class MainActivity extends TeamknBaseActivity {
 		setContentView(R.layout.base_main);
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
+		
 		start_syn_data();
 	}
 	
@@ -148,41 +149,31 @@ public class MainActivity extends TeamknBaseActivity {
 	class SynDataUIBroadcastReceiver extends BroadcastReceiver{
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			int progress = intent.getExtras().getInt("progress");
-			switch(progress){
-			case -1:
-				//出错
-				BaseUtils.toast(R.string.app_data_syn_fail);
-				data_syn_progress_bar.setProgress(0);
-				data_syn_progress_bar.setVisibility(View.GONE);
-				break;
-			case 0:
-				//开始同步
-				data_syn_textview.setText(R.string.now_syning);
-				data_syn_progress_bar.setProgress(0);
-				data_syn_progress_bar.setVisibility(View.VISIBLE);
-			case 1:
-				// 同步进行中
-				int current_progress = data_syn_progress_bar.getProgress();
-				if (current_progress < 90) {
-					data_syn_progress_bar.setProgress(current_progress + 1);
-				}
-				break;
-			case 100:
-				// 同步完毕
-				data_syn_textview.setText("同步完毕");
-				data_syn_progress_bar.setProgress(100);
-				
-				AccountManager.touch_last_syn_time();
-				break;
-			case 101:
-				// 界面显示同步结束
-				long time = AccountManager.last_syn_time();
-				String str = BaseUtils.date_string(time);
-				data_syn_textview.setText("数据同步于 " + str);
-				data_syn_progress_bar.setVisibility(View.GONE);
-				break;
-			}
+		  String type = intent.getExtras().getString("type");
+		  if(type.equals("set_max")){
+		    int max_num = intent.getExtras().getInt("set_max");
+		    data_syn_progress_bar.setMax(max_num);
+		  }else if(type.equals("progress")){
+		    int progress = intent.getExtras().getInt("progress");
+		    if(progress == 0){
+		      data_syn_textview.setText(R.string.now_syning);
+		    }
+		    data_syn_progress_bar.setProgress(progress);
+        data_syn_progress_bar.setVisibility(View.VISIBLE);
+		  }else if(type.equals("exception")){
+        BaseUtils.toast(R.string.app_data_syn_fail);
+        data_syn_progress_bar.setProgress(0);
+        data_syn_progress_bar.setVisibility(View.GONE);
+		  }else if(type.equals("final")){
+        data_syn_textview.setText("同步完毕");
+        
+        AccountManager.touch_last_syn_time();
+        
+        long time = AccountManager.last_syn_time();
+        String str = BaseUtils.date_string(time);
+        data_syn_textview.setText("数据同步于 " + str);
+        data_syn_progress_bar.setVisibility(View.GONE);
+		  }
 		}
 	}
 	
