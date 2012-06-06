@@ -75,5 +75,5 @@
     <!-- view.getTag(key,value) 中的 key -->
     <!-- 笔记列表项的 tag key -->
 		<item type="id" name="tag_note_uuid"></item>
-		<item type="id" name="tag_note_type"></item>
+		<item type="id" name="tag_note_kind"></item>
 </resources>

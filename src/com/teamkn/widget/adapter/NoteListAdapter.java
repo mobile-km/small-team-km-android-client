@@ -41,11 +41,12 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
   public void fill_with_data(
       BaseViewHolder holder,
       Note item, int position) {
+    
     ViewHolder view_holder = (ViewHolder) holder;
     view_holder.note_info_tv.setTag(R.id.tag_note_uuid,item.uuid);
-    view_holder.note_info_tv.setTag(R.id.tag_note_type,item.type);
+    view_holder.note_info_tv.setTag(R.id.tag_note_kind,item.kind);
     
-    if(item.type.equals(NoteDBHelper.Type.IMAGE)){
+    if(item.kind.equals(NoteDBHelper.Kind.IMAGE)){
       String image_file_path = NoteDBHelper.note_image_file(item.uuid).getPath();
       Bitmap bitmap = BitmapFactory.decodeFile(image_file_path);
       view_holder.note_image_iv.setVisibility(View.VISIBLE);

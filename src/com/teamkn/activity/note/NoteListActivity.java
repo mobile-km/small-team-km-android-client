@@ -57,13 +57,13 @@ public class NoteListActivity extends TeamknBaseActivity {
           int item_id, long position) {
         TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
         String uuid = (String) info_tv.getTag(R.id.tag_note_uuid);
-        String type = (String) info_tv.getTag(R.id.tag_note_type);
+        String kind = (String) info_tv.getTag(R.id.tag_note_kind);
         
         Intent intent = new Intent(NoteListActivity.this, EditNoteActivity.class);
         intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
-        intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, type);
+        intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);
         
-        if(type == NoteDBHelper.Type.IMAGE){
+        if(kind == NoteDBHelper.Kind.IMAGE){
           String image_path = NoteDBHelper.note_image_file(uuid).getPath();
           intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
         }

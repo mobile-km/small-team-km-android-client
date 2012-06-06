@@ -90,12 +90,12 @@ public class HttpApi {
                 
                 String uuid = (String)note_json.get("uuid");
                 String content = (String)note_json.get("content");
-                String type = (String)note_json.get("kind");
+                String kind = (String)note_json.get("kind");
                 Integer is_removed = (Integer)note_json.get("is_removed");
                 long updated_at = (Integer)note_json.get("updated_at");
                 String attachment_url = (String)note_json.get("attachment_url");
                 
-                if(type.equals(NoteDBHelper.Type.IMAGE)){
+                if(kind.equals(NoteDBHelper.Kind.IMAGE)){
                   HttpApi.Syn.pull_image(uuid,attachment_url);
                 }
                 NoteDBHelper.update(uuid,content,is_removed,updated_at);
@@ -127,13 +127,13 @@ public class HttpApi {
 	    new TeamknPostRequest<String>(同步推送,
 	        new BasicNameValuePair("note[uuid]", note.uuid),
 	        new BasicNameValuePair("note[content]", note.content),
-	        new BasicNameValuePair("note[kind]", note.type),
+	        new BasicNameValuePair("note[kind]", note.kind),
 	        new BasicNameValuePair("note[is_removed]", note.is_removed+"")
 	        ) {
 
             @Override
             public String on_success(String response_text) throws Exception {
-              if(note.type.equals(NoteDBHelper.Type.IMAGE)){
+              if(note.kind.equals(NoteDBHelper.Kind.IMAGE)){
                 HttpApi.Syn.push_image(note);
               }
               long seconds = Long.parseLong(response_text);
@@ -171,16 +171,16 @@ public class HttpApi {
                 
                 String uuid = (String)note_json.get("uuid");
                 String content = (String)note_json.get("content");
-                String type = (String)note_json.get("kind");
+                String kind = (String)note_json.get("kind");
                 Integer is_removed = (Integer)note_json.get("is_removed");
                 long updated_at = (Integer)note_json.get("updated_at");
                 String attachment_url = (String)note_json.get("attachment_url");
                 
-                if(type.equals(NoteDBHelper.Type.IMAGE)){
+                if(kind.equals(NoteDBHelper.Kind.IMAGE)){
                   HttpApi.Syn.pull_image(uuid,attachment_url);
                 }
                 
-                NoteDBHelper.create_item(uuid,content,type,is_removed,updated_at);
+                NoteDBHelper.create_item(uuid,content,kind,is_removed,updated_at);
                 return true;
               }
               throw new Exception();

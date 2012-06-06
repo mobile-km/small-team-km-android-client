@@ -102,7 +102,7 @@ public final class R {
         public static final int note_list=0x7f0a0023;
         public static final int password_et=0x7f0a0005;
         public static final int save_note_bn=0x7f0a0017;
-        public static final int tag_note_type=0x7f0a0001;
+        public static final int tag_note_kind=0x7f0a0001;
         /**  view.getTag(key,value) 中的 key 
  笔记列表项的 tag key 
          */

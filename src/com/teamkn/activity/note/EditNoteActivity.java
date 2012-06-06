@@ -22,13 +22,13 @@ public class EditNoteActivity extends TeamknBaseActivity {
   private ImageView note_image_iv;
   
   private Note note;
-  private String type;
+  private String kind;
   private String note_uuid;
   private String image_path;
   
   public class Extra{
     public static final String NOTE_UUID = "note_uuid";
-    public static final String NOTE_TYPE = "note_type";
+    public static final String NOTE_KIND = "note_kind";
     public static final String NOTE_IMAGE_PATH = "note_image_path";
   }
 
@@ -39,7 +39,7 @@ public class EditNoteActivity extends TeamknBaseActivity {
     
     Intent intent = getIntent();
     note_uuid = intent.getStringExtra(EditNoteActivity.Extra.NOTE_UUID);
-    type = intent.getStringExtra(EditNoteActivity.Extra.NOTE_TYPE);
+    kind = intent.getStringExtra(EditNoteActivity.Extra.NOTE_KIND);
     image_path = intent.getStringExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH);
     
     init_common();
@@ -89,11 +89,11 @@ public class EditNoteActivity extends TeamknBaseActivity {
   }
   
   private boolean is_text_note(){
-    return type.equals(NoteDBHelper.Type.TEXT);
+    return kind.equals(NoteDBHelper.Kind.TEXT);
   }
   
   private boolean is_image_note(){
-    return type.equals(NoteDBHelper.Type.IMAGE);
+    return kind.equals(NoteDBHelper.Kind.IMAGE);
   }
 
   public void click_save_note_bn(View view) {

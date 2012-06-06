@@ -3,27 +3,20 @@ package com.teamkn.model.database;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.util.Log;
-
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class NoteDBHelper extends BaseModelDBHelper {
-  public class Type{
+  public class Kind{
     public static final String TEXT = "TEXT";
     public static final String IMAGE = "IMAGE";
   }
@@ -68,16 +61,16 @@ public class NoteDBHelper extends BaseModelDBHelper {
     int id = cursor.getInt(0);
     String uuid = cursor.getString(1);
     String content = cursor.getString(2);
-    String type = cursor.getString(3);
+    String kind = cursor.getString(3);
     int is_removed = cursor.getInt(4);
     long created_at = cursor.getLong(5);
     long updated_at = cursor.getLong(6);
-    return new Note(id, uuid, content,type, is_removed, created_at,
+    return new Note(id, uuid, content,kind, is_removed, created_at,
         updated_at);
   }
   
   final public static boolean create_text_note(String note_content){
-    String uuid = create_item(note_content,Type.TEXT);
+    String uuid = create_item(note_content,Kind.TEXT);
     if(uuid != null){
       return true;
     }
@@ -85,7 +78,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
   }
   
   public static boolean create_image_note(String origin_image_path) {
-    String uuid = create_item("",Type.IMAGE);
+    String uuid = create_item("",Kind.IMAGE);
     File note_image_file = note_image_file(uuid);
     
     try {
@@ -98,7 +91,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
     }
   }
   
-  public static void create_item(String uuid, String content, String type,
+  public static void create_item(String uuid, String content, String kind,
       Integer is_removed, long updated_at) {
     SQLiteDatabase db = get_write_db();
     
@@ -107,8 +100,8 @@ public class NoteDBHelper extends BaseModelDBHelper {
       ContentValues values = new ContentValues();
       values.put(Constants.TABLE_NOTES__UUID, uuid);
       values.put(Constants.TABLE_NOTES__CONTENT, content);
-      values.put(Constants.TABLE_NOTES__TYPE, type);
-      values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
+      values.put(Constants.TABLE_NOTES__KIND, kind);
+      values.put(Constants.TABLE_NOTES__IS_REMOVED, is_removed);
       values.put(Constants.TABLE_NOTES__UPDATED_AT, updated_at);
       values.put(Constants.TABLE_NOTES__CREATED_AT, updated_at);
       db.insert(Constants.TABLE_NOTES, null, values);
@@ -119,10 +112,10 @@ public class NoteDBHelper extends BaseModelDBHelper {
     }
   }
   
-  final private static String create_item(String note_content,String type){
+  final private static String create_item(String note_content,String kind){
     long current_seconds = System.currentTimeMillis()/1000;
     String uuid = UUID.randomUUID().toString();
-    create_item(uuid,note_content, type,0, current_seconds);
+    create_item(uuid,note_content, kind,0, current_seconds);
     return uuid;
   }
   
@@ -216,7 +209,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
     return new String[] { 
         Constants.KEY_ID, Constants.TABLE_NOTES__UUID,
         Constants.TABLE_NOTES__CONTENT,
-        Constants.TABLE_NOTES__TYPE,
+        Constants.TABLE_NOTES__KIND,
         Constants.TABLE_NOTES__IS_REMOVED,
         Constants.TABLE_NOTES__CREATED_AT,
         Constants.TABLE_NOTES__UPDATED_AT };

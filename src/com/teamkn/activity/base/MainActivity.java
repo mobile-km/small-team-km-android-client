@@ -56,7 +56,7 @@ public class MainActivity extends TeamknBaseActivity {
 	public void click_new_text(View view){
 	  Intent intent = new Intent();
 	  intent.setClass(this, EditNoteActivity.class);
-	  intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, NoteDBHelper.Type.TEXT);
+	  intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.TEXT);
 	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
 	}
 	
@@ -136,7 +136,7 @@ public class MainActivity extends TeamknBaseActivity {
 		  case MainActivity.RequestCode.FROM_ALBUM:
 		    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
 		    Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-		    intent.putExtra(EditNoteActivity.Extra.NOTE_TYPE, NoteDBHelper.Type.IMAGE);
+		    intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.IMAGE);
 		    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
 		    startActivity(intent);
 		}

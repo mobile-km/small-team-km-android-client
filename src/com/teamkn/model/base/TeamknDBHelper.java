@@ -19,7 +19,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper{
 	    Constants.KEY_ID                  + " integer primary key, " +
 	    Constants.TABLE_NOTES__UUID       + " text not null, " +
 	    Constants.TABLE_NOTES__CONTENT    + " text, " +
-	    Constants.TABLE_NOTES__TYPE       + " text not null, " +
+	    Constants.TABLE_NOTES__KIND       + " text not null, " +
 	    Constants.TABLE_NOTES__IS_REMOVED + " integer not null DEFAULT  0, " +
 	    Constants.TABLE_NOTES__CREATED_AT + " long not null, " +
 	    Constants.TABLE_NOTES__UPDATED_AT + " long not null);";
