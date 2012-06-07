@@ -86,14 +86,14 @@ public class HttpApi {
 	    public static final String SYN_HAS_NEXT = "syn_has_next";
 	  }
 	  
-	  public static HashMap handshake() throws Exception {
-	    return new TeamknGetRequest<HashMap>(同步握手) {
+	  public static HashMap<String,Object> handshake() throws Exception {
+	    return new TeamknGetRequest<HashMap<String,Object>>(同步握手) {
 	      @Override
-	      public HashMap on_success(String response_text) throws Exception {
+	      public HashMap<String,Object> on_success(String response_text) throws Exception {
 	        JSONObject json = new JSONObject(response_text);
 	        String uuid = (String)json.get("syn_task_uuid");
 	        Integer count = (Integer)json.get("note_count");
-	        HashMap map = new HashMap();
+	        HashMap<String,Object> map = new HashMap<String,Object>();
 	        map.put("syn_task_uuid", uuid);
 	        map.put("note_count",count);
 	        return map;

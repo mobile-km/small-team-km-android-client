@@ -30,42 +30,6 @@
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
 
-		<!-- sendfeed -->
-		<activity android:name=".activity.sendfeed.NewFeedActivity" android:windowSoftInputMode="adjustResize" >
-			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
-				<data android:mimeType="text/plain" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
-				<data android:mimeType="image/*" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.SEND_MULTIPLE" />
-				<data android:mimeType="image/*" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity android:name=".activity.sendfeed.SelectCollectionListActivity"></activity>
-		<activity android:name=".activity.sendfeed.showImageCaptureActivity"></activity>
-		<activity android:name=".activity.sendfeed.MyLocationActivity"></activity>
-
-		<!-- collection -->
-		<activity android:name=".activity.feed.FeedDetailActivity"></activity>
-		<activity android:name=".activity.collection.CollectionListActivity"></activity>
-		<activity android:name=".activity.collection.CollectionFeedListActivity"></activity>
-		<!-- home_timeline -->		
-		<activity android:name=".activity.feed.FeedListActivity"></activity>
-		
-		<!-- 人际关系 -->
-		<activity android:name=".activity.contacts.ContactsActivity"></activity>
-		<activity android:name=".activity.contacts.FollowingGridActivity"></activity>
-		<!-- comment -->
-		<activity android:name=".activity.comment.SendFeedCommentActivity"></activity>
-		<activity android:name=".activity.comment.FeedCommentListActivity"></activity>
-		<activity android:name=".activity.comment.ReceivedCommentListActivity"></activity>
 		<!-- 数据同步接收器 -->
 		<receiver android:name=".receiver.SynDataBroadcastReceiver">
 			<intent-filter>
@@ -80,12 +44,6 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	
 </manifest>
-
-<!-- 
-	2011.10.25 优化内存占用，完善账户管理功能
-	2011.10.26 调整数据同步机制
- -->

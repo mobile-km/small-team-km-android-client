@@ -24,7 +24,7 @@ public class SynDataBroadcastReceiver extends BroadcastReceiver {
 
 			@Override
 			public Void do_in_background(String... params) throws Exception {
-			  HashMap map = HttpApi.Syn.handshake();
+			  HashMap<String,Object> map = HttpApi.Syn.handshake();
 			  String uuid = (String)map.get("syn_task_uuid");
 			  int server_count = (Integer)map.get("note_count");
 			  int unsyn_count = NoteDBHelper.unsyn_count();

@@ -3,7 +3,6 @@ package com.teamkn.activity.base;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.base.activity.TeamknBaseActivity;
