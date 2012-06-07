@@ -10,7 +10,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-import com.teamkn.base.http.ParamFile;
+import com.teamkn.base.http.PostParmFile;
+import com.teamkn.base.http.PostParmText;
 import com.teamkn.base.http.TeamknGetRequest;
 import com.teamkn.base.http.TeamknHttpRequest;
 import com.teamkn.base.http.TeamknPostRequest;
@@ -29,8 +30,6 @@ public class HttpApi {
 	public static final String 同步比对        = "/syn/compare";
 	
 	public static final String 同步推送        = "/syn/push";
-	
-	public static final String 同步推送图片    = "/syn/push_image";
 	
 	public static final String 同步下一个      = "/syn/get_next";
 	// LoginActivity
@@ -153,37 +152,45 @@ public class HttpApi {
     }
 
     public static void push(final Note note) throws Exception {
-	    new TeamknPostRequest<String>(同步推送,
-	        new BasicNameValuePair("note[uuid]", note.uuid),
-	        new BasicNameValuePair("note[content]", note.content),
-	        new BasicNameValuePair("note[kind]", note.kind),
-	        new BasicNameValuePair("note[is_removed]", note.is_removed+"")
-	        ) {
-
-            @Override
-            public String on_success(String response_text) throws Exception {
-              if(note.kind.equals(NoteDBHelper.Kind.IMAGE)){
-                HttpApi.Syn.push_image(note);
-              }
-              long seconds = Long.parseLong(response_text);
-              NoteDBHelper.touch_updated_at(note.uuid, seconds);
-              return null;
-            }
-      }.go();
-    }
-
-    public static boolean push_image(Note note) throws Exception {
       File image = Note.note_image_file(note.uuid);
-      return new TeamknPostRequest<Boolean>(同步推送图片 + "?uuid=" + note.uuid,
-          new ParamFile("image",image.getPath(),"image/jpeg")
-          ) {
-            @Override
-            public Boolean on_success(String response_text) throws Exception {
-              return true;
-            }
-      }.go();
+      
+      if(note.kind.equals(NoteDBHelper.Kind.TEXT)){
+        
+        new TeamknPostRequest<String>(同步推送,
+            new PostParmText("note[uuid]", note.uuid),
+            new PostParmText("note[content]", note.content),
+            new PostParmText("note[kind]", note.kind),
+            new PostParmText("note[is_removed]", note.is_removed+"")
+            ) {
+              @Override
+              public String on_success(String response_text) throws Exception {
+                long seconds = Long.parseLong(response_text);
+                NoteDBHelper.touch_updated_at(note.uuid, seconds);
+                return null;
+              }
+        }.go();
+        
+      }else{
+        
+        new TeamknPostRequest<String>(同步推送,
+            new PostParmText("note[uuid]", note.uuid),
+            new PostParmText("note[content]", note.content),
+            new PostParmText("note[kind]", note.kind),
+            new PostParmText("note[is_removed]", note.is_removed+""),
+            new PostParmFile("note[attachment]", image.getPath(), "image/jpeg")
+            ) {
+              @Override
+              public String on_success(String response_text) throws Exception {
+                long seconds = Long.parseLong(response_text);
+                NoteDBHelper.touch_updated_at(note.uuid, seconds);
+                return null;
+              }
+        }.go();
+        
+      }
+      
     }
-    
+
     public static boolean syn_next(String syn_task_uuid) throws Exception{
       return new TeamknGetRequest<Boolean>(同步下一个,
           new BasicNameValuePair("syn_taks_uuid",syn_task_uuid)

@@ -17,15 +17,15 @@ public abstract class TeamknPostRequest<TResult> extends TeamknHttpRequest<TResu
 	}
 	
 	// 上传文件之类的请求
-	public TeamknPostRequest(final String request_path, final ParamFile...param_files){
-		HttpEntity entity = build_entity(param_files);
+	public TeamknPostRequest(final String request_path, final PostParam...param){
+		HttpEntity entity = build_entity(param);
 		this.http_uri_request = build_http_post(entity, request_path);
 	}
 	
-	private HttpEntity build_entity(ParamFile...param_files){
+	private HttpEntity build_entity(PostParam...param){
 		MultipartEntity entity = new MultipartEntity();
-		for(ParamFile param_file : param_files){
-			entity.addPart(param_file.param_name, param_file.get_filebody());
+		for(PostParam param_file : param){
+			entity.addPart(param_file.get_name(), param_file.get_body());
 		}
 		return entity;
 	}
