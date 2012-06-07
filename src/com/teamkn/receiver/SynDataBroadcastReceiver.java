@@ -12,6 +12,14 @@ import android.content.Context;
 import android.content.Intent;
 
 public class SynDataBroadcastReceiver extends BroadcastReceiver {
+  public class Type{
+    public static final String SET_MAX = "set_max";
+    public static final String START_SYN = "start_syn";
+    public static final String PROGRESS = "progress";
+    public static final String EXCEPTION = "exception";
+    public static final String SUCCESS = "success";
+    public static final String FINAL = "final";
+  }
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
@@ -32,7 +40,7 @@ public class SynDataBroadcastReceiver extends BroadcastReceiver {
 			  
 			  send_max_num(context,count);
 			  int index = 0;
-			  send_progress_broadcast(context,index);
+			  send_start_syn(context);
 			  List<Note> list = NoteDBHelper.all(true);
 			  for (Iterator<Note> iterator = list.iterator(); iterator.hasNext();) {
           Note note = iterator.next();
@@ -50,7 +58,7 @@ public class SynDataBroadcastReceiver extends BroadcastReceiver {
 			}
 
 			public void on_success(Void v) {
-				// nothing
+			  send_success(context);
 			}
 
 			public boolean on_unknown_exception() {
@@ -65,30 +73,42 @@ public class SynDataBroadcastReceiver extends BroadcastReceiver {
 
 	}
 	
-	private void send_exception(Context context){
-	   Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
-	    i.putExtra("type", "exception");
-	    context.sendBroadcast(i);
-	}
-	
-	private void send_final(Context context){
-	  Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
-    i.putExtra("type", "final");
-    context.sendBroadcast(i);
-	}
-
-	private void send_progress_broadcast(Context context, int progress) {
-		Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
-		i.putExtra("type", "progress");
-		i.putExtra("progress", progress);
-		context.sendBroadcast(i);
-	}
-	
 	private void send_max_num(Context context, int max_num) {
 	  Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
-	  i.putExtra("type", "set_max");
-	  i.putExtra("set_max", max_num);
+	  i.putExtra("type", Type.SET_MAX);
+	  i.putExtra(Type.SET_MAX, max_num);
 	  context.sendBroadcast(i);
 	}
+	
+	private void send_start_syn(Context context){
+    Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
+    i.putExtra("type", Type.START_SYN);
+    context.sendBroadcast(i);
+	}
+	
+	 private void send_progress_broadcast(Context context, int progress) {
+	    Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
+	    i.putExtra("type", Type.PROGRESS);
+	    i.putExtra(Type.PROGRESS, progress);
+	    context.sendBroadcast(i);
+	  }
+	 
+	  private void send_exception(Context context){
+	     Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
+	      i.putExtra("type", Type.EXCEPTION);
+	      context.sendBroadcast(i);
+	  }
+	  
+	  private void send_success(Context context){
+      Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
+      i.putExtra("type", Type.SUCCESS);
+      context.sendBroadcast(i);
+	  }
+	  
+	  private void send_final(Context context){
+	    Intent i = new Intent(BroadcastReceiverConstants.ACTION_SYN_DATA_UI);
+	    i.putExtra("type", Type.FINAL);
+	    context.sendBroadcast(i);
+	  }
 
 }

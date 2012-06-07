@@ -23,6 +23,7 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.receiver.BroadcastReceiverConstants;
+import com.teamkn.receiver.SynDataBroadcastReceiver;
 
 public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{
@@ -166,25 +167,23 @@ public class MainActivity extends TeamknBaseActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 		  String type = intent.getExtras().getString("type");
-		  if(type.equals("set_max")){
-		    int max_num = intent.getExtras().getInt("set_max");
+		  if(type.equals(SynDataBroadcastReceiver.Type.SET_MAX)){
+		    int max_num = intent.getExtras().getInt(SynDataBroadcastReceiver.Type.SET_MAX);
 		    data_syn_progress_bar.setMax(max_num);
-		  }else if(type.equals("progress")){
-		    int progress = intent.getExtras().getInt("progress");
-		    if(progress == 0){
-		      data_syn_textview.setText(R.string.now_syning);
-		    }
+		  }else if(type.equals(SynDataBroadcastReceiver.Type.START_SYN)){
+		    data_syn_textview.setText(R.string.now_syning);
+		    data_syn_progress_bar.setProgress(0);
+        data_syn_progress_bar.setVisibility(View.VISIBLE);
+		  }else if(type.equals(SynDataBroadcastReceiver.Type.PROGRESS)){
+		    int progress = intent.getExtras().getInt(SynDataBroadcastReceiver.Type.PROGRESS);
 		    data_syn_progress_bar.setProgress(progress);
         data_syn_progress_bar.setVisibility(View.VISIBLE);
-		  }else if(type.equals("exception")){
+		  }else if(type.equals(SynDataBroadcastReceiver.Type.EXCEPTION)){
         BaseUtils.toast(R.string.app_data_syn_fail);
-        data_syn_progress_bar.setProgress(0);
-        data_syn_progress_bar.setVisibility(View.GONE);
-		  }else if(type.equals("final")){
+		  }else if(type.equals(SynDataBroadcastReceiver.Type.SUCCESS)){
+		    AccountManager.touch_last_syn_time();
+		  }else if(type.equals(SynDataBroadcastReceiver.Type.FINAL)){
         data_syn_textview.setText("同步完毕");
-        
-        AccountManager.touch_last_syn_time();
-        
         long time = AccountManager.last_syn_time();
         String str = BaseUtils.date_string(time);
         data_syn_textview.setText("数据同步于 " + str);
