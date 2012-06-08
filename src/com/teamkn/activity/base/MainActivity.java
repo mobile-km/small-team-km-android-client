@@ -1,7 +1,6 @@
 package com.teamkn.activity.base;
 
 import java.io.File;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -19,7 +18,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.teamkn.R;
-import com.teamkn.Logic.AccountManager;
+import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -159,7 +158,6 @@ public class MainActivity extends TeamknBaseActivity {
 		      path = uri.getPath();
 		    }
 		    if(new File(path).exists()){
-		      System.out.println(path);
 		      start_edit_note_activity_by_image_path(path);
 		    }
 		    break;
@@ -194,12 +192,15 @@ public class MainActivity extends TeamknBaseActivity {
 		  }else if(type.equals(SynDataBroadcastReceiver.Type.EXCEPTION)){
         BaseUtils.toast(R.string.app_data_syn_fail);
 		  }else if(type.equals(SynDataBroadcastReceiver.Type.SUCCESS)){
-		    AccountManager.touch_last_syn_time();
+		    TeamknPreferences.touch_last_syn_time();
 		  }else if(type.equals(SynDataBroadcastReceiver.Type.FINAL)){
         data_syn_textview.setText("同步完毕");
-        long time = AccountManager.last_syn_time();
-        String str = BaseUtils.date_string(time);
-        data_syn_textview.setText("数据同步于 " + str);
+        String str = TeamknPreferences.last_syn_time();
+        if(str == null){
+          data_syn_textview.setText("数据还没有同步过");
+        }else{
+          data_syn_textview.setText("数据同步于 " + str);
+        }
         data_syn_progress_bar.setVisibility(View.GONE);
 		  }
 		}

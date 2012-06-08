@@ -149,12 +149,12 @@ public final class R {
         public static final int main=0x7f0b0000;
     }
     public static final class string {
-        public static final int account_delete_button=0x7f090034;
-        public static final int account_edit_button=0x7f090032;
-        public static final int account_edit_button_close=0x7f090033;
+        public static final int account_delete_button=0x7f090033;
+        public static final int account_edit_button=0x7f090031;
+        public static final int account_edit_button_close=0x7f090032;
         /**  账号管理 
          */
-        public static final int account_manager_title=0x7f090031;
+        public static final int account_manager_title=0x7f090030;
         public static final int app_authenticate_exception=0x7f09000d;
         public static final int app_data_syn_fail=0x7f09000f;
         public static final int app_intent_connection_exception=0x7f09000c;
@@ -210,6 +210,11 @@ public final class R {
         public static final int now_sending=0x7f090006;
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
+        public static final int preferences_key_current_user_id=0x7f090035;
+        public static final int preferences_key_last_syn_time=0x7f090036;
+        /**  TeamknPreferences 的 keys 
+         */
+        public static final int preferences_key_upload_photo_quality=0x7f090034;
         public static final int save_note_bn=0x7f090027;
         public static final int saving=0x7f090028;
         /**  选择收集册页面 
@@ -219,9 +224,6 @@ public final class R {
          */
         public static final int show_capture_image_back=0x7f090029;
         public static final int submit_bn=0x7f09002b;
-        /**  设置页面 
-         */
-        public static final int upload_photo_quality=0x7f090030;
     }
     public static final class style {
         /**  主题 

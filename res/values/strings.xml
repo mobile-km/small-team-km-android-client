@@ -64,8 +64,6 @@
   	<!-- 收集册主题列表页面 -->
     <string name="menu_delete_collection">删除</string>
     <string name="menu_change_collection_name">改名</string>
-    <!-- 设置页面 -->
-    <string name="upload_photo_quality">upload_photo_quality</string>
     <!-- 账号管理 -->
     <string name="account_manager_title">账号管理</string>
     <string name="account_edit_button">编辑</string>
@@ -76,4 +74,10 @@
     <!-- 笔记列表项的 tag key -->
 		<item type="id" name="tag_note_uuid"></item>
 		<item type="id" name="tag_note_kind"></item>
+		
+		<!-- TeamknPreferences 的 keys -->
+    <string name="preferences_key_upload_photo_quality">upload_photo_quality</string>
+    <string name="preferences_key_current_user_id">current_user_id</string>
+    <string name="preferences_key_last_syn_time">last_syn_time</string>
+    
 </resources>
