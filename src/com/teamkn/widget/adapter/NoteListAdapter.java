@@ -1,11 +1,11 @@
 package com.teamkn.widget.adapter;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.teamkn.R;
+import com.teamkn.Logic.CompressPhoto;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.Note;
@@ -45,7 +45,8 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
     
     if(item.kind.equals(NoteDBHelper.Kind.IMAGE)){
       String image_file_path = Note.note_image_file(item.uuid).getPath();
-      Bitmap bitmap = BitmapFactory.decodeFile(image_file_path);
+//      Bitmap bitmap = BitmapFactory.decodeFile(image_file_path);
+      Bitmap bitmap = CompressPhoto.get_thumb_bitmap_form_file(image_file_path);
       view_holder.note_image_iv.setVisibility(View.VISIBLE);
       view_holder.note_image_iv.setImageBitmap(bitmap);
     }else{
