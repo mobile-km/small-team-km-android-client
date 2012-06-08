@@ -1,5 +1,7 @@
 package com.teamkn.activity.base;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -147,8 +150,18 @@ public class MainActivity extends TeamknBaseActivity {
 		    start_edit_note_activity_by_image_path(image_path);
 		    break;
 		  case MainActivity.RequestCode.FROM_CAMERA:
-		    String path = data.getData().getPath();
-		    start_edit_note_activity_by_image_path(path);
+		    Uri uri = data.getData();
+		    String scheme = uri.getScheme();
+		    String path;
+		    if(scheme.equals("content")){
+		      path = BaseUtils.get_file_path_from_image_uri(data.getData());
+		    }else{
+		      path = uri.getPath();
+		    }
+		    if(new File(path).exists()){
+		      System.out.println(path);
+		      start_edit_note_activity_by_image_path(path);
+		    }
 		    break;
 		}
 		
