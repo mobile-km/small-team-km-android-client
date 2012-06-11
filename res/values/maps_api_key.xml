@@ -16,7 +16,8 @@
 
 <!-- NOTE: this file should NOT be checked into version control systems. -->
 <resources>
-    <string name="mapabc_api_key">88fd41604cc3fa0cd81188420064db826765b9262c69b079923ae528b31c5296d39b4c26ce4637b2</string>
+    <string name="mapabc_api_key">88fd41604cc3fa0cd81188420064db826765b9262c69b079923ae528b31c5296d39b4c26ce4637b2
+    </string>
     <string name="google_map_api_key">0Ylv4RzCjsF8sAIyW8EljXZ-BLPyLx9k4ozyYCA</string>
- </resources>
+</resources>
 

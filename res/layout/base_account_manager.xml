@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  	xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/body"
->	
-  
-	<RelativeLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		style="@style/head_bar"
-	>
-		<Button 
-			style="@style/head_bar_button_go_back"
-		/>
-		<TextView 
-			style="@style/head_bar_text_center" 
-			android:text="@string/account_manager_title"
-		/>
-	    <Button
-			android:text="@string/account_edit_button"
-			style="@style/head_bar_button_right"
-			android:onClick="on_edit_account_button_click"
-	    />
-	</RelativeLayout>
-  
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/body"
+        >
 
- 	<ListView
-		android:id="@+id/account_list"
-		android:layout_height="fill_parent" 
-		android:layout_width="fill_parent"
- 	/>
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            >
+        <Button
+                style="@style/head_bar_button_go_back"
+                />
+        <TextView
+                style="@style/head_bar_text_center"
+                android:text="@string/account_manager_title"
+                />
+        <Button
+                android:text="@string/account_edit_button"
+                style="@style/head_bar_button_right"
+                android:onClick="on_edit_account_button_click"
+                />
+    </RelativeLayout>
+
+
+    <ListView
+            android:id="@+id/account_list"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            />
 </LinearLayout>

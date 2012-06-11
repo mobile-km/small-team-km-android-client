@@ -3,3 +3,6 @@
 .project
 bin/*
 project.properties
+.idea
+out
+*.iml

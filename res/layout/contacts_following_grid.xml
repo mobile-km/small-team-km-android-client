@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/body"
->	
-  
-	<RelativeLayout
-		style="@style/head_bar"
-	>
-		<TextView
-			style="@style/head_bar_text_center" 
-			android:text="我关注的人"
-		/>
-		<Button 
-			style="@style/head_bar_button_go_back"
-		/>
-	</RelativeLayout>
-	
-  	<GridView
-		android:id="@+id/following_grid"
-		android:layout_width="fill_parent"
-  		android:layout_height="fill_parent"
-  		android:numColumns="3"
-  		android:columnWidth="104dp"
-  		android:paddingLeft="8dp"
-  		android:horizontalSpacing="0dp"
-  		android:verticalSpacing="0dp"
-  		android:listSelector="@null"
-		android:fastScrollEnabled="true" 
-   	/>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/body"
+        >
+
+    <RelativeLayout
+            style="@style/head_bar"
+            >
+        <TextView
+                style="@style/head_bar_text_center"
+                android:text="我关注的人"
+                />
+        <Button
+                style="@style/head_bar_button_go_back"
+                />
+    </RelativeLayout>
+
+    <GridView
+            android:id="@+id/following_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:numColumns="3"
+            android:columnWidth="104dp"
+            android:paddingLeft="8dp"
+            android:horizontalSpacing="0dp"
+            android:verticalSpacing="0dp"
+            android:listSelector="@null"
+            android:fastScrollEnabled="true"
+            />
 </LinearLayout>
