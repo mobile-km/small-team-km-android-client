@@ -35,12 +35,7 @@
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
 
-		<!-- 数据同步接收器 -->
-		<receiver android:name=".receiver.SynDataBroadcastReceiver">
-			<intent-filter>
-				<action android:name="com.teamkn.action.start_syn_data"/>
-			</intent-filter>
-		</receiver>
+		<service android:name=".service.SynNoteService"></service>
 		
 		<uses-library android:name="com.google.android.maps"/>		
 	</application>

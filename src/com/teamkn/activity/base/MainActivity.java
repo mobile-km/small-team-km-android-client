@@ -3,13 +3,14 @@ package com.teamkn.activity.base;
 import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,8 +25,8 @@ import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.NoteDBHelper;
-import com.teamkn.receiver.BroadcastReceiverConstants;
-import com.teamkn.receiver.SynDataBroadcastReceiver;
+import com.teamkn.service.SynNoteService;
+import com.teamkn.service.SynNoteService.SynNoteBinder;
 
 public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{
@@ -35,27 +36,41 @@ public class MainActivity extends TeamknBaseActivity {
   }
 	private TextView data_syn_textview;
 	private ProgressBar data_syn_progress_bar;
-	final private SynDataUIBroadcastReceiver syn_data_broadcast_receiver = new SynDataUIBroadcastReceiver();
+	private SynNoteBinder syn_note_binder;
+	private SynUIBinder syn_ui_binder = new SynUIBinder();
+	
+	private ServiceConnection conn = new ServiceConnection(){
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      System.out.println("ServiceConnection  ServiceConnection");
+      System.out.println("ServiceConnection  ServiceConnection Thread" + Thread.currentThread());
+      syn_note_binder = (SynNoteBinder)service;
+      syn_note_binder.set_syn_ui_binder(syn_ui_binder);
+      syn_note_binder.start();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      // 当 SynNoteService 因异常而断开连接的时候，这个方法才会被调用
+      System.out.println("ServiceConnection  onServiceDisconnected");
+      syn_note_binder = null;
+    }
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// 注册receiver
-		registerReceiver(syn_data_broadcast_receiver, new IntentFilter(
-				BroadcastReceiverConstants.ACTION_SYN_DATA_UI));
 		
 		// load view
 		setContentView(R.layout.base_main);
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
 		
-		start_syn_data();
-	}
-	
-  //同步操作
-	private void start_syn_data() {
-		sendBroadcast(new Intent("com.teamkn.action.start_syn_data"));
+		// 注册更新服务
+    Intent intent = new Intent(MainActivity.this,SynNoteService.class);
+    bindService(intent, conn, Context.BIND_AUTO_CREATE);
+    System.out.println("MainActivity onCreate end");
+    System.out.println("MainActivity onCreate Thread" + Thread.currentThread());
 	}
 	
 	public void click_new_text(View view){
@@ -83,8 +98,8 @@ public class MainActivity extends TeamknBaseActivity {
 	@Override
   protected void onDestroy() {
     super.onDestroy();
-    // 注册过的receiver，一定要在onDestroy时反注册，否则会有leak异常，导致程序崩溃
-    unregisterReceiver(syn_data_broadcast_receiver);
+    // 解除 和 更新笔记服务的绑定
+    unbindService(conn);
   }
 	
 	@Override
@@ -173,37 +188,66 @@ public class MainActivity extends TeamknBaseActivity {
     startActivity(intent);
 	}
 	
-	// 同步服务广播接收器
-	class SynDataUIBroadcastReceiver extends BroadcastReceiver{
-		@Override
-		public void onReceive(Context context, Intent intent) {
-		  String type = intent.getExtras().getString("type");
-		  if(type.equals(SynDataBroadcastReceiver.Type.SET_MAX)){
-		    int max_num = intent.getExtras().getInt(SynDataBroadcastReceiver.Type.SET_MAX);
-		    data_syn_progress_bar.setMax(max_num);
-		  }else if(type.equals(SynDataBroadcastReceiver.Type.START_SYN)){
-		    data_syn_textview.setText(R.string.now_syning);
-		    data_syn_progress_bar.setProgress(0);
-        data_syn_progress_bar.setVisibility(View.VISIBLE);
-		  }else if(type.equals(SynDataBroadcastReceiver.Type.PROGRESS)){
-		    int progress = intent.getExtras().getInt(SynDataBroadcastReceiver.Type.PROGRESS);
-		    data_syn_progress_bar.setProgress(progress);
-        data_syn_progress_bar.setVisibility(View.VISIBLE);
-		  }else if(type.equals(SynDataBroadcastReceiver.Type.EXCEPTION)){
-        BaseUtils.toast(R.string.app_data_syn_fail);
-		  }else if(type.equals(SynDataBroadcastReceiver.Type.SUCCESS)){
-		    TeamknPreferences.touch_last_syn_time();
-		  }else if(type.equals(SynDataBroadcastReceiver.Type.FINAL)){
-        data_syn_textview.setText("同步完毕");
-        String str = TeamknPreferences.last_syn_time();
-        if(str == null){
-          data_syn_textview.setText("数据还没有同步过");
-        }else{
-          data_syn_textview.setText("数据同步于 " + str);
-        }
-        data_syn_progress_bar.setVisibility(View.GONE);
-		  }
-		}
-	}
-	
+	 public class SynUIBinder{
+	    public void set_max_num(int max_num){
+	      final int num = max_num;
+	      System.out.println("set_max_num   " + max_num);
+	      data_syn_progress_bar.post(new Runnable() {
+          @Override
+          public void run() {
+            data_syn_progress_bar.setMax(num);
+          }
+        });
+	    }
+	    
+	    public void set_start_syn(){
+	      System.out.println("set_start_syn");
+	      data_syn_textview.post(new Runnable() {
+          @Override
+          public void run() {
+            data_syn_textview.setText(R.string.now_syning);
+            data_syn_progress_bar.setProgress(0);
+            data_syn_progress_bar.setVisibility(View.VISIBLE);
+          }
+        });
+	    }
+	    
+	    public void set_progress(int progress){
+	      final int num = progress;
+	      System.out.println("set_progress  " + progress);
+	      data_syn_progress_bar.post(new Runnable() {
+          @Override
+          public void run() {
+            data_syn_progress_bar.setProgress(num);
+            data_syn_progress_bar.setVisibility(View.VISIBLE);
+          }
+        });
+	    }
+	    
+	    public void set_syn_success(){
+	      System.out.println("syn_success");
+	      TeamknPreferences.touch_last_syn_time(true);
+	      data_syn_textview.post(new Runnable() {
+          @Override
+          public void run() {
+            String str = TeamknPreferences.last_syn_time();
+            data_syn_textview.setText("上次同步成功: " + str);
+            data_syn_progress_bar.setVisibility(View.GONE);
+          }
+        });
+	    }
+	    
+      public void set_syn_fail() {
+        System.out.println("syn_fail");
+        TeamknPreferences.touch_last_syn_time(false);
+        data_syn_textview.post(new Runnable() {
+          @Override
+          public void run() {
+            String str = TeamknPreferences.last_syn_time();
+            data_syn_textview.setText("上次同步失败: " + str);
+            data_syn_progress_bar.setVisibility(View.GONE);
+          }
+        });
+      }
+	  }
 }

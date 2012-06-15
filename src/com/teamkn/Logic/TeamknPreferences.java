@@ -22,6 +22,12 @@ public class TeamknPreferences {
     pre_edit.commit();
   }
   
+  public static void put_boolean(String key_name,boolean value){
+    Editor pre_edit = PREFERENCES.edit();
+    pre_edit.putBoolean(key_name, value);
+    pre_edit.commit();
+  }
+  
   public static String get_resource_string(int resource_id){
     return TeamknApplication.context.getResources().getString(resource_id);
   }
@@ -41,6 +47,15 @@ public class TeamknPreferences {
 	  return PREFERENCES.getInt(key, 0);
 	}
 	
+  public static void touch_last_syn_time(boolean success) {
+    long time = System.currentTimeMillis();
+    String time_key = get_resource_string(R.string.preferences_key_last_syn_time);
+    TeamknPreferences.put_long(time_key, time);
+    
+    String status_key = get_resource_string(R.string.preferences_key_last_syn_status);
+    TeamknPreferences.put_boolean(status_key,success);
+  }
+  
   public static String last_syn_time() {
     String key = get_resource_string(R.string.preferences_key_last_syn_time);
     long time = PREFERENCES.getLong(key, 0);
@@ -50,10 +65,9 @@ public class TeamknPreferences {
       return BaseUtils.date_string(time);
     }
   }
-
-  public static void touch_last_syn_time() {
-    long time = System.currentTimeMillis();
-    String key = get_resource_string(R.string.preferences_key_last_syn_time);
-    TeamknPreferences.put_long(key, time);
+  
+  public static boolean last_syn_status(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_status);
+    return PREFERENCES.getBoolean(key, false);
   }
 }

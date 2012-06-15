@@ -211,6 +211,7 @@ public final class R {
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
         public static final int preferences_key_current_user_id=0x7f090035;
+        public static final int preferences_key_last_syn_status=0x7f090037;
         public static final int preferences_key_last_syn_time=0x7f090036;
         /**  TeamknPreferences 的 keys 
          */
