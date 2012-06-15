@@ -41,6 +41,8 @@
     <string name="new_text">新建文本</string>
     <string name="from_album">从相册</string>
     <string name="from_camera">拍照</string>
+    <string name="manual_syn_bn">同步</string>
+    
     <string name="menu_about">关于…</string>
     <string name="menu_account_management">账号管理</string>
     <string name="menu_setting">设置</string>

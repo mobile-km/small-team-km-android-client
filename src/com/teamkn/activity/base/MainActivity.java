@@ -91,6 +91,12 @@ public class MainActivity extends TeamknBaseActivity {
 	  startActivityForResult(intent, MainActivity.RequestCode.FROM_CAMERA);
 	}
 	
+	public void click_manual_syn(View view){
+	  if(syn_note_binder != null){
+	    syn_note_binder.manual_syn();
+	  }
+	}
+	
 	public void show_note_list(View view){
 	  open_activity(NoteListActivity.class);
 	}

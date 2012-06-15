@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity.SynUIBinder;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import android.app.Service;
@@ -56,7 +57,7 @@ public class SynNoteService extends Service {
   public void onDestroy() {
     System.out.println("SynNoteService class  onDestroy");
     System.out.println("SynNoteService class  onDestroy Thread" + Thread.currentThread());
-    syn_note_thread.set_cancel_flag();
+    syn_note_handler.set_cancel_flag();
     syn_note_thread.quit();
     super.onDestroy();
   }
@@ -72,42 +73,68 @@ public class SynNoteService extends Service {
       System.out.println("SynNoteBinder start Thread" + Thread.currentThread());
       syn_note_handler.sendEmptyMessage(SynNoteHandler.SYN_MESSAGE);
     }
+    
+    public void manual_syn(){
+      if(syn_note_handler.has_syning()){
+        return;
+      }
+      syn_note_handler.removeMessages(SynNoteHandler.SYN_MESSAGE);
+      syn_note_handler.sendEmptyMessage(SynNoteHandler.SYN_MESSAGE);
+    }
   }
 
   public class SynNoteHandlerThread extends HandlerThread{
-    private boolean cancel_flag = false;
-
     public SynNoteHandlerThread() {
       super("同步笔记的工作线程");
+    }
+  }
+  
+  public class SynNoteHandler extends Handler{
+    public static final int SYN_MESSAGE = 0;
+    private boolean cancel_flag = false;
+    private boolean syning_flag = false;
+
+    public SynNoteHandler(SynNoteHandlerThread syn_note_thread) {
+      super(syn_note_thread.getLooper());
+    }
+    
+    public void check_cancel_flag() throws Exception{
+      if(this.cancel_flag){
+        throw new Exception();
+      }
     }
     
     public void set_cancel_flag(){
       this.cancel_flag = true;
     }
     
-    public boolean has_cancel_flag(){
-      return this.cancel_flag;
-    }
-  }
-  
-  public class SynNoteHandler extends Handler{
-    public static final int SYN_MESSAGE = 0;
-    private SynNoteHandlerThread syn_note_thread;
-
-    public SynNoteHandler(SynNoteHandlerThread syn_note_thread) {
-      super(syn_note_thread.getLooper());
-      this.syn_note_thread = syn_note_thread;
+    public boolean has_syning(){
+      return this.syning_flag;
     }
     
-    public void check_cancel_flag() throws Exception{
-      if(syn_note_thread.has_cancel_flag()){
-        throw new Exception();
-      }
+    public void set_syning_flag(boolean flag){
+      this.syning_flag = flag;
     }
 
     @Override
     public void handleMessage(Message msg) {
+      check_network();
+      super.handleMessage(msg);
+    }
+    
+    public void check_network(){
+      System.out.println(BaseUtils.is_wifi_active(SynNoteService.this));
+      if(BaseUtils.is_wifi_active(SynNoteService.this)){
+        start_syn();
+      }else{
+        syn_ui_binder.set_syn_fail();
+        sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);
+      }
+    }
+    
+    public void start_syn(){
       try {
+        set_syning_flag(true);
         System.out.println("SynNoteHandler handleMessage " + Thread.currentThread());
         HashMap<String,Object> map = HttpApi.Syn.handshake();
         String uuid = (String)map.get("syn_task_uuid");
@@ -134,10 +161,14 @@ public class SynNoteService extends Service {
           syn_ui_binder.set_progress(index);
         }
         syn_ui_binder.set_syn_success();
+        sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
       } catch (Exception e) {
+        e.printStackTrace();
         syn_ui_binder.set_syn_fail();
+        sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);
+      }finally{
+        set_syning_flag(false);
       }
-      super.handleMessage(msg);
     }
   }
 }

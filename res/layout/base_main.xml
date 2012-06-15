@@ -61,9 +61,11 @@
         android:layout_width="160px"
         >
         <Button
-          android:text="@string/laceholder"
+          android:id="@+id/manual_syn_bn"
+          android:text="@string/manual_syn_bn"
           android:layout_height="fill_parent"
           android:layout_width="fill_parent"
+          android:onClick="click_manual_syn"
           />
         </LinearLayout>
       <LinearLayout
