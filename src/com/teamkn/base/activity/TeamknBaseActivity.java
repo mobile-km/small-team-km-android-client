@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.LoginActivity;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
 
@@ -23,6 +24,19 @@ abstract public class TeamknBaseActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		ActivitiesStackSingleton.remove_activity(this);
+	}
+	
+	@Override
+	protected void onResume() {
+	  TeamknApplication.current_show_activity = this.getClass().getName();
+	  super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+	  TeamknApplication.current_show_activity = null;
+	  System.out.println("teamknbaseactivity on pause"  + this.getClass().getName());
+	  super.onPause();
 	}
 	
 	

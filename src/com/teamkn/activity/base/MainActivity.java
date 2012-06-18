@@ -3,6 +3,8 @@ package com.teamkn.activity.base;
 import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +24,7 @@ import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.NoteDBHelper;
@@ -241,6 +244,11 @@ public class MainActivity extends TeamknBaseActivity {
             data_syn_progress_bar.setVisibility(View.GONE);
           }
         });
+	      
+	      if(TeamknApplication.current_show_activity == null 
+            || !TeamknApplication.current_show_activity.equals("com.teamkn.activity.base.MainActivity")){
+	        // TODO 增加通知提示
+        }
 	    }
 	    
       public void set_syn_fail() {

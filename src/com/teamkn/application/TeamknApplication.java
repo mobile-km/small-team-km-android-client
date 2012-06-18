@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 public class TeamknApplication extends Application {
 	public static Context context;
 	public static LayoutInflater mInflater;
+	public static String current_show_activity;
 
 	public static View inflate(int resource, ViewGroup root, boolean attachToRoot){
 		return mInflater.inflate(resource, root, attachToRoot);
