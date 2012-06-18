@@ -2,12 +2,12 @@
 
 <!-- 刚加载时的“正在载入”页面 -->
 
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/body"
->
-    <TextView 
-    	android:text="@string/now_loading"
-    	style="@style/loading_layout_text"
-   	/>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/body"
+        >
+    <TextView
+            android:text="@string/now_loading"
+            style="@style/loading_layout_text"
+            />
 </LinearLayout>

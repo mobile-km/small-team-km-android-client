@@ -3,8 +3,6 @@ package com.teamkn.activity.base;
 import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +22,7 @@ import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
+import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
@@ -98,6 +97,10 @@ public class MainActivity extends TeamknBaseActivity {
 	  if(syn_note_binder != null){
 	    syn_note_binder.manual_syn();
 	  }
+	}
+
+	public void click_start_search(View view) {
+		open_activity(SearchActivity.class);
 	}
 	
 	public void show_note_list(View view){

@@ -1,11 +1,11 @@
 package com.teamkn.Logic;
 
-import com.teamkn.R;
-import com.teamkn.application.TeamknApplication;
-import com.teamkn.base.utils.BaseUtils;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import com.teamkn.R;
+import com.teamkn.application.TeamknApplication;
+import com.teamkn.base.utils.BaseUtils;
 
 public class TeamknPreferences {
   public static final SharedPreferences PREFERENCES = PreferenceManager.getDefaultSharedPreferences(TeamknApplication.context);
@@ -25,6 +25,12 @@ public class TeamknPreferences {
   public static void put_boolean(String key_name,boolean value){
     Editor pre_edit = PREFERENCES.edit();
     pre_edit.putBoolean(key_name, value);
+    pre_edit.commit();
+  }
+  
+  public static void put_string(String key_name, String value) {
+    Editor pre_edit = PREFERENCES.edit();
+    pre_edit.putString(key_name, value);
     pre_edit.commit();
   }
   
@@ -64,10 +70,5 @@ public class TeamknPreferences {
     }else{
       return BaseUtils.date_string(time);
     }
-  }
-  
-  public static boolean last_syn_status(){
-    String key = get_resource_string(R.string.preferences_key_last_syn_status);
-    return PREFERENCES.getBoolean(key, false);
   }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- 全局 -->
+    <!-- 全局 -->
     <string name="app_name">teamkn</string>
     <string name="app_version">0.0.9 pre</string>
     <string name="app_version_full">android客户端 0.0.9 pre</string>
@@ -10,23 +10,23 @@
     <string name="now_deleting">正在删除…</string>
     <string name="now_updating">正在修改…</string>
     <string name="now_syning">正在同步数据…</string>
-    
+
     <string name="app_method_not_define_exception">功能方法未定义</string>
     <string name="app_intent_connection_exception">网络连接错误</string>
     <string name="app_authenticate_exception">用户身份验证错误</string>
     <string name="app_unknown_exception">程序执行错误</string>
-    
+
     <string name="app_data_syn_fail">数据同步失败</string>
-    
+
     <string name="button_go_back">返回</string>
     <string name="laceholder">占位</string>
-    
+
     <!-- 各种dialog -->
     <string name="dialog_close_app_title">退出程序</string>
     <string name="dialog_close_app_text">是否退出 teamkn？</string>
     <string name="dialog_ok">确定</string>
     <string name="dialog_cancel">取消</string>
-    
+
     <!-- 登录页面 -->
     <string name="login_email">邮箱</string>
     <string name="login_password">密码</string>
@@ -35,27 +35,31 @@
     <string name="login_password_valid_blank">请输入密码</string>
     <string name="login_auth_fail">用户邮箱或密码错误</string>
     <string name="login_now_login">正在登录…</string>
-    
+
     <!-- 登录成功后的主页面 -->
     <string name="base_main_show_note_list">笔记列表</string>
     <string name="new_text">新建文本</string>
     <string name="from_album">从相册</string>
     <string name="from_camera">拍照</string>
     <string name="manual_syn_bn">同步</string>
-    
     <string name="menu_about">关于…</string>
+    <string name="start_search">搜索</string>
     <string name="menu_account_management">账号管理</string>
     <string name="menu_setting">设置</string>
-    
+
+
+    <!-- 搜索页面 -->
+    <string name="search_prompt">请输入搜索内容</string>
+
+
     <!-- 新建文本页面 -->
     <string name="note_content_et">文本内容</string>
     <string name="note_content_valid_blank">主题内容不能为空</string>
     <string name="note_image_valid_blank">图片不存在</string>
     <string name="save_note_bn">保存</string>
     <string name="saving">正在保存...</string>
-    
-    
-    
+
+
     <!-- 显示照片页面 -->
     <string name="show_capture_image_back">返回</string>
     <!-- 选择收集册页面 -->
@@ -63,7 +67,7 @@
     <string name="submit_bn">确定</string>
     <string name="cancel_bn">取消</string>
     <string name="new_collection">新建收集册</string>
-  	<!-- 收集册主题列表页面 -->
+    <!-- 收集册主题列表页面 -->
     <string name="menu_delete_collection">删除</string>
     <string name="menu_change_collection_name">改名</string>
     <!-- 账号管理 -->
@@ -71,13 +75,13 @@
     <string name="account_edit_button">编辑</string>
     <string name="account_edit_button_close">完成</string>
     <string name="account_delete_button">删除</string>
-    
+
     <!-- view.getTag(key,value) 中的 key -->
     <!-- 笔记列表项的 tag key -->
-		<item type="id" name="tag_note_uuid"></item>
-		<item type="id" name="tag_note_kind"></item>
-		
-		<!-- TeamknPreferences 的 keys -->
+    <item type="id" name="tag_note_uuid"></item>
+    <item type="id" name="tag_note_kind"></item>
+
+    <!-- TeamknPreferences 的 keys -->
     <string name="preferences_key_upload_photo_quality">upload_photo_quality</string>
     <string name="preferences_key_current_user_id">current_user_id</string>
     <string name="preferences_key_last_syn_time">last_syn_time</string>

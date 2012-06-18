@@ -71,61 +71,66 @@ public final class R {
         public static final int user_default_avatar_normal=0x7f020025;
     }
     public static final class id {
-        public static final int account_avatar=0x7f0a001d;
-        public static final int account_delete=0x7f0a001f;
+        public static final int account_avatar=0x7f0a001e;
+        public static final int account_delete=0x7f0a0020;
         public static final int account_list=0x7f0a0003;
-        public static final int account_name=0x7f0a001e;
-        public static final int add_account=0x7f0a001a;
+        public static final int account_name=0x7f0a001f;
+        public static final int add_account=0x7f0a001b;
         public static final int base_main_actions=0x7f0a0007;
-        public static final int base_main_syn_bar=0x7f0a000c;
-        public static final int bottom_bar=0x7f0a0016;
-        public static final int contacts=0x7f0a000f;
-        public static final int current_account=0x7f0a001b;
-        public static final int current_account_icon=0x7f0a001c;
+        public static final int base_main_syn_bar=0x7f0a000d;
+        public static final int bottom_bar=0x7f0a0017;
+        public static final int contacts=0x7f0a0010;
+        public static final int current_account=0x7f0a001c;
+        public static final int current_account_icon=0x7f0a001d;
         public static final int email_et=0x7f0a0004;
-        public static final int following_grid=0x7f0a0010;
+        public static final int following_grid=0x7f0a0011;
         public static final int from_album=0x7f0a0009;
         public static final int from_camera=0x7f0a000a;
-        public static final int list_more_button=0x7f0a0020;
-        public static final int list_more_button_info=0x7f0a0021;
-        public static final int list_more_button_loading=0x7f0a0022;
+        public static final int horizontal_wrapper=0x7f0a0028;
+        public static final int list_more_button=0x7f0a0021;
+        public static final int list_more_button_info=0x7f0a0022;
+        public static final int list_more_button_loading=0x7f0a0023;
         public static final int login_button=0x7f0a0006;
-        public static final int main_data_syn_progress_bar=0x7f0a000e;
-        public static final int main_data_syn_text=0x7f0a000d;
-        public static final int manual_syn_bn=0x7f0a000b;
-        public static final int menu_about=0x7f0a0031;
-        public static final int menu_account_management=0x7f0a0033;
-        public static final int menu_setting=0x7f0a0032;
+        public static final int main_data_syn_progress_bar=0x7f0a000f;
+        public static final int main_data_syn_text=0x7f0a000e;
+        public static final int manual_syn_bn=0x7f0a000c;
+        public static final int menu_about=0x7f0a0036;
+        public static final int menu_account_management=0x7f0a0038;
+        public static final int menu_setting=0x7f0a0037;
         public static final int new_text=0x7f0a0008;
-        public static final int note_content_et=0x7f0a0017;
-        public static final int note_content_tv=0x7f0a0024;
-        public static final int note_image_iv=0x7f0a0018;
-        public static final int note_info_tv=0x7f0a0023;
-        public static final int note_list=0x7f0a0025;
+        public static final int note_content_et=0x7f0a0018;
+        public static final int note_content_tv=0x7f0a0025;
+        public static final int note_image_iv=0x7f0a0019;
+        public static final int note_info_tv=0x7f0a0024;
+        public static final int note_list=0x7f0a0026;
         public static final int password_et=0x7f0a0005;
-        public static final int save_note_bn=0x7f0a0019;
+        public static final int save_note_bn=0x7f0a001a;
+        public static final int search_box=0x7f0a0027;
+        public static final int search_history=0x7f0a0029;
+        public static final int search_result_list=0x7f0a002a;
+        public static final int start_search=0x7f0a000b;
         public static final int tag_note_kind=0x7f0a0001;
         /**  view.getTag(key,value) 中的 key 
  笔记列表项的 tag key 
          */
         public static final int tag_note_uuid=0x7f0a0000;
-        public static final int teamkn_alert_dialog_button1=0x7f0a002c;
-        public static final int teamkn_alert_dialog_button2=0x7f0a002e;
-        public static final int teamkn_alert_dialog_button3=0x7f0a002d;
-        public static final int teamkn_alert_dialog_button_panel=0x7f0a002b;
-        public static final int teamkn_alert_dialog_content_panel=0x7f0a0028;
-        public static final int teamkn_alert_dialog_content_panel_scrollView=0x7f0a0029;
-        public static final int teamkn_alert_dialog_message=0x7f0a002a;
-        public static final int teamkn_alert_dialog_title=0x7f0a0027;
-        public static final int teamkn_alert_dialog_title_panel=0x7f0a0026;
-        public static final int teamkn_progress_dialog_message=0x7f0a002f;
-        public static final int user_avatar=0x7f0a0012;
-        public static final int user_id=0x7f0a0011;
-        public static final int user_name=0x7f0a0013;
-        public static final int user_sign=0x7f0a0014;
-        public static final int v2_activate=0x7f0a0015;
+        public static final int teamkn_alert_dialog_button1=0x7f0a0031;
+        public static final int teamkn_alert_dialog_button2=0x7f0a0033;
+        public static final int teamkn_alert_dialog_button3=0x7f0a0032;
+        public static final int teamkn_alert_dialog_button_panel=0x7f0a0030;
+        public static final int teamkn_alert_dialog_content_panel=0x7f0a002d;
+        public static final int teamkn_alert_dialog_content_panel_scrollView=0x7f0a002e;
+        public static final int teamkn_alert_dialog_message=0x7f0a002f;
+        public static final int teamkn_alert_dialog_title=0x7f0a002c;
+        public static final int teamkn_alert_dialog_title_panel=0x7f0a002b;
+        public static final int teamkn_progress_dialog_message=0x7f0a0034;
+        public static final int user_avatar=0x7f0a0013;
+        public static final int user_id=0x7f0a0012;
+        public static final int user_name=0x7f0a0014;
+        public static final int user_sign=0x7f0a0015;
+        public static final int v2_activate=0x7f0a0016;
         public static final int webView1=0x7f0a0002;
-        public static final int widget_head_bar_title=0x7f0a0030;
+        public static final int widget_head_bar_title=0x7f0a0035;
     }
     public static final class layout {
         public static final int base_about=0x7f030000;
@@ -143,19 +148,20 @@ public final class R {
         public static final int list_note_item=0x7f03000c;
         public static final int note_list=0x7f03000d;
         public static final int part_head_bar_user_info=0x7f03000e;
-        public static final int teamkn_alert_dialog=0x7f03000f;
-        public static final int teamkn_progress_dialog=0x7f030010;
+        public static final int search=0x7f03000f;
+        public static final int teamkn_alert_dialog=0x7f030010;
+        public static final int teamkn_progress_dialog=0x7f030011;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
     }
     public static final class string {
-        public static final int account_delete_button=0x7f090034;
-        public static final int account_edit_button=0x7f090032;
-        public static final int account_edit_button_close=0x7f090033;
+        public static final int account_delete_button=0x7f090036;
+        public static final int account_edit_button=0x7f090034;
+        public static final int account_edit_button_close=0x7f090035;
         /**  账号管理 
          */
-        public static final int account_manager_title=0x7f090031;
+        public static final int account_manager_title=0x7f090033;
         public static final int app_authenticate_exception=0x7f09000d;
         public static final int app_data_syn_fail=0x7f09000f;
         public static final int app_intent_connection_exception=0x7f09000c;
@@ -170,7 +176,7 @@ public final class R {
          */
         public static final int base_main_show_note_list=0x7f09001d;
         public static final int button_go_back=0x7f090010;
-        public static final int cancel_bn=0x7f09002d;
+        public static final int cancel_bn=0x7f09002f;
         public static final int dialog_cancel=0x7f090015;
         public static final int dialog_close_app_text=0x7f090013;
         /**  各种dialog 
@@ -193,40 +199,44 @@ public final class R {
         public static final int manual_syn_bn=0x7f090021;
         public static final int mapabc_api_key=0x7f090000;
         public static final int menu_about=0x7f090022;
-        public static final int menu_account_management=0x7f090023;
-        public static final int menu_change_collection_name=0x7f090030;
+        public static final int menu_account_management=0x7f090024;
+        public static final int menu_change_collection_name=0x7f090032;
         /**  收集册主题列表页面 
          */
-        public static final int menu_delete_collection=0x7f09002f;
-        public static final int menu_setting=0x7f090024;
-        public static final int new_collection=0x7f09002e;
+        public static final int menu_delete_collection=0x7f090031;
+        public static final int menu_setting=0x7f090025;
+        public static final int new_collection=0x7f090030;
         public static final int new_text=0x7f09001e;
         /**  新建文本页面 
          */
-        public static final int note_content_et=0x7f090025;
-        public static final int note_content_valid_blank=0x7f090026;
-        public static final int note_image_valid_blank=0x7f090027;
+        public static final int note_content_et=0x7f090027;
+        public static final int note_content_valid_blank=0x7f090028;
+        public static final int note_image_valid_blank=0x7f090029;
         public static final int now_creating=0x7f090007;
         public static final int now_deleting=0x7f090008;
         public static final int now_loading=0x7f090005;
         public static final int now_sending=0x7f090006;
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
-        public static final int preferences_key_current_user_id=0x7f090036;
-        public static final int preferences_key_last_syn_status=0x7f090038;
-        public static final int preferences_key_last_syn_time=0x7f090037;
+        public static final int preferences_key_current_user_id=0x7f090038;
+        public static final int preferences_key_last_syn_status=0x7f09003a;
+        public static final int preferences_key_last_syn_time=0x7f090039;
         /**  TeamknPreferences 的 keys 
          */
-        public static final int preferences_key_upload_photo_quality=0x7f090035;
-        public static final int save_note_bn=0x7f090028;
-        public static final int saving=0x7f090029;
+        public static final int preferences_key_upload_photo_quality=0x7f090037;
+        public static final int save_note_bn=0x7f09002a;
+        public static final int saving=0x7f09002b;
+        /**  搜索页面 
+         */
+        public static final int search_prompt=0x7f090026;
         /**  选择收集册页面 
          */
-        public static final int send_tsina=0x7f09002b;
+        public static final int send_tsina=0x7f09002d;
         /**  显示照片页面 
          */
-        public static final int show_capture_image_back=0x7f09002a;
-        public static final int submit_bn=0x7f09002c;
+        public static final int show_capture_image_back=0x7f09002c;
+        public static final int start_search=0x7f090023;
+        public static final int submit_bn=0x7f09002e;
     }
     public static final class style {
         /**  主题 

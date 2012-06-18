@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:focusable="true"
-  android:focusableInTouchMode="true"
-  style="@style/no_padding_body"
-  >
-  
-	<!-- 正文输入 -->
-	<LinearLayout
-	  android:layout_alignParentTop="true"
-	  android:layout_width="fill_parent"
-	  android:layout_height="fill_parent"
-	  android:layout_above="@+id/bottom_bar"
-    >
-    <EditText
-      android:id="@+id/note_content_et"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:hint="@string/note_content_et"
-      style="@style/note_content_inputer_layout"
-      android:visibility="gone"
-      />
-    <ImageView
-      android:id="@+id/note_image_iv"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:visibility="gone"
-      />
-    </LinearLayout>
-    
-	<!-- 窗口底栏 -->
-	<LinearLayout
-	  android:id="@+id/bottom_bar"
-	  android:layout_alignParentBottom="true"
-	  style="@style/bottom_bar"
-    >
-		<LinearLayout
-		  style="@style/bottom_bar_top_line"
-		  />
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        style="@style/no_padding_body"
+        >
+
+    <!-- 正文输入 -->
     <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="fill_parent"
-      android:layout_height="40dp"
-      android:background="#f1f1f1"
-      > 
-      <Button
-        android:id="@+id/save_note_bn"
-        android:text="@string/save_note_bn"
-        android:layout_width="60dp"
-        android:layout_height="fill_parent"
-        android:onClick="click_save_note_bn"
-        />
-      </LinearLayout>
+            android:layout_alignParentTop="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/bottom_bar"
+            >
+        <EditText
+                android:id="@+id/note_content_et"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:hint="@string/note_content_et"
+                style="@style/note_content_inputer_layout"
+                android:visibility="gone"
+                />
+        <ImageView
+                android:id="@+id/note_image_iv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone"
+                />
     </LinearLayout>
-  
+
+    <!-- 窗口底栏 -->
+    <LinearLayout
+            android:id="@+id/bottom_bar"
+            android:layout_alignParentBottom="true"
+            style="@style/bottom_bar"
+            >
+        <LinearLayout
+                style="@style/bottom_bar_top_line"
+                />
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="#f1f1f1"
+                >
+            <Button
+                    android:id="@+id/save_note_bn"
+                    android:text="@string/save_note_bn"
+                    android:layout_width="60dp"
+                    android:layout_height="fill_parent"
+                    android:onClick="click_save_note_bn"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>

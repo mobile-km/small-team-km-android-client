@@ -34,10 +34,9 @@
 		</activity>
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
-
-		<service android:name=".service.SynNoteService"></service>
+		<activity android:name=".activity.note.SearchActivity"></activity>
 		
-		<uses-library android:name="com.google.android.maps"/>		
-	</application>
-	
+		<service android:name=".service.SynNoteService"></service>
+    <uses-library android:name="com.google.android.maps"/>  
+    </application>
 </manifest>
