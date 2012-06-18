@@ -4,13 +4,26 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-    <EditText android:id="@+id/search_field"
+    <EditText android:id="@+id/search_box"
               android:layout_height="40dp"
               android:layout_width="fill_parent"
               android:hint="@string/search_prompt"/>
 
+    <HorizontalScrollView android:layout_height="wrap_content"
+                          android:layout_width="wrap_content"
+                          android:layout_below="@id/search_box"
+                          android:id="@+id/horizontal_wrapper">
+
+        <LinearLayout android:id="@+id/search_history"
+                      android:orientation="horizontal"
+                      android:layout_height="wrap_content"
+                      android:layout_width="wrap_content"/>
+
+
+    </HorizontalScrollView>
+
     <ListView android:id="@+id/search_result_list"
-              android:layout_below="@id/search_field"
+              android:layout_below="@id/horizontal_wrapper"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"/>
 

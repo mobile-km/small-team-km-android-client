@@ -22,6 +22,12 @@ public class TeamknPreferences {
         pre_edit.commit();
     }
 
+    public static void put_string(String key_name, String value) {
+        Editor pre_edit = PREFERENCES.edit();
+        pre_edit.putString(key_name, value);
+        pre_edit.commit();
+    }
+
     public static String get_resource_string(int resource_id) {
         return TeamknApplication.context.getResources().getString(resource_id);
     }
