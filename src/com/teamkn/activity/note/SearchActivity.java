@@ -28,7 +28,14 @@ public class SearchActivity extends NoteListActivity {
         do_index();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
-        load_search_box();
+
+        EditText search_box    = (EditText) findViewById(R.id.search_box);
+        Button   search_submit = (Button)   findViewById(R.id.search_submit);
+        Button   search_clear  = (Button)   findViewById(R.id.search_clear);
+
+        search_submit.setOnClickListener(new SearchSubmitClickListener());
+        search_clear.setOnClickListener(new SearchClearClickListener());
+        search_box.setOnKeyListener(new SearchBoxEnterListener());
         load_search_history();
     }
 
@@ -38,11 +45,6 @@ public class SearchActivity extends NoteListActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void load_search_box() {
-        EditText search_box = (EditText) findViewById(R.id.search_box);
-        search_box.setOnKeyListener(new SearchBoxSubmitListener(search_box));
     }
 
     private void add_records(ViewGroup layout) {
@@ -58,12 +60,12 @@ public class SearchActivity extends NoteListActivity {
         }
     }
 
-    private void set_on_search_record_click_listener(ViewGroup view,
+    private void set_on_search_record_click_listener(ViewGroup history_view,
                                                      SearchHistoryRecordClickListener listener) {
-        int child_count = view.getChildCount();
+        int child_count = history_view.getChildCount();
 
         for (int i = 0; i < child_count; i++) {
-            View child_view = view.getChildAt(i);
+            View child_view = history_view.getChildAt(i);
             child_view.setOnClickListener(listener);
         }
     }
@@ -95,6 +97,22 @@ public class SearchActivity extends NoteListActivity {
     private void do_search(String query_string) throws IOException, ParseException {
         List<Note> result = Searcher.search(query_string);
         load_result_list(result);
+    }
+
+    private void do_search_box_search() {
+        EditText search_box = (EditText) findViewById(R.id.search_box);
+        String query_string = search_box.getText().toString();
+        SearchHistory.put(query_string);
+
+        LinearLayout search_history =
+                (LinearLayout) findViewById(R.id.search_history);
+
+        try {
+            do_search(query_string);
+            add_records(search_history);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class SearchHistoryRecordClickListener implements View.OnClickListener {
@@ -140,38 +158,33 @@ public class SearchActivity extends NoteListActivity {
 
     }
 
-    private class SearchBoxSubmitListener implements View.OnKeyListener {
-        private EditText search_box;
+    private class SearchClearClickListener implements View.OnClickListener {
 
-        public SearchBoxSubmitListener(EditText start_search_box) {
-            search_box = start_search_box;
+        @Override
+        public void onClick(View button) {
+            search_box_set_text("");
         }
+    }
+
+    private class SearchSubmitClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View button) {
+            do_search_box_search();
+        }
+    }
+
+    private class SearchBoxEnterListener implements View.OnKeyListener {
 
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent event) {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                (keyCode           == KeyEvent.KEYCODE_ENTER)) {
+                    (keyCode           == KeyEvent.KEYCODE_ENTER)) {
 
-                String query_string = search_box.getText().toString();
-                System.out.print(query_string);
-                SearchHistory.put(query_string);
-                LinearLayout search_history =
-                        (LinearLayout) findViewById(R.id.search_history);
-
-                try {
-                    do_search(query_string);
-                    add_records(search_history);
-
-                    BaseUtils.toast(SearchHistory.get().toString());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                do_search_box_search();
                 return true;
             }
             return false;
         }
-
     }
 
     private class NoteItemContextMenuListener implements View.OnCreateContextMenuListener {
