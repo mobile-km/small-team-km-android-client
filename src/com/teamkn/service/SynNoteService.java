@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.Logic.HttpApi.NetworkUnusableException;
+import com.teamkn.Logic.HttpApi.ServerErrorException;
 import com.teamkn.activity.base.MainActivity.SynUIBinder;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
@@ -162,7 +164,15 @@ public class SynNoteService extends Service {
         }
         syn_ui_binder.set_syn_success();
         sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
-      } catch (Exception e) {
+      }catch(ServerErrorException see){
+        see.printStackTrace();
+        syn_ui_binder.set_syn_fail();
+        sendEmptyMessageDelayed(SYN_MESSAGE, 30*60*1000);
+      }catch(NetworkUnusableException nue){
+        nue.printStackTrace();
+        syn_ui_binder.set_syn_fail();
+        sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);
+      }catch (Exception e) {
         e.printStackTrace();
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);

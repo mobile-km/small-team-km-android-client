@@ -63,7 +63,7 @@ public abstract class TeamknHttpRequest<TResult> {
                 on_authenticate_exception();
                 throw new AuthenticateException(); //抛出未登录异常，会被 TeamknRunnable 接到并处理
             default:
-                throw new Exception();    //不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
+                throw new ResponseNot200Exception();    //不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
         }
     }
 
@@ -93,5 +93,9 @@ public abstract class TeamknHttpRequest<TResult> {
             nv_pair_list.add(pair);
         }
         return new UrlEncodedFormEntity(nv_pair_list, HTTP.UTF_8);
+    }
+    
+    public static class ResponseNot200Exception extends Exception{
+      private static final long serialVersionUID = -7542262559198093947L;
     }
 }
