@@ -8,7 +8,6 @@ import com.teamkn.R;
 import com.teamkn.base.search.Indexer;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.widget.adapter.NoteListAdapter;
@@ -56,17 +55,8 @@ public class SearchActivity extends NoteListActivity {
                 Button record = new Button(this);
                 record.setText(record_text);
                 layout.addView(record);
+                record.setOnClickListener(new SearchHistoryRecordClickListener());
             }
-        }
-    }
-
-    private void set_on_search_record_click_listener(ViewGroup history_view,
-                                                     SearchHistoryRecordClickListener listener) {
-        int child_count = history_view.getChildCount();
-
-        for (int i = 0; i < child_count; i++) {
-            View child_view = history_view.getChildAt(i);
-            child_view.setOnClickListener(listener);
         }
     }
 
@@ -74,9 +64,6 @@ public class SearchActivity extends NoteListActivity {
         LinearLayout search_history =
                 (LinearLayout) findViewById(R.id.search_history);
         add_records(search_history);
-
-        set_on_search_record_click_listener(search_history,
-                                            new SearchHistoryRecordClickListener());
     }
 
     private void load_result_list(List<Note> notes) {
