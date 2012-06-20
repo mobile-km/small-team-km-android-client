@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.teamkn.base.search.Indexer;
+import com.teamkn.base.task.IndexTimerTask;
 
 public class TeamknApplication extends Application {
     public static Context context;
@@ -23,6 +25,7 @@ public class TeamknApplication extends Application {
     public void onCreate() {
         context = getApplicationContext();
         mInflater = LayoutInflater.from(context);
+        Indexer.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
         super.onCreate();
     }
 

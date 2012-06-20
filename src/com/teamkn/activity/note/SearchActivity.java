@@ -24,7 +24,6 @@ public class SearchActivity extends NoteListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        do_index();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
@@ -36,14 +35,6 @@ public class SearchActivity extends NoteListActivity {
         search_clear.setOnClickListener(new SearchClearClickListener());
         search_box.setOnKeyListener(new SearchBoxEnterListener());
         load_search_history();
-    }
-
-    private void do_index() {
-        try {
-            Indexer.index_notes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void add_records(ViewGroup layout) {
@@ -100,6 +91,11 @@ public class SearchActivity extends NoteListActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
     private class SearchHistoryRecordClickListener implements View.OnClickListener {
@@ -165,7 +161,7 @@ public class SearchActivity extends NoteListActivity {
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent event) {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode           == KeyEvent.KEYCODE_ENTER)) {
+                (keyCode           == KeyEvent.KEYCODE_ENTER)) {
 
                 do_search_box_search();
                 return true;

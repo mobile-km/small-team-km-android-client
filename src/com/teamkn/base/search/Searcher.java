@@ -4,6 +4,7 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -23,7 +24,7 @@ public class Searcher {
 
     public static List<Note> search(String queryString) throws IOException, ParseException {
         Directory     indexDir      = FSDirectory.open(new File(Config.INDEX_DIR));
-        IndexSearcher indexSearcher = new IndexSearcher(indexDir);
+        IndexSearcher indexSearcher = new IndexSearcher(IndexReader.open(indexDir));
         QueryParser   parser        = new QueryParser(Version.LUCENE_36,
                                                       "note_content",
                                                       new StandardAnalyzer(Version.LUCENE_36));

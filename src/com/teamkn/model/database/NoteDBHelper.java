@@ -4,10 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.google.common.base.Joiner;
+import com.teamkn.base.search.Indexer;
 import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 import org.apache.commons.io.FileUtils;
+import org.apache.lucene.index.IndexWriterConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +19,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class NoteDBHelper extends BaseModelDBHelper {
+    private static Indexer indexer;
+
+    static {
+        try {
+            indexer = new Indexer(IndexWriterConfig.OpenMode.APPEND);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public class Kind {
         public static final String TEXT = "TEXT";
         public static final String IMAGE = "IMAGE";
@@ -80,6 +93,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
         if (uuid != null) {
             return true;
         }
+        try {
+            indexer.add_index(find(uuid));
+            indexer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -110,6 +129,13 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CREATED_AT, updated_at);
 
         create_item(values);
+
+        try {
+            indexer.add_index(find(uuid));
+            indexer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean touch_updated_at(String uuid, long seconds) {
@@ -152,6 +178,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CONTENT, note_content);
         values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
 
+
         return update_columns(uuid, values);
     }
 
@@ -181,6 +208,30 @@ public class NoteDBHelper extends BaseModelDBHelper {
         }
     }
 
+    final public static List<Note> find(List<String> uuids) {
+        SQLiteDatabase db = get_read_db();
+
+        String uuids_list = Joiner.on(",").join(uuids);
+
+        Cursor cursor = db.query(Constants.TABLE_NOTES,
+                                 get_columns(),
+                                 "uuid IN (" + uuids_list + ")",
+                                 null, null, null, null);
+
+        ArrayList<Note> notes = new ArrayList<Note>();
+
+        if (cursor.moveToFirst()) {
+            for (long i = 0; i < cursor.getCount(); i++) {
+                notes.add(build_note_by_cursor(cursor));
+                cursor.moveToNext();
+            }
+
+            return notes;
+        }
+
+        return notes;
+    }
+
     public static boolean destroy(String uuid) {
         // 保存数据库信息
         long current_seconds = System.currentTimeMillis() / 1000;
@@ -189,6 +240,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
         values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
 
+        try {
+            indexer.delete_index(find(uuid));
+            indexer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return update_columns(uuid, values);
     }
 
@@ -231,10 +288,10 @@ public class NoteDBHelper extends BaseModelDBHelper {
                     values, Constants.TABLE_NOTES__UUID + " = ? ",
                     new String[]{uuid});
 
-            if (row_count != 1) {
-                return false;
-            }
-            return true;
+            indexer.update_index(find(uuid));
+            indexer.close();
+
+            return row_count == 1;
         } catch (Exception e) {
             Log.e("NoteDBHelper", "update", e);
             return false;
@@ -251,6 +308,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 Constants.TABLE_NOTES__IS_REMOVED,
                 Constants.TABLE_NOTES__CREATED_AT,
                 Constants.TABLE_NOTES__UPDATED_AT};
+    }
+
+    private  static String[] get_column(String column) {
+        return new String[] {
+                column
+        };
     }
 
     private static Note build_note_by_cursor(Cursor cursor) {
