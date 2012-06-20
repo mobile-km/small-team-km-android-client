@@ -107,6 +107,14 @@ public class MainActivity extends TeamknBaseActivity {
 	  open_activity(NoteListActivity.class);
 	}
 	
+	public void click_headbar_button_setting(View view){
+	  open_activity(TeamknSettingActivity.class);
+	}
+	
+	public void click_headbar_button_contacts(View view){
+	  BaseUtils.toast("正在施工");
+	}
+	
 	@Override
   protected void onDestroy() {
     super.onDestroy();

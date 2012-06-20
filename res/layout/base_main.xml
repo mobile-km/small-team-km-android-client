@@ -3,162 +3,176 @@
 <!-- 主界面，包含功能选择 -->
 
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/body"
+>    
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/body"
+        style="@style/head_bar"
+    >
+        <TextView
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:text="@string/headbar_title"
+        />
+
+        <Button
+            android:id="@+id/headbar_button_setting"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/headbar_setting"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:onClick="click_headbar_button_setting"
+        />
+
+        <Button
+            android:id="@+id/headbar_button_contacts"
+            android:background="@drawable/headbar_contacts"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@+id/headbar_button_setting"
+            android:onClick="click_headbar_button_contacts"
+        />
+
+    </RelativeLayout>    
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#fff"
+    >
+        <RelativeLayout
+            android:id="@+id/main_user_avatar"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="#cccccc"
         >
-    <!-- 六个按钮 -->
-    <TableLayout
-            android:id="@+id/base_main_actions"
-            android:layout_width="480px"
-            android:layout_height="320px"
-            android:layout_marginBottom="20px">
-        <TableRow
-                android:layout_width="480px"
-                android:layout_height="160px"
-                >
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="96dp"
+            android:layout_toRightOf="@+id/main_user_avatar"
+            android:layout_marginLeft="5dp"
+        >
+            <TextView 
+                android:id="@+id/main_user_name"
+                android:text="@string/main_user_name_default"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:textSize="20dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+            />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="66dp"
+                android:layout_alignParentBottom="true"
+                android:background="#000" 
+            >
                 <Button
-                        android:id="@+id/new_text"
-                        android:text="@string/new_text"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:onClick="click_new_text"
-                        />
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
+                    android:id="@+id/new_text"
+                    android:text="@string/new_text"
+                    android:onClick="click_new_text"
+                    android:layout_height="fill_parent"
+                    android:layout_width="52dp"
+                    android:background="#ccc"
+                />
                 <Button
-                        android:id="@+id/from_album"
-                        android:text="@string/from_album"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:onClick="click_from_album"
-                        />
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
+                    android:id="@+id/from_album"
+                    android:text="@string/from_album"
+                    android:onClick="click_from_album"
+                    android:layout_height="fill_parent"
+                    android:layout_width="52dp"
+                    android:background="#F7F8FA"
+                    android:layout_toRightOf="@+id/new_text"
+                />
                 <Button
-                        android:id="@+id/from_camera"
-                        android:text="@string/from_camera"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:onClick="click_from_camera"
-                        />
-            </LinearLayout>
-        </TableRow>
-        <TableRow
-                android:layout_width="480px"
-                android:layout_height="160px">
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
+                    android:id="@+id/from_camera"
+                    android:text="@string/from_camera"
+                    android:onClick="click_from_camera"
+                    android:layout_height="fill_parent"
+                    android:layout_width="52dp"
+                    android:background="#ccc"
+                    android:layout_toRightOf="@+id/from_album"
+                />
                 <Button
-                        android:id="@+id/start_search"
-                        android:text="@string/start_search"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:onClick="click_start_search"
-                        />
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
-                   <Button
-                     android:id="@+id/manual_syn_bn"
-                     android:text="@string/manual_syn_bn"
-                     android:layout_height="fill_parent"
-                     android:layout_width="fill_parent"
-                     android:onClick="click_manual_syn"
-                     />
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_height="160px"
-                    android:layout_width="160px"
-                    >
-                <Button
-                        android:text="@string/laceholder"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        />
-            </LinearLayout>
-        </TableRow>
-    </TableLayout>
+                    android:text="@string/placeholder"
+                    android:layout_height="fill_parent"
+                    android:layout_width="52dp"
+                    android:background="#F7F8FA"
+                    android:layout_toRightOf="@+id/from_camera"
+                />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
 
     <!-- 三个长条框 -->
-    <LinearLayout
-            android:layout_width="480px"
-            android:layout_height="100px"
-            android:layout_marginBottom="10px"
-            >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    >
         <Button
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
-                android:text="@string/base_main_show_note_list"
-                android:onClick="show_note_list"
-                />
-    </LinearLayout>
+            android:id="@+id/start_search"
+            android:text="@string/start_search"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:onClick="click_start_search"
+        />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    >
+        <Button
+            android:id="@+id/manual_syn_bn"
+            android:text="@string/manual_syn_bn"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:onClick="click_manual_syn"
+        />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    >
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="@string/base_main_show_note_list"
+            android:onClick="show_note_list"
+        />
+    </RelativeLayout>
+    
     <!-- 同步进度条和提示文字 -->
     <LinearLayout
-            android:id="@+id/base_main_syn_bar"
-            android:layout_width="480px"
-            android:layout_height="100px"
-            android:layout_marginBottom="10px"
-            android:orientation="vertical"
-            >
+        android:id="@+id/base_main_syn_bar"
+        android:layout_width="320dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="vertical"
+    >
         <TextView
-                android:id="@+id/main_data_syn_text"
-                android:layout_height="20dp"
-                android:layout_width="fill_parent"
-                android:gravity="center"
-                android:textSize="13dp"
-                />
+            android:id="@+id/main_data_syn_text"
+            android:layout_height="20dp"
+            android:layout_width="fill_parent"
+            android:gravity="center"
+            android:textSize="13dp"
+        />
         <ProgressBar
-                android:id="@+id/main_data_syn_progress_bar"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_height="20dp"
-                android:layout_width="fill_parent"
-                android:visibility="gone"
-                />
+            android:id="@+id/main_data_syn_progress_bar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_height="20dp"
+            android:layout_width="fill_parent"
+            android:visibility="gone"
+        />
     </LinearLayout>
-    <LinearLayout
-            android:layout_width="480px"
-            android:layout_height="100px"
-            android:layout_marginBottom="20px"
-            >
-    </LinearLayout>
-
-    <!-- 底部菜单 -->
-    <LinearLayout
-            android:layout_width="480px"
-            android:layout_height="120px"
-            android:orientation="horizontal"
-            >
-        <LinearLayout
-                android:layout_width="120px"
-                android:layout_height="120px"
-                ></LinearLayout>
-        <LinearLayout
-                android:layout_width="120px"
-                android:layout_height="120px"
-                ></LinearLayout>
-        <LinearLayout
-                android:layout_width="120px"
-                android:layout_height="120px"
-                ></LinearLayout>
-        <LinearLayout
-                android:layout_width="120px"
-                android:layout_height="120px"
-                ></LinearLayout>
-    </LinearLayout>
-
-
 </LinearLayout>
