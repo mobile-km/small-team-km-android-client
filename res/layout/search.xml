@@ -6,8 +6,20 @@
 
     <EditText android:id="@+id/search_box"
               android:layout_height="40dp"
-              android:layout_width="fill_parent"
+              android:layout_width="218dp"
               android:hint="@string/search_prompt"/>
+
+    <Button android:id="@+id/search_submit"
+            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/search_box"
+            android:text="搜索"/>
+
+    <Button android:id="@+id/search_clear"
+            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/search_submit"
+            android:text="清空"/>
 
     <HorizontalScrollView android:layout_height="wrap_content"
                           android:layout_width="wrap_content"

@@ -28,11 +28,12 @@ public class SearchHistory {
     public static LinkedList<String> put(String query_string) {
         LinkedList<String> unique_records = uniquify_list(get());
 
-        unique_records.addFirst(query_string);
+        if (query_string.length() > 0) {
+            unique_records.addFirst(query_string);
+        }
+
         unique_records = uniquify_list(unique_records);
-
         LinkedList<String> history_cache = trim_list(unique_records, 10);
-
         TeamknPreferences.put_string("search_history",
                                      Joiner.on(",").join(history_cache));
         return history_cache;

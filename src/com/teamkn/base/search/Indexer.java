@@ -6,6 +6,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -36,7 +37,7 @@ public class Indexer {
                                              IndexWriter.MaxFieldLength.UNLIMITED);
     }
 
-    protected Document getDocument(Note note) throws Exception {
+    protected Document new_document(Note note) throws Exception {
         Document doc = new Document();
 
         doc.add(new Field("note_uuid",
@@ -53,8 +54,19 @@ public class Indexer {
     }
 
     private void index_note(Note note) throws Exception {
-        Document doc = getDocument(note);
+        Document doc = new_document(note);
         writer.addDocument(doc);
+    }
+
+    private void delete_index(Note note) throws Exception {
+        Term delete_term = new Term("note_uuid", note.uuid);
+        writer.deleteDocuments(delete_term);
+    }
+
+    private void update_index(Note note) throws Exception {
+        Term update_term = new Term("note_uuid", note.uuid);
+        Document doc = new_document(note);
+        writer.updateDocument(update_term, doc);
     }
 
     public void close() throws IOException {
