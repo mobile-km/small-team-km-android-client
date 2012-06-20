@@ -9,7 +9,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -85,52 +84,57 @@ public class HttpApi {
             public static final String SYN_HAS_NEXT = "syn_has_next";
         }
 
-        public static HashMap<String, Object> handshake() throws Exception {
-            return new TeamknGetRequest<HashMap<String, Object>>(同步握手) {
+        public static HashMap<String, Object> handshake() throws Exception,ServerErrorException,NetworkUnusableException {
+          return new HttpRequestTryThreeProcessor<HashMap<String, Object>>(){
+            @Override
+            public HashMap<String, Object> callback() throws Exception {
+              return new TeamknGetRequest<HashMap<String, Object>>(同步握手) {
                 @Override
                 public HashMap<String, Object> on_success(String response_text) throws Exception {
-                    JSONObject json = new JSONObject(response_text);
-                    String uuid = (String) json.get("syn_task_uuid");
-                    Integer count = (Integer) json.get("note_count");
-                    HashMap<String, Object> map = new HashMap<String, Object>();
-                    map.put("syn_task_uuid", uuid);
-                    map.put("note_count", count);
-                    return map;
+                  JSONObject json = new JSONObject(response_text);
+                  String uuid = (String) json.get("syn_task_uuid");
+                  Integer count = (Integer) json.get("note_count");
+                  HashMap<String, Object> map = new HashMap<String, Object>();
+                  map.put("syn_task_uuid", uuid);
+                  map.put("note_count", count);
+                  return map;
                 }
-            }.go();
+              }.go();
+            }
+          }.execute();
         }
 
-        public static String compare(String syn_task_uuid, final Note note) throws Exception {
-            return new TeamknPostRequest<String>(同步比对,
-                    new BasicNameValuePair("syn_task_uuid", syn_task_uuid),
-                    new BasicNameValuePair("note_uuid", note.uuid),
-                    new BasicNameValuePair("updated_at", note.updated_at + "")
-            ) {
-                @Override
-                public String on_success(String response_text) throws Exception {
+        public static String compare(final String syn_task_uuid, final Note note) throws Exception,NetworkUnusableException,ServerErrorException {
+          return new HttpRequestTryThreeProcessor<String>(){
+            @Override
+            public String callback() throws Exception {
+              return new TeamknPostRequest<String>(同步比对,
+                new BasicNameValuePair("syn_task_uuid", syn_task_uuid),
+                new BasicNameValuePair("note_uuid", note.uuid),
+                new BasicNameValuePair("updated_at", note.updated_at + "")
+                ) {
+                  @Override
+                  public String on_success(String response_text) throws Exception {
                     JSONObject json = new JSONObject(response_text);
                     String action = (String) json.get("action");
                     System.out.println("compare");
                     System.out.println(action);
-
-
                     if (action.equals(HttpApi.Syn.Action.DO_PUSH)) {
-                        HttpApi.Syn.push(note);
+                      HttpApi.Syn.push(note);
                     } else if (action.equals(HttpApi.Syn.Action.DO_PULL)) {
-
-                        JSONObject note_json = (JSONObject) json.get("note");
-                        System.out.println(note_json);
-                        NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
-
-                        if (note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)) {
-                            HttpApi.Syn.pull_image(note_bean.uuid, note_bean.attachment_url);
-                        }
-                        NoteDBHelper.update_from_pull(note_bean.uuid, note_bean.content, note_bean.is_removed, note_bean.updated_at);
+                      JSONObject note_json = (JSONObject) json.get("note");
+                      System.out.println(note_json);
+                      NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
+                      if (note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)) {
+                        HttpApi.Syn.pull_image(note_bean.uuid, note_bean.attachment_url);
+                      }
+                      NoteDBHelper.update_from_pull(note_bean.uuid, note_bean.content, note_bean.is_removed, note_bean.updated_at);
                     }
-
                     return action;
-                }
-            }.go();
+                  }
+              }.go();
+            }
+          }.execute();
         }
 
         public static void pull_image(String uuid, String attachment_url) {
@@ -185,41 +189,50 @@ public class HttpApi {
                         return null;
                     }
                 }.go();
-
             }
-
         }
 
-        public static boolean syn_next(String syn_task_uuid) throws Exception {
-            return new TeamknGetRequest<Boolean>(同步下一个,
-                    new BasicNameValuePair("syn_taks_uuid", syn_task_uuid)
-            ) {
-                @Override
-                public Boolean on_success(String response_text) throws Exception {
+        public static boolean syn_next(final String syn_task_uuid) throws Exception,NetworkUnusableException,ServerErrorException {
+          return new HttpRequestTryThreeProcessor<Boolean>(){
+            @Override
+            public Boolean callback() throws Exception {
+              return new TeamknGetRequest<Boolean>(同步下一个,
+                new BasicNameValuePair("syn_taks_uuid", syn_task_uuid)
+                ) {
+                  @Override
+                  public Boolean on_success(String response_text) throws Exception {
                     JSONObject json = new JSONObject(response_text);
                     String action = (String) json.get("action");
                     if (action.equals(HttpApi.Syn.Action.SYN_COMPLETED)) {
-                        return false;
+                      return false;
                     } else if (action.equals(HttpApi.Syn.Action.SYN_HAS_NEXT)) {
-                        JSONObject note_json = (JSONObject) json.get("note");
-                        System.out.println(note_json);
-
-                        NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
-                        if (note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)) {
-                            HttpApi.Syn.pull_image(note_bean.uuid, note_bean.attachment_url);
-                        }
-
-                        NoteDBHelper.create_new_item_from_pull_server(note_bean.uuid, note_bean.content, note_bean.kind, note_bean.is_removed, note_bean.updated_at);
-                        return true;
+                      JSONObject note_json = (JSONObject) json.get("note");
+                      System.out.println(note_json);
+                      NoteBean note_bean = HttpApi.Syn.NoteBean.build(note_json);
+                      if (note_bean.kind.equals(NoteDBHelper.Kind.IMAGE)) {
+                        HttpApi.Syn.pull_image(note_bean.uuid, note_bean.attachment_url);
+                      }
+                      NoteDBHelper.create_new_item_from_pull_server(note_bean.uuid, note_bean.content, note_bean.kind, note_bean.is_removed, note_bean.updated_at);
+                      return true;
                     }
                     throw new Exception();
-                }
-            }.go();
+                  }
+                }.go();
+              }
+          }.execute();
         }
     }
 
 
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;
+    }
+    
+    public static class NetworkUnusableException extends Exception{
+      private static final long serialVersionUID = 854703815488292561L;
+    }
+    
+    public static class ServerErrorException extends Exception{
+      private static final long serialVersionUID = -3689174865045267291L;
     }
 }
