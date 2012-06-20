@@ -27,6 +27,7 @@
             android:background="@drawable/headbar_setting"
             android:layout_width="44dp"
             android:layout_height="44dp"
+            android:onClick="click_headbar_button_setting"
         />
 
         <Button
@@ -35,6 +36,7 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_toLeftOf="@+id/headbar_button_setting"
+            android:onClick="click_headbar_button_contacts"
         />
 
     </RelativeLayout>    
