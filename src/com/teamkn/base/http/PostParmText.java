@@ -4,6 +4,7 @@ import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.StringBody;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class PostParmText implements PostParam {
     private String param_name;
@@ -22,7 +23,7 @@ public class PostParmText implements PostParam {
     @Override
     public ContentBody get_body() {
         try {
-            return new StringBody(value);
+            return new StringBody(value,Charset.forName( "UTF-8" ));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
