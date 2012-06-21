@@ -1,5 +1,6 @@
 package com.teamkn.activity.base;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +9,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
@@ -26,6 +32,7 @@ import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
@@ -71,8 +78,22 @@ public class MainActivity extends TeamknBaseActivity {
 		// 注册更新服务
     Intent intent = new Intent(MainActivity.this,SynNoteService.class);
     bindService(intent, conn, Context.BIND_AUTO_CREATE);
-    System.out.println("MainActivity onCreate end");
-    System.out.println("MainActivity onCreate Thread" + Thread.currentThread());
+
+    // 设置用户头像和名字
+    AccountUser user = current_user();
+    byte[] avatar = user.avatar;
+    String name = current_user().name;
+    RelativeLayout rl = (RelativeLayout)findViewById(R.id.main_user_avatar);
+    if(avatar != null){
+      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(avatar));
+      Drawable drawable = new BitmapDrawable(bitmap);
+      rl.setBackgroundDrawable(drawable);
+    }else{
+      rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
+    }
+    
+    TextView user_name_tv = (TextView)findViewById(R.id.main_user_name);
+    user_name_tv.setText(name);
 	}
 	
 	public void click_new_text(View view){
