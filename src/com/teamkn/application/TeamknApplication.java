@@ -2,11 +2,13 @@ package com.teamkn.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.teamkn.base.search.Indexer;
 import com.teamkn.base.task.IndexTimerTask;
+import com.teamkn.service.IndexService;
 
 public class TeamknApplication extends Application {
     public static Context context;
@@ -25,8 +27,6 @@ public class TeamknApplication extends Application {
     public void onCreate() {
         context = getApplicationContext();
         mInflater = LayoutInflater.from(context);
-        Indexer.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
-        super.onCreate();
     }
 
     final public static String now_loading = "正在载入…";

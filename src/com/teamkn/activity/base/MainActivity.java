@@ -25,8 +25,10 @@ import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.IndexTimerTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.service.IndexService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 
@@ -71,7 +73,12 @@ public class MainActivity extends TeamknBaseActivity {
 		// 注册更新服务
     Intent intent = new Intent(MainActivity.this,SynNoteService.class);
     bindService(intent, conn, Context.BIND_AUTO_CREATE);
-    System.out.println("MainActivity onCreate end");
+
+        IndexService.start(this);
+
+        IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
+
+        System.out.println("MainActivity onCreate end");
     System.out.println("MainActivity onCreate Thread" + Thread.currentThread());
 	}
 	
@@ -120,6 +127,8 @@ public class MainActivity extends TeamknBaseActivity {
     super.onDestroy();
     // 解除 和 更新笔记服务的绑定
     unbindService(conn);
+
+        IndexService.stop();
   }
 	
 	@Override

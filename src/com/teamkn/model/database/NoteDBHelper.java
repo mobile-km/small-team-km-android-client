@@ -5,12 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.google.common.base.Joiner;
-import com.teamkn.base.search.Indexer;
 import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
+import com.teamkn.service.IndexService;
+import com.teamkn.service.IndexService.IndexHandler.action;
 import org.apache.commons.io.FileUtils;
-import org.apache.lucene.index.IndexWriterConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +19,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class NoteDBHelper extends BaseModelDBHelper {
-    private static Indexer indexer;
-
-    static {
-        try {
-            indexer = new Indexer(IndexWriterConfig.OpenMode.APPEND);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public class Kind {
         public static final String TEXT = "TEXT";
         public static final String IMAGE = "IMAGE";
@@ -90,16 +80,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
 
     public static boolean create_text_note(String note_content) {
         String uuid = create_item_by_kind(note_content, Kind.TEXT);
-        if (uuid != null) {
-            return true;
-        }
-        try {
-            indexer.add_index(find(uuid));
-            indexer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+
+        IndexService.obtain_index_request(find(uuid),
+                                          action.ADD)
+                    .sendToTarget();
+
+        return uuid != null;
     }
 
     public static boolean create_image_note(String origin_image_path) {
@@ -131,8 +117,9 @@ public class NoteDBHelper extends BaseModelDBHelper {
         create_item(values);
 
         try {
-            indexer.add_index(find(uuid));
-            indexer.close();
+            IndexService.obtain_index_request(find(uuid),
+                                              action.ADD)
+                        .sendToTarget();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -240,12 +227,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
         values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
 
-        try {
-            indexer.delete_index(find(uuid));
-            indexer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return update_columns(uuid, values);
     }
 
@@ -288,8 +269,17 @@ public class NoteDBHelper extends BaseModelDBHelper {
                     values, Constants.TABLE_NOTES__UUID + " = ? ",
                     new String[]{uuid});
 
-            indexer.update_index(find(uuid));
-            indexer.close();
+            Note note = find(uuid);
+
+            if (note.is_removed == 1) {
+                IndexService.obtain_index_request(find(uuid),
+                                                  action.DELETE)
+                            .sendToTarget();
+            } else {
+                IndexService.obtain_index_request(find(uuid),
+                                                  action.UPDATE)
+                            .sendToTarget();
+            }
 
             return row_count == 1;
         } catch (Exception e) {

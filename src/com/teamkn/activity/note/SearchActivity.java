@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import com.teamkn.R;
-import com.teamkn.base.search.Indexer;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.service.IndexService;
 import com.teamkn.widget.adapter.NoteListAdapter;
 import org.apache.lucene.queryParser.ParseException;
 

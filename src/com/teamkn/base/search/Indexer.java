@@ -1,9 +1,7 @@
 package com.teamkn.base.search;
 
-import com.teamkn.base.task.IndexTimerTask;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
-import org.apache.http.util.VersionInfo;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -17,13 +15,12 @@ import org.apache.lucene.util.Version;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class Indexer {
-    private IndexWriter writer;
+    public final IndexWriter writer;
     private static Directory indexDir;
+    private static Indexer instance = null;
 
     static {
         try {
@@ -33,28 +30,27 @@ public class Indexer {
         }
     }
 
-    public static void index_task(long interval) {
-        Timer index_timer = new Timer();
-        index_timer.scheduleAtFixedRate(new IndexTimerTask(),
-                                        0,
-                                        interval);
+    private static Indexer get_instance() throws Exception {
+        if (instance == null) {
+            instance = new  Indexer();
+        }
+        return instance;
     }
 
     public static void index_notes() throws Exception {
-        Indexer    indexer = new Indexer(IndexWriterConfig.OpenMode.CREATE);
         List<Note> notes   = NoteDBHelper.all(false);
 
         for (Note note: notes) {
-            indexer.add_index(note);
+            Indexer.add_index(note);
         }
 
-        indexer.close();
+        Indexer.close();
     }
 
-    public Indexer(IndexWriterConfig.OpenMode open_mode) throws Exception {
+    private Indexer() throws Exception {
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_36,
                                                          new StandardAnalyzer(Version.LUCENE_36));
-        config.setOpenMode(open_mode);
+        config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 
         writer = new IndexWriter(indexDir, config);
     }
@@ -63,7 +59,7 @@ public class Indexer {
         return IndexReader.indexExists(indexDir);
     }
 
-    private Document new_document(Note note) throws Exception {
+    private static Document new_document(Note note) throws Exception {
         Document doc = new Document();
 
         doc.add(new Field("note_uuid",
@@ -79,26 +75,31 @@ public class Indexer {
         return doc;
     }
 
-    public void add_index(Note note) throws Exception {
-        writer.addDocument(new_document(note));
+    public static void add_index( Note note) throws Exception {
+        get_instance().writer.addDocument(new_document(note));
     }
 
-    public void delete_index(Note note) throws Exception {
+    public static void delete_index(Note note) throws Exception {
         if (note.is_removed == 1) {
-            writer.deleteDocuments(new Term("note_uuid",
-                                            note.uuid));
+            get_instance().writer.deleteDocuments(new Term("note_uuid",
+                                                  note.uuid));
         }
     }
 
-    public void update_index(Note note) throws Exception {
+    public static void update_index(Note note) throws Exception {
         if (note.is_removed == 0) {
-            writer.updateDocument(new Term("note_uuid",
-                                           note.uuid),
-                                  new_document(note));
+            get_instance().writer.updateDocument(new Term("note_uuid",
+                                                 note.uuid),
+                                                 new_document(note));
         }
     }
 
-    public void close() throws IOException {
-        writer.close();
+    public static void close() throws Exception {
+        get_instance().writer.close();
+        instance = null;
+    }
+
+    public static void commit() throws Exception {
+        get_instance().writer.commit();
     }
 }
