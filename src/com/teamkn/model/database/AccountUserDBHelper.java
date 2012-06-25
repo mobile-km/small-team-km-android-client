@@ -22,7 +22,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                     new String[]{
                             Constants.KEY_ID,
                             Constants.TABLE_USERS__COOKIES,
-                            Constants.TABLE_USERS__INFO
+                            Constants.TABLE_USERS__INFO,
+                            Constants.TABLE_USERS__AVATAR
                     }, null, null, null, null,
                     Constants.KEY_ID + " ASC"
             );
@@ -31,7 +32,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             while (cursor.moveToNext()) {
                 String cookies = cursor.getString(1);
                 String info = cursor.getString(2);
-                users.add(new AccountUser(cookies, info));
+                byte[] avatar = cursor.getBlob(3);
+                users.add(new AccountUser(cookies, info, avatar));
             }
 
             return users;
@@ -103,6 +105,7 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             values.put(Constants.TABLE_USERS__NAME, account_user.name);
             values.put(Constants.TABLE_USERS__COOKIES, account_user.cookies);
             values.put(Constants.TABLE_USERS__INFO, account_user.info);
+            values.put(Constants.TABLE_USERS__AVATAR,account_user.avatar);
 
             AccountUser o_user = find(account_user.user_id);
 
@@ -130,7 +133,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                     Constants.KEY_ID,
                     Constants.TABLE_USERS__USER_ID,
                     Constants.TABLE_USERS__COOKIES,
-                    Constants.TABLE_USERS__INFO
+                    Constants.TABLE_USERS__INFO,
+                    Constants.TABLE_USERS__AVATAR
             },
                     Constants.TABLE_USERS__USER_ID + " = " + user_id,
                     null, null, null, null
@@ -141,7 +145,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             if (has_result) {
                 String cookies = cursor.getString(2);
                 String info = cursor.getString(3);
-                return new AccountUser(cookies, info);
+                byte[] avatar = cursor.getBlob(4);
+                return new AccountUser(cookies, info, avatar);
             } else {
                 return AccountUser.NIL_ACCOUNT_USER;
             }

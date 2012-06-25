@@ -11,6 +11,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.KEY_ID + " integer primary key autoincrement, " +
             Constants.TABLE_USERS__USER_ID + " integer not null, " +
             Constants.TABLE_USERS__NAME + " text not null, " +
+            Constants.TABLE_USERS__AVATAR + " blob, " +
             Constants.TABLE_USERS__COOKIES + " text not null, " +
             Constants.TABLE_USERS__INFO + " text not null);";
 
