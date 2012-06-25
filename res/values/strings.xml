@@ -19,8 +19,12 @@
     <string name="app_data_syn_fail">数据同步失败</string>
 
     <string name="button_go_back">返回</string>
-    <string name="laceholder">占位</string>
+    <string name="placeholder">占位</string>
 
+    <!-- MAIN -->
+    <string name="headbar_title">TEAMKN</string>
+    <string name="main_user_name_default">这里是用户名</string>
+    
     <!-- 各种dialog -->
     <string name="dialog_close_app_title">退出程序</string>
     <string name="dialog_close_app_text">是否退出 teamkn？</string>
