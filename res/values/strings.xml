@@ -79,6 +79,12 @@
     <string name="account_edit_button">编辑</string>
     <string name="account_edit_button_close">完成</string>
     <string name="account_delete_button">删除</string>
+    <!-- 联系人页面 -->
+    <string name="contact_page_header">联系人</string>
+    <string name="to_search_contact_page">搜索</string>
+    <!-- 搜索联系人页面 -->
+    <string name="search_contact_page_header">搜索联系人</string>
+    <string name="search_contact">搜索</string>
 
     <!-- view.getTag(key,value) 中的 key -->
     <!-- 笔记列表项的 tag key -->

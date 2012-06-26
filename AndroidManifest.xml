@@ -35,6 +35,9 @@
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
 		<activity android:name=".activity.note.SearchActivity"></activity>
+    
+    <activity android:name=".activity.contact.ContactsActivity"></activity>
+    <activity android:name=".activity.contact.SearchContactActivity"></activity>
 		
 		<service android:name=".service.SynNoteService"></service>
     <uses-library android:name="com.google.android.maps"/>  

@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.note.SearchActivity;
@@ -133,7 +134,7 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	
 	public void click_headbar_button_contacts(View view){
-	  BaseUtils.toast("正在施工");
+	  open_activity(ContactsActivity.class);
 	}
 	
 	@Override

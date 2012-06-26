@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/body"
+>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/head_bar"
+    >
+        <Button
+            style="@style/head_bar_button_go_back"
+        />
+        <TextView
+            style="@style/head_bar_text_center"
+            android:text="@string/search_contact_page_header"
+        />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+    >
+        <Button
+            android:id="@+id/search_contact_bn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/search_contact"
+            android:onClick="click_search_contact_bn"
+        />
+        <EditText
+            android:id="@+id/search_contact_et"
+            android:hint="@string/search_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/search_contact_bn"
+        />
+    </RelativeLayout>
+    
+
+</LinearLayout>

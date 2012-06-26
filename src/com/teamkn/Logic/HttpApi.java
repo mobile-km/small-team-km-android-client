@@ -6,8 +6,10 @@ import com.teamkn.model.database.NoteDBHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +30,8 @@ public class HttpApi {
     public static final String 同步推送 = "/syn/push";
 
     public static final String 同步下一个 = "/syn/get_next";
+    
+    public static final String 用户查询 = "/users/search";
 
     // LoginActivity
     // 用户登录请求
@@ -238,7 +242,19 @@ public class HttpApi {
           }.execute();
         }
     }
-
+    
+    public static class Contact{
+      public static void search(String query){
+        new TeamknGetRequest<String>(用户查询,
+            new BasicNameValuePair("query", query)
+            ){
+          @Override
+          public String on_success(String response_text) throws Exception {
+            return null;
+          }
+        };
+      }
+    }
 
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;
