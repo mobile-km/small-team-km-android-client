@@ -19,18 +19,18 @@ import java.util.List;
 
 public class Indexer {
     public final IndexWriter writer;
-    private static Directory indexDir;
+    private static Directory index_dir;
     private static Indexer instance = null;
 
     static {
         try {
-            indexDir = FSDirectory.open(new File(Config.INDEX_DIR));
+            index_dir = FSDirectory.open(new File(Config.INDEX_DIR));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static Indexer get_instance() throws Exception {
+    public static Indexer get_instance() throws Exception {
         if (instance == null) {
             instance = new  Indexer();
         }
@@ -52,11 +52,11 @@ public class Indexer {
                                                          new StandardAnalyzer(Version.LUCENE_36));
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 
-        writer = new IndexWriter(indexDir, config);
+        writer = new IndexWriter(index_dir, config);
     }
 
     public static boolean index_exists() throws IOException {
-        return IndexReader.indexExists(indexDir);
+        return IndexReader.indexExists(index_dir);
     }
 
     private static Document new_document(Note note) throws Exception {
@@ -65,7 +65,7 @@ public class Indexer {
         doc.add(new Field("note_uuid",
                           note.uuid,
                           Field.Store.YES,
-                          Field.Index.NO));
+                          Field.Index.NOT_ANALYZED_NO_NORMS));
 
         doc.add(new Field("note_content",
                           note.content,
@@ -83,6 +83,7 @@ public class Indexer {
         if (note.is_removed == 1) {
             get_instance().writer.deleteDocuments(new Term("note_uuid",
                                                   note.uuid));
+
         }
     }
 
@@ -101,5 +102,10 @@ public class Indexer {
 
     public static void commit() throws Exception {
         get_instance().writer.commit();
+    }
+
+    public static void refresh() throws Exception {
+        close();
+        get_instance();
     }
 }

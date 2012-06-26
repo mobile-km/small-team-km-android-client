@@ -3,7 +3,10 @@ package com.teamkn.base.search;
 import com.google.common.base.Joiner;
 import com.teamkn.Logic.TeamknPreferences;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SearchHistory {
     private static String get_history_string() {

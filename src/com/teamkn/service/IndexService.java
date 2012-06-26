@@ -8,14 +8,13 @@ import android.os.IBinder;
 import android.os.Message;
 import com.teamkn.base.search.Indexer;
 import com.teamkn.model.Note;
-import org.apache.lucene.index.IndexWriterConfig;
 
 import java.io.IOException;
 
 public class IndexService extends Service {
     private static Intent intent;
     private static Activity start_activity;
-    public  static IndexHandler handler = new IndexHandler();
+    public static IndexHandler handler = new IndexHandler();
 
     public static void start(Activity activity) {
         intent         = new Intent(activity, IndexService.class);
@@ -77,7 +76,8 @@ public class IndexService extends Service {
 
         @Override
         public void handleMessage(Message message) {
-            IndexRunnable runnable = new IndexRunnable(message.what, (Note) message.obj);
+            IndexRunnable runnable = new IndexRunnable(message.what,
+                                                       (Note) message.obj);
             post(runnable);
         }
     }
@@ -95,6 +95,10 @@ public class IndexService extends Service {
             System.out.print("from index service: Sir, Runnable anonymous is serving your request!");
             // arg1 -> 0, 1, 2 -> 0: add; 1: delete; 2: update.
             try {
+                if (action != IndexHandler.action.ALL && ! Indexer.index_exists()) {
+                    Indexer.index_notes();
+                }
+
                 switch (action) {
                     case IndexHandler.action.ADD:
                         Indexer.add_index((Note) note);

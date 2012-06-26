@@ -272,11 +272,11 @@ public class NoteDBHelper extends BaseModelDBHelper {
             Note note = find(uuid);
 
             if (note.is_removed == 1) {
-                IndexService.obtain_index_request(find(uuid),
+                IndexService.obtain_index_request(note,
                                                   action.DELETE)
                             .sendToTarget();
             } else {
-                IndexService.obtain_index_request(find(uuid),
+                IndexService.obtain_index_request(note,
                                                   action.UPDATE)
                             .sendToTarget();
             }

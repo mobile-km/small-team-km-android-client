@@ -37,6 +37,8 @@
 		<activity android:name=".activity.note.SearchActivity"></activity>
 		
 		<service android:name=".service.SynNoteService"></service>
-    <uses-library android:name="com.google.android.maps"/>  
+
+        <service android:name=".service.IndexService"></service>
+    <uses-library android:name="com.google.android.maps"/>
     </application>
 </manifest>

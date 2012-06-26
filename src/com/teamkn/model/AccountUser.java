@@ -1,14 +1,13 @@
 package com.teamkn.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.model.base.BaseModel;
-
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class AccountUser extends BaseModel {
     public String cookies;

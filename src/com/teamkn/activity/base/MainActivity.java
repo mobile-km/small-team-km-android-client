@@ -1,14 +1,8 @@
 package com.teamkn.activity.base;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,8 +18,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.R;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.note.SearchActivity;
@@ -38,6 +32,9 @@ import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.service.IndexService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
 
 public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{

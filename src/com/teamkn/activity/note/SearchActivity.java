@@ -9,11 +9,8 @@ import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
-import com.teamkn.service.IndexService;
 import com.teamkn.widget.adapter.NoteListAdapter;
-import org.apache.lucene.queryParser.ParseException;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class SearchActivity extends NoteListActivity {
         search_box.setText(text);
     }
 
-    private void do_search(String query_string) throws IOException, ParseException {
+    private void do_search(String query_string) throws Exception {
         List<Note> result = Searcher.search(query_string);
         load_result_list(result);
     }
