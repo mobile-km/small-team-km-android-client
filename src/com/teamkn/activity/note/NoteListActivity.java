@@ -98,8 +98,8 @@ public class NoteListActivity extends TeamknBaseActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void destroy_note_confirm(final String uuid) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NoteListActivity.this); //这里只能用this，不能用appliction_context
+    protected void destroy_note_confirm(final String uuid) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
 
         builder.setMessage("确认要删除吗？")
                .setPositiveButton(R.string.dialog_ok,

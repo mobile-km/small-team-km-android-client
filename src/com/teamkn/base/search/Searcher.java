@@ -2,6 +2,7 @@ package com.teamkn.base.search;
 
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.service.IndexService;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;

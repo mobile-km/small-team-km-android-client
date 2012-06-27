@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class Indexer {
-    public final IndexWriter writer;
+    public IndexWriter writer;
     private static Directory index_dir;
     private static Indexer instance = null;
 
@@ -32,19 +32,18 @@ public class Indexer {
 
     public static Indexer get_instance() throws Exception {
         if (instance == null) {
-            instance = new  Indexer();
+            instance = new Indexer();
         }
         return instance;
     }
 
     public static void index_notes() throws Exception {
-        List<Note> notes   = NoteDBHelper.all(false);
+        Indexer.close();
+        List<Note> notes = NoteDBHelper.all(false);
 
         for (Note note: notes) {
             Indexer.add_index(note);
         }
-
-        Indexer.close();
     }
 
     private Indexer() throws Exception {
@@ -83,7 +82,6 @@ public class Indexer {
         if (note.is_removed == 1) {
             get_instance().writer.deleteDocuments(new Term("note_uuid",
                                                   note.uuid));
-
         }
     }
 
@@ -102,10 +100,5 @@ public class Indexer {
 
     public static void commit() throws Exception {
         get_instance().writer.commit();
-    }
-
-    public static void refresh() throws Exception {
-        close();
-        get_instance();
     }
 }

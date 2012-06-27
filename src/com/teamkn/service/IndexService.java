@@ -9,8 +9,6 @@ import android.os.Message;
 import com.teamkn.base.search.Indexer;
 import com.teamkn.model.Note;
 
-import java.io.IOException;
-
 public class IndexService extends Service {
     private static Intent intent;
     private static Activity start_activity;
@@ -39,10 +37,9 @@ public class IndexService extends Service {
     public static void build_all() {
         try {
             if (! Indexer.index_exists()) {
-                obtain_index_request()
-                            .sendToTarget();
+                obtain_index_request().sendToTarget();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,6 +94,8 @@ public class IndexService extends Service {
             try {
                 if (action != IndexHandler.action.ALL && ! Indexer.index_exists()) {
                     Indexer.index_notes();
+                    Indexer.commit();
+                    return;
                 }
 
                 switch (action) {
