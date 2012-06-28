@@ -34,15 +34,16 @@ public class Indexer {
         if (instance == null) {
             instance = new Indexer();
         }
+
         return instance;
     }
 
     public static void index_notes() throws Exception {
-        Indexer.close();
+        delete_all();
         List<Note> notes = NoteDBHelper.all(false);
 
         for (Note note: notes) {
-            Indexer.add_index(note);
+            add_index(note);
         }
     }
 
@@ -74,7 +75,7 @@ public class Indexer {
         return doc;
     }
 
-    public static void add_index( Note note) throws Exception {
+    public static void add_index(Note note) throws Exception {
         get_instance().writer.addDocument(new_document(note));
     }
 
@@ -83,6 +84,11 @@ public class Indexer {
             get_instance().writer.deleteDocuments(new Term("note_uuid",
                                                   note.uuid));
         }
+    }
+
+    public static void delete_all() throws Exception {
+        get_instance().writer.deleteAll();
+        commit();
     }
 
     public static void update_index(Note note) throws Exception {
