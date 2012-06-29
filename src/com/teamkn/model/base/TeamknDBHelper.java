@@ -25,6 +25,18 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_NOTES__IS_SYND + " integer not null DEFAULT  0, " +
             Constants.TABLE_NOTES__CREATED_AT + " long not null, " +
             Constants.TABLE_NOTES__UPDATED_AT + " long not null);";
+    
+    private static final String create_table_contacts = "create table " +
+            Constants.TABLE_CONTACTS + "(" +
+            Constants.KEY_ID + " integer primary key, " +
+            Constants.TABLE_CONTACTS__USER_ID + " integer not null, " +
+            Constants.TABLE_CONTACTS__CONTACT_USER_ID + " integer not null, " +
+            Constants.TABLE_CONTACTS__CONTACT_USER_NAME + " text not null, " +
+            Constants.TABLE_CONTACTS__CONTACT_USER_AVATAR + " blob, " +
+            Constants.TABLE_CONTACTS__MESSAGE + " text, " +
+            Constants.TABLE_CONTACTS__STATUS + " text not null, " +
+            Constants.TABLE_CONTACTS__SERVER_CREATED_TIME + " long not null, " +
+            Constants.TABLE_CONTACTS__SERVER_UPDATED_TIME + " long not null);";
 
 
     public TeamknDBHelper(Context context, String name, CursorFactory factory,
@@ -36,12 +48,14 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(create_table_users);
         db.execSQL(create_table_notes);
+        db.execSQL(create_table_contacts);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + Constants.TABLE_USERS);
         db.execSQL("drop table if exists " + Constants.TABLE_NOTES);
+        db.execSQL("drop table if exists " + Constants.TABLE_CONTACTS);
         onCreate(db);
     }
 }

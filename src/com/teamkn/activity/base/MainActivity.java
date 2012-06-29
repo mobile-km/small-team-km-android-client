@@ -35,6 +35,7 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 
@@ -95,6 +96,9 @@ public class MainActivity extends TeamknBaseActivity {
     
     TextView user_name_tv = (TextView)findViewById(R.id.main_user_name);
     user_name_tv.setText(name);
+    
+    // 启动刷新联系人状态服务
+    startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
 	}
 	
 	public void click_new_text(View view){
@@ -142,6 +146,8 @@ public class MainActivity extends TeamknBaseActivity {
     super.onDestroy();
     // 解除 和 更新笔记服务的绑定
     unbindService(conn);
+    // 关闭更新联系人状态服务
+    stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
   }
 	
 	@Override

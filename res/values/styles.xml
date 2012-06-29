@@ -343,4 +343,12 @@
 
         <item name="android:background">@drawable/teamkn_process_dialog_background</item>
     </style>
+    
+    <style name="user_info_panel">
+        <item name="android:windowBackground">@color/user_info_panel_bgc</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
 </resources>

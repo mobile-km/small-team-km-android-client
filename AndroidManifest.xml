@@ -38,8 +38,13 @@
     
     <activity android:name=".activity.contact.ContactsActivity"></activity>
     <activity android:name=".activity.contact.SearchContactActivity"></activity>
+    <activity 
+        android:name=".activity.contact.UserInfoActivity"
+        android:theme="@style/user_info_panel"
+    ></activity>
 		
 		<service android:name=".service.SynNoteService"></service>
+    <service android:name=".service.RefreshContactStatusService"></service>
     <uses-library android:name="com.google.android.maps"/>  
     </application>
 </manifest>

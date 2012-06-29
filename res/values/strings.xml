@@ -96,4 +96,5 @@
     <string name="preferences_key_current_user_id">current_user_id</string>
     <string name="preferences_key_last_syn_time">last_syn_time</string>
     <string name="preferences_key_last_syn_status">last_syn_status</string>
+    <string name="preferences_key_syn_contact_timestamp">syn_contact_timestamp</string>
 </resources>

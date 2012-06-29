@@ -71,4 +71,23 @@ public class TeamknPreferences {
       return BaseUtils.date_string(time);
     }
   }
+  
+  public static long syn_contact_timestamp(){
+    String key = get_resource_string(R.string.preferences_key_syn_contact_timestamp);
+    return PREFERENCES.getLong(key, 0);
+  }
+
+  public static void set_syn_contact_timestamp(long timestamp) {
+    String key = get_resource_string(R.string.preferences_key_syn_contact_timestamp);
+    TeamknPreferences.put_long(key, timestamp);
+  }
+  
+  public static boolean never_syn(){
+    long timestamp = syn_contact_timestamp();
+    if(timestamp == 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

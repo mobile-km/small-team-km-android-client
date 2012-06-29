@@ -7,4 +7,6 @@
     <color name="login_button_text_color">#FFFFFF</color>
     <color name="darkgray">#A9A9A9</color>
     <drawable name="feed_bn_pressed">#ddd</drawable>
+    <!-- 用户信息框背景色 -->
+    <color name="user_info_panel_bgc">#E8E8E8</color>
 </resources>
