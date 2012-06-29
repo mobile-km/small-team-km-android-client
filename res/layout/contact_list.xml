@@ -48,4 +48,11 @@
             android:onClick="click_to_search_contact_page"
         />
     </LinearLayout>
+    
+    <ListView
+        android:id="@+id/contact_list_lv"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+    >
+    </ListView>
 </LinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+>
+    <TextView
+        android:id="@+id/contact_user_header_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:textSize="18dp"
+        android:background="@color/contact_user_header_bgc"
+    />
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    >
+    
+        <ImageView
+            android:id="@+id/contact_user_avatar_iv"
+            android:layout_margin="2dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/user_default_avatar_normal"
+            android:layout_alignParentLeft="true"
+        />
+        <TextView
+            android:id="@+id/contact_user_name_tv"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_toLeftOf="@+id/contact_user_avatar_iv"
+        />
+        
+        <!-- 收到的邀请 -->
+        <LinearLayout
+            android:id="@+id/be_invited_contact_action_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:visibility="gone"
+        >
+            <Button
+                android:id="@+id/be_invited_contact_accept_invite_bn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="接受"
+            />
+            <Button
+                android:id="@+id/be_invited_contact_refuse_invite_bn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拒绝"
+            />
+        </LinearLayout>
+        
+        <!-- 被拒绝的邀请 -->
+        <LinearLayout
+            android:id="@+id/be_refused_contact_action_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" 
+        >
+            <Button
+                android:id="@+id/be_refused_contact_remove_contact_bn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除"
+            />
+        </LinearLayout>
+        
+        <!-- 把我删除的联系人 -->
+        <LinearLayout
+            android:id="@+id/be_removed_contact_action_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" 
+        >
+            <Button
+                android:id="@+id/be_removed_contact_remove_contact_bn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除"
+            />
+        </LinearLayout>
+        
+        <!-- 联系人 -->
+        <LinearLayout
+            android:id="@+id/applied_contact_action_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" 
+        >
+            <Button
+                android:id="@+id/applied_contact_remove_contact_bn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除"
+            />
+        </LinearLayout>
+        
+    </RelativeLayout>
+</LinearLayout>

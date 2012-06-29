@@ -31,6 +31,22 @@ public class ContactDBHelper extends BaseModelDBHelper {
     public static final String BE_REMOVED = "BE_REMOVED";
   }
   
+  public static List<Contact> build_all_contacts(int current_user_id){
+    List<Contact> be_invite_contacts = ContactDBHelper.be_invite_contacts(current_user_id);
+    List<Contact> be_refused_contacts = ContactDBHelper.be_refused_contacts(current_user_id);
+    List<Contact> applied_contacts = ContactDBHelper.applied_contacts(current_user_id);
+    List<Contact> invite_contacts = ContactDBHelper.invite_contacts(current_user_id);
+    List<Contact> be_removed_contacts = ContactDBHelper.be_removed_contacts(current_user_id);
+    
+    List<Contact> all_contacts = new ArrayList<Contact>();
+    all_contacts.addAll(be_invite_contacts);
+    all_contacts.addAll(be_refused_contacts);
+    all_contacts.addAll(be_removed_contacts);
+    all_contacts.addAll(applied_contacts);
+    all_contacts.addAll(invite_contacts);
+    return all_contacts;
+  }
+  
   public static long get_newest_server_updated_time(int current_user_id) throws Exception{
     SQLiteDatabase db = get_read_db();
     int newest_server_updated_time = 0;

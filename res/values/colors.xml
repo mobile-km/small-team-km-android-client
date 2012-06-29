@@ -9,4 +9,6 @@
     <drawable name="feed_bn_pressed">#ddd</drawable>
     <!-- 用户信息框背景色 -->
     <color name="user_info_panel_bgc">#E8E8E8</color>
+    <!-- 联系人列表头 -->
+    <color name="contact_user_header_bgc">#C0C0C0</color>
 </resources>
