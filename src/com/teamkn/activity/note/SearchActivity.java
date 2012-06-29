@@ -1,30 +1,30 @@
 package com.teamkn.activity.note;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import com.teamkn.R;
-import com.teamkn.base.search.Indexer;
+import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.widget.adapter.NoteListAdapter;
-import org.apache.lucene.queryParser.ParseException;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SearchActivity extends NoteListActivity {
+public class SearchActivity extends TeamknBaseActivity {
     public class RequestCode {
         public final static int EDIT_TEXT = 1;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        do_index();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
@@ -36,14 +36,6 @@ public class SearchActivity extends NoteListActivity {
         search_clear.setOnClickListener(new SearchClearClickListener());
         search_box.setOnKeyListener(new SearchBoxEnterListener());
         load_search_history();
-    }
-
-    private void do_index() {
-        try {
-            Indexer.index_notes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void add_records(ViewGroup layout) {
@@ -81,7 +73,7 @@ public class SearchActivity extends NoteListActivity {
         search_box.setText(text);
     }
 
-    private void do_search(String query_string) throws IOException, ParseException {
+    private void do_search(String query_string) throws Exception {
         List<Note> result = Searcher.search(query_string);
         load_result_list(result);
     }
@@ -101,6 +93,55 @@ public class SearchActivity extends NoteListActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo;
+        menuInfo              = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        TextView note_info_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_info_tv);
+        String   uuid         = (String)   note_info_tv.getTag(R.id.tag_note_uuid);
+        destroy_note_confirm(uuid);
+
+        return super.onContextItemSelected(item);
+    }
+
+    protected void destroy_note_confirm(final String uuid) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
+
+        builder.setMessage("确认要删除吗？")
+                .setPositiveButton(R.string.dialog_ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int             which) {
+                                NoteDBHelper.destroy(uuid);
+                                do_search_box_search();
+                            }
+                        })
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show();
+    }
+
+    // 处理其他activity界面的回调
+    @Override
+    protected void onActivityResult(int    requestCode,
+                                    int    resultCode,
+                                    Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case NoteListActivity.RequestCode.EDIT_TEXT:
+                do_search_box_search();
+                break;
+        }
+
+        super.onActivityResult(requestCode,
+                               resultCode,
+                               data);
+    }
+
+
 
     private class SearchHistoryRecordClickListener implements View.OnClickListener {
 
@@ -165,7 +206,7 @@ public class SearchActivity extends NoteListActivity {
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent event) {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode           == KeyEvent.KEYCODE_ENTER)) {
+                (keyCode           == KeyEvent.KEYCODE_ENTER)) {
 
                 do_search_box_search();
                 return true;

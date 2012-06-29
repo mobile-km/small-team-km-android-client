@@ -1,8 +1,8 @@
 package com.teamkn.service;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import android.app.Service;
+import android.content.Intent;
+import android.os.*;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.HttpApi.NetworkUnusableException;
 import com.teamkn.Logic.HttpApi.ServerErrorException;
@@ -10,13 +10,10 @@ import com.teamkn.activity.base.MainActivity.SynUIBinder;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
-import android.app.Service;
-import android.content.Intent;
-import android.os.Binder;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Message;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class SynNoteService extends Service {
   public SynUIBinder syn_ui_binder;

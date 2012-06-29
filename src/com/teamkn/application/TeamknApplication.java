@@ -23,7 +23,6 @@ public class TeamknApplication extends Application {
     public void onCreate() {
         context = getApplicationContext();
         mInflater = LayoutInflater.from(context);
-        super.onCreate();
     }
 
     final public static String now_loading = "正在载入…";

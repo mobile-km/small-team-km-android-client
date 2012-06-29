@@ -46,5 +46,6 @@
 		<service android:name=".service.SynNoteService"></service>
     <service android:name=".service.RefreshContactStatusService"></service>
     <uses-library android:name="com.google.android.maps"/>  
+        <service android:name=".service.IndexService"></service>
     </application>
 </manifest>

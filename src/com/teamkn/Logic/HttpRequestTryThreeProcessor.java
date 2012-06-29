@@ -1,9 +1,10 @@
 package com.teamkn.Logic;
 
-import java.net.SocketException;
 import com.teamkn.Logic.HttpApi.NetworkUnusableException;
 import com.teamkn.Logic.HttpApi.ServerErrorException;
 import com.teamkn.base.http.TeamknHttpRequest.ResponseNot200Exception;
+
+import java.net.SocketException;
 
 public abstract class HttpRequestTryThreeProcessor<E> {
   public abstract E callback() throws Exception,NetworkUnusableException,ServerErrorException;

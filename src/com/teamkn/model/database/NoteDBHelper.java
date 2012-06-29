@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.google.common.base.Joiner;
 import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
+import com.teamkn.service.IndexService;
+import com.teamkn.service.IndexService.IndexHandler.action;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -77,10 +80,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
 
     public static boolean create_text_note(String note_content) {
         String uuid = create_item_by_kind(note_content, Kind.TEXT);
-        if (uuid != null) {
-            return true;
-        }
-        return false;
+
+        IndexService.obtain_index_request(find(uuid),
+                                          action.ADD)
+                    .sendToTarget();
+
+        return uuid != null;
     }
 
     public static boolean create_image_note(String origin_image_path) {
@@ -110,6 +115,14 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CREATED_AT, updated_at);
 
         create_item(values);
+
+        try {
+            IndexService.obtain_index_request(find(uuid),
+                                              action.ADD)
+                        .sendToTarget();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean touch_updated_at(String uuid, long seconds) {
@@ -152,6 +165,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CONTENT, note_content);
         values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
 
+
         return update_columns(uuid, values);
     }
 
@@ -179,6 +193,30 @@ public class NoteDBHelper extends BaseModelDBHelper {
         } finally {
             db.close();
         }
+    }
+
+    final public static List<Note> find(List<String> uuids) {
+        SQLiteDatabase db = get_read_db();
+
+        String uuids_list = Joiner.on(",").join(uuids);
+
+        Cursor cursor = db.query(Constants.TABLE_NOTES,
+                                 get_columns(),
+                                 "uuid IN (" + uuids_list + ")",
+                                 null, null, null, null);
+
+        ArrayList<Note> notes = new ArrayList<Note>();
+
+        if (cursor.moveToFirst()) {
+            for (long i = 0; i < cursor.getCount(); i++) {
+                notes.add(build_note_by_cursor(cursor));
+                cursor.moveToNext();
+            }
+
+            return notes;
+        }
+
+        return notes;
     }
 
     public static boolean destroy(String uuid) {
@@ -231,10 +269,19 @@ public class NoteDBHelper extends BaseModelDBHelper {
                     values, Constants.TABLE_NOTES__UUID + " = ? ",
                     new String[]{uuid});
 
-            if (row_count != 1) {
-                return false;
+            Note note = find(uuid);
+
+            if (note.is_removed == 1) {
+                IndexService.obtain_index_request(note,
+                                                  action.DELETE)
+                            .sendToTarget();
+            } else {
+                IndexService.obtain_index_request(note,
+                                                  action.UPDATE)
+                            .sendToTarget();
             }
-            return true;
+
+            return row_count == 1;
         } catch (Exception e) {
             Log.e("NoteDBHelper", "update", e);
             return false;
@@ -251,6 +298,12 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 Constants.TABLE_NOTES__IS_REMOVED,
                 Constants.TABLE_NOTES__CREATED_AT,
                 Constants.TABLE_NOTES__UPDATED_AT};
+    }
+
+    private  static String[] get_column(String column) {
+        return new String[] {
+                column
+        };
     }
 
     private static Note build_note_by_cursor(Cursor cursor) {
