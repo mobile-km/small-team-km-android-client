@@ -80,10 +80,9 @@ public class MainActivity extends TeamknBaseActivity {
     Intent intent = new Intent(MainActivity.this,SynNoteService.class);
     bindService(intent, conn, Context.BIND_AUTO_CREATE);
 
-
-        // 开始后台索引服务
-        IndexService.start(this);
-        IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
+    // 开始后台索引服务
+    IndexService.start(this);
+    IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
 
     // 设置用户头像和名字
     AccountUser user = current_user();

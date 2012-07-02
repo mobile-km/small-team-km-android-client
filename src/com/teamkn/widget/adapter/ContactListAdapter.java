@@ -105,10 +105,12 @@ public class ContactListAdapter extends TeamknBaseAdapter<Contact> {
   
   private void fill_applied_action(ViewHolder view_holder, Contact item,
       int position) {
+    // 删除联系人
+    final int contact_user_id = item.contact_user_id;
     view_holder.applied_contact_remove_contact_bn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        BaseUtils.toast("正在施工");
+        remove_contact_record(contact_user_id);
       }
     });
     
@@ -117,10 +119,12 @@ public class ContactListAdapter extends TeamknBaseAdapter<Contact> {
 
   private void fill_be_removed_action(ViewHolder view_holder, Contact item,
       int position) {
+    // 删除 已经把我删除联系人的 关联记录
+    final int contact_user_id = item.contact_user_id;
     view_holder.be_removed_contact_remove_contact_bn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        BaseUtils.toast("正在施工");
+        remove_contact_record(contact_user_id);
       }
     });
     
@@ -129,10 +133,12 @@ public class ContactListAdapter extends TeamknBaseAdapter<Contact> {
 
   private void fill_be_refused_action(ViewHolder view_holder, Contact item,
       int position) {
+    // 删除已经把我的邀请拒绝的 关联记录
+    final int contact_user_id = item.contact_user_id;
     view_holder.be_refused_contact_remove_contact_bn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        BaseUtils.toast("正在施工");
+        remove_contact_record(contact_user_id);
       }
     });
     
@@ -183,6 +189,22 @@ public class ContactListAdapter extends TeamknBaseAdapter<Contact> {
       }
     });
     view_holder.be_invited_contact_action_ll.setVisibility(View.VISIBLE);
+  }
+  
+  private void remove_contact_record(final int contact_user_id){
+    new TeamknAsyncTask<Void, Void, Void>(ContactListAdapter.this.activity,"请稍等") {
+      @Override
+      public Void do_in_background(Void... params) throws Exception {
+        HttpApi.Contact.remove_contact(contact_user_id);
+        ContactsActivity contacts_activity = (ContactsActivity)ContactListAdapter.this.activity;
+        contacts_activity.load_contacts_to_list();
+        return null;
+      }
+
+      @Override
+      public void on_success(Void result) {
+      }
+    }.execute();
   }
   
   private class ViewHolder implements BaseViewHolder {
