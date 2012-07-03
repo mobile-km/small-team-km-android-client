@@ -19,9 +19,15 @@ public class NoteMeta {
   }
   
   public String get_action(){
+    if(client_updated_time == 0){return NoteMeta.Action.PULL;};
+    if(server_updated_time == 0){return NoteMeta.Action.PUSH;};
+    
     long last_syn_success_client_time = TeamknPreferences.last_syn_success_client_time();
     long last_syn_success_server_time = TeamknPreferences.last_syn_success_server_time();
     long client_adjusted_updated_time = client_updated_time - (last_syn_success_client_time - last_syn_success_server_time);
+    System.out.println(client_adjusted_updated_time);
+    System.out.println(client_updated_time);
+    System.out.println(server_updated_time);
     
     if(client_adjusted_updated_time >= server_updated_time){
       return NoteMeta.Action.PUSH;
@@ -32,7 +38,7 @@ public class NoteMeta {
   
   public long syn() throws Exception{
     String action = get_action();
-    if(action.equals(NoteMeta.Action.PUSH)){
+    if(action.equals(NoteMeta.Action.PULL)){
       return HttpApi.Syn.pull(uuid);
     }else{
       Note note = NoteDBHelper.find(uuid);
