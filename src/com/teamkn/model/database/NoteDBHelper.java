@@ -31,7 +31,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
         try {
             cursor = db.query(Constants.TABLE_NOTES,
                     new String[]{Constants.KEY_ID},
-                    Constants.TABLE_NOTES__IS_SYND + " = ? ",
+                    Constants.TABLE_NOTES__SYNED_SERVER_TIME + " = ? ",
                     new String[]{"0"}, null, null, null);
 
             return cursor.getCount();
@@ -41,6 +41,33 @@ public class NoteDBHelper extends BaseModelDBHelper {
         } finally {
             db.close();
         }
+    }
+    
+    public static List<Note> client_changed_notes() throws Exception{
+      SQLiteDatabase db = get_read_db();
+      List<Note> notes = new ArrayList<Note>();
+      Cursor cursor;
+      try {
+        cursor = db.query(Constants.TABLE_NOTES,
+                get_columns(),
+                Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT + " = ?", new String[]{"1"},
+                null, null,
+                Constants.KEY_ID + " DESC");
+
+          while (cursor.moveToNext()) {
+              System.out.println("moveToNext");
+              Note note = build_note_by_cursor(cursor);
+              notes.add(note);
+          }
+
+          return notes;
+      } catch (Exception e) {
+          Log.e("NoteDBHelper", "client_changed_notes", e);
+          throw e;
+      } finally {
+          db.close();
+      }
+
     }
 
     public static List<Note> all(boolean has_removed) throws Exception {
@@ -101,8 +128,17 @@ public class NoteDBHelper extends BaseModelDBHelper {
             return false;
         }
     }
+    
+    public static void pull(String uuid, String content, String kind, int is_removed, long updated_at){
+      Note note = find(uuid);
+      if(Note.NIL_NOTE == note){
+        create_from_pull(uuid, content, kind, is_removed, updated_at);
+      }else{
+        update_from_pull(uuid, content, is_removed, updated_at);
+      }
+    }
 
-    public static void create_new_item_from_pull_server(String uuid, String content, String kind,
+    private static void create_from_pull(String uuid, String content, String kind,
                                                         Integer is_removed, long updated_at) {
         // 保存数据库信息
         ContentValues values = new ContentValues();
@@ -110,10 +146,9 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CONTENT, content);
         values.put(Constants.TABLE_NOTES__KIND, kind);
         values.put(Constants.TABLE_NOTES__IS_REMOVED, is_removed);
-        values.put(Constants.TABLE_NOTES__IS_SYND, 1);
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, updated_at);
-        values.put(Constants.TABLE_NOTES__CREATED_AT, updated_at);
-
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,0);
+        values.put(Constants.TABLE_NOTES__SYNED_SERVER_TIME,updated_at);
+        
         create_item(values);
 
         try {
@@ -125,22 +160,23 @@ public class NoteDBHelper extends BaseModelDBHelper {
         }
     }
 
-    public static boolean touch_updated_at(String uuid, long seconds) {
+    public static boolean after_push(String uuid, long seconds) {
         ContentValues values = new ContentValues();
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, seconds);
-        values.put(Constants.TABLE_NOTES__IS_SYND, 1);
+        
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT, 0);
+        values.put(Constants.TABLE_NOTES__SYNED_SERVER_TIME, seconds);
 
         return update_columns(uuid, values);
     }
 
-    public static boolean update_from_pull(String uuid, String content, Integer is_removed,
+    private static boolean update_from_pull(String uuid, String content, Integer is_removed,
                                            long updated_at) {
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_NOTES__CONTENT, content);
         values.put(Constants.TABLE_NOTES__IS_REMOVED, is_removed);
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, updated_at);
-        values.put(Constants.TABLE_NOTES__IS_SYND, 1);
-
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT, 0);
+        values.put(Constants.TABLE_NOTES__SYNED_SERVER_TIME, updated_at);
+        
         return update_columns(uuid, values);
     }
 
@@ -163,7 +199,8 @@ public class NoteDBHelper extends BaseModelDBHelper {
 
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_NOTES__CONTENT, note_content);
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,1);
+        values.put(Constants.TABLE_NOTES__CLIENT_UPDATED_TIME, current_seconds);
 
 
         return update_columns(uuid, values);
@@ -225,7 +262,8 @@ public class NoteDBHelper extends BaseModelDBHelper {
 
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,1);
+        values.put(Constants.TABLE_NOTES__CLIENT_UPDATED_TIME, current_seconds);
 
         return update_columns(uuid, values);
     }
@@ -239,10 +277,11 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__CONTENT, note_content);
         values.put(Constants.TABLE_NOTES__KIND, kind);
         values.put(Constants.TABLE_NOTES__IS_REMOVED, 0);
-        values.put(Constants.TABLE_NOTES__IS_SYND, 0);
-        values.put(Constants.TABLE_NOTES__UPDATED_AT, current_seconds);
-        values.put(Constants.TABLE_NOTES__CREATED_AT, current_seconds);
-
+        values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,1);
+        values.put(Constants.TABLE_NOTES__CLIENT_CREATED_TIME,current_seconds);
+        values.put(Constants.TABLE_NOTES__CLIENT_UPDATED_TIME,current_seconds);
+        values.put(Constants.TABLE_NOTES__SYNED_SERVER_TIME,0);
+        
         create_item(values);
 
         return uuid;
@@ -296,14 +335,11 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 Constants.TABLE_NOTES__CONTENT,
                 Constants.TABLE_NOTES__KIND,
                 Constants.TABLE_NOTES__IS_REMOVED,
-                Constants.TABLE_NOTES__CREATED_AT,
-                Constants.TABLE_NOTES__UPDATED_AT};
-    }
-
-    private  static String[] get_column(String column) {
-        return new String[] {
-                column
-        };
+                Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,
+                Constants.TABLE_NOTES__CLIENT_CREATED_TIME,
+                Constants.TABLE_NOTES__CLIENT_UPDATED_TIME,
+                Constants.TABLE_NOTES__SYNED_SERVER_TIME
+          };
     }
 
     private static Note build_note_by_cursor(Cursor cursor) {
@@ -312,10 +348,13 @@ public class NoteDBHelper extends BaseModelDBHelper {
         String content = cursor.getString(2);
         String kind = cursor.getString(3);
         int is_removed = cursor.getInt(4);
-        long created_at = cursor.getLong(5);
-        long updated_at = cursor.getLong(6);
-        return new Note(id, uuid, content, kind, is_removed, created_at,
-                updated_at);
+        int is_changed_by_client = cursor.getInt(5);
+        long client_created_time = cursor.getLong(6);
+        long client_updated_time = cursor.getLong(7);
+        long syned_server_time = cursor.getLong(8);
+        
+        return new Note(id, uuid, content, kind, is_removed, is_changed_by_client, client_created_time,
+            client_updated_time, syned_server_time);
     }
 
 }

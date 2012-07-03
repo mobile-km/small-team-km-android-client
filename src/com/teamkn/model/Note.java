@@ -11,8 +11,10 @@ public class Note extends BaseModel {
     public String content;
     public String kind;
     public int is_removed;
-    public long created_at;
-    public long updated_at;
+    public int is_changed_by_client;
+    public long client_created_time;
+    public long client_updated_time;
+    public long syned_server_time;
 
     final public static Note NIL_NOTE = new Note();
 
@@ -20,15 +22,18 @@ public class Note extends BaseModel {
         set_nil();
     }
 
-    public Note(int id, String uuid, String content, String kind, int is_removed,
-                long created_at, long updated_at) {
-        this.id = id;
-        this.uuid = uuid;
-        this.content = content;
-        this.kind = kind;
-        this.is_removed = is_removed;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+    public Note(int id, String uuid, String content, String kind,
+        int is_removed, int is_changed_by_client, long client_created_time,
+        long client_updated_time, long syned_server_time) {
+      this.id = id;
+      this.uuid = uuid;
+      this.content = content;
+      this.kind = kind;
+      this.is_removed = is_removed;
+      this.is_changed_by_client = is_changed_by_client;
+      this.client_created_time = client_created_time;
+      this.client_updated_time = client_updated_time;
+      this.syned_server_time = syned_server_time;
     }
 
     public static File note_image_file(String uuid) {

@@ -9,13 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.SearchUser;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.cache.image.ImageCache;
 
 public class UserInfoActivity extends TeamknBaseActivity {

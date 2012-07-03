@@ -94,7 +94,9 @@
     <!-- TeamknPreferences 的 keys -->
     <string name="preferences_key_upload_photo_quality">upload_photo_quality</string>
     <string name="preferences_key_current_user_id">current_user_id</string>
-    <string name="preferences_key_last_syn_time">last_syn_time</string>
-    <string name="preferences_key_last_syn_status">last_syn_status</string>
     <string name="preferences_key_syn_contact_timestamp">syn_contact_timestamp</string>
+    <string name="preferences_key_last_syn_server_meta_updated_time">last_syn_server_meta_updated_time</string>
+    <string name="preferences_key_last_syn_success_server_time">last_syn_success_server_time</string>
+    <string name="preferences_key_last_syn_success_client_time">last_syn_success_client_time</string>
+    <string name="preferences_key_last_syn_fail_client_time">last_syn_fail_client_time</string>
 </resources>

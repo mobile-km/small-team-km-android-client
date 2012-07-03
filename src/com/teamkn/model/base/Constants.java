@@ -2,7 +2,7 @@ package com.teamkn.model.base;
 
 public class Constants {
     public static final String DATABASE_NAME = "teamkn";
-    public static final int DATABASE_VERSION = 18;
+    public static final int DATABASE_VERSION = 19;
     public static final String KEY_ID = "_id";
 
     // 账号 数据表的常量
@@ -19,9 +19,10 @@ public class Constants {
     public static final String TABLE_NOTES__CONTENT = "content";
     public static final String TABLE_NOTES__KIND = "kind";
     public static final String TABLE_NOTES__IS_REMOVED = "is_removed";
-    public static final String TABLE_NOTES__CREATED_AT = "created_at";
-    public static final String TABLE_NOTES__UPDATED_AT = "updated_at";
-    public static final String TABLE_NOTES__IS_SYND = "is_synd";
+    public static final String TABLE_NOTES__IS_CHANGED_BY_CLIENT = "is_changed_by_client";
+    public static final String TABLE_NOTES__CLIENT_CREATED_TIME = "client_created_time";
+    public static final String TABLE_NOTES__CLIENT_UPDATED_TIME = "client_updated_time";
+    public static final String TABLE_NOTES__SYNED_SERVER_TIME   = "syned_server_time"; 
     
     // contact 数据表的常量
     public static final String TABLE_CONTACTS = "contacts";

@@ -22,9 +22,10 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_NOTES__CONTENT + " text, " +
             Constants.TABLE_NOTES__KIND + " text not null, " +
             Constants.TABLE_NOTES__IS_REMOVED + " integer not null DEFAULT  0, " +
-            Constants.TABLE_NOTES__IS_SYND + " integer not null DEFAULT  0, " +
-            Constants.TABLE_NOTES__CREATED_AT + " long not null, " +
-            Constants.TABLE_NOTES__UPDATED_AT + " long not null);";
+            Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT + " integer not null DEFAULT  1, " +
+            Constants.TABLE_NOTES__CLIENT_CREATED_TIME + " long not null, " +
+            Constants.TABLE_NOTES__CLIENT_UPDATED_TIME + " long not null, " +
+            Constants.TABLE_NOTES__SYNED_SERVER_TIME + " long not null DEFAULT 0);";
     
     private static final String create_table_contacts = "create table " +
             Constants.TABLE_CONTACTS + "(" +

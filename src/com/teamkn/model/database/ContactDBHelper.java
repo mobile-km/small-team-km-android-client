@@ -1,24 +1,18 @@
 package com.teamkn.model.database;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.model.Contact;
-import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 

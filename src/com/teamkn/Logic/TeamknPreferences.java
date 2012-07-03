@@ -5,7 +5,6 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import com.teamkn.R;
 import com.teamkn.application.TeamknApplication;
-import com.teamkn.base.utils.BaseUtils;
 
 public class TeamknPreferences {
   public static final SharedPreferences PREFERENCES = PreferenceManager.getDefaultSharedPreferences(TeamknApplication.context);
@@ -53,25 +52,6 @@ public class TeamknPreferences {
 	  return PREFERENCES.getInt(key, 0);
 	}
 	
-  public static void touch_last_syn_time(boolean success) {
-    long time = System.currentTimeMillis();
-    String time_key = get_resource_string(R.string.preferences_key_last_syn_time);
-    TeamknPreferences.put_long(time_key, time);
-    
-    String status_key = get_resource_string(R.string.preferences_key_last_syn_status);
-    TeamknPreferences.put_boolean(status_key,success);
-  }
-  
-  public static String last_syn_time() {
-    String key = get_resource_string(R.string.preferences_key_last_syn_time);
-    long time = PREFERENCES.getLong(key, 0);
-    if(time == 0){
-      return null;
-    }else{
-      return BaseUtils.date_string(time);
-    }
-  }
-  
   public static long syn_contact_timestamp(){
     String key = get_resource_string(R.string.preferences_key_syn_contact_timestamp);
     return PREFERENCES.getLong(key, 0);
@@ -90,4 +70,47 @@ public class TeamknPreferences {
       return false;
     }
   }
+  
+  public static long last_syn_server_meta_updated_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_server_meta_updated_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void set_last_syn_server_meta_updated_time(long time){
+    String key = get_resource_string(R.string.preferences_key_last_syn_server_meta_updated_time);
+    TeamknPreferences.put_long(key, time);
+  }
+  
+  public static long last_syn_success_server_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_success_server_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void set_last_syn_success_server_time(long time){
+    String key = get_resource_string(R.string.preferences_key_last_syn_success_server_time);
+    TeamknPreferences.put_long(key, time);
+  }
+  
+  public static long last_syn_success_client_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_success_client_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void touch_last_syn_success_client_time(){
+    long time = System.currentTimeMillis();
+    String key = get_resource_string(R.string.preferences_key_last_syn_success_client_time);
+    TeamknPreferences.put_long(key, time);
+  }
+  
+  public static long last_syn_fail_client_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_fail_client_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void touch_last_syn_fail_client_time(){
+    long time = System.currentTimeMillis();
+    String key = get_resource_string(R.string.preferences_key_last_syn_fail_client_time);
+    TeamknPreferences.put_long(key, time);
+  }
+  
 }

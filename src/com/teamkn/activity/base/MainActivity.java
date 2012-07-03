@@ -279,11 +279,10 @@ public class MainActivity extends TeamknBaseActivity {
 	    
 	    public void set_syn_success(){
 	      System.out.println("syn_success");
-	      TeamknPreferences.touch_last_syn_time(true);
 	      data_syn_textview.post(new Runnable() {
           @Override
           public void run() {
-            String str = TeamknPreferences.last_syn_time();
+            String str = BaseUtils.date_string(TeamknPreferences.last_syn_success_client_time()); 
             data_syn_textview.setText("上次同步成功: " + str);
             data_syn_progress_bar.setVisibility(View.GONE);
           }
@@ -297,11 +296,11 @@ public class MainActivity extends TeamknBaseActivity {
 	    
       public void set_syn_fail() {
         System.out.println("syn_fail");
-        TeamknPreferences.touch_last_syn_time(false);
+        TeamknPreferences.touch_last_syn_fail_client_time();
         data_syn_textview.post(new Runnable() {
           @Override
           public void run() {
-            String str = TeamknPreferences.last_syn_time();
+            String str = BaseUtils.date_string(TeamknPreferences.last_syn_fail_client_time()); 
             data_syn_textview.setText("上次同步失败: " + str);
             data_syn_progress_bar.setVisibility(View.GONE);
           }

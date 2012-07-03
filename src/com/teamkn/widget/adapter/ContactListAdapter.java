@@ -1,7 +1,6 @@
 package com.teamkn.widget.adapter;
 
 import java.io.ByteArrayInputStream;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,7 +17,6 @@ import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.base.task.TeamknAsyncTask;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Contact;
 import com.teamkn.model.database.ContactDBHelper;
 

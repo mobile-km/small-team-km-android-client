@@ -2,7 +2,6 @@ package com.teamkn.base.search;
 
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
-import com.teamkn.service.IndexService;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -14,7 +13,6 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

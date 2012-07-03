@@ -6,13 +6,11 @@ import android.os.*;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.HttpApi.NetworkUnusableException;
 import com.teamkn.Logic.HttpApi.ServerErrorException;
+import com.teamkn.Logic.NoteMeta;
+import com.teamkn.Logic.NoteMetaMerge;
+import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.base.MainActivity.SynUIBinder;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.Note;
-import com.teamkn.model.database.NoteDBHelper;
-
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class SynNoteService extends Service {
@@ -135,30 +133,26 @@ public class SynNoteService extends Service {
       try {
         set_syning_flag(true);
         System.out.println("SynNoteHandler handleMessage " + Thread.currentThread());
-        HashMap<String,Object> map = HttpApi.Syn.handshake();
-        String uuid = (String)map.get("syn_task_uuid");
-        int server_count = (Integer)map.get("note_count");
-        int unsyn_count = NoteDBHelper.unsyn_count();
-        int count = server_count + unsyn_count;
         
-        syn_ui_binder.set_max_num(count);
+        NoteMetaMerge merge = HttpApi.Syn.detail_meta();
+        List<NoteMeta> merge_list = merge.get_merge_list();
+        
+        syn_ui_binder.set_max_num(merge_list.size());
         int index = 0;
         syn_ui_binder.set_start_syn();
-        List<Note> list = NoteDBHelper.all(true);
-        for (Iterator<Note> iterator = list.iterator(); iterator.hasNext();) {
+        
+        long last_syn_success_server_time = 0;
+        for (int i = 0; i < merge_list.size(); i++) {
           check_cancel_flag();
-          Note note = iterator.next();
-          HttpApi.Syn.compare(uuid, note);
+          NoteMeta note_meta = merge_list.get(i);
+          last_syn_success_server_time = note_meta.syn();
           index+=1;
           syn_ui_binder.set_progress(index);
         }
-        boolean has_next = true; 
-        while(has_next){
-          check_cancel_flag();
-          has_next = HttpApi.Syn.syn_next(uuid);
-          index+=1;
-          syn_ui_binder.set_progress(index);
-        }
+        TeamknPreferences.set_last_syn_server_meta_updated_time(merge.last_syn_server_meta_updated_time);
+        TeamknPreferences.set_last_syn_success_server_time(last_syn_success_server_time);
+        TeamknPreferences.touch_last_syn_success_client_time();
+        
         syn_ui_binder.set_syn_success();
         sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
       }catch(ServerErrorException see){

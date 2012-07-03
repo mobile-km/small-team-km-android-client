@@ -3,10 +3,6 @@ package com.teamkn.service;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.contact.ContactsActivity.RefreshContactUiBinder;
-import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusBinder;
-import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusHandler;
-import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusHandlerThread;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;

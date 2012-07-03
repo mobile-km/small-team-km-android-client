@@ -272,9 +272,11 @@ public final class R {
         public static final int now_updating=0x7f090009;
         public static final int placeholder=0x7f090011;
         public static final int preferences_key_current_user_id=0x7f09003e;
-        public static final int preferences_key_last_syn_status=0x7f090040;
-        public static final int preferences_key_last_syn_time=0x7f09003f;
-        public static final int preferences_key_syn_contact_timestamp=0x7f090041;
+        public static final int preferences_key_last_syn_fail_client_time=0x7f090043;
+        public static final int preferences_key_last_syn_server_meta_updated_time=0x7f090040;
+        public static final int preferences_key_last_syn_success_client_time=0x7f090042;
+        public static final int preferences_key_last_syn_success_server_time=0x7f090041;
+        public static final int preferences_key_syn_contact_timestamp=0x7f09003f;
         /**  TeamknPreferences 的 keys 
          */
         public static final int preferences_key_upload_photo_quality=0x7f09003d;
