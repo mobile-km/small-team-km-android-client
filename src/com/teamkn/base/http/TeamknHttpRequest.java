@@ -1,6 +1,7 @@
 package com.teamkn.base.http;
 
 import com.teamkn.Logic.AccountManager;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.AccountManager.AuthenticateException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TeamknHttpRequest<TResult> {
+    public static final String SITE = HttpApi.SITE;
     protected HttpUriRequest http_uri_request;
     private DefaultHttpClient http_client;
 

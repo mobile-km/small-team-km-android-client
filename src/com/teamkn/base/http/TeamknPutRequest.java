@@ -1,6 +1,5 @@
 package com.teamkn.base.http;
 
-import com.teamkn.Logic.HttpApi;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -21,7 +20,7 @@ public abstract class TeamknPutRequest<TResult> extends TeamknHttpRequest<TResul
   }
 
   private HttpPut build_http_put(HttpEntity entity, String request_path) {
-      HttpPut http_post = new HttpPut(HttpApi.SITE + request_path);
+      HttpPut http_post = new HttpPut(TeamknHttpRequest.SITE + request_path);
       http_post.setHeader("User-Agent", "android");
       http_post.setEntity(entity);
       return http_post;
