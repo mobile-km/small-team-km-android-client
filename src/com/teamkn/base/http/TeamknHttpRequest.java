@@ -2,7 +2,6 @@ package com.teamkn.base.http;
 
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.AccountManager.AuthenticateException;
-import com.teamkn.model.base.CookieHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -11,12 +10,10 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.HttpClientParams;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -36,12 +33,8 @@ public abstract class TeamknHttpRequest<TResult> {
         return client;
     }
 
-    final private List<Cookie> get_cookies_list() {
-        return http_client.getCookieStore().getCookies();
-    }
-
     final public String get_cookies() {
-        return CookieHelper.parse_string(get_cookies_list());
+      return CookieHelper.parse_cookie_store_to_string(http_client.getCookieStore());
     }
 
     // 主方法 GO
