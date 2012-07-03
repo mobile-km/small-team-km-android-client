@@ -47,8 +47,8 @@ public class HttpApi {
     public static boolean user_authenticate(String email, String password) throws Exception {
         return new TeamknPostRequest<Boolean>(
                 用户登录,
-                new BasicNameValuePair("email", email),
-                new BasicNameValuePair("password", password)
+                new PostParamText("email", email),
+                new PostParamText("password", password)
         ) {
             @Override
             public Boolean on_success(String response_text) throws Exception {
@@ -154,10 +154,10 @@ public class HttpApi {
             if (note.kind.equals(NoteDBHelper.Kind.TEXT)) {
 
                 return new TeamknPostRequest<Long>(同步推送,
-                        new PostParmText("note[uuid]", note.uuid),
-                        new PostParmText("note[content]", note.content),
-                        new PostParmText("note[kind]", note.kind),
-                        new PostParmText("note[is_removed]", note.is_removed + "")
+                        new PostParamText("note[uuid]", note.uuid),
+                        new PostParamText("note[content]", note.content),
+                        new PostParamText("note[kind]", note.kind),
+                        new PostParamText("note[is_removed]", note.is_removed + "")
                 ) {
                     @Override
                     public Long on_success(String response_text) throws Exception {
@@ -170,11 +170,11 @@ public class HttpApi {
             } else {
 
               return new TeamknPostRequest<Long>(同步推送,
-                        new PostParmText("note[uuid]", note.uuid),
-                        new PostParmText("note[content]", note.content),
-                        new PostParmText("note[kind]", note.kind),
-                        new PostParmText("note[is_removed]", note.is_removed + ""),
-                        new PostParmFile("note[attachment]", image.getPath(), "image/jpeg")
+                        new PostParamText("note[uuid]", note.uuid),
+                        new PostParamText("note[content]", note.content),
+                        new PostParamText("note[kind]", note.kind),
+                        new PostParamText("note[is_removed]", note.is_removed + ""),
+                        new PostParamFile("note[attachment]", image.getPath(), "image/jpeg")
                 ) {
                     @Override
                     public Long on_success(String response_text) throws Exception {
@@ -213,8 +213,8 @@ public class HttpApi {
 
       public static void invite(int user_id, String message) throws Exception {
         new TeamknPostRequest<Void>(邀请增加为联系人,
-            new PostParmText("user_id",user_id+""),
-            new PostParmText("message",message)
+            new PostParamText("user_id",user_id+""),
+            new PostParamText("message",message)
             ) {
               @Override
               public Void on_success(String response_text) throws Exception {
@@ -226,7 +226,7 @@ public class HttpApi {
 
       public static void accept_invite(int user_id) throws Exception {
         new TeamknPostRequest<Void>( 接收加为联系人的邀请,
-            new PostParmText("user_id",user_id+"")
+            new PostParamText("user_id",user_id+"")
             ) {
               @Override
               public Void on_success(String response_text) throws Exception {
@@ -239,7 +239,7 @@ public class HttpApi {
       public static void refuse_invite(int user_id) throws Exception {
         final int other_user_id = user_id;
         new TeamknPostRequest<Void>( 拒绝加为联系人的邀请,
-            new PostParmText("user_id",user_id+"")
+            new PostParamText("user_id",user_id+"")
             ) {
               @Override
               public Void on_success(String response_text) throws Exception {

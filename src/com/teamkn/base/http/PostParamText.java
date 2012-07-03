@@ -6,11 +6,11 @@ import org.apache.http.entity.mime.content.StringBody;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-public class PostParmText implements PostParam {
+public class PostParamText implements HttpParam {
     private String param_name;
     private String value;
 
-    public PostParmText(String param_name, String value) {
+    public PostParamText(String param_name, String value) {
         this.param_name = param_name;
         this.value = value;
     }
