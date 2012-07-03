@@ -2,7 +2,6 @@ package com.teamkn.base.http;
 
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.Logic.AccountManager.AuthenticateException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -92,5 +91,9 @@ public abstract class TeamknHttpRequest<TResult> {
     
     public static class ResponseNot200Exception extends Exception{
       private static final long serialVersionUID = -7542262559198093947L;
+    }
+    
+    public static class AuthenticateException extends Exception {
+      private static final long serialVersionUID = 8741487079704426464L;
     }
 }

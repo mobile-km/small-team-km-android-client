@@ -1,5 +1,6 @@
 package com.teamkn.Logic;
 
+import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.AccountUserDBHelper;
@@ -58,7 +59,4 @@ public class AccountManager {
         return !current_user().is_nil();
     }
 
-    public static class AuthenticateException extends Exception {
-        private static final long serialVersionUID = 8741487079704426464L;
-    }
 }

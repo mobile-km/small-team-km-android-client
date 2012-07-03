@@ -2,9 +2,9 @@ package com.teamkn.base.task;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import com.teamkn.Logic.AccountManager.AuthenticateException;
 import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.widget.TeamknProgressDialog;
 

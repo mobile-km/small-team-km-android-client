@@ -1,7 +1,7 @@
 package com.teamkn.base.runnable;
 
-import com.teamkn.Logic.AccountManager.AuthenticateException;
 import com.teamkn.Logic.HttpApi.IntentException;
+import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
 
 public abstract class TeamknRunnable implements Runnable {
     public static final int METHOD_NOT_DEFINE_EXCEPTION = 9001;
