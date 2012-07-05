@@ -18,12 +18,12 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 
         try {
             Cursor cursor = db.query(
-                    Constants.TABLE_USERS,
+                    Constants.TABLE_ACCOUNT_USERS,
                     new String[]{
                             Constants.KEY_ID,
-                            Constants.TABLE_USERS__COOKIES,
-                            Constants.TABLE_USERS__INFO,
-                            Constants.TABLE_USERS__AVATAR
+                            Constants.TABLE_ACCOUNT_USERS__COOKIES,
+                            Constants.TABLE_ACCOUNT_USERS__INFO,
+                            Constants.TABLE_ACCOUNT_USERS__AVATAR
                     }, null, null, null, null,
                     Constants.KEY_ID + " ASC"
             );
@@ -52,7 +52,7 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 
         try {
             Cursor cursor = db.query(
-                    Constants.TABLE_USERS,
+                    Constants.TABLE_ACCOUNT_USERS,
                     new String[]{}, null, null, null, null, null
             );
 
@@ -74,8 +74,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
         try {
             // 删除数据库信息
             db.execSQL(
-                    "DELETE FROM " + Constants.TABLE_USERS + " WHERE "
-                            + Constants.TABLE_USERS__USER_ID + " = ?",
+                    "DELETE FROM " + Constants.TABLE_ACCOUNT_USERS + " WHERE "
+                            + Constants.TABLE_ACCOUNT_USERS__USER_ID + " = ?",
                     new Object[]{
                             account_user.user_id
                     }
@@ -101,18 +101,18 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
         try {
             // 保存数据库信息
             ContentValues values = new ContentValues();
-            values.put(Constants.TABLE_USERS__USER_ID, account_user.user_id);
-            values.put(Constants.TABLE_USERS__NAME, account_user.name);
-            values.put(Constants.TABLE_USERS__COOKIES, account_user.cookies);
-            values.put(Constants.TABLE_USERS__INFO, account_user.info);
-            values.put(Constants.TABLE_USERS__AVATAR,account_user.avatar);
+            values.put(Constants.TABLE_ACCOUNT_USERS__USER_ID, account_user.user_id);
+            values.put(Constants.TABLE_ACCOUNT_USERS__NAME, account_user.name);
+            values.put(Constants.TABLE_ACCOUNT_USERS__COOKIES, account_user.cookies);
+            values.put(Constants.TABLE_ACCOUNT_USERS__INFO, account_user.info);
+            values.put(Constants.TABLE_ACCOUNT_USERS__AVATAR,account_user.avatar);
 
             AccountUser o_user = find(account_user.user_id);
 
             if (o_user.is_nil()) {
-                db.insert(Constants.TABLE_USERS, null, values);
+                db.insert(Constants.TABLE_ACCOUNT_USERS, null, values);
             } else {
-                db.update(Constants.TABLE_USERS, values, Constants.TABLE_USERS__USER_ID + " = " + account_user.user_id, null);
+                db.update(Constants.TABLE_ACCOUNT_USERS, values, Constants.TABLE_ACCOUNT_USERS__USER_ID + " = " + account_user.user_id, null);
             }
 
             return true;
@@ -129,14 +129,14 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 
         try {
             Cursor cursor = db.query(
-                    Constants.TABLE_USERS, new String[]{
+                    Constants.TABLE_ACCOUNT_USERS, new String[]{
                     Constants.KEY_ID,
-                    Constants.TABLE_USERS__USER_ID,
-                    Constants.TABLE_USERS__COOKIES,
-                    Constants.TABLE_USERS__INFO,
-                    Constants.TABLE_USERS__AVATAR
+                    Constants.TABLE_ACCOUNT_USERS__USER_ID,
+                    Constants.TABLE_ACCOUNT_USERS__COOKIES,
+                    Constants.TABLE_ACCOUNT_USERS__INFO,
+                    Constants.TABLE_ACCOUNT_USERS__AVATAR
             },
-                    Constants.TABLE_USERS__USER_ID + " = " + user_id,
+                    Constants.TABLE_ACCOUNT_USERS__USER_ID + " = " + user_id,
                     null, null, null, null
             );
 
