@@ -42,6 +42,10 @@
         android:name=".activity.contact.UserInfoActivity"
         android:theme="@style/user_info_panel"
     ></activity>
+    
+    <!-- 对话串 -->
+    <activity android:name=".activity.chat.SelectChatMemberActivity"></activity>
+    
 		
 		<service android:name=".service.SynNoteService"></service>
     <service android:name=".service.RefreshContactStatusService"></service>

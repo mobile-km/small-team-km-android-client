@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.R;
+import com.teamkn.activity.chat.SelectChatMemberActivity;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
@@ -130,6 +131,10 @@ public class MainActivity extends TeamknBaseActivity {
 
 	public void click_start_search(View view) {
 		open_activity(SearchActivity.class);
+	}
+	
+	public void click_new_chat(View view){
+	  open_activity(SelectChatMemberActivity.class);
 	}
 	
 	public void show_note_list(View view){
