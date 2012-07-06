@@ -3,6 +3,7 @@ package com.teamkn.activity.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +17,9 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Contact;
+import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
+import com.teamkn.service.SynNoteService;
 import com.teamkn.widget.adapter.SelectChatMemberListAdapter;
 
 public class SelectChatMemberActivity extends TeamknBaseActivity {
@@ -61,17 +64,26 @@ public class SelectChatMemberActivity extends TeamknBaseActivity {
   }
 
   public void click_submit_select_chat_member(View view){
-    new TeamknAsyncTask<Void,Void,Void>(this,"正在创建") {
+    if(select_chat_member_ids.size() == 0){return;}
+    
+    new TeamknAsyncTask<Void,Void,Long>(this,"正在创建") {
 
       @Override
-      public Void do_in_background(Void... params) throws Exception {
+      public Long do_in_background(Void... params) throws Exception {
         List<Integer> user_list = select_chat_member_ids;
-        // TODO
-        return null;
+        long client_chat_id = ChatDBHelper.create(user_list);
+        if(BaseUtils.is_wifi_active(SelectChatMemberActivity.this)){
+          HttpApi.Chat.create(client_chat_id,user_list);
+        }
+        return client_chat_id;
       }
 
       @Override
-      public void on_success(Void result) {
+      public void on_success(Long client_chat_id) {
+        Intent intent = new Intent(SelectChatMemberActivity.this,ChatActivity.class);
+        intent.putExtra(ChatActivity.Extra.CLIENT_CHAT_ID, (long)client_chat_id);
+        startActivity(intent);
+        SelectChatMemberActivity.this.finish();
       }
       
     }.execute();

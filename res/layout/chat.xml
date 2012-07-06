@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/head_bar"
+        android:id="@+id/head_bar"
+    >
+        <Button
+            style="@style/head_bar_button_go_back"
+        />
+        <TextView
+            style="@style/head_bar_text_center"
+            android:text="@string/chat"
+        />
+    </RelativeLayout>
+    
+    <ListView 
+        android:id="@+id/chat_node_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="false"
+        android:scrollbars="none"
+        android:layout_above="@+id/send_chat_node_bar"
+        android:layout_below="@+id/head_bar"
+    >
+    </ListView>
+    <RelativeLayout
+        android:id="@+id/send_chat_node_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+    >
+        <Button
+            android:id="@+id/send_chat_node_bn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:onClick="click_send_chat_node_bn"
+            android:text="发送"
+        />
+        <EditText
+            android:id="@+id/chat_node_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/send_chat_node_bn"
+            android:layout_alignParentLeft="true"
+        />
+    </RelativeLayout>
+</RelativeLayout>

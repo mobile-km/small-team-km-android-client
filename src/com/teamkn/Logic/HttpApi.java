@@ -1,7 +1,10 @@
 package com.teamkn.Logic;
 
 import com.teamkn.base.http.*;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
+import com.teamkn.model.database.ChatDBHelper;
+import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
 import org.apache.commons.io.IOUtils;
@@ -41,6 +44,10 @@ public class HttpApi {
     public static final String 删除联系人          = "/contacts/remove";
     
     public static final String 刷新联系人状态      = "/contacts/refresh_status";
+    
+    public static final String 创建对话串          = "/api/chats";
+    
+    public static final String 创建对话            = "/api/chat_nodes";
 
     // LoginActivity
     // 用户登录请求
@@ -282,6 +289,47 @@ public class HttpApi {
           TeamknPreferences.set_syn_contact_timestamp(timestamp);
         }
       }
+    }
+    
+    public static class Chat{
+      public static void create(final long client_chat_id, List<Integer> user_id_list) throws Exception{
+        String member_ids_str = BaseUtils.integer_list_to_string(user_id_list);
+        new TeamknPostRequest<Void>( 创建对话串,
+            new PostParamText("member_ids",member_ids_str)
+            ) {
+              @Override
+              public Void on_success(String response_text) throws Exception {
+                JSONObject json = new JSONObject(response_text);
+                int server_chat_id = json.getInt("server_chat_id");
+                long server_created_time = json.getLong("server_created_time");
+                long server_updated_time = json.getLong("server_updated_time");
+                ChatDBHelper.after_server_create(client_chat_id,server_chat_id,server_created_time,server_updated_time);
+                return null;
+              }
+        }.go();
+      }
+    }
+    
+    public static class ChatNode{
+
+      public static void create(final long client_chat_node_id, int server_chat_id, String content) throws Exception {
+        new TeamknPostRequest<Void>(创建对话,
+            new PostParamText("chat_id",server_chat_id+""),
+            new PostParamText("chat_node[content]",content),
+            new PostParamText("chat_node[kind]",ChatNodeDBHelper.Kind.TEXT)
+            ) {
+              @Override
+              public Void on_success(String response_text) throws Exception {
+                JSONObject json = new JSONObject(response_text);
+                int server_chat_node_id = json.getInt("server_chat_node_id");
+                long server_created_time = json.getLong("server_created_time");
+                
+                ChatNodeDBHelper.after_server_create(client_chat_node_id,server_chat_node_id,server_created_time);
+                return null;
+              }
+        }.go();        
+      }
+      
     }
 
     public static class IntentException extends Exception {

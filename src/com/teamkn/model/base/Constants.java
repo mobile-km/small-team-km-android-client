@@ -2,7 +2,7 @@ package com.teamkn.model.base;
 
 public class Constants {
     public static final String DATABASE_NAME = "teamkn";
-    public static final int DATABASE_VERSION = 21;
+    public static final int DATABASE_VERSION = 26;
     public static final String KEY_ID = "_id";
 
     // 账号 数据表的常量
@@ -34,4 +34,32 @@ public class Constants {
     public static final String TABLE_CONTACTS__STATUS = "status";
     public static final String TABLE_CONTACTS__SERVER_CREATED_TIME = "server_created_time";
     public static final String TABLE_CONTACTS__SERVER_UPDATED_TIME = "server_updated_time";
+
+    // chat 数据表的常量
+    public static final String TABLE_CHATS = "chats";
+    public static final String TABLE_CHATS__SERVER_CHAT_ID = "server_chat_id";
+    public static final String TABLE_CHATS__SERVER_CREATED_TIME = "server_created_time";
+    public static final String TABLE_CHATS__SERVER_UPDATED_TIME = "server_updated_time";
+    
+    // chat_memberships 数据表的常量
+    public static final String TABLE_CHAT_MEMBERSHIPS = "chat_memberships";
+    public static final String TABLE_CHAT_MEMBERSHIPS__CHAT_ID = "chat_id";
+    public static final String TABLE_CHAT_MEMBERSHIPS__USER_ID = "user_id";
+    
+    // chat_nodes 数据表的常量
+    public static final String TABLE_CHAT_NODES = "chat_nodes";
+    public static final String TABLE_CHAT_NODES__CHAT_ID = "chat_id";
+    public static final String TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID = "server_chat_node_id";
+    public static final String TABLE_CHAT_NODES__CONTENT = "content";
+    public static final String TABLE_CHAT_NODES__KIND = "kind";
+    public static final String TABLE_CHAT_NODES__SERVER_CREATED_TIME = "server_created_time";
+    public static final String TABLE_CHAT_NODES__SENDER_ID = "sender_id";
+    
+    // user 数据表的常量
+    public static final String TABLE_USERS = "users";
+    public static final String TABLE_USERS__USER_ID = "user_id";
+    public static final String TABLE_USERS__USER_NAME = "user_name";
+    public static final String TABLE_USERS__USER_AVATAR = "user_avatar";
+    public static final String TABLE_USERS__SERVER_CREATED_TIME = "server_created_time";
+    public static final String TABLE_USERS__SERVER_UPDATED_TIME = "server_updated_time";
 }
