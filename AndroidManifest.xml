@@ -46,6 +46,7 @@
     <!-- 对话串 -->
     <activity android:name=".activity.chat.SelectChatMemberActivity"></activity>
     <activity android:name=".activity.chat.ChatActivity"></activity>
+    <activity android:name=".activity.chat.ChatListActivity"></activity>
 		
 		<service android:name=".service.SynNoteService"></service>
     <service android:name=".service.RefreshContactStatusService"></service>

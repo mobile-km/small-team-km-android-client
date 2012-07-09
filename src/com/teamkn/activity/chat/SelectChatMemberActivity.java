@@ -60,7 +60,10 @@ public class SelectChatMemberActivity extends TeamknBaseActivity {
   }
 
   public void click_submit_select_chat_member(View view){
-    if(select_chat_member_ids.size() == 0){return;}
+    if(select_chat_member_ids.size() == 0){
+      BaseUtils.toast("xxx");
+      return;
+    }
     
     new TeamknAsyncTask<Void,Void,Integer>(this,"正在创建") {
 

@@ -32,9 +32,6 @@ public class ChatActivity extends TeamknBaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     client_chat_id = getIntent().getIntExtra(Extra.CLIENT_CHAT_ID, 0);
-    System.out.println("~~~~~~~~~~~~");
-    System.out.println(client_chat_id);
-    System.out.println("~~~~~~~~~~~~");
     chat = ChatDBHelper.find(client_chat_id);
     setContentView(R.layout.chat);
     

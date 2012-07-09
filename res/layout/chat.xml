@@ -14,7 +14,7 @@
         />
         <TextView
             style="@style/head_bar_text_center"
-            android:text="@string/chat"
+            android:text="@string/chat_title"
         />
     </RelativeLayout>
     

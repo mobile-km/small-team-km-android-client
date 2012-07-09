@@ -104,13 +104,13 @@
                     android:layout_toRightOf="@+id/from_album"
                 />
                 <Button
-                    android:id="@+id/new_chat"
-                    android:text="@string/new_chat"
+                    android:id="@+id/to_chat_list"
+                    android:text="@string/to_chat_list"
                     android:layout_height="fill_parent"
                     android:layout_width="52dp"
                     android:background="#F7F8FA"
                     android:layout_toRightOf="@+id/from_camera"
-                    android:onClick="click_new_chat"
+                    android:onClick="click_to_chat_list"
                 />
             </RelativeLayout>
 

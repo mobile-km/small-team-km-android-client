@@ -50,9 +50,16 @@
     <string name="start_search">搜索</string>
     <string name="menu_account_management">账号管理</string>
     <string name="menu_setting">设置</string>
-    <string name="new_chat">对话串</string>
-    <string name="chat">对话串</string>
-
+    <string name="to_chat_list">对话串</string>
+    
+    <!-- 对话串列表页面 -->
+    <string name="new_chat">新建对话串</string>
+    
+    <!-- 对话列表页面 -->
+    <string name="chat_title">对话串</string>
+    
+    <!-- 选择对话串成员页面 -->
+    <string name="select_chat_member_title">对话串</string>
 
     <!-- 搜索页面 -->
     <string name="search_prompt">请输入搜索内容</string>

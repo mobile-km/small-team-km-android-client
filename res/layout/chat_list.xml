@@ -7,33 +7,32 @@
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/head_bar"
+        android:id="@+id/head_bar"
     >
         <Button
             style="@style/head_bar_button_go_back"
         />
         <TextView
             style="@style/head_bar_text_center"
-            android:text="@string/select_chat_member_title"
+            android:text="@string/chat_title"
         />
     </RelativeLayout>
     
+    
     <ListView
-        android:id="@+id/select_chat_member_lv"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent" 
-    >
-    </ListView>
-    <LinearLayout
-        android:layout_alignParentBottom="true"
+        android:id="@+id/chat_list_lv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-    >
-        <Button
-            android:id="@+id/submit_select_chat_member_bn"
-            android:layout_width="fill_parent" 
-            android:layout_height="wrap_content"
-            android:onClick="click_submit_select_chat_member"
-            android:text="完成"
-        />
-    </LinearLayout>
+        android:layout_below="@+id/head_bar"
+        android:layout_above="@+id/new_chat_bn"
+    />
+    
+    <Button
+        android:id="@+id/new_chat_bn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="click_new_chat_bn"
+        android:text="@string/new_chat"
+    />
 </RelativeLayout>
