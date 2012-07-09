@@ -8,12 +8,25 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class UserDBHelper extends BaseModelDBHelper {
-  public static User find(int user_id){
+  public static int find_client_user_id(int server_user_id){
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_USERS, 
+        new String[]{Constants.KEY_ID},
+        Constants.TABLE_USERS__USER_ID + " = ?", 
+        new String[]{server_user_id+""},null, null, null);
+
+    cursor.moveToFirst();
+    int id = cursor.getInt(0);
+    db.close();
+    return id;
+  }
+  
+  public static User find(int client_user_id){
     User user;
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_USERS, get_columns(),
-        Constants.TABLE_USERS__USER_ID + " = ?", 
-        new String[]{user_id+""},null, null, null);
+        Constants.KEY_ID + " = ?", 
+        new String[]{client_user_id+""},null, null, null);
 
     boolean has_value = cursor.moveToFirst();
     if(has_value){
@@ -25,6 +38,38 @@ public class UserDBHelper extends BaseModelDBHelper {
     cursor.close();
     db.close();
     return user;
+  }
+  
+  public static User find_by_server_user_id(int server_user_id){
+    User user;
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_USERS, get_columns(),
+        Constants.TABLE_USERS__USER_ID + " = ?", 
+        new String[]{server_user_id+""},null, null, null);
+
+    boolean has_value = cursor.moveToFirst();
+    if(has_value){
+      user = build_by_cursor(cursor);
+    }else{
+      user = User.NIL_USER;
+    }
+    
+    cursor.close();
+    db.close();
+    return user;
+  }
+  
+  public static boolean is_exists(int server_user_id){
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_USERS, get_columns(),
+        Constants.TABLE_USERS__USER_ID + " = ?", 
+        new String[]{server_user_id+""},null, null, null);
+
+    boolean has_value = cursor.moveToFirst();
+    
+    cursor.close();
+    db.close();
+    return has_value;
   }
 
   private static User build_by_cursor(Cursor cursor) {

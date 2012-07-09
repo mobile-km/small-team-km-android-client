@@ -292,8 +292,8 @@ public class HttpApi {
     }
     
     public static class Chat{
-      public static void create(final int client_chat_id, List<Integer> user_id_list) throws Exception{
-        String member_ids_str = BaseUtils.integer_list_to_string(user_id_list);
+      public static void create(final int client_chat_id, List<Integer> server_user_id_list) throws Exception{
+        String member_ids_str = BaseUtils.integer_list_to_string(server_user_id_list);
         new TeamknPostRequest<Void>( 创建对话串,
             new PostParamText("member_ids",member_ids_str)
             ) {

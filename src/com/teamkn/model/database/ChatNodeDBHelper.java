@@ -6,8 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import com.teamkn.model.ChatNode;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
@@ -22,7 +20,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     List<ChatNode> chat_node_list = new ArrayList<ChatNode>();
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_CHAT_NODES, get_columns(), 
-        Constants.TABLE_CHAT_NODES__CHAT_ID + " = ?", 
+        Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID + " = ?", 
         new String[]{client_chat_id+""}, 
         null, null, null);
     
@@ -60,20 +58,20 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     int chat_id = cursor.getInt(1);
     String content = cursor.getString(2);
     String kind = cursor.getString(3);
-    int sender_id = cursor.getInt(4);
+    int client_user_id = cursor.getInt(4);
     int server_chat_node_id = cursor.getInt(5);
     long server_created_time = cursor.getLong(6);
     
-    return new ChatNode(id,chat_id,content,kind,sender_id,server_chat_node_id,server_created_time);
+    return new ChatNode(id,chat_id,content,kind,client_user_id,server_chat_node_id,server_created_time);
   }
 
   private static String[] get_columns(){
     return new String[]{
         Constants.KEY_ID,
-        Constants.TABLE_CHAT_NODES__CHAT_ID,
+        Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID,
         Constants.TABLE_CHAT_NODES__CONTENT,
         Constants.TABLE_CHAT_NODES__KIND,
-        Constants.TABLE_CHAT_NODES__SENDER_ID,
+        Constants.TABLE_CHAT_NODES__CLIENT_USER_ID,
         Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID,
         Constants.TABLE_CHAT_NODES__SERVER_CREATED_TIME
     };
@@ -81,15 +79,17 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
 
   public static int create(int client_chat_id, String content,
       int current_user_id) {
+    int client_user_id = UserDBHelper.find_client_user_id(current_user_id);
+    
     SQLiteDatabase db = get_write_db();
     
     ContentValues values = new ContentValues();
     values.put(Constants.TABLE_CHAT_NODES__CONTENT, content);
     values.put(Constants.TABLE_CHAT_NODES__KIND,Kind.TEXT);
-    values.put(Constants.TABLE_CHAT_NODES__SENDER_ID,current_user_id);
-    values.put(Constants.TABLE_CHAT_NODES__CHAT_ID,client_chat_id);
-    long client_chat_node_id = db.insert(Constants.TABLE_CHAT_NODES, null, values);
-    if(client_chat_node_id == -1){throw new SQLException();};
+    values.put(Constants.TABLE_CHAT_NODES__CLIENT_USER_ID,client_user_id);
+    values.put(Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID,client_chat_id);
+    long row_id = db.insert(Constants.TABLE_CHAT_NODES, null, values);
+    if(row_id == -1){throw new SQLException();};
     db.close();
     return get_max_id();
   }

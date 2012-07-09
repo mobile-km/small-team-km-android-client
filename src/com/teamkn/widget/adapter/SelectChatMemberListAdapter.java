@@ -16,11 +16,11 @@ import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.Contact;
 
 public class SelectChatMemberListAdapter extends TeamknBaseAdapter<Contact> {
-  private List<Integer> select_chat_member_ids;
+  private List<Integer> select_chat_member_server_user_ids;
 
-  public SelectChatMemberListAdapter(TeamknBaseActivity activity, List<Integer> select_chat_member_ids) {
+  public SelectChatMemberListAdapter(TeamknBaseActivity activity, List<Integer> select_chat_member_server_user_ids) {
     super(activity);
-    this.select_chat_member_ids = select_chat_member_ids;
+    this.select_chat_member_server_user_ids = select_chat_member_server_user_ids;
   }
 
   @Override
@@ -53,7 +53,7 @@ public class SelectChatMemberListAdapter extends TeamknBaseAdapter<Contact> {
     }else{
       view_holder.select_chat_member_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
     }
-    if(select_chat_member_ids.indexOf(item.contact_user_id) == -1){
+    if(select_chat_member_server_user_ids.indexOf(item.contact_user_id) == -1){
       view_holder.select_chat_member_select_cb.setChecked(false);
     }else{
       view_holder.select_chat_member_select_cb.setChecked(true);
@@ -68,10 +68,10 @@ public class SelectChatMemberListAdapter extends TeamknBaseAdapter<Contact> {
     
     if(cb.isChecked()){
       cb.setChecked(false);
-      select_chat_member_ids.remove(id);
+      select_chat_member_server_user_ids.remove(id);
     }else{
       cb.setChecked(true);
-      select_chat_member_ids.add(id);
+      select_chat_member_server_user_ids.add(id);
     }
   }
   

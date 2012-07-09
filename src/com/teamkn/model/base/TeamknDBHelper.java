@@ -49,18 +49,18 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     private static final String create_chat_memberships = "create table " +
             Constants.TABLE_CHAT_MEMBERSHIPS + " (" +
             Constants.KEY_ID + " integer primary key, " +
-            Constants.TABLE_CHAT_MEMBERSHIPS__CHAT_ID + " integer not null, " +
-            Constants.TABLE_CHAT_MEMBERSHIPS__USER_ID + " integer not null);";
+            Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_CHAT_ID + " integer not null, " +
+            Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_USER_ID + " integer not null);";
     
     private static final String create_chat_nodes = "create table " +
             Constants.TABLE_CHAT_NODES + " (" +
             Constants.KEY_ID + " integer primary key, " +
-            Constants.TABLE_CHAT_NODES__CHAT_ID + " integer not null, " +
+            Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID + " integer not null, " +
             Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " integer, " +
             Constants.TABLE_CHAT_NODES__CONTENT + " text, " +
             Constants.TABLE_CHAT_NODES__KIND + " text not null, " +
             Constants.TABLE_CHAT_NODES__SERVER_CREATED_TIME + " long, " +
-            Constants.TABLE_CHAT_NODES__SENDER_ID + " integer not null);";
+            Constants.TABLE_CHAT_NODES__CLIENT_USER_ID + " integer not null);";
     
     private static final String create_users = "create table " +
             Constants.TABLE_USERS + " (" +

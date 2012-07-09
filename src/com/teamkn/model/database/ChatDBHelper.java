@@ -17,31 +17,19 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class ChatDBHelper extends BaseModelDBHelper {
-  public static int create(List<Integer> member_ids){
+  public static int create(List<Integer> server_user_id_list){
+    int new_chat_id = 0;
+    copy_user_info_from_contacts_to_users(server_user_id_list);
+    
     AccountUser current_user = AccountManager.current_user();
     int current_user_id = current_user.user_id;
+    int current_user_client_id = UserDBHelper.find_client_user_id(current_user_id);
     
-    // 拼装 参与者的 ContentValues 
-    List<ContentValues> member_values_list = new ArrayList<ContentValues>();
-    // 增加 自己到对话串
-    ContentValues cv = new ContentValues();
-    cv.put(Constants.TABLE_USERS__USER_ID,current_user.user_id);
-    cv.put(Constants.TABLE_USERS__USER_NAME,current_user.name);
-    cv.put(Constants.TABLE_USERS__USER_AVATAR,current_user.avatar);
-    cv.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,0);
-    cv.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,0);
-    member_values_list.add(cv);
-    
-    for(int i = 0; i< member_ids.size(); i++){
-      Integer contact_user_id = member_ids.get(i);
-      Contact contact = ContactDBHelper.find(current_user_id, contact_user_id);
-      ContentValues values = new ContentValues();
-      values.put(Constants.TABLE_USERS__USER_ID,contact.contact_user_id);
-      values.put(Constants.TABLE_USERS__USER_NAME,contact.contact_user_name);
-      values.put(Constants.TABLE_USERS__USER_AVATAR,contact.contact_user_avatar);
-      values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,contact.server_created_time);
-      values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,contact.server_updated_time);
-      member_values_list.add(values);
+    ArrayList<Integer> client_user_id_list = new ArrayList<Integer>();
+    client_user_id_list.add(current_user_client_id);
+    for(int server_user_id : server_user_id_list){
+      int client_user_id = UserDBHelper.find_client_user_id(server_user_id);
+      client_user_id_list.add(client_user_id);
     }
     
     SQLiteDatabase db = get_write_db();
@@ -50,29 +38,65 @@ public class ChatDBHelper extends BaseModelDBHelper {
       //创建 chats
       ContentValues v = new ContentValues();
       v.put(Constants.TABLE_CHATS__SERVER_CREATED_TIME,0);
-      long chat_id = db.insert(Constants.TABLE_CHATS, null, v);
-      if(chat_id == -1){throw new SQLException();}
-      // 创建 users
-      for (int i = 0; i < member_values_list.size(); i++) {
-        ContentValues values = member_values_list.get(i);
-        long user_id = db.insert(Constants.TABLE_USERS, null, values);
-        if(chat_id == -1){throw new SQLException();}
-        
-        // 创建中间表
+      long row_id = db.insert(Constants.TABLE_CHATS, null, v);
+      if(row_id == -1){throw new SQLException();}
+      Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID +") from " + Constants.TABLE_CHATS + ";",null);
+      cursor.moveToFirst();
+      new_chat_id = cursor.getInt(0);
+      cursor.close();
+      
+      // 创建 中间表
+      for(int client_user_id : client_user_id_list){
         ContentValues membership_values = new ContentValues();
-        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__CHAT_ID,chat_id);
-        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__USER_ID,user_id);
-        long m_id = db.insert(Constants.TABLE_CHAT_MEMBERSHIPS, null, membership_values);
-        if(m_id == -1){throw new SQLException();}
+        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_CHAT_ID,new_chat_id);
+        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_USER_ID,client_user_id);
+        long m_row_id = db.insert(Constants.TABLE_CHAT_MEMBERSHIPS, null, membership_values);
+        if(m_row_id == -1){throw new SQLException();}        
       }
+      
       db.setTransactionSuccessful();
     }finally {
       db.endTransaction();
       db.close();
     }
-    return get_max_id();
+    return new_chat_id;
   }
   
+  // 现在联系人模块把联系人信息存在了 contacts 表中了
+  // 这里把数据复制一份到 users 表中
+  // TODO 联系人模块应该重构，把 contacts 表中的数据移到 users 中
+  // 在重构前，先这样复制一份
+  private static void copy_user_info_from_contacts_to_users(List<Integer> server_user_id_list){
+    AccountUser current_user = AccountManager.current_user();
+    int current_user_id = current_user.user_id;
+    
+    SQLiteDatabase db = get_write_db();
+    if(!UserDBHelper.is_exists(current_user_id)){
+      copy_user_info(db,current_user.user_id,current_user.name,current_user.avatar,0,0);
+    }
+    
+    for(int server_user_id : server_user_id_list){
+      if(!UserDBHelper.is_exists(server_user_id)){
+        Contact contact = ContactDBHelper.find(current_user_id, server_user_id);
+        copy_user_info(db,contact.contact_user_id,contact.contact_user_name,contact.contact_user_avatar,
+            contact.server_created_time,contact.server_updated_time);
+      }  
+    }
+    
+    db.close();
+  }
+  
+  private static void copy_user_info(SQLiteDatabase db, int user_id,
+      String user_name, byte[] user_avatar, long server_created_time, long server_updated_time) {
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_USERS__USER_ID,user_id);
+    values.put(Constants.TABLE_USERS__USER_NAME,user_name);
+    values.put(Constants.TABLE_USERS__USER_AVATAR,user_avatar);
+    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_created_time);
+    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_updated_time);
+    db.insert(Constants.TABLE_USERS, null, values);
+  }
+
   public static int get_max_id(){
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID + ") from " + Constants.TABLE_CHATS + ";", null);
@@ -102,8 +126,8 @@ public class ChatDBHelper extends BaseModelDBHelper {
     SQLiteDatabase db = get_read_db();
 
     Cursor cursor = db.query(Constants.TABLE_CHAT_MEMBERSHIPS,
-        new String[]{Constants.TABLE_CHAT_MEMBERSHIPS__USER_ID},
-        Constants.TABLE_CHAT_MEMBERSHIPS__CHAT_ID + " = ?",
+        new String[]{Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_USER_ID},
+        Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_CHAT_ID + " = ?",
         new String[]{client_chat_id+""},null,null,null);
     
     while(cursor.moveToNext()){
@@ -112,8 +136,8 @@ public class ChatDBHelper extends BaseModelDBHelper {
     cursor.close();
     db.close();
     
-    for(Integer user_id : user_id_list){
-      User user = UserDBHelper.find(user_id);
+    for(Integer client_user_id : user_id_list){
+      User user = UserDBHelper.find(client_user_id);
       user_list.add(user);
     }
     
