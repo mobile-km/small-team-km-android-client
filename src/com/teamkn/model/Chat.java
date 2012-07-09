@@ -5,7 +5,7 @@ import java.util.List;
 import com.teamkn.model.base.BaseModel;
 
 public class Chat extends BaseModel {
-  public long id;
+  public int id;
   public int server_chat_id;
   public long server_created_time;
   public long server_updated_time;
@@ -17,7 +17,7 @@ public class Chat extends BaseModel {
       set_nil();
   }
 
-  public Chat(long id, int server_chat_id, long server_created_time,
+  public Chat(int id, int server_chat_id, long server_created_time,
       long server_updated_time, List<Integer> member_ids) {
     this.id = id;
     this.server_chat_id = server_chat_id;

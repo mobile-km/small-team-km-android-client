@@ -16,7 +16,7 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class ChatDBHelper extends BaseModelDBHelper {
-  public static long create(List<Integer> member_ids){
+  public static int create(List<Integer> member_ids){
     AccountUser current_user = AccountManager.current_user();
     int current_user_id = current_user.user_id;
     
@@ -65,14 +65,24 @@ public class ChatDBHelper extends BaseModelDBHelper {
         if(m_id == -1){throw new SQLException();}
       }
       db.setTransactionSuccessful();
-      return chat_id;
     }finally {
       db.endTransaction();
       db.close();
     }
+    return get_max_id();
   }
   
-  public static Chat find(long client_chat_id){
+  public static int get_max_id(){
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID + ") from " + Constants.TABLE_CHATS + ";", null);
+    cursor.moveToFirst();
+    int max_id = cursor.getInt(0);
+    cursor.close();
+    db.close();
+    return max_id;
+  }
+  
+  public static Chat find(int client_chat_id){
     SQLiteDatabase db = get_read_db();
     Chat chat;
     String sql = "select " +
@@ -108,7 +118,7 @@ public class ChatDBHelper extends BaseModelDBHelper {
     return chat;
   }
 
-  public static void after_server_create(long client_chat_id,
+  public static void after_server_create(int client_chat_id,
       int server_chat_id, long server_created_time, long server_updated_time) {
     SQLiteDatabase db = get_read_db();
     

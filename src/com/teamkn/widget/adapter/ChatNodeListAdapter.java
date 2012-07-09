@@ -1,7 +1,6 @@
 package com.teamkn.widget.adapter;
 
 import java.io.ByteArrayInputStream;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,7 +12,6 @@ import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.ChatNode;
-import com.teamkn.model.User;
 
 public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 

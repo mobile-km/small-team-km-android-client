@@ -1,13 +1,10 @@
 package com.teamkn.activity.chat;
 
 import java.util.List;
-
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
@@ -27,14 +24,17 @@ public class ChatActivity extends TeamknBaseActivity {
 
   private ListView chat_node_lv;
   private EditText chat_node_et;
-  private long client_chat_id;
+  private int client_chat_id;
   private Chat chat;
   private ChatNodeListAdapter adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    client_chat_id = getIntent().getLongExtra(Extra.CLIENT_CHAT_ID, 0);
+    client_chat_id = getIntent().getIntExtra(Extra.CLIENT_CHAT_ID, 0);
+    System.out.println("~~~~~~~~~~~~");
+    System.out.println(client_chat_id);
+    System.out.println("~~~~~~~~~~~~");
     chat = ChatDBHelper.find(client_chat_id);
     setContentView(R.layout.chat);
     
@@ -57,11 +57,11 @@ public class ChatActivity extends TeamknBaseActivity {
       return;
     }
     
-    new TeamknAsyncTask<Void, Void, Long>(ChatActivity.this,"请稍等") {
+    new TeamknAsyncTask<Void, Void, Integer>(ChatActivity.this,"请稍等") {
       @Override
-      public Long do_in_background(Void... params) throws Exception {
+      public Integer do_in_background(Void... params) throws Exception {
         int current_user_id = AccountManager.current_user().user_id;
-        long client_chat_node_id = ChatNodeDBHelper.create(client_chat_id,content,current_user_id);
+        int client_chat_node_id = ChatNodeDBHelper.create(client_chat_id,content,current_user_id);
         if(BaseUtils.is_wifi_active(ChatActivity.this) && chat.is_syned()){
           HttpApi.ChatNode.create(client_chat_node_id,chat.server_chat_id,content);
         }
@@ -69,7 +69,7 @@ public class ChatActivity extends TeamknBaseActivity {
       }
 
       @Override
-      public void on_success(Long client_chat_node_id) {
+      public void on_success(Integer client_chat_node_id) {
         ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
         adapter.add_item(chat_node);
         chat_node_et.setText("");

@@ -2,11 +2,11 @@ package com.teamkn.model.database;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.teamkn.model.ChatNode;
 import com.teamkn.model.base.BaseModelDBHelper;
@@ -18,7 +18,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     public static final String IMAGE = "IMAGE";
 }
   
-  public static List<ChatNode> find_list(long client_chat_id){
+  public static List<ChatNode> find_list(int client_chat_id){
     List<ChatNode> chat_node_list = new ArrayList<ChatNode>();
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_CHAT_NODES, get_columns(), 
@@ -35,7 +35,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     return chat_node_list;
   }
   
-  public static ChatNode find(long client_chat_node_id){
+  public static ChatNode find(int client_chat_node_id){
     ChatNode chat_node;
     SQLiteDatabase db = get_read_db();
 
@@ -56,8 +56,8 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
   }
   
   private static ChatNode build_by_cursor(Cursor cursor) {
-    long id = cursor.getLong(0);
-    long chat_id = cursor.getLong(1);
+    int id = cursor.getInt(0);
+    int chat_id = cursor.getInt(1);
     String content = cursor.getString(2);
     String kind = cursor.getString(3);
     int sender_id = cursor.getInt(4);
@@ -79,7 +79,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     };
   }
 
-  public static long create(long client_chat_id, String content,
+  public static int create(int client_chat_id, String content,
       int current_user_id) {
     SQLiteDatabase db = get_write_db();
     
@@ -91,11 +91,20 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     long client_chat_node_id = db.insert(Constants.TABLE_CHAT_NODES, null, values);
     if(client_chat_node_id == -1){throw new SQLException();};
     db.close();
-    
-    return client_chat_node_id;
+    return get_max_id();
+  }
+  
+  public static int get_max_id(){
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID + ") from " + Constants.TABLE_CHAT_NODES + ";", null);
+    cursor.moveToFirst();
+    int max_id = cursor.getInt(0);
+    cursor.close();
+    db.close();
+    return max_id;
   }
 
-  public static void after_server_create(long client_chat_node_id,
+  public static void after_server_create(int client_chat_node_id,
       int server_chat_node_id, long server_created_time) {
     SQLiteDatabase db = get_read_db();
     
@@ -103,7 +112,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     values.put(Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID,server_chat_node_id);
     values.put(Constants.TABLE_CHAT_NODES__SERVER_CREATED_TIME,server_created_time);
     
-    int count = db.update(Constants.TABLE_CHAT_NODES, values,
+    db.update(Constants.TABLE_CHAT_NODES, values,
         Constants.KEY_ID + " = ?", new String[]{client_chat_node_id+""});
     db.close();
   }

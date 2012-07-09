@@ -41,21 +41,21 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     
     private static final String create_chats = "create table " +
             Constants.TABLE_CHATS + " (" +
-            Constants.KEY_ID + " long primary key, " +
+            Constants.KEY_ID + " integer primary key, " +
             Constants.TABLE_CHATS__SERVER_CHAT_ID + " integer, " +
             Constants.TABLE_CHATS__SERVER_CREATED_TIME + " long, " +
             Constants.TABLE_CHATS__SERVER_UPDATED_TIME + " long);";
     
     private static final String create_chat_memberships = "create table " +
             Constants.TABLE_CHAT_MEMBERSHIPS + " (" +
-            Constants.KEY_ID + " long primary key, " +
-            Constants.TABLE_CHAT_MEMBERSHIPS__CHAT_ID + " long not null, " +
-            Constants.TABLE_CHAT_MEMBERSHIPS__USER_ID + " long not null);";
+            Constants.KEY_ID + " integer primary key, " +
+            Constants.TABLE_CHAT_MEMBERSHIPS__CHAT_ID + " integer not null, " +
+            Constants.TABLE_CHAT_MEMBERSHIPS__USER_ID + " integer not null);";
     
     private static final String create_chat_nodes = "create table " +
             Constants.TABLE_CHAT_NODES + " (" +
-            Constants.KEY_ID + " long primary key, " +
-            Constants.TABLE_CHAT_NODES__CHAT_ID + " long not null, " +
+            Constants.KEY_ID + " integer primary key, " +
+            Constants.TABLE_CHAT_NODES__CHAT_ID + " integer not null, " +
             Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " integer, " +
             Constants.TABLE_CHAT_NODES__CONTENT + " text, " +
             Constants.TABLE_CHAT_NODES__KIND + " text not null, " +
@@ -64,7 +64,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     
     private static final String create_users = "create table " +
             Constants.TABLE_USERS + " (" +
-            Constants.KEY_ID + " long primary key, " +
+            Constants.KEY_ID + " integer primary key, " +
             Constants.TABLE_USERS__USER_ID + " integer not null, " +
             Constants.TABLE_USERS__USER_NAME + " text not null, " +
             Constants.TABLE_USERS__USER_AVATAR + " blob, " + 

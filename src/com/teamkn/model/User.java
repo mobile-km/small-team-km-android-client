@@ -4,7 +4,7 @@ import com.teamkn.model.base.BaseModel;
 
 public class User extends BaseModel {
   final public static User NIL_USER = new User();
-  public long id;
+  public int id;
   public int user_id;
   public long server_created_time;
   public String user_name;
@@ -15,7 +15,7 @@ public class User extends BaseModel {
       set_nil();
   }
 
-  public User(long id, int user_id, String user_name, byte[] user_avatar,
+  public User(int id, int user_id, String user_name, byte[] user_avatar,
       long server_created_time, long server_updated_time) {
     this.id = id;
     this.user_id = user_id;

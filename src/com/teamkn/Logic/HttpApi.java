@@ -292,7 +292,7 @@ public class HttpApi {
     }
     
     public static class Chat{
-      public static void create(final long client_chat_id, List<Integer> user_id_list) throws Exception{
+      public static void create(final int client_chat_id, List<Integer> user_id_list) throws Exception{
         String member_ids_str = BaseUtils.integer_list_to_string(user_id_list);
         new TeamknPostRequest<Void>( 创建对话串,
             new PostParamText("member_ids",member_ids_str)
@@ -312,7 +312,7 @@ public class HttpApi {
     
     public static class ChatNode{
 
-      public static void create(final long client_chat_node_id, int server_chat_id, String content) throws Exception {
+      public static void create(final int client_chat_node_id, int server_chat_id, String content) throws Exception {
         new TeamknPostRequest<Void>(创建对话,
             new PostParamText("chat_id",server_chat_id+""),
             new PostParamText("chat_node[content]",content),

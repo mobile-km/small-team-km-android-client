@@ -28,7 +28,7 @@ public class UserDBHelper extends BaseModelDBHelper {
   }
 
   private static User build_by_cursor(Cursor cursor) {
-    long id = cursor.getLong(0);
+    int id = cursor.getInt(0);
     int user_id = cursor.getInt(1);
     String user_name = cursor.getString(2);
     byte[] user_avatar = cursor.getBlob(3);

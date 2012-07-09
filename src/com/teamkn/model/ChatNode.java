@@ -11,14 +11,14 @@ public class ChatNode extends BaseModel {
   public User sender;
   public String kind;
   public String content;
-  public long chat_id;
-  public long id;
+  public int chat_id;
+  public int id;
 
   private ChatNode() {
       set_nil();
   }
 
-  public ChatNode(long id, long chat_id, String content, String kind,
+  public ChatNode(int id, int chat_id, String content, String kind,
       int sender_id, int server_chat_node_id, long server_created_time) {
     
     this.id = id;
