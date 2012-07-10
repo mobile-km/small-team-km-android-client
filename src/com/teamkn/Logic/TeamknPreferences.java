@@ -113,4 +113,24 @@ public class TeamknPreferences {
     TeamknPreferences.put_long(key, time);
   }
   
+  public static long last_syn_chat_updated_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_chat_updated_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void set_last_syn_chat_updated_time(long last_syn_chat_updated_time){
+    String key = get_resource_string(R.string.preferences_key_last_syn_chat_updated_time);
+    TeamknPreferences.put_long(key, last_syn_chat_updated_time);
+  }
+  
+  public static long last_syn_chat_node_created_time(){
+    String key = get_resource_string(R.string.preferences_key_last_syn_chat_node_created_time);
+    return PREFERENCES.getLong(key, 0);
+  }
+  
+  public static void set_last_syn_chat_node_created_time(long last_syn_chat_node_created_time){
+    String key = get_resource_string(R.string.preferences_key_last_syn_chat_node_created_time);
+    TeamknPreferences.put_long(key, last_syn_chat_node_created_time);
+  }
+  
 }

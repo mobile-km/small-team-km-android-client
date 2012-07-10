@@ -302,6 +302,8 @@ public final class R {
         public static final int now_updating=0x7f090009;
         public static final int placeholder=0x7f090011;
         public static final int preferences_key_current_user_id=0x7f090042;
+        public static final int preferences_key_last_syn_chat_node_created_time=0x7f090049;
+        public static final int preferences_key_last_syn_chat_updated_time=0x7f090048;
         public static final int preferences_key_last_syn_fail_client_time=0x7f090047;
         public static final int preferences_key_last_syn_server_meta_updated_time=0x7f090044;
         public static final int preferences_key_last_syn_success_client_time=0x7f090046;

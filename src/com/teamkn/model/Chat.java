@@ -1,5 +1,6 @@
 package com.teamkn.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.teamkn.model.base.BaseModel;
@@ -11,6 +12,7 @@ public class Chat extends BaseModel {
   public long server_created_time;
   public long server_updated_time;
   public List<User> members;
+  public List<Integer> server_user_id_list;
   
   final public static Chat NIL_CHAT = new Chat();
 
@@ -25,11 +27,20 @@ public class Chat extends BaseModel {
     this.server_created_time = server_created_time;
     this.server_updated_time = server_updated_time;
     this.members = ChatDBHelper.get_member_list(this.id);
+    this.server_user_id_list = get_member_server_user_id_list();
   }
   
   
   public boolean is_syned(){
     return this.server_chat_id != 0;
+  }
+  
+  private List<Integer> get_member_server_user_id_list(){
+    List<Integer> server_user_id_list = new ArrayList<Integer>();
+    for(User user : this.members){
+      server_user_id_list.add(user.user_id);
+    }
+    return server_user_id_list;
   }
   
 }

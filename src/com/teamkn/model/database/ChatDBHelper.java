@@ -70,33 +70,20 @@ public class ChatDBHelper extends BaseModelDBHelper {
     AccountUser current_user = AccountManager.current_user();
     int current_user_id = current_user.user_id;
     
-    SQLiteDatabase db = get_write_db();
     if(!UserDBHelper.is_exists(current_user_id)){
-      copy_user_info(db,current_user.user_id,current_user.name,current_user.avatar,0,0);
+      UserDBHelper.create(current_user.user_id, current_user.name, current_user.avatar, 0, 0);
     }
     
     for(int server_user_id : server_user_id_list){
       if(!UserDBHelper.is_exists(server_user_id)){
         Contact contact = ContactDBHelper.find(current_user_id, server_user_id);
-        copy_user_info(db,contact.contact_user_id,contact.contact_user_name,contact.contact_user_avatar,
-            contact.server_created_time,contact.server_updated_time);
-      }  
+        UserDBHelper.create(contact.contact_user_id, contact.contact_user_name, 
+            contact.contact_user_avatar, contact.server_created_time, contact.server_updated_time);
+      }
     }
     
-    db.close();
   }
   
-  private static void copy_user_info(SQLiteDatabase db, int user_id,
-      String user_name, byte[] user_avatar, long server_created_time, long server_updated_time) {
-    ContentValues values = new ContentValues();
-    values.put(Constants.TABLE_USERS__USER_ID,user_id);
-    values.put(Constants.TABLE_USERS__USER_NAME,user_name);
-    values.put(Constants.TABLE_USERS__USER_AVATAR,user_avatar);
-    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_created_time);
-    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_updated_time);
-    db.insert(Constants.TABLE_USERS, null, values);
-  }
-
   public static int get_max_id(){
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID + ") from " + Constants.TABLE_CHATS + ";", null);
@@ -105,6 +92,21 @@ public class ChatDBHelper extends BaseModelDBHelper {
     cursor.close();
     db.close();
     return max_id;
+  }
+  
+  public static List<Chat> find_unsyn_list(){
+    List<Chat> chat_list = new ArrayList<Chat>();
+    SQLiteDatabase db = get_read_db();
+    
+    Cursor cursor = db.query(Constants.TABLE_CHATS, get_columns(), 
+        Constants.TABLE_CHATS__SERVER_CHAT_ID + " is null", 
+        null,null, null, null);
+    while(cursor.moveToNext()){
+      chat_list.add(build_by_cursor(cursor));
+    }
+    cursor.close();
+    db.close();
+    return chat_list;
   }
   
   public static List<Chat> find_list(){
@@ -195,6 +197,68 @@ public class ChatDBHelper extends BaseModelDBHelper {
         Constants.KEY_ID + " = ?", new String[]{client_chat_id+""});
     
     db.close();
+  }
+
+  public static boolean is_exists(int server_chat_id) {
+    SQLiteDatabase db = get_read_db();
+    
+    Cursor cursor = db.query(Constants.TABLE_CHATS, get_columns(),
+        Constants.TABLE_CHATS__SERVER_CHAT_ID + " = ?",
+        new String[]{server_chat_id+""}, null, null, null);
+    
+    boolean has_value = cursor.moveToFirst();
+    cursor.close();
+    db.close();
+    
+    return has_value;
+  }
+
+  public static void pull_from_server(int server_chat_id,
+      ArrayList<Integer> client_user_id_list, long server_created_time,
+      long server_updated_time) {
+    
+    SQLiteDatabase db = get_write_db();
+    db.beginTransaction();
+    try {
+      //创建 chats
+      ContentValues v = new ContentValues();
+      v.put(Constants.TABLE_CHATS__SERVER_CHAT_ID,server_chat_id);
+      v.put(Constants.TABLE_CHATS__SERVER_CREATED_TIME,server_created_time);
+      v.put(Constants.TABLE_CHATS__SERVER_UPDATED_TIME,server_updated_time);
+      long row_id = db.insert(Constants.TABLE_CHATS, null, v);
+      if(row_id == -1){throw new SQLException();}
+      Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID +") from " + Constants.TABLE_CHATS + ";",null);
+      cursor.moveToFirst();
+      int new_chat_id = cursor.getInt(0);
+      cursor.close();
+      
+      // 创建 中间表
+      for(int client_user_id : client_user_id_list){
+        ContentValues membership_values = new ContentValues();
+        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_CHAT_ID,new_chat_id);
+        membership_values.put(Constants.TABLE_CHAT_MEMBERSHIPS__CLIENT_USER_ID,client_user_id);
+        long m_row_id = db.insert(Constants.TABLE_CHAT_MEMBERSHIPS, null, membership_values);
+        if(m_row_id == -1){throw new SQLException();}        
+      }
+      
+      db.setTransactionSuccessful();
+    }finally {
+      db.endTransaction();
+      db.close();
+    }
+  }
+
+  public static int find_client_chat_id(int server_chat_id) {
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_CHATS, 
+        new String[]{Constants.KEY_ID},
+        Constants.TABLE_CHATS__SERVER_CHAT_ID + " = ?", 
+        new String[]{server_chat_id+""},null, null, null);
+
+    cursor.moveToFirst();
+    int id = cursor.getInt(0);
+    db.close();
+    return id;
   }
 
 }

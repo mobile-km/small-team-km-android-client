@@ -7,6 +7,7 @@ import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.model.database.UserDBHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -48,6 +49,10 @@ public class HttpApi {
     public static final String 创建对话串          = "/api/chats";
     
     public static final String 创建对话            = "/api/chat_nodes";
+    
+    public static final String 获取对话串          = "/api/pull_chats";
+    
+    public static final String 获取对话            = "/api/pull_chat_nodes";
 
     // LoginActivity
     // 用户登录请求
@@ -308,6 +313,49 @@ public class HttpApi {
               }
         }.go();
       }
+      
+      public static void pull_chats() throws Exception{
+        final long last_syn_chat_updated_time = TeamknPreferences.last_syn_chat_updated_time();
+        
+        new TeamknGetRequest<Void>(获取对话串,
+            new BasicNameValuePair("last_syn_chat_updated_time", last_syn_chat_updated_time+"")
+            ){
+          @Override
+          public Void on_success(String response_text) throws Exception {
+            long max_last_syn_chat_updated_time = last_syn_chat_updated_time;
+            JSONArray json_array = new JSONArray(response_text);
+            for (int i = 0; i < json_array.length(); i++) {
+              JSONObject obj = json_array.getJSONObject(i);
+              
+              int server_chat_id = obj.getInt("server_chat_id");
+              long server_created_time = obj.getLong("server_created_time");
+              long server_updated_time = obj.getLong("server_updated_time");
+              ArrayList<Integer> client_user_id_list = new ArrayList<Integer>();
+              
+              JSONArray members_array = obj.getJSONArray("members");
+              for (int j = 0; j < members_array.length(); j++) {
+                JSONObject member = members_array.getJSONObject(j);
+                
+                int user_id = member.getInt("user_id");
+                String user_name = member.getString("user_name");
+                String user_avatar_url = member.getString("user_avatar_url");
+                long user_server_created_time = member.getLong("server_created_time");
+                long user_server_updated_time = member.getLong("server_updated_time");
+                
+                if(!UserDBHelper.is_exists(user_id)){
+                  UserDBHelper.create(user_id, user_name, user_avatar_url, user_server_created_time, user_server_updated_time);
+                }
+                int client_user_id = UserDBHelper.find_client_user_id(user_id);
+                client_user_id_list.add(client_user_id);
+              }
+              ChatDBHelper.pull_from_server(server_chat_id,client_user_id_list,server_created_time,server_updated_time);
+              max_last_syn_chat_updated_time = Math.max(max_last_syn_chat_updated_time,server_updated_time);
+            }
+            TeamknPreferences.set_last_syn_chat_updated_time(max_last_syn_chat_updated_time);
+            return null;
+          }
+        }.go();
+      }
     }
     
     public static class ChatNode{
@@ -328,6 +376,37 @@ public class HttpApi {
                 return null;
               }
         }.go();        
+      }
+      
+      public static void pull_chat_nodes() throws Exception{
+        final long last_syn_chat_node_created_time = TeamknPreferences.last_syn_chat_node_created_time();
+        
+        new TeamknGetRequest<Void>(获取对话,
+            new BasicNameValuePair("last_syn_chat_node_created_time", last_syn_chat_node_created_time+"")
+            ){
+          @Override
+          public Void on_success(String response_text) throws Exception {
+            long max_last_syn_chat_node_created_time = last_syn_chat_node_created_time;
+            JSONArray chat_node_array = new JSONArray(response_text);
+            for (int i = 0; i < chat_node_array.length(); i++) {
+              JSONObject chat_node_obj = chat_node_array.getJSONObject(i);
+              int server_chat_id = chat_node_obj.getInt("server_chat_id");
+              int server_chat_node_id = chat_node_obj.getInt("server_chat_node_id");
+              int sender_id = chat_node_obj.getInt("sender_id");
+              String content = chat_node_obj.getString("content");
+              long server_created_time = chat_node_obj.getLong("server_created_time");
+              
+              if(!ChatNodeDBHelper.is_exists(server_chat_node_id)){
+                int client_user_id = UserDBHelper.find_client_user_id(sender_id);
+                int client_chat_id = ChatDBHelper.find_client_chat_id(server_chat_id);
+                ChatNodeDBHelper.pull(client_chat_id,server_chat_node_id,client_user_id,content,server_created_time);
+              }
+              max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
+            }
+            TeamknPreferences.set_last_syn_chat_node_created_time(max_last_syn_chat_node_created_time);
+            return null;
+          }
+        }.go();
       }
       
     }

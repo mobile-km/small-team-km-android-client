@@ -1,13 +1,48 @@
 package com.teamkn.model.database;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.model.User;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class UserDBHelper extends BaseModelDBHelper {
+  public static void create(int user_id,
+      String user_name, byte[] user_avatar, long server_created_time, long server_updated_time){
+    SQLiteDatabase db = get_write_db();
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_USERS__USER_ID,user_id);
+    values.put(Constants.TABLE_USERS__USER_NAME,user_name);
+    values.put(Constants.TABLE_USERS__USER_AVATAR,user_avatar);
+    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_created_time);
+    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_updated_time);
+    db.insert(Constants.TABLE_USERS, null, values);
+    db.close();
+  }
+  
+  public static void create(int user_id,
+      String user_name, String user_avatar_url, long server_created_time, long server_updated_time){
+    byte[] user_avatar = null;
+    if(user_avatar_url != null && !user_avatar_url.equals("")){
+      InputStream is = HttpApi.download_image(user_avatar_url);
+      try {
+        user_avatar = IOUtils.toByteArray(is);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    
+    create(user_id,user_name,user_avatar,server_created_time,server_updated_time);
+  }
+  
   public static int find_client_user_id(int server_user_id){
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_USERS, 
@@ -17,6 +52,7 @@ public class UserDBHelper extends BaseModelDBHelper {
 
     cursor.moveToFirst();
     int id = cursor.getInt(0);
+    cursor.close();
     db.close();
     return id;
   }

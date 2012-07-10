@@ -108,4 +108,6 @@
     <string name="preferences_key_last_syn_success_server_time">last_syn_success_server_time</string>
     <string name="preferences_key_last_syn_success_client_time">last_syn_success_client_time</string>
     <string name="preferences_key_last_syn_fail_client_time">last_syn_fail_client_time</string>
+    <string name="preferences_key_last_syn_chat_updated_time">last_syn_chat_updated_time</string>
+    <string name="preferences_key_last_syn_chat_node_created_time">last_syn_chat_node_created_time</string>
 </resources>

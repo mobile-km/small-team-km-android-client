@@ -33,6 +33,7 @@ import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.IndexService;
+import com.teamkn.service.SynChatService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import java.io.ByteArrayInputStream;
@@ -102,6 +103,8 @@ public class MainActivity extends TeamknBaseActivity {
     
     // 启动刷新联系人状态服务
     startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+    // 启动更新 对话串的服务
+    startService(new Intent(MainActivity.this,SynChatService.class));
 	}
 	
 	public void click_new_text(View view){
@@ -155,8 +158,9 @@ public class MainActivity extends TeamknBaseActivity {
     unbindService(conn);
     // 关闭更新联系人状态服务
     stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-
-        IndexService.stop();
+    // 关闭更新对话串的服务
+    stopService(new Intent(MainActivity.this,SynChatService.class));
+    IndexService.stop();
   }
 	
 	@Override

@@ -53,6 +53,21 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     return chat_node;
   }
   
+  public static boolean is_exists(int server_chat_node_id){
+    SQLiteDatabase db = get_read_db();
+
+    Cursor cursor = db.query(Constants.TABLE_CHAT_NODES, get_columns(), 
+        Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " = ? ", 
+        new String[]{server_chat_node_id+""}, 
+        null, null, null);
+    boolean has_value = cursor.moveToFirst();
+    
+    cursor.close();
+    db.close();
+    
+    return has_value;
+  }
+  
   private static ChatNode build_by_cursor(Cursor cursor) {
     int id = cursor.getInt(0);
     int chat_id = cursor.getInt(1);
@@ -114,6 +129,38 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     
     db.update(Constants.TABLE_CHAT_NODES, values,
         Constants.KEY_ID + " = ?", new String[]{client_chat_node_id+""});
+    db.close();
+  }
+
+  public static List<ChatNode> find_unsyn_list() {
+    List<ChatNode> chat_node_list = new ArrayList<ChatNode>();
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_CHAT_NODES, get_columns(), 
+        Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " is null", 
+        null, null, null, null);
+    
+    while(cursor.moveToNext()){
+      chat_node_list.add(build_by_cursor(cursor));
+    }
+    
+    cursor.close();
+    db.close();
+    return chat_node_list;
+  }
+
+  public static void pull(int client_chat_id, int server_chat_node_id,
+      int client_user_id, String content, long server_created_time) {
+    SQLiteDatabase db = get_write_db();
+    
+    ContentValues values = new ContentValues();
+    values.put(Constants.TABLE_CHAT_NODES__CONTENT, content);
+    values.put(Constants.TABLE_CHAT_NODES__KIND,Kind.TEXT);
+    values.put(Constants.TABLE_CHAT_NODES__CLIENT_USER_ID,client_user_id);
+    values.put(Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID,client_chat_id);
+    values.put(Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID,server_chat_node_id);
+    values.put(Constants.TABLE_CHAT_NODES__SERVER_CREATED_TIME,server_created_time);
+    long row_id = db.insert(Constants.TABLE_CHAT_NODES, null, values);
+    if(row_id == -1){throw new SQLException();};
     db.close();
   }
 
