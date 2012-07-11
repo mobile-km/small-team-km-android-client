@@ -13,6 +13,7 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.model.Chat;
 import com.teamkn.model.Contact;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
@@ -70,11 +71,11 @@ public class SelectChatMemberActivity extends TeamknBaseActivity {
       @Override
       public Integer do_in_background(Void... params) throws Exception {
         List<Integer> server_user_id_list = select_chat_member_server_user_ids;
-        int client_chat_id = ChatDBHelper.create(server_user_id_list);
+        Chat chat = ChatDBHelper.create(server_user_id_list);
         if(BaseUtils.is_wifi_active(SelectChatMemberActivity.this)){
-          HttpApi.Chat.create(client_chat_id,server_user_id_list);
+          HttpApi.Chat.create(chat.uuid,server_user_id_list);
         }
-        return client_chat_id;
+        return chat.id;
       }
 
       @Override

@@ -58,11 +58,11 @@ public class ChatActivity extends TeamknBaseActivity {
       @Override
       public Integer do_in_background(Void... params) throws Exception {
         int current_user_id = AccountManager.current_user().user_id;
-        int client_chat_node_id = ChatNodeDBHelper.create(client_chat_id,content,current_user_id);
+        ChatNode chat_node = ChatNodeDBHelper.create(client_chat_id,content,current_user_id);
         if(BaseUtils.is_wifi_active(ChatActivity.this) && chat.is_syned()){
-          HttpApi.ChatNode.create(client_chat_node_id,chat.server_chat_id,content);
+          HttpApi.ChatNode.create(chat_node.uuid,chat.server_chat_id,content);
         }
-        return client_chat_node_id;
+        return chat_node.id;
       }
 
       @Override

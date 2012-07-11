@@ -91,14 +91,14 @@ public class SynChatService extends Service {
       for(Chat chat : chat_list){
         List<Integer> user_list = chat.server_user_id_list;
         user_list.remove((Integer)current_user_id);
-        HttpApi.Chat.create(chat.id, user_list);
+        HttpApi.Chat.create(chat.uuid, user_list);
       }
       // 查询没有同步过的 chat_node
       List<ChatNode> chat_node_list = ChatNodeDBHelper.find_unsyn_list();
       // 同步 chat_node
       for(ChatNode chat_node : chat_node_list){
         Chat chat = ChatDBHelper.find(chat_node.chat_id);
-        HttpApi.ChatNode.create(chat_node.id, chat.server_chat_id, chat_node.content);
+        HttpApi.ChatNode.create(chat_node.uuid, chat.server_chat_id, chat_node.content);
       }
     }
   }

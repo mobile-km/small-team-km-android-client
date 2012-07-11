@@ -13,6 +13,7 @@ public class Chat extends BaseModel {
   public long server_updated_time;
   public List<User> members;
   public List<Integer> server_user_id_list;
+  public String uuid;
   
   final public static Chat NIL_CHAT = new Chat();
 
@@ -20,8 +21,9 @@ public class Chat extends BaseModel {
       set_nil();
   }
 
-  public Chat(int id, int server_chat_id, long server_created_time,
+  public Chat(String uuid, int id, int server_chat_id, long server_created_time,
       long server_updated_time) {
+    this.uuid = uuid;
     this.id = id;
     this.server_chat_id = server_chat_id;
     this.server_created_time = server_created_time;

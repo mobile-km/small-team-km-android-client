@@ -297,10 +297,11 @@ public class HttpApi {
     }
     
     public static class Chat{
-      public static void create(final int client_chat_id, List<Integer> server_user_id_list) throws Exception{
+      public static void create(final String uuid, List<Integer> server_user_id_list) throws Exception{
         String member_ids_str = BaseUtils.integer_list_to_string(server_user_id_list);
         new TeamknPostRequest<Void>( 创建对话串,
-            new PostParamText("member_ids",member_ids_str)
+            new PostParamText("member_ids",member_ids_str),
+            new PostParamText("uuid",uuid)
             ) {
               @Override
               public Void on_success(String response_text) throws Exception {
@@ -308,7 +309,7 @@ public class HttpApi {
                 int server_chat_id = json.getInt("server_chat_id");
                 long server_created_time = json.getLong("server_created_time");
                 long server_updated_time = json.getLong("server_updated_time");
-                ChatDBHelper.after_server_create(client_chat_id,server_chat_id,server_created_time,server_updated_time);
+                ChatDBHelper.after_server_create(uuid,server_chat_id,server_created_time,server_updated_time);
                 return null;
               }
         }.go();
@@ -327,6 +328,7 @@ public class HttpApi {
             for (int i = 0; i < json_array.length(); i++) {
               JSONObject obj = json_array.getJSONObject(i);
               
+              String uuid = obj.getString("uuid");
               int server_chat_id = obj.getInt("server_chat_id");
               long server_created_time = obj.getLong("server_created_time");
               long server_updated_time = obj.getLong("server_updated_time");
@@ -345,10 +347,10 @@ public class HttpApi {
                 if(!UserDBHelper.is_exists(user_id)){
                   UserDBHelper.create(user_id, user_name, user_avatar_url, user_server_created_time, user_server_updated_time);
                 }
-                int client_user_id = UserDBHelper.find_client_user_id(user_id);
+                int client_user_id = UserDBHelper.get_client_user_id(user_id);
                 client_user_id_list.add(client_user_id);
               }
-              ChatDBHelper.pull_from_server(server_chat_id,client_user_id_list,server_created_time,server_updated_time);
+              ChatDBHelper.pull_from_server(uuid,server_chat_id,client_user_id_list,server_created_time,server_updated_time);
               max_last_syn_chat_updated_time = Math.max(max_last_syn_chat_updated_time,server_updated_time);
             }
             TeamknPreferences.set_last_syn_chat_updated_time(max_last_syn_chat_updated_time);
@@ -360,9 +362,10 @@ public class HttpApi {
     
     public static class ChatNode{
 
-      public static void create(final int client_chat_node_id, int server_chat_id, String content) throws Exception {
+      public static void create(final String uuid, int server_chat_id, String content) throws Exception {
         new TeamknPostRequest<Void>(创建对话,
             new PostParamText("chat_id",server_chat_id+""),
+            new PostParamText("chat_node[uuid]",uuid),
             new PostParamText("chat_node[content]",content),
             new PostParamText("chat_node[kind]",ChatNodeDBHelper.Kind.TEXT)
             ) {
@@ -372,7 +375,7 @@ public class HttpApi {
                 int server_chat_node_id = json.getInt("server_chat_node_id");
                 long server_created_time = json.getLong("server_created_time");
                 
-                ChatNodeDBHelper.after_server_create(client_chat_node_id,server_chat_node_id,server_created_time);
+                ChatNodeDBHelper.after_server_create(uuid,server_chat_node_id,server_created_time);
                 return null;
               }
         }.go();        
@@ -390,17 +393,14 @@ public class HttpApi {
             JSONArray chat_node_array = new JSONArray(response_text);
             for (int i = 0; i < chat_node_array.length(); i++) {
               JSONObject chat_node_obj = chat_node_array.getJSONObject(i);
+              String uuid = chat_node_obj.getString("uuid");
               int server_chat_id = chat_node_obj.getInt("server_chat_id");
               int server_chat_node_id = chat_node_obj.getInt("server_chat_node_id");
               int sender_id = chat_node_obj.getInt("sender_id");
               String content = chat_node_obj.getString("content");
               long server_created_time = chat_node_obj.getLong("server_created_time");
               
-              if(!ChatNodeDBHelper.is_exists(server_chat_node_id)){
-                int client_user_id = UserDBHelper.find_client_user_id(sender_id);
-                int client_chat_id = ChatDBHelper.find_client_chat_id(server_chat_id);
-                ChatNodeDBHelper.pull(client_chat_id,server_chat_node_id,client_user_id,content,server_created_time);
-              }
+              ChatNodeDBHelper.pull_from_server(uuid, server_chat_id, server_chat_node_id, sender_id, content, server_created_time);
               max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
             }
             TeamknPreferences.set_last_syn_chat_node_created_time(max_last_syn_chat_node_created_time);

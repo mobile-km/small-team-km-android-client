@@ -43,7 +43,7 @@ public class UserDBHelper extends BaseModelDBHelper {
     create(user_id,user_name,user_avatar,server_created_time,server_updated_time);
   }
   
-  public static int find_client_user_id(int server_user_id){
+  public static int get_client_user_id(int server_user_id){
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_USERS, 
         new String[]{Constants.KEY_ID},

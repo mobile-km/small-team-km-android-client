@@ -2,7 +2,7 @@ package com.teamkn.model.base;
 
 public class Constants {
     public static final String DATABASE_NAME = "teamkn";
-    public static final int DATABASE_VERSION = 26;
+    public static final int DATABASE_VERSION = 27;
     public static final String KEY_ID = "_id";
 
     // 账号 数据表的常量
@@ -37,6 +37,7 @@ public class Constants {
 
     // chat 数据表的常量
     public static final String TABLE_CHATS = "chats";
+    public static final String TABLE_CHATS__UUID = "uuid";
     public static final String TABLE_CHATS__SERVER_CHAT_ID = "server_chat_id";
     public static final String TABLE_CHATS__SERVER_CREATED_TIME = "server_created_time";
     public static final String TABLE_CHATS__SERVER_UPDATED_TIME = "server_updated_time";
@@ -48,6 +49,7 @@ public class Constants {
     
     // chat_nodes 数据表的常量
     public static final String TABLE_CHAT_NODES = "chat_nodes";
+    public static final String TABLE_CHAT_NODES__UUID = "uuid";
     public static final String TABLE_CHAT_NODES__CLIENT_CHAT_ID = "client_chat_id";
     public static final String TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID = "server_chat_node_id";
     public static final String TABLE_CHAT_NODES__CONTENT = "content";

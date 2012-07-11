@@ -42,6 +42,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     private static final String create_chats = "create table " +
             Constants.TABLE_CHATS + " (" +
             Constants.KEY_ID + " integer primary key, " +
+            Constants.TABLE_CHATS__UUID + " text not null, " +
             Constants.TABLE_CHATS__SERVER_CHAT_ID + " integer, " +
             Constants.TABLE_CHATS__SERVER_CREATED_TIME + " long, " +
             Constants.TABLE_CHATS__SERVER_UPDATED_TIME + " long);";
@@ -55,6 +56,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     private static final String create_chat_nodes = "create table " +
             Constants.TABLE_CHAT_NODES + " (" +
             Constants.KEY_ID + " integer primary key, " +
+            Constants.TABLE_CHAT_NODES__UUID + " text not null, " +
             Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID + " integer not null, " +
             Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " integer, " +
             Constants.TABLE_CHAT_NODES__CONTENT + " text, " +

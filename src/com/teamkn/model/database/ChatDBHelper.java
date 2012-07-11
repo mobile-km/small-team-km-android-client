@@ -2,6 +2,7 @@ package com.teamkn.model.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -17,27 +18,31 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class ChatDBHelper extends BaseModelDBHelper {
-  public static int create(List<Integer> server_user_id_list){
-    int new_chat_id = 0;
+  public static Chat create(List<Integer> server_user_id_list){
     copy_user_info_from_contacts_to_users(server_user_id_list);
+    
+    String uuid = UUID.randomUUID().toString();
+    int new_chat_id = 0;
     
     AccountUser current_user = AccountManager.current_user();
     int current_user_id = current_user.user_id;
-    int current_user_client_id = UserDBHelper.find_client_user_id(current_user_id);
+    int current_user_client_id = UserDBHelper.get_client_user_id(current_user_id);
     
     ArrayList<Integer> client_user_id_list = new ArrayList<Integer>();
     client_user_id_list.add(current_user_client_id);
     for(int server_user_id : server_user_id_list){
-      int client_user_id = UserDBHelper.find_client_user_id(server_user_id);
+      int client_user_id = UserDBHelper.get_client_user_id(server_user_id);
       client_user_id_list.add(client_user_id);
     }
     
     SQLiteDatabase db = get_write_db();
     db.beginTransaction();
+    
     try {
       //创建 chats
       ContentValues v = new ContentValues();
-      v.put(Constants.TABLE_CHATS__SERVER_CREATED_TIME,0);
+      
+      v.put(Constants.TABLE_CHATS__UUID,uuid);
       long row_id = db.insert(Constants.TABLE_CHATS, null, v);
       if(row_id == -1){throw new SQLException();}
       Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID +") from " + Constants.TABLE_CHATS + ";",null);
@@ -59,7 +64,7 @@ public class ChatDBHelper extends BaseModelDBHelper {
       db.endTransaction();
       db.close();
     }
-    return new_chat_id;
+    return find(new_chat_id);
   }
   
   // 现在联系人模块把联系人信息存在了 contacts 表中了
@@ -82,16 +87,6 @@ public class ChatDBHelper extends BaseModelDBHelper {
       }
     }
     
-  }
-  
-  public static int get_max_id(){
-    SQLiteDatabase db = get_read_db();
-    Cursor cursor = db.rawQuery("select max(" + Constants.KEY_ID + ") from " + Constants.TABLE_CHATS + ";", null);
-    cursor.moveToFirst();
-    int max_id = cursor.getInt(0);
-    cursor.close();
-    db.close();
-    return max_id;
   }
   
   public static List<Chat> find_unsyn_list(){
@@ -146,24 +141,6 @@ public class ChatDBHelper extends BaseModelDBHelper {
     return user_list;
   }
   
-  private static Chat build_by_cursor(Cursor cursor) {
-    int client_chat_id = cursor.getInt(0);
-    int server_chat_id = cursor.getInt(1);
-    long server_created_time = cursor.getLong(2);
-    long server_updated_time = cursor.getLong(3);
-    return new Chat(client_chat_id, server_chat_id, server_created_time,
-        server_updated_time);
-  }
-
-  private static String[] get_columns() {
-    return new String[]{
-      Constants.KEY_ID,
-      Constants.TABLE_CHATS__SERVER_CHAT_ID,
-      Constants.TABLE_CHATS__SERVER_CREATED_TIME,
-      Constants.TABLE_CHATS__SERVER_UPDATED_TIME
-    };
-  }
-
   public static Chat find(int client_chat_id){
     SQLiteDatabase db = get_read_db();
     Chat chat;
@@ -184,7 +161,7 @@ public class ChatDBHelper extends BaseModelDBHelper {
     return chat;
   }
 
-  public static void after_server_create(int client_chat_id,
+  public static void after_server_create(String uuid,
       int server_chat_id, long server_created_time, long server_updated_time) {
     SQLiteDatabase db = get_read_db();
     
@@ -194,34 +171,23 @@ public class ChatDBHelper extends BaseModelDBHelper {
     values.put(Constants.TABLE_CHATS__SERVER_UPDATED_TIME, server_updated_time);
     
     db.update(Constants.TABLE_CHATS, values,
-        Constants.KEY_ID + " = ?", new String[]{client_chat_id+""});
+        Constants.TABLE_CHATS__UUID + " = ?", new String[]{uuid+""});
     
     db.close();
   }
 
-  public static boolean is_exists(int server_chat_id) {
-    SQLiteDatabase db = get_read_db();
-    
-    Cursor cursor = db.query(Constants.TABLE_CHATS, get_columns(),
-        Constants.TABLE_CHATS__SERVER_CHAT_ID + " = ?",
-        new String[]{server_chat_id+""}, null, null, null);
-    
-    boolean has_value = cursor.moveToFirst();
-    cursor.close();
-    db.close();
-    
-    return has_value;
-  }
-
-  public static void pull_from_server(int server_chat_id,
+  public static void pull_from_server(String uuid, int server_chat_id,
       ArrayList<Integer> client_user_id_list, long server_created_time,
       long server_updated_time) {
+    
+    if(is_exists(uuid)){return;}
     
     SQLiteDatabase db = get_write_db();
     db.beginTransaction();
     try {
       //创建 chats
       ContentValues v = new ContentValues();
+      v.put(Constants.TABLE_CHATS__UUID,uuid);
       v.put(Constants.TABLE_CHATS__SERVER_CHAT_ID,server_chat_id);
       v.put(Constants.TABLE_CHATS__SERVER_CREATED_TIME,server_created_time);
       v.put(Constants.TABLE_CHATS__SERVER_UPDATED_TIME,server_updated_time);
@@ -248,7 +214,7 @@ public class ChatDBHelper extends BaseModelDBHelper {
     }
   }
 
-  public static int find_client_chat_id(int server_chat_id) {
+  public static int get_client_chat_id(int server_chat_id) {
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_CHATS, 
         new String[]{Constants.KEY_ID},
@@ -259,6 +225,40 @@ public class ChatDBHelper extends BaseModelDBHelper {
     int id = cursor.getInt(0);
     db.close();
     return id;
+  }
+  
+  private static String[] get_columns() {
+    return new String[]{
+      Constants.KEY_ID,
+      Constants.TABLE_CHATS__UUID,
+      Constants.TABLE_CHATS__SERVER_CHAT_ID,
+      Constants.TABLE_CHATS__SERVER_CREATED_TIME,
+      Constants.TABLE_CHATS__SERVER_UPDATED_TIME
+    };
+  }
+  
+  private static boolean is_exists(String uuid) {
+    SQLiteDatabase db = get_read_db();
+    
+    Cursor cursor = db.query(Constants.TABLE_CHATS, get_columns(),
+        Constants.TABLE_CHATS__UUID + " = ?",
+        new String[]{uuid}, null, null, null);
+    
+    boolean has_value = cursor.moveToFirst();
+    cursor.close();
+    db.close();
+    
+    return has_value;
+  }
+  
+  private static Chat build_by_cursor(Cursor cursor) {
+    int client_chat_id = cursor.getInt(0);
+    String uuid = cursor.getString(1);
+    int server_chat_id = cursor.getInt(2);
+    long server_created_time = cursor.getLong(3);
+    long server_updated_time = cursor.getLong(4);
+    return new Chat(uuid,client_chat_id, server_chat_id, server_created_time,
+        server_updated_time);
   }
 
 }
