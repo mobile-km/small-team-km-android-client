@@ -53,6 +53,5 @@
     <service android:name=".service.IndexService"></service>
     <service android:name=".service.SynChatService"></service>
     
-    <uses-library android:name="com.google.android.maps"/>  
   </application>
 </manifest>
