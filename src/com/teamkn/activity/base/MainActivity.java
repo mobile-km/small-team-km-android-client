@@ -80,7 +80,7 @@ public class MainActivity extends TeamknBaseActivity {
 		// 注册更新服务
     Intent intent = new Intent(MainActivity.this,SynNoteService.class);
     bindService(intent, conn, Context.BIND_AUTO_CREATE);
-
+       
     // 开始后台索引服务
     IndexService.start(this);
     IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);

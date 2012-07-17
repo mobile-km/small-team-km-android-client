@@ -33,6 +33,17 @@
 		<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
+		    <intent-filter>  
+				<action android:name="android.intent.action.SEND"/>  
+				<category android:name="android.intent.category.DEFAULT"/> 
+				<data android:mimeType="text/plain"/>
+			</intent-filter>
+			<intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <data android:mimeType="image/*"></data>
+            </intent-filter>
+		    	
 		</activity>
 		<activity android:name=".activity.note.SearchActivity"></activity>
     
@@ -48,7 +59,7 @@
     <activity android:name=".activity.chat.ChatActivity"></activity>
     <activity android:name=".activity.chat.ChatListActivity"></activity>
 		
-		<service android:name=".service.SynNoteService"></service>
+	<service android:name=".service.SynNoteService"></service>
     <service android:name=".service.RefreshContactStatusService"></service>
     <service android:name=".service.IndexService"></service>
     <service android:name=".service.SynChatService"></service>

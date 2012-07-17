@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.teamkn.R;
+import com.teamkn.activity.base.LoginActivity;
+import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -23,7 +27,10 @@ public class EditNoteActivity extends TeamknBaseActivity {
     private String kind;
     private String note_uuid;
     private String image_path;
-
+    
+    
+    private  String text;
+    private  Uri uri;
     public class Extra {
         public static final String NOTE_UUID = "note_uuid";
         public static final String NOTE_KIND = "note_kind";
@@ -34,13 +41,41 @@ public class EditNoteActivity extends TeamknBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_note);
-
+        
         Intent intent = getIntent();
+        
         note_uuid = intent.getStringExtra(EditNoteActivity.Extra.NOTE_UUID);
         kind = intent.getStringExtra(EditNoteActivity.Extra.NOTE_KIND);
         image_path = intent.getStringExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH);
-
+        
         init_common();
+        
+        text = intent.getStringExtra(Intent.EXTRA_TEXT);       
+        final Bundle content = intent.getExtras();
+        System.out.println( "content.getParcelable(Intent.EXTRA_STREAM)  " +content.getParcelable(Intent.EXTRA_STREAM) );
+        if ( content.getParcelable(Intent.EXTRA_STREAM) != null ) {
+        	 uri = (Uri)content.getParcelable(Intent.EXTRA_STREAM); 
+        	 image_path = uri.toString();
+        }
+        
+        System.out.println(" getIntent() text = " + text);
+        System.out.println(" getIntent() uri = " + uri);
+        System.out.println(" getIntent() image_path = " + image_path);
+        if(!is_logged_in()){
+        	open_activity(LoginActivity.class);
+            finish();
+        }
+        if(kind==null){
+        	if(text!=null){
+        		kind = NoteDBHelper.Kind.TEXT;
+        	}
+        	if(uri!=null){
+        		kind = NoteDBHelper.Kind.IMAGE;
+        	}        	
+        }
+        
+        
+       
         if (is_text_note()) {
             init_text_note();
         } else if (is_image_note()) {
@@ -60,8 +95,12 @@ public class EditNoteActivity extends TeamknBaseActivity {
         if (note != null) {
             note_content_et.setText(note.content);
         }
+        if(text!=null){
+    		note_content_et.setText(text);
+        }
     }
 
+    
     private void init_image_note() {
         if (is_edit_note()) {
             note_content_et = (EditText) findViewById(R.id.note_content_et);
@@ -72,8 +111,14 @@ public class EditNoteActivity extends TeamknBaseActivity {
             note_image_iv.setVisibility(View.VISIBLE);
 
             try {
-                Bitmap bitmap = BitmapFactory.decodeFile(image_path);
-                note_image_iv.setImageBitmap(bitmap);
+            	if(uri!=null){
+//            		note_image_iv.setImageURI(uri);           		
+            		Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            		note_image_iv.setImageBitmap(bitmap);
+            	}else{
+            		Bitmap bitmap = BitmapFactory.decodeFile(image_path);
+                    note_image_iv.setImageBitmap(bitmap);
+            	}   
             } catch (Exception e) {
                 e.printStackTrace();
                 image_path = null;
