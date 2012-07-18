@@ -23,16 +23,18 @@
         android:padding="5dp"
     >
         <Button
+            android:id="@+id/button_contact_list_linkman"
             android:layout_width="77dp"
             android:layout_height="44dp"
             android:paddingRight="1dp"
-            android:text="@string/placeholder"
+            android:text="@string/contact_list_linkman"
         />
         <Button
-            android:layout_width="77dp"
+            android:id="@+id/button_contact_list_send_invite"
+            android:layout_width="95dp"
             android:layout_height="44dp"
             android:paddingRight="1dp"
-            android:text="@string/placeholder"
+            android:text="@string/contact_list_send_invite"
         />
         <Button
             android:layout_width="77dp"
@@ -48,11 +50,8 @@
             android:onClick="click_to_search_contact_page"
         />
     </LinearLayout>
-    
-    <ListView
-        android:id="@+id/contact_list_lv"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-    >
-    </ListView>
+    <include 
+        layout="@layout/contact_list_linkman" 
+        android:id="@+id/contact_list_linkman"
+    />   
 </LinearLayout>

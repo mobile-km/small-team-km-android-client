@@ -32,9 +32,8 @@ public class ContactListAdapter extends TeamknBaseAdapter<Contact> {
   }
 
   @Override
-  public BaseViewHolder build_view_holder(
-      View view) {
-    ViewHolder view_holder      = new ViewHolder();
+  public BaseViewHolder build_view_holder(View view) {
+    ViewHolder view_holder = new ViewHolder();
     view_holder.contact_user_header_tv = (TextView)view.findViewById(R.id.contact_user_header_tv);
     view_holder.contact_user_avatar_iv = (ImageView)view.findViewById(R.id.contact_user_avatar_iv);
     view_holder.contact_user_name_tv = (TextView)view.findViewById(R.id.contact_user_name_tv);
