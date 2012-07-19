@@ -49,5 +49,14 @@
             android:layout_toLeftOf="@+id/send_chat_node_bn"
             android:layout_alignParentLeft="true"
         />
+        <Button
+            android:id="@+id/chat_node_button_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chat_node_et"
+            android:layout_alignParentLeft="true"
+            android:onClick="click_chat_node_button_album"
+            android:text="发送图片"
+        />
     </RelativeLayout>
 </RelativeLayout>

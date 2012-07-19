@@ -1,8 +1,10 @@
 package com.teamkn.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.base.BaseModel;
 import com.teamkn.model.database.ChatDBHelper;
 
@@ -44,5 +46,11 @@ public class Chat extends BaseModel {
     }
     return server_user_id_list;
   }
-  
+  public static File note_image_file(String uuid) {
+      File dir = new File(FileDirs.TEAMKN_CHATS_DIR, uuid);
+      if (!dir.exists()) {
+          dir.mkdir();
+      }
+      return new File(dir, "image");
+  }
 }

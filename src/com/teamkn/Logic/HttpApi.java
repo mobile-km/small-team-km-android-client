@@ -380,6 +380,29 @@ public class HttpApi {
               }
         }.go();        
       }
+      // 加载提交图片
+      public static void create_image(final String uuid, int server_chat_id, String content , String kind) throws Exception {
+    	  File image = com.teamkn.model.Chat.note_image_file(uuid);
+    	  new TeamknPostRequest<Void>(创建对话,
+              new PostParamText("chat_id",server_chat_id+""),
+              new PostParamText("chat_node[uuid]",uuid),
+              new PostParamFile("chat_node[content]", image.getPath(), "image/jpeg"),
+              new PostParamText("chat_node[kind]",kind)
+              ) {
+                @Override
+                public Void on_success(String response_text) throws Exception {
+                  JSONObject json = new JSONObject(response_text);
+                  int server_chat_node_id = json.getInt("server_chat_node_id");
+                  long server_created_time = json.getLong("server_created_time");
+                  
+                  ChatNodeDBHelper.after_server_create(uuid,server_chat_node_id,server_created_time);
+ 
+                  System.out.println("server_chat_node_id `````````````=  " + server_chat_node_id);
+                  System.out.println("server_created_time `````````````=  " + server_created_time);
+                  return null;
+                }
+          }.go();        
+        }
       
       public static void pull_chat_nodes() throws Exception{
         final long last_syn_chat_node_created_time = TeamknPreferences.last_syn_chat_node_created_time();

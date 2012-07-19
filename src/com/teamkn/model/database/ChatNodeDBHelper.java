@@ -1,16 +1,27 @@
 package com.teamkn.model.database;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.teamkn.model.Chat;
 import com.teamkn.model.ChatNode;
+import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
+import com.teamkn.model.database.NoteDBHelper.Kind;
+import com.teamkn.service.IndexService;
+import com.teamkn.service.IndexService.IndexHandler.action;
 
 public class ChatNodeDBHelper extends BaseModelDBHelper {
   public class Kind {
@@ -97,7 +108,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
   }
 
   public static ChatNode create(int client_chat_id, String content,
-      int current_user_id) {
+      int current_user_id, String kind) {
     int client_user_id = UserDBHelper.get_client_user_id(current_user_id);
     String uuid = UUID.randomUUID().toString();
     
@@ -106,7 +117,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     ContentValues values = new ContentValues();
     values.put(Constants.TABLE_CHAT_NODES__UUID,uuid);
     values.put(Constants.TABLE_CHAT_NODES__CONTENT, content);
-    values.put(Constants.TABLE_CHAT_NODES__KIND,Kind.TEXT);
+    values.put(Constants.TABLE_CHAT_NODES__KIND,kind);
     values.put(Constants.TABLE_CHAT_NODES__CLIENT_USER_ID,client_user_id);
     values.put(Constants.TABLE_CHAT_NODES__CLIENT_CHAT_ID,client_chat_id);
     long row_id = db.insert(Constants.TABLE_CHAT_NODES, null, values);
@@ -114,6 +125,26 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     db.close();
     return find_by_uuid(uuid);
   }
+  //start mi
+  public static ChatNode create_image_chat(int client_chat_id, String origin_image_path,
+	      int current_user_id,String kind) {
+	  ChatNode chatNode = create(client_chat_id,origin_image_path,current_user_id,kind);
+      String uuid = chatNode.uuid;
+      File chat_image_file = Chat.note_image_file(uuid);
+      try {
+          FileUtils.copyFile(new File(origin_image_path), chat_image_file);
+      } catch (IOException e) {
+          e.printStackTrace();
+//          destroy(uuid);
+      }
+	return chatNode;
+  }
+  
+  //end mi
+  
+  
+  
+  
   
   public static ChatNode find_by_uuid(String uuid){
     ChatNode chat_node;

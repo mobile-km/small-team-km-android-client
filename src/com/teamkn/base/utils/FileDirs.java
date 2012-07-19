@@ -22,4 +22,6 @@ public class FileDirs {
     public final static File TEAMKN_NOTES_DIR = get_or_create_dir("/teamkn/notes");
     public final static File TEAMKN_CAPTURE_DIR = get_or_create_dir("/teamkn/capture");
     public final static File TEAMKN_IMAGE_CACHE_DIR = get_or_create_dir("/teamkn/image_cache");
+    
+    public final static File TEAMKN_CHATS_DIR = get_or_create_dir("/teamkn/chats");
 }
