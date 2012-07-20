@@ -58,10 +58,12 @@ public class NoteListActivity extends TeamknBaseActivity {
                                     View           list_item,
                                     int            item_id,
                                     long           position) {
+            	
                 TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
                 String   uuid    = (String)   info_tv.getTag(R.id.tag_note_uuid);
                 String   kind    = (String)   info_tv.getTag(R.id.tag_note_kind);
 
+                
                 Intent   intent  = new Intent(NoteListActivity.this, EditNoteActivity.class);
                 intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
                 intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);

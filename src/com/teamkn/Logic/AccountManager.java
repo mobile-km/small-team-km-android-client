@@ -54,7 +54,6 @@ public class AccountManager {
         int user_id = TeamknPreferences.current_user_id();
         return AccountUserDBHelper.find(user_id);
     }
-
     public static boolean is_logged_in() {
         return !current_user().is_nil();
     }

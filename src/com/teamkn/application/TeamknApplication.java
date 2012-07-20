@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class TeamknApplication extends Application {
+	
     public static Context context;
     public static LayoutInflater mInflater;
     public static String current_show_activity;

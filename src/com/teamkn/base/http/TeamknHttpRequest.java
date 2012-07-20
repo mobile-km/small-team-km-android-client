@@ -30,7 +30,6 @@ public abstract class TeamknHttpRequest<TResult> {
         HttpClientParams.setRedirecting(params, false);
         DefaultHttpClient client = new DefaultHttpClient(params);
         client.setCookieStore(AccountManager.get_cookie_store());
-
         return client;
     }
 
@@ -64,9 +63,7 @@ public abstract class TeamknHttpRequest<TResult> {
     // 此方法为 status_code = 200 时 的处理方法，由用户自己定义
     public abstract TResult on_success(String response_text) throws Exception;
 
-    public void on_authenticate_exception() {/*nothing..*/}
-
-    ;
+    public void on_authenticate_exception() {/*nothing..*/};
 
     protected String build_params_string(NameValuePair... nv_pairs) {
         String params_string = "?";

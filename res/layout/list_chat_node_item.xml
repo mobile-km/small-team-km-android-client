@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
 >
     
     <ImageView
@@ -18,6 +18,7 @@
         android:id="@+id/chat_node_content_tv"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/user_avatar_iv"
         android:visibility="gone"
     />
     <ImageView
@@ -27,5 +28,83 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:visibility="gone"
+        android:layout_toRightOf="@+id/user_avatar_iv"
     />
-</LinearLayout>
+    <ImageButton 
+        android:id="@+id/imagebutton_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="2dp"
+        android:src="@drawable/emotion_icn_smile_extrasmall"
+        android:background="@drawable/moment_emotion_button"
+        android:layout_alignParentRight="true"
+        android:clickable="true" 
+        android:focusable="false"
+    />
+    <LinearLayout 
+	    android:id="@+id/comment_frame_linearLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:visibility="gone"
+	    android:layout_toLeftOf="@+id/imagebutton_comment"
+	    android:layout_alignTop="@+id/imagebutton_comment"
+	    android:background="@drawable/emotion_picker_deluxe"
+    >   
+   
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" 
+            android:paddingTop="10dp"
+            android:paddingLeft="2dp"
+        >
+            <ImageView  
+                android:id="@+id/emotion_icn_smile"
+                android:src="@drawable/emotion_icn_smile"
+                android:layout_width="40dp" 
+                android:layout_height="40dp"
+                android:layout_margin="3dp" 
+            />
+            <ImageView  
+                android:id="@+id/emotion_icn_wink"
+                android:src="@drawable/emotion_icn_wink"
+                android:layout_width="40dp" 
+                android:layout_height="40dp" 
+                android:layout_margin="3dp"
+            />
+            <ImageView  
+                android:id="@+id/emotion_icn_gasp"
+                android:src="@drawable/emotion_icn_gasp"
+                android:layout_width="40dp" 
+                android:layout_height="40dp" 
+                android:layout_margin="3dp"
+            />
+            <ImageView  
+                android:id="@+id/emotion_icn_sad"
+                android:src="@drawable/emotion_icn_sad"
+                android:layout_width="40dp" 
+                android:layout_height="40dp" 
+                android:layout_margin="3dp"
+            />
+            <ImageView  
+                android:id="@+id/emotion_icn_heart"
+                android:src="@drawable/emotion_icn_heart"
+                android:layout_width="40dp" 
+                android:layout_height="40dp" 
+                android:layout_margin="3dp"
+            />
+        </LinearLayout>
+        
+        <TextView  
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="10dip"
+            android:textSize="20dip"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:text="Seen by 1 friend"
+        />
+	</LinearLayout>
+</RelativeLayout>
