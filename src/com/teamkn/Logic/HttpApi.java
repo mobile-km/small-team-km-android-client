@@ -3,6 +3,7 @@ package com.teamkn.Logic;
 import com.teamkn.base.http.*;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Note;
+import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class HttpApi {
 
-    public static final String SITE = "http://192.168.1.28:9527";
+    public static final String SITE = "http://192.168.1.38:9527";
 
     // 各种路径常量
     public static final String 用户登录 = "/login";
@@ -359,7 +360,27 @@ public class HttpApi {
         }.go();
       }
     }
-    
+    public static class Attitudes{
+    	public static void create(final int chat_node_id, int current_user_id, String kind) throws Exception {
+            new TeamknPostRequest<Void>(创建对话,
+                new PostParamText("attitudes[chat_node_id]",chat_node_id+""),
+                new PostParamText("attitudes[current_user_id]",current_user_id+""),
+                new PostParamText("attitudes[kind]",kind)
+                ) {
+                  @Override
+                  public Void on_success(String response_text) throws Exception {
+                	  
+                    JSONObject json = new JSONObject(response_text);
+                    int server_chat_node_id = json.getInt("server_chat_node_id");
+                    long server_created_time = json.getLong("server_created_time");
+                    
+                    AttitudesDBHelper.after_server_create(chat_node_id,server_chat_node_id,server_created_time);
+                   
+                    return null;
+                  }
+            }.go();        
+          }
+    }
     public static class ChatNode{
 
       public static void create(final String uuid, int server_chat_id, String content) throws Exception {

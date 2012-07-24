@@ -72,7 +72,12 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_USERS__USER_AVATAR + " blob, " + 
             Constants.TABLE_USERS__SERVER_CREATED_TIME + " long, " +
             Constants.TABLE_USERS__SERVER_UPDATED_TIME + " long);";
-
+    
+    private static final String create_attitudes = "create table "+
+            Constants.TABLE_ATTITUDES + " ( " + 
+    		Constants.TABLE_ATTITUDES__CHAT_NODE_ID + " integer not null, " + 
+            Constants.TABLE_ATTITUDES__CLIENT_USER_ID + " integer not null, " + 
+    		Constants.TABLE_ATTITUDES__KIND + " text not null );";
 
     public TeamknDBHelper(Context context, String name, CursorFactory factory,
                           int version) {
@@ -81,6 +86,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+    	
         db.execSQL(create_table_account_users);
         db.execSQL(create_table_notes);
         db.execSQL(create_table_contacts);
@@ -89,6 +95,11 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL(create_chat_memberships);
         db.execSQL(create_chat_nodes);
         db.execSQL(create_users);
+        
+        
+        System.out.println("create_attitudes = " + create_attitudes);
+        db.execSQL(create_attitudes);
+        System.out.println(create_attitudes);
     }
 
     @Override
@@ -102,6 +113,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists " + Constants.TABLE_CHAT_NODES);
         db.execSQL("drop table if exists " + Constants.TABLE_USERS);
         
+        db.execSQL("drop table if exists " + Constants.TABLE_ATTITUDES);
         onCreate(db);
     }
 }

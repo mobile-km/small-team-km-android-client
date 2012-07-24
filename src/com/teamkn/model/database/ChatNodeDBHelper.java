@@ -27,7 +27,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
   public class Kind {
     public static final String TEXT = "TEXT";
     public static final String IMAGE = "IMAGE";
-}
+  }
   
   public static List<ChatNode> find_list(int client_chat_id){
     List<ChatNode> chat_node_list = new ArrayList<ChatNode>();

@@ -2,10 +2,9 @@
 <RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
 >
-    
     <ImageView
         android:id="@+id/user_avatar_iv"
         android:layout_margin="2dp"
@@ -13,20 +12,21 @@
         android:layout_height="56dp"
         android:adjustViewBounds="true"
         android:background="@drawable/user_default_avatar_normal"
-    />
+    />   
     <TextView
         android:id="@+id/chat_node_content_tv"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="190dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/user_avatar_iv"
         android:visibility="gone"
     />
     <ImageView
         android:id="@+id/user_content_iv"
         android:layout_margin="2dp"
-        android:layout_marginLeft="10dp"
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:layout_marginLeft="70dp"
         android:visibility="gone"
         android:layout_toRightOf="@+id/user_avatar_iv"
     />
@@ -41,70 +41,25 @@
         android:layout_alignParentRight="true"
         android:clickable="true" 
         android:focusable="false"
-    />
+    /> 
     <LinearLayout 
-	    android:id="@+id/comment_frame_linearLayout"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:visibility="gone"
-	    android:layout_toLeftOf="@+id/imagebutton_comment"
-	    android:layout_alignTop="@+id/imagebutton_comment"
-	    android:background="@drawable/emotion_picker_deluxe"
-    >   
-   
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/subLayout" 
+            android:orientation="vertical" 
+            android:layout_below="@+id/imagebutton_comment" 
+            android:layout_alignParentRight="true"
+            android:background="@drawable/comment_bubble" 
+            android:layout_width="250dp" 
+            android:layout_margin="10dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" 
-            android:paddingTop="10dp"
-            android:paddingLeft="2dp"
-        >
-            <ImageView  
-                android:id="@+id/emotion_icn_smile"
-                android:src="@drawable/emotion_icn_smile"
-                android:layout_width="40dp" 
-                android:layout_height="40dp"
-                android:layout_margin="3dp" 
-            />
-            <ImageView  
-                android:id="@+id/emotion_icn_wink"
-                android:src="@drawable/emotion_icn_wink"
-                android:layout_width="40dp" 
-                android:layout_height="40dp" 
-                android:layout_margin="3dp"
-            />
-            <ImageView  
-                android:id="@+id/emotion_icn_gasp"
-                android:src="@drawable/emotion_icn_gasp"
-                android:layout_width="40dp" 
-                android:layout_height="40dp" 
-                android:layout_margin="3dp"
-            />
-            <ImageView  
-                android:id="@+id/emotion_icn_sad"
-                android:src="@drawable/emotion_icn_sad"
-                android:layout_width="40dp" 
-                android:layout_height="40dp" 
-                android:layout_margin="3dp"
-            />
-            <ImageView  
-                android:id="@+id/emotion_icn_heart"
-                android:src="@drawable/emotion_icn_heart"
-                android:layout_width="40dp" 
-                android:layout_height="40dp" 
-                android:layout_margin="3dp"
-            />
+            android:padding="10dp" 
+            android:visibility="gone"
+     >     
+            <ListView 
+                 android:id="@+id/listview_comment_result"
+                 android:background="#fff"
+                 android:padding="10dp" 
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content">     
+             </ListView>
         </LinearLayout>
-        
-        <TextView  
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:paddingLeft="10dip"
-            android:textSize="20dip"
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content" 
-            android:text="Seen by 1 friend"
-        />
-	</LinearLayout>
 </RelativeLayout>
