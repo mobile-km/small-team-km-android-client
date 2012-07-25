@@ -60,14 +60,14 @@
         />
     </RelativeLayout>
     
-	       <LinearLayout 
+    <LinearLayout 
         android:id="@+id/comment_frame_linearLayout"
         android:layout_width="250dp"
         android:layout_height="200dp"
         android:orientation="vertical"
         android:visibility="gone"
         android:background="@drawable/emotion_picker_deluxe"
-   >   
+     >   
    
         <LinearLayout
             android:layout_width="wrap_content"

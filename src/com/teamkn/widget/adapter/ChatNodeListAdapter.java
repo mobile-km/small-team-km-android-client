@@ -83,8 +83,7 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    
 	    List<Attitudes> attitudes_list = AttitudesDBHelper.find_list(item.id);	
 	    final AttitudesListAdapter attitudes_adapter = new AttitudesListAdapter(activity);
-        System.out.println("attitudes_list.size() =   " + attitudes_list.size() + " : " +  item.id) ;
-	    if(attitudes_list.size()>0){
+        if(attitudes_list.size()>0){
 	    	
 	    	view_holder.subLayout.setVisibility(View.VISIBLE);
 	    	
@@ -92,9 +91,11 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    	view_holder.listview_comment_result.setAdapter(attitudes_adapter);
 	    	// 确定listview的高度
 	    	ListViewUtility.setListViewHeightBasedOnChildren(view_holder.listview_comment_result);
+	    	System.out.println("  test  comment   value " + item.id);
 	    }else{
 	    	attitudes_list.clear();
 	    	view_holder.subLayout.setVisibility(View.GONE);
+	    	System.out.println("  test  comment  no value " + item.id);
 	    }
 	    
 	    final int chat_id = item.id;

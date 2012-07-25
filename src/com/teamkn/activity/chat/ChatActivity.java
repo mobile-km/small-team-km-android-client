@@ -276,19 +276,23 @@ public class ChatActivity extends TeamknBaseActivity {
 				    final Attitudes attitudes =  AttitudesDBHelper.create(chat_node_id,current_user_id,kind);
 				  
 				    System.out.println("attitudes values  " + attitudes.chat_node_id);
-//				    listview_att.post(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//							layout_list.setVisibility(View.VISIBLE);
-//							attitudesListAdapter_chat.add_item(attitudes);
-//						    attitudesListAdapter_chat.notifyDataSetChanged();  
-//						}
-//					});
+				    
+				    listview_att.post(new Runnable() {						
+						@Override
+						public void run() {
+							layout_list.setVisibility(View.VISIBLE);
+							attitudesListAdapter_chat.add_item(attitudes);
+							adapter.notifyDataSetChanged();
+						    attitudesListAdapter_chat.notifyDataSetChanged();
+						    
+						    System.out.println("attitudes ce");
+						}
+					});
 				    
 				    if(BaseUtils.is_wifi_active(ChatActivity.this) && chat.is_syned()){
 				      HttpApi.Attitudes.create(chat_node_id,current_user_id,kind);
 				    }
+				    
 				    return attitudes.chat_node_id;
 				}
 				
@@ -307,7 +311,9 @@ public class ChatActivity extends TeamknBaseActivity {
 	 }
 	 //222
 	 
-     public static boolean showDialog(int[] intXY , int chat_id,ImageButton view,LinearLayout layout,AttitudesListAdapter attitudesListAdapter,ListView listview){
+     public static boolean showDialog(int[] intXY , 
+    		 int chat_id,ImageButton view,LinearLayout layout,
+    		 AttitudesListAdapter attitudesListAdapter,ListView listview){
     	attitudesListAdapter_chat = attitudesListAdapter;
     	chat_node_id = chat_id;
     	layout_list = layout;
