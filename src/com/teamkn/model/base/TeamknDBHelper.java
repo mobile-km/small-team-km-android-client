@@ -77,7 +77,8 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_ATTITUDES + " ( " + 
     		Constants.TABLE_ATTITUDES__CHAT_NODE_ID + " integer not null, " + 
             Constants.TABLE_ATTITUDES__CLIENT_USER_ID + " integer not null, " + 
-    		Constants.TABLE_ATTITUDES__KIND + " text not null );";
+    		Constants.TABLE_ATTITUDES__KIND + " text not null ,"+
+            Constants.TABLE_ATTITUDES_IS_SYNED + "  text);";
 
     public TeamknDBHelper(Context context, String name, CursorFactory factory,
                           int version) {
@@ -95,11 +96,10 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL(create_chat_memberships);
         db.execSQL(create_chat_nodes);
         db.execSQL(create_users);
-        
-        
-        System.out.println("create_attitudes = " + create_attitudes);
+            
         db.execSQL(create_attitudes);
-        System.out.println(create_attitudes);
+        System.out.println("create_attitudes = " + create_attitudes);
+        
     }
 
     @Override

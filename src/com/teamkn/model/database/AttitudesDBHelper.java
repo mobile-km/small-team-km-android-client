@@ -36,7 +36,7 @@ public class AttitudesDBHelper extends BaseModelDBHelper{
         db.close();
         return chat_node_list;
       }
-	public static Attitudes create(int chat_node_id, int current_user_id, String kind) {
+	public static Attitudes create(int chat_node_id, int current_user_id, String kind,String is_syned) {
 		int client_user_id = UserDBHelper.get_client_user_id(current_user_id);
 //		String uuid = UUID.randomUUID().toString();
 		SQLiteDatabase db = get_write_db();
@@ -45,12 +45,48 @@ public class AttitudesDBHelper extends BaseModelDBHelper{
 		values.put(Constants.TABLE_ATTITUDES__CHAT_NODE_ID,chat_node_id);
 		values.put(Constants.TABLE_ATTITUDES__CLIENT_USER_ID, client_user_id);
 		values.put(Constants.TABLE_ATTITUDES__KIND,kind);
-		
-		long row_id = db.insert(Constants.TABLE_ATTITUDES, null, values);
+		values.put(Constants.TABLE_ATTITUDES_IS_SYNED, is_syned);
+		long row_id;
+		Attitudes attitudes  = find_by_chat_node_id_AND_user_id(chat_node_id, client_user_id);
+
+		if(attitudes != null && !attitudes.equals(null) && attitudes.chat_node_id!=0){
+			try {
+				row_id = db.delete(Constants.TABLE_ATTITUDES,
+						 Constants.TABLE_ATTITUDES__CHAT_NODE_ID + " = ? AND " + Constants.TABLE_ATTITUDES__CLIENT_USER_ID + " = ?",
+						 new String[]{chat_node_id+"",client_user_id+""});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		row_id = db.insert(Constants.TABLE_ATTITUDES, null, values);
 		if(row_id == -1){throw new SQLException();};
 		db.close();
 		return find_by_chat_node_id(chat_node_id);
 	}
+	
+	
+	public static Attitudes find_by_chat_node_id_AND_user_id(int chat_node_id,int user_id){
+	    Attitudes attitudes;
+	    SQLiteDatabase db = get_read_db();
+
+	    Cursor cursor = db.query(Constants.TABLE_ATTITUDES, get_columns(), 
+	        Constants.TABLE_ATTITUDES__CHAT_NODE_ID + " = ? AND " + Constants.TABLE_ATTITUDES__CLIENT_USER_ID + " = ?", 
+	        new String[]{chat_node_id+"",user_id+""}, 
+	        null, null, null);
+	    
+	    boolean has_value = cursor.moveToFirst();
+	    if(has_value){
+	    	attitudes = build_by_cursor(cursor);
+	    }else{
+	    	attitudes = Attitudes.ATTITUDES;
+	    }
+	    db.close();
+	    return attitudes;
+    }
+	
+	
+	
 	 public static Attitudes find_by_chat_node_id(int chat_node_id){
 		    Attitudes attitudes;
 		    SQLiteDatabase db = get_read_db();
@@ -74,15 +110,15 @@ public class AttitudesDBHelper extends BaseModelDBHelper{
 		    int chat_node_id = cursor.getInt(0);
 		    int client_user_id = cursor.getInt(1);
 		    String kind = cursor.getString(2); 
-		    System.out.println("i = " + i + "; chat_node_id = " +chat_node_id + " ; client_user_id = " + client_user_id + " ;  kind = " + kind);
-		    i++;
-		    return new Attitudes(chat_node_id, client_user_id, kind);
+		    String is_syed = cursor.getString(3); 
+		    return new Attitudes(chat_node_id, client_user_id, kind,is_syed);
 	 }
 	 private static String[] get_columns(){
 		    return new String[]{
 		        Constants.TABLE_ATTITUDES__CHAT_NODE_ID,
 		        Constants.TABLE_ATTITUDES__CLIENT_USER_ID,
-		        Constants.TABLE_ATTITUDES__KIND
+		        Constants.TABLE_ATTITUDES__KIND,
+		        Constants.TABLE_ATTITUDES_IS_SYNED
 		   };
 	 }
 	 
@@ -116,5 +152,21 @@ public class AttitudesDBHelper extends BaseModelDBHelper{
 		    }  
 		    db.close();
 		    return attitudes;
+	 }
+	 
+	 public static List<Attitudes> find(String is_syned){
+		    List<Attitudes> list = new ArrayList<Attitudes>();
+		    SQLiteDatabase db = get_read_db();
+
+		    Cursor cursor = db.query(Constants.TABLE_ATTITUDES, get_columns(), 
+		        Constants.TABLE_ATTITUDES_IS_SYNED+ " = ? ", 
+		        new String[]{ is_syned }, 
+		        null, null, null);
+		   while (cursor.moveToNext()) {
+			   list.add(build_by_cursor(cursor));
+		    }
+		   cursor.close();
+		    db.close();
+		    return list;
 	 }
 }

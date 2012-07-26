@@ -1,8 +1,12 @@
 package com.teamkn.Logic;
 
+import android.content.Context;
+
 import com.teamkn.base.http.*;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.Note;
+import com.teamkn.model.User;
 import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
@@ -54,6 +58,10 @@ public class HttpApi {
     public static final String 获取对话串          = "/api/pull_chats";
     
     public static final String 获取对话            = "/api/pull_chat_nodes";
+    
+    public static final String 创建对话表情反馈     =  "/api/attitudes/push";
+    
+    public static final String 获取对话表情反馈     =  "/api/attitudes/pull";
 
     // LoginActivity
     // 用户登录请求
@@ -361,25 +369,66 @@ public class HttpApi {
       }
     }
     public static class Attitudes{
-    	public static void create(final int chat_node_id, int current_user_id, String kind) throws Exception {
-            new TeamknPostRequest<Void>(创建对话,
-                new PostParamText("attitudes[chat_node_id]",chat_node_id+""),
-                new PostParamText("attitudes[current_user_id]",current_user_id+""),
-                new PostParamText("attitudes[kind]",kind)
+    	public static void create(final int chat_node_id, final int current_user_id, final String kind,int server_chat_node_id) throws Exception {
+            new TeamknPostRequest<Void>(创建对话表情反馈,
+                new PostParamText("chat_node_id",server_chat_node_id+""),
+                new PostParamText("user_id",current_user_id+""),
+                new PostParamText("kind",kind)
                 ) {
                   @Override
                   public Void on_success(String response_text) throws Exception {
-                	  
-                    JSONObject json = new JSONObject(response_text);
-                    int server_chat_node_id = json.getInt("server_chat_node_id");
-                    long server_created_time = json.getLong("server_created_time");
-                    
-                    AttitudesDBHelper.after_server_create(chat_node_id,server_chat_node_id,server_created_time);
-                   
+                      System.out.println("fu wu qi lian jie cheng gong ````````` ========== 999999 ");
+                	  com.teamkn.model.Attitudes attitudes =  AttitudesDBHelper.create(chat_node_id,current_user_id,kind,"true");
                     return null;
                   }
             }.go();        
-          }
+        }
+    	public static void getcreat(final Context context){
+    		int time = SharedParam.getParam(context);
+    		try {
+				new TeamknGetRequest<Void>(获取对话表情反馈,
+				        new BasicNameValuePair("last_syn_attitudes_updated_time", time+"")){
+				      @Override
+				      public Void on_success(String response_text) throws Exception { 
+				    	int maxTime = 0; 
+				        JSONArray attitudes_array = new JSONArray(response_text);
+				        for (int i = 0; i < attitudes_array.length(); i++) {
+				           JSONObject att = attitudes_array.getJSONObject(i);
+				           int server_updated_time = att.getInt("server_updated_time");
+				           if(maxTime<server_updated_time){
+				        	   maxTime = server_updated_time ;
+				           } 
+				           
+				           int server_chat_node_id = att.getInt("server_chat_node_id");
+				           String kind = att.getString("kind");
+				           User user = null;
+			        	   JSONObject user_json = att.getJSONObject("user");
+			        	   int user_id_s = user_json.getInt("user_id");
+			        	   String user_name = user_json.getString("user_name");
+			        	   byte[] user_avatar_url = (user_json.getString("user_avatar_url").getBytes());
+			        	   long server_created_time = user_json.getLong("server_created_time");
+			        	   long server_updated_time1 = user_json.getLong("server_updated_time");
+			        	   user = new User(0, user_id_s, user_name, user_avatar_url, server_created_time, server_updated_time1);
+			           
+				           
+				           int chat_node_id = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id).id;
+				           int user_id = UserDBHelper.find_by_server_user_id(user.user_id).id;
+				           com.teamkn.model.Attitudes attitudes= AttitudesDBHelper.find_by_chat_node_id_AND_user_id(chat_node_id, user_id);
+				           if(attitudes.kind != kind){
+				        	   AttitudesDBHelper.create(chat_node_id, user.user_id, kind, "true");
+				           }    
+				        }
+				        SharedParam.saveParam(context, maxTime);
+				        return null;
+				        
+				      }
+				    }.go();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
     }
     public static class ChatNode{
 
@@ -418,8 +467,6 @@ public class HttpApi {
                   
                   ChatNodeDBHelper.after_server_create(uuid,server_chat_node_id,server_created_time);
  
-                  System.out.println("server_chat_node_id `````````````=  " + server_chat_node_id);
-                  System.out.println("server_created_time `````````````=  " + server_created_time);
                   return null;
                 }
           }.go();        

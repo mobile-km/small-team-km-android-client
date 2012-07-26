@@ -66,6 +66,28 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
     return chat_node;
   }
   
+  
+  public static ChatNode find_by_server_chat_node_id(int server_chat_node_id){
+	    ChatNode chat_node;
+	    SQLiteDatabase db = get_read_db();
+
+	    Cursor cursor = db.query(Constants.TABLE_CHAT_NODES, get_columns(), 
+	        Constants.TABLE_CHAT_NODES__SERVER_CHAT_NODE_ID + " = ? ", 
+	        new String[]{server_chat_node_id+""}, 
+	        null, null, null);
+	    
+	    boolean has_value = cursor.moveToFirst();
+	    if(has_value){
+	      chat_node = build_by_cursor(cursor);
+	    }else{
+	      chat_node = ChatNode.NIL_CHAT_NODE;
+	    }
+	    
+	    db.close();
+	    return chat_node;
+	  }
+  
+  
   public static boolean is_exists(String uuid){
     SQLiteDatabase db = get_read_db();
 

@@ -29,8 +29,10 @@ import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.IndexTimerTask;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.service.FaceCommentService;
 import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.IndexService;
 import com.teamkn.service.SynChatService;
@@ -85,6 +87,12 @@ public class MainActivity extends TeamknBaseActivity {
     IndexService.start(this);
     IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
 
+	// 注册更新表情反馈服务
+    Intent intent1 = new Intent(MainActivity.this,FaceCommentService.class);
+    startService(intent1);
+    SharedParam.saveParam(this, 0);
+    FaceCommentService.context = this;
+    
     // 设置用户头像和名字
     AccountUser user = current_user();
     byte[] avatar = user.avatar;
@@ -161,6 +169,7 @@ public class MainActivity extends TeamknBaseActivity {
     // 关闭更新对话串的服务
     stopService(new Intent(MainActivity.this,SynChatService.class));
     IndexService.stop();
+    stopService(new Intent(MainActivity.this,FaceCommentService.class));
   }
 	
 	@Override

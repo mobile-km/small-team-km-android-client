@@ -70,7 +70,6 @@ public class Constants {
     public static final String TABLE_ATTITUDES__CHAT_NODE_ID = "chat_node_id";
     public static final String TABLE_ATTITUDES__CLIENT_USER_ID = "client_user_id";
     public static final String TABLE_ATTITUDES__KIND = "kind";
+    public static final String TABLE_ATTITUDES_IS_SYNED = "is_syned";
     
-    public static final String TABLE_ATTITUDES__SERVER_CHAT_NODE_ID = "server_chat_node_id";
-    public static final String TABLE_ATTITUDES__SERVER_CREATED_TIME = "server_created_time";
 }

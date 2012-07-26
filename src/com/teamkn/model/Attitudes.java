@@ -11,6 +11,8 @@ public class Attitudes extends BaseModel{
 	public int client_user_id;
 	public String kind;
 	
+	public String is_syned = "false"; 
+	
 	public Attitudes() {
 		set_nil();
 	}
@@ -20,4 +22,13 @@ public class Attitudes extends BaseModel{
 		this.client_user_id = client_user_id;
 		this.kind = kind;
 	}
+	public Attitudes(int chat_node_id, int client_user_id, String kind,
+			String is_syned) {
+		super();
+		this.chat_node_id = chat_node_id;
+		this.client_user_id = client_user_id;
+		this.kind = kind;
+		this.is_syned = is_syned;
+	}
+	
 }

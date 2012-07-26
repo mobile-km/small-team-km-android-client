@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teamkn.R;
+import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.CompressPhoto;
 import com.teamkn.activity.chat.ChatActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -26,13 +28,14 @@ import com.teamkn.model.Attitudes;
 import com.teamkn.model.Chat;
 import com.teamkn.model.ChatNode;
 import com.teamkn.model.IsShow;
+import com.teamkn.model.User;
 import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper.Kind;
+import com.teamkn.model.database.UserDBHelper;
 
 public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
-		IsShow isShow = new IsShow();
-	    Activity context;
-  public ChatNodeListAdapter(TeamknBaseActivity activity) {	
+  ChatActivity context;
+  public ChatNodeListAdapter(ChatActivity activity) {	
 	    super(activity);
 	    this.context = activity;
   }
@@ -69,7 +72,6 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    }
 	    if(item.kind.equals(Kind.IMAGE)){
 	        String image_file_path = Chat.note_image_file(item.uuid).getPath();
-	        System.out.println("ChatNodeListAdapter ---  image_file_path " + image_file_path);
 	//  Bitmap bitmap = BitmapFactory.decodeFile(image_file_path);
 	        Bitmap bitmap = CompressPhoto.get_thumb_bitmap_form_file(image_file_path);
 	        view_holder.user_content_iv.setVisibility(View.VISIBLE);
@@ -91,20 +93,27 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    	view_holder.listview_comment_result.setAdapter(attitudes_adapter);
 	    	// 确定listview的高度
 	    	ListViewUtility.setListViewHeightBasedOnChildren(view_holder.listview_comment_result);
-	    	System.out.println("  test  comment   value " + item.id);
 	    }else{
 	    	attitudes_list.clear();
 	    	view_holder.subLayout.setVisibility(View.GONE);
-	    	System.out.println("  test  comment  no value " + item.id);
 	    }
 	    
 	    final int chat_id = item.id;
+	    final int server_chat_node_id = item.server_chat_node_id;
+	    
+	    User user = UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id);
+	    Attitudes attitudes = AttitudesDBHelper.find_by_chat_node_id_AND_user_id
+	    		(server_chat_node_id,  user.id);
+	    if(attitudes.kind == AttitudesDBHelper.Kind.HEART){
+	    	view_holder.imagebutton_comment.setImageDrawable(context.getResources().getDrawable(R.drawable.emotion_icn_heart_extrasmall));
+	    }
+	    System.out.println("attitudes.kind  " + attitudes.kind);
 		view_holder.imagebutton_comment.setOnClickListener(new OnClickListener() {		
 			@Override
 			public void onClick(View v) {
 				int[] intXY = new int[2];
 				view_holder.imagebutton_comment.getLocationOnScreen(intXY);
-				ChatActivity.showDialog(intXY,chat_id,view_holder.imagebutton_comment,view_holder.subLayout,attitudes_adapter,view_holder.listview_comment_result);
+				ChatActivity.showDialog(context,intXY,chat_id,server_chat_node_id,view_holder.imagebutton_comment,attitudes_adapter,view_holder.listview_comment_result);
 			}
 		});
         

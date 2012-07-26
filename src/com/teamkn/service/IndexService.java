@@ -15,7 +15,7 @@ public class IndexService extends Service {
     public static IndexHandler handler = new IndexHandler();
 
     public static void start(Activity activity) {
-        intent         = new Intent(activity, IndexService.class);
+        intent = new Intent(activity, IndexService.class);
         start_activity = activity;
         start_activity.startService(intent);
     }
