@@ -25,7 +25,10 @@ public class LoginActivity extends TeamknBaseActivity {
             do_login();
         }
     }
-
+    public void register_button_click(View view){
+    	open_activity(RegisterActivity.class);
+        finish();
+    }
     //获取邮箱，密码字符串。作准备。
     private void prepare_email_and_password() {
         EditText email_et = (EditText) findViewById(R.id.email_et);

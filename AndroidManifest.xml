@@ -29,6 +29,7 @@
 		<activity android:name=".activity.base.AboutActivity"></activity>
 		<activity android:name=".activity.base.TeamknSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 		<activity android:name=".activity.base.AccountManagerActivity"></activity>
+		<activity android:name=".activity.base.RegisterActivity"></activity>
 		
 		<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 		</activity>

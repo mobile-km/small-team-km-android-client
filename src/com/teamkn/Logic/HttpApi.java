@@ -2,6 +2,7 @@ package com.teamkn.Logic;
 
 import android.content.Context;
 
+import com.teamkn.activity.base.RegisterActivity;
 import com.teamkn.base.http.*;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
@@ -31,6 +32,8 @@ public class HttpApi {
     public static final String SITE = "http://192.168.1.38:9527";
 
     // 各种路径常量
+    public static final String 用户注册 = "/signup_submit";
+    
     public static final String 用户登录 = "/login";
 
     public static final String 请求笔记元信息 = "/syn/detail_meta";
@@ -77,6 +80,35 @@ public class HttpApi {
                 AccountManager.login(get_cookies(), json.toString());
                 return true;
             }
+        }.go();
+    }
+    
+    public static Boolean user_register(String email,String name, String password) throws Exception {
+    	System.out.println(email + "  :  " + name + " :  " + password);
+    	return new TeamknPostRequest<Boolean>(
+        		用户注册,
+                new PostParamText("user[email]", email),
+                new PostParamText("user[name]", name),
+                new PostParamText("user[password]", password)
+        ) {
+            @Override
+            public Boolean on_success(String response_text) throws Exception {
+                JSONObject json = new JSONObject(response_text);
+                System.out.println(json);
+                String user_name = json.getString("name");
+                String avatar_url = json.getString("avatar_url");
+                Integer user_id = json.getInt("id");
+            
+                AccountManager.login(get_cookies(), json.toString());
+                
+                return true;
+            }
+            
+            @Override
+            public Boolean on_unprocessable_entity(String responst_text) {
+            	RegisterActivity.questError = responst_text;
+				return false;	
+            };
         }.go();
     }
     

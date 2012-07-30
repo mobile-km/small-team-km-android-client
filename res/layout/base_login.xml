@@ -56,6 +56,12 @@
                 style="@style/login_layout_button"
                 android:onClick="login_button_click"
                 ></Button>
+        <Button
+                android:id="@+id/register_button"
+                android:text="注册新用户"
+                style="@style/login_layout_button"
+                android:onClick="register_button_click"
+                ></Button>
     </LinearLayout>
 </LinearLayout>
 

@@ -55,12 +55,19 @@ public abstract class TeamknHttpRequest<TResult> {
             case HttpStatus.SC_UNAUTHORIZED:
                 on_authenticate_exception();
                 throw new AuthenticateException(); //抛出未登录异常，会被 TeamknRunnable 接到并处理
+            case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+            	return on_unprocessable_entity(responst_text);
             default:
                 throw new ResponseNot200Exception();    //不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
         }
     }
+    
 
-    // 此方法为 status_code = 200 时 的处理方法，由用户自己定义
+    public TResult on_unprocessable_entity(String responst_text) {
+		return null;
+	}
+
+	// 此方法为 status_code = 200 时 的处理方法，由用户自己定义
     public abstract TResult on_success(String response_text) throws Exception;
 
     public void on_authenticate_exception() {/*nothing..*/};

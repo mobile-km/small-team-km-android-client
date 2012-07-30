@@ -236,6 +236,7 @@ public class MainActivity extends TeamknBaseActivity {
 		  case MainActivity.RequestCode.FROM_CAMERA:
 		    Uri uri = data.getData();
 		    String scheme = uri.getScheme();
+		    System.out.println("uri  :  scheme  --  " + uri + " : " + scheme);
 		    String path;
 		    if(scheme.equals("content")){
 		      path = BaseUtils.get_file_path_from_image_uri(data.getData());

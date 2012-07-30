@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 登陆界面 -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/body"
+>    
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/head_bar"
+    >
+        <Button
+            android:id="@+id/headbar_button_setting"
+            android:text="@string/button_go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:onClick="click_headbar_button_back"
+        />
+    </RelativeLayout>    
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="#fff"
+        android:orientation="vertical"
+    >      
+       <EditText
+           android:id="@+id/register_edittext_email"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColorHint="#000"
+           android:hint="Email "
+           android:layout_marginTop="10dp"
+       />
+       <EditText
+           android:id="@+id/register_edittext_name"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColorHint="#000"
+           android:hint="用户名 "
+           android:layout_marginTop="10dp"
+       />
+       <EditText
+           android:id="@+id/register_edittext_password"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColorHint="#000"
+           android:hint="密码 "
+           android:inputType="textPassword"
+           android:layout_marginTop="10dp"
+       />
+      <Button
+           android:id="@+id/register_button"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColor="#000"
+           android:text="创建账号"
+           android:layout_marginTop="10dp"
+           android:onClick="click_register_button"
+       />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/register_linearlayout_error_show"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp"
+    >
+        <TextView
+            android:id="@+id/register_tv_error_show"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="账户创建失败，原因如下 ： "
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_intent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 网络无法连接"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_email_repeat"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 这个邮箱已经注册过了"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_name_repeat"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 已经有这个名称的用户了"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_email_no"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 没有填写邮箱"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_name_no"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 没有填写用户名"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_password_no"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text=". 没有填写密码"
+            android:visibility="gone"
+        />
+    </LinearLayout>
+</LinearLayout>
