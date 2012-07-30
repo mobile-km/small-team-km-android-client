@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff" >
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+    >
+    
+	    <LinearLayout 
+	       android:id="@+id/linearlayout_help_top"
+	       android:orientation="vertical"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content">
+	   </LinearLayout>
+	    
+	   <LinearLayout 
+	       android:orientation="horizontal"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	   >
+	        <LinearLayout 
+		       android:id="@+id/linearlayout_help_left"
+		       android:orientation="vertical"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+	       >
+	       </LinearLayout>
+	       <TextView
+	            android:id="@+id/popupshow_yuan"
+		        android:background="@drawable/yuan"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp" 
+	       />
+	       <TextView
+		        android:background="@drawable/right"
+		        android:layout_width="500dp"
+		        android:layout_height="100dp" 
+	       />
+	   </LinearLayout>
+	    
+	   <TextView
+	       android:background="@drawable/right" 
+	       android:layout_marginTop="0dp"
+	       android:layout_width="fill_parent"
+	       android:layout_height="800dp"
+	   />
+   
+   </LinearLayout>
+   <TextView  
+       android:id="@+id/popupshow_str_top"
+       android:layout_marginTop="120dp"
+       android:gravity="center_horizontal"
+       android:textColor="#fff"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+        android:layout_gravity="top"
+   />
+   <TextView  
+       android:id="@+id/popupshow_str_but"
+       android:layout_marginBottom="120dp"
+       android:gravity="center_horizontal"
+       android:textColor="#fff"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_gravity="bottom"
+   />
+   <ImageView  
+       android:id="@+id/popupshow_image_top"
+       android:src="@drawable/camera_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_gravity="top|right"
+       android:visibility="gone"
+       android:layout_marginTop="50dp"
+       android:layout_marginRight="7dp"
+   />
+   <ImageView  
+       android:id="@+id/popupshow_image_but"
+       android:src="@drawable/camera_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_gravity="bottom|right"
+       android:visibility="gone"
+        android:layout_margin="7dp"
+   />
+</FrameLayout>
