@@ -29,22 +29,32 @@ public class RegisterActivity extends TeamknBaseActivity{
 		//判断 网络，填写的是否有空值
 		if(judgeRegister()){
 			clearTV();
-			try {
-				questError = null;
-				System.out.println(HttpApi.user_register(email, name, password));
-				if(questError==null){
-					open_activity(MainActivity.class);
-	                finish();
-				}else{
-					System.out.println("ccccccccccccccccccc  "  + questError);
-					tv_show.setVisibility(View.VISIBLE);
-					tv_email_repead.setVisibility(View.VISIBLE);
-					tv_email_repead.setText(questError);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			questVoid();	
 		}
+	}
+	public void questVoid(){
+		 new TeamknAsyncTask<Void, Void, Integer>(RegisterActivity.this,"信息已提交") {
+				@Override
+				public Integer do_in_background(Void... params) throws Exception {
+					questError = null;
+					if(BaseUtils.is_wifi_active(RegisterActivity.this)){
+				    	HttpApi.user_register(email, name, password);
+				    }
+				    return 1;
+				}
+				@Override
+				public void on_success(Integer client_chat_node_id) {
+					
+					if(questError==null){
+						open_activity(MainActivity.class);
+		                finish();
+					}else{
+						tv_show.setVisibility(View.VISIBLE);
+						tv_email_repead.setVisibility(View.VISIBLE);
+						tv_email_repead.setText(questError);
+					}
+			    }
+	   }.execute();
 	}
     public void clearTV(){
     	tv_show.setVisibility(View.GONE);
@@ -56,8 +66,7 @@ public class RegisterActivity extends TeamknBaseActivity{
     	tv_name_repead.setVisibility(View.GONE);
     }
 	public boolean judgeRegister(){
-		boolean judge = true;
-		
+		 boolean judge = true;
 		 email = et_email.getText().toString();
 		 name = et_name.getText().toString();
 	     password = et_password.getText().toString();

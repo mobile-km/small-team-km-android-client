@@ -66,9 +66,10 @@
     <LinearLayout 
         android:id="@+id/register_linearlayout_error_show"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:orientation="vertical"
-        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:background="#fff"
     >
         <TextView
             android:id="@+id/register_tv_error_show"
