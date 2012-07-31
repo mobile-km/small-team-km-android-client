@@ -3,6 +3,7 @@ package com.teamkn.activity.base;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
@@ -20,7 +21,8 @@ import com.teamkn.model.database.ChatNodeDBHelper.Kind;
 public class RegisterActivity extends TeamknBaseActivity{
 	public static String questError = null;
 	private EditText et_email,et_name,et_password;
-	private TextView tv_show,tv_intent_no,tv_email_repead,tv_name_repead,tv_email_no,tv_name_no,tv_password_no;
+	private TextView tv_intent_no,tv_email_repead,tv_name_repead,tv_email_no,tv_name_no,tv_password_no;
+	private LinearLayout ll_show;
 	String email,name,password;
 	public void click_headbar_button_back(View view){
 		restart_to_login();
@@ -49,7 +51,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 						open_activity(MainActivity.class);
 		                finish();
 					}else{
-						tv_show.setVisibility(View.VISIBLE);
+						ll_show.setVisibility(View.VISIBLE);
 						tv_email_repead.setVisibility(View.VISIBLE);
 						tv_email_repead.setText(questError);
 					}
@@ -57,7 +59,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 	   }.execute();
 	}
     public void clearTV(){
-    	tv_show.setVisibility(View.GONE);
+    	ll_show.setVisibility(View.GONE);
     	tv_intent_no.setVisibility(View.GONE);
     	tv_email_no.setVisibility(View.GONE);
     	tv_name_no.setVisibility(View.GONE);
@@ -89,7 +91,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 			judge = false;
 		}
 		if(!judge){
-			tv_show.setVisibility(View.VISIBLE);
+			ll_show.setVisibility(View.VISIBLE);
 		}
 		return judge;
 	}
@@ -104,7 +106,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 		et_name = (EditText)findViewById(R.id.register_edittext_name);
 		et_password = (EditText)findViewById(R.id.register_edittext_password);
 		
-		tv_show = (TextView)findViewById(R.id.register_tv_error_show);
+		ll_show = (LinearLayout)findViewById(R.id.register_tv_error_show);
 		tv_email_repead = (TextView)findViewById(R.id.register_tv_error_show_email_repeat);
 		tv_name_repead = (TextView)findViewById(R.id.register_tv_error_show_name_repeat);
 		tv_email_no = (TextView)findViewById(R.id.register_tv_error_show_email_no);
