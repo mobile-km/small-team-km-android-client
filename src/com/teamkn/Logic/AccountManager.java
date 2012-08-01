@@ -21,7 +21,7 @@ public class AccountManager {
             throw new AuthenticateException();
         }
     }
-
+    
     public static void switch_account(AccountUser account_user) {
         TeamknPreferences.set_current_user_id(account_user.user_id);
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/body"
+        android:background="#000"
+>
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+    >
+        <Button
+                style="@style/head_bar_button_go_back"
+                android:text="取消"
+        />
+        <TextView
+                style="@style/head_bar_text_center"
+                android:text="上传头像"
+        />
+        <Button
+                android:text="使用"
+                style="@style/head_bar_button_right"
+                android:onClick="click_set_avatar_update"
+        />
+    </RelativeLayout>
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+    >
+		  <ImageView
+		       android:id="@+id/iv_show_avatar"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content"
+		   />
+    </RelativeLayout>
+</LinearLayout>

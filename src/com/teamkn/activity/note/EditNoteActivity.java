@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import com.teamkn.R;
 import com.teamkn.activity.base.LoginActivity;
-import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -118,6 +117,8 @@ public class EditNoteActivity extends TeamknBaseActivity {
             	}else{
             		Bitmap bitmap = BitmapFactory.decodeFile(image_path);
                     note_image_iv.setImageBitmap(bitmap);
+                    
+                    System.out.println("image_path_editnoteactivity  = " + image_path);
             	}   
             } catch (Exception e) {
                 e.printStackTrace();

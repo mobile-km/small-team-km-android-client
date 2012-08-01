@@ -25,6 +25,7 @@ import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.note.SearchActivity;
+import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.IndexTimerTask;
@@ -123,9 +124,9 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	
 	public void click_from_album(View view){
-	  Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
-    intent.setType("image/*");
-    startActivityForResult(intent,MainActivity.RequestCode.FROM_ALBUM);
+		 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
+	     intent.setType("image/*");
+	     startActivityForResult(intent,MainActivity.RequestCode.FROM_ALBUM);
 	}
 	
 	public void click_from_camera(View view){
@@ -157,6 +158,10 @@ public class MainActivity extends TeamknBaseActivity {
 	
 	public void click_headbar_button_contacts(View view){
 	  open_activity(ContactsActivity.class);
+	}
+	
+	public void click_update_user_msg(View view){
+		open_activity(UserMsgActivity.class);
 	}
 	
 	@Override

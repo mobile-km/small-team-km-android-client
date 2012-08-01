@@ -20,10 +20,10 @@ import com.teamkn.model.database.ChatNodeDBHelper.Kind;
 
 public class RegisterActivity extends TeamknBaseActivity{
 	public static String questError = null;
-	private EditText et_email,et_name,et_password;
-	private TextView tv_intent_no,tv_email_repead,tv_name_repead,tv_email_no,tv_name_no,tv_password_no;
+	private EditText et_email,et_name,et_password,et_affirm_password;
+	private TextView tv_intent_no,tv_email_repead,tv_affirm_password_no,tv_email_no,tv_name_no,tv_password_no;
 	private LinearLayout ll_show;
-	String email,name,password;
+	String email,name,password,affirm_password;
 	public void click_headbar_button_back(View view){
 		restart_to_login();
 	}
@@ -40,7 +40,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 				public Integer do_in_background(Void... params) throws Exception {
 					questError = null;
 					if(BaseUtils.is_wifi_active(RegisterActivity.this)){
-				    	HttpApi.user_register(email, name, password);
+				    	HttpApi.user_register(email, name, password,affirm_password);
 				    }
 				    return 1;
 				}
@@ -65,13 +65,14 @@ public class RegisterActivity extends TeamknBaseActivity{
     	tv_name_no.setVisibility(View.GONE);
     	tv_password_no.setVisibility(View.GONE);
     	tv_email_repead.setVisibility(View.GONE);
-    	tv_name_repead.setVisibility(View.GONE);
+    	tv_affirm_password_no.setVisibility(View.GONE);
     }
 	public boolean judgeRegister(){
 		 boolean judge = true;
 		 email = et_email.getText().toString();
 		 name = et_name.getText().toString();
 	     password = et_password.getText().toString();
+	     affirm_password = et_affirm_password.getText().toString();
 		
 		if( ! BaseUtils.is_wifi_active(RegisterActivity.this)){
 			tv_intent_no.setVisibility(View.VISIBLE);
@@ -90,6 +91,10 @@ public class RegisterActivity extends TeamknBaseActivity{
 			tv_password_no.setVisibility(View.VISIBLE);
 			judge = false;
 		}
+		if(BaseUtils.is_str_blank(affirm_password)){
+			tv_affirm_password_no.setVisibility(View.VISIBLE);
+			judge = false;
+		}
 		if(!judge){
 			ll_show.setVisibility(View.VISIBLE);
 		}
@@ -105,10 +110,11 @@ public class RegisterActivity extends TeamknBaseActivity{
 		et_email = (EditText)findViewById(R.id.register_edittext_email);
 		et_name = (EditText)findViewById(R.id.register_edittext_name);
 		et_password = (EditText)findViewById(R.id.register_edittext_password);
+		et_affirm_password = (EditText)findViewById(R.id.register_edittext_affirm_password);
 		
 		ll_show = (LinearLayout)findViewById(R.id.register_tv_error_show);
 		tv_email_repead = (TextView)findViewById(R.id.register_tv_error_show_email_repeat);
-		tv_name_repead = (TextView)findViewById(R.id.register_tv_error_show_name_repeat);
+		tv_affirm_password_no = (TextView)findViewById(R.id.register_tv_error_show_affirm_password_no);
 		tv_email_no = (TextView)findViewById(R.id.register_tv_error_show_email_no);
 		tv_name_no = (TextView)findViewById(R.id.register_tv_error_show_name_no);
 		tv_password_no = (TextView)findViewById(R.id.register_tv_error_show_password_no);

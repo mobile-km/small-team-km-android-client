@@ -59,7 +59,12 @@
     <activity android:name=".activity.chat.SelectChatMemberActivity"></activity>
     <activity android:name=".activity.chat.ChatActivity"></activity>
     <activity android:name=".activity.chat.ChatListActivity"></activity>
-		
+	
+	<!-- 用户信息 -->
+    <activity android:name=".activity.usermsg.UserMsgActivity"></activity>
+    <activity android:name=".activity.usermsg.UserMsgAvatarSetActivity"></activity>
+    <activity android:name=".activity.usermsg.UserMsgNameSetActivity"></activity>
+    	
 	<service android:name=".service.SynNoteService"></service>
     <service android:name=".service.RefreshContactStatusService"></service>
     <service android:name=".service.IndexService"></service>

@@ -126,7 +126,7 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
 
     final public static AccountUser find(int user_id) {
         SQLiteDatabase db = get_read_db();
-
+     
         try {
             Cursor cursor = db.query(
                     Constants.TABLE_ACCOUNT_USERS, new String[]{
@@ -158,5 +158,4 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             db.close();
         }
     }
-
 }

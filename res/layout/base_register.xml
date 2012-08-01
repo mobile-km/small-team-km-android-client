@@ -22,7 +22,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="8dp"
         android:orientation="vertical"
     >      
        <EditText
@@ -31,7 +31,7 @@
            android:layout_height="wrap_content"
            android:textColorHint="#000"
            android:hint="Email "
-           android:layout_marginTop="10dp"
+           android:layout_marginTop="0dp"
            android:imeOptions="actionDone"
        />
        <EditText
@@ -40,7 +40,7 @@
            android:layout_height="wrap_content"
            android:textColorHint="#000"
            android:hint="用户名 "
-           android:layout_marginTop="10dp"
+           android:layout_marginTop="8dp"
            android:imeOptions="actionDone"
        />
        <EditText
@@ -50,7 +50,17 @@
            android:textColorHint="#000"
            android:hint="密码 "
            android:inputType="textPassword"
-           android:layout_marginTop="10dp"
+           android:layout_marginTop="8dp"
+           android:imeOptions="actionDone"
+       />
+       <EditText
+           android:id="@+id/register_edittext_affirm_password"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColorHint="#000"
+           android:hint="确认密码 "
+           android:inputType="textPassword"
+           android:layout_marginTop="8dp"
            android:imeOptions="actionDone"
        />
       <Button
@@ -67,7 +77,7 @@
         android:layout_height="400dp"
         android:orientation="vertical"
         android:background="@drawable/camera_library_background_pressed"
-        android:padding="15dp"
+        android:padding="12dp"
         android:visibility="gone"
     >
         <TextView
@@ -92,14 +102,7 @@
             android:text=". 这个邮箱已经注册过了"
             android:visibility="gone"
         />
-        <TextView
-            android:id="@+id/register_tv_error_show_name_repeat"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:text=". 已经有这个名称的用户了"
-            android:visibility="gone"
-        />
+        
         <TextView
             android:id="@+id/register_tv_error_show_email_no"
             android:layout_width="fill_parent"
@@ -122,6 +125,14 @@
             android:layout_height="wrap_content"
             android:textColor="#FFF"
             android:text=". 没有填写密码"
+            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/register_tv_error_show_affirm_password_no"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text=". 没有填写确认密码"
             android:visibility="gone"
         />
     </LinearLayout>

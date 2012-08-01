@@ -3,9 +3,12 @@ package com.teamkn.Logic;
 import android.content.Context;
 
 import com.teamkn.activity.base.RegisterActivity;
+import com.teamkn.activity.usermsg.UserMsgAvatarSetActivity;
+import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
 import com.teamkn.base.http.*;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
+import com.teamkn.model.AccountUser;
 import com.teamkn.model.Note;
 import com.teamkn.model.User;
 import com.teamkn.model.database.AttitudesDBHelper;
@@ -35,6 +38,10 @@ public class HttpApi {
     public static final String 用户注册 = "/signup_submit";
     
     public static final String 用户登录 = "/login";
+    
+    public static final String 设置用户名 = "/api/account/change_name" ; 
+    
+    public static final String 设置用户头像 = "/api/account/change_avatar" ; 
 
     public static final String 请求笔记元信息 = "/syn/detail_meta";
 
@@ -83,13 +90,14 @@ public class HttpApi {
         }.go();
     }
     
-    public static Boolean user_register(String email,String name, String password) throws Exception {
-    	System.out.println(email + "  :  " + name + " :  " + password);
+    public static Boolean user_register(String email,String name, String password,String affirm_password) throws Exception {
+    	System.out.println(email + "  :  " + name + " :  " + password + "  :  " + affirm_password);
     	return new TeamknPostRequest<Boolean>(
         		用户注册,
                 new PostParamText("user[email]", email),
                 new PostParamText("user[name]", name),
-                new PostParamText("user[password]", password)
+                new PostParamText("user[password]", password),
+                new PostParamText("user[password_confirmation]", affirm_password)
         ) {
             @Override
             public Boolean on_success(String response_text) throws Exception {
@@ -111,6 +119,53 @@ public class HttpApi {
             };
         }.go();
     }
+    
+    public static Boolean user_set_name(String uname) throws Exception {
+    	return new TeamknPostRequest<Boolean>(
+        		设置用户名,
+                new PostParamText("name", uname)
+        ) {
+            @Override
+            public Boolean on_success(String response_text) throws Exception {
+            	
+                JSONObject json = new JSONObject(response_text);
+                System.out.println(json);
+                AccountManager.login(get_cookies(), json.toString());
+                return true;
+            }
+            
+            @Override
+            public Boolean on_unprocessable_entity(String responst_text) {
+            	UserMsgNameSetActivity.requestError = responst_text;
+				return false;	
+            };
+        }.go();
+    }
+    
+    public static Boolean user_set_avatar(String avatar) throws Exception {
+    	File image = new File(avatar);
+    	return new TeamknPostRequest<Boolean>(
+        		设置用户头像,
+                new PostParamFile("avatar", image.getPath(),"image/jpeg")
+        ) {
+//    		new PostParamFile("chat_node[content]", image.getPath(), "image/jpeg"),
+            @Override
+            public Boolean on_success(String response_text) throws Exception {
+            	
+                JSONObject json = new JSONObject(response_text);
+                System.out.println(json);
+                AccountManager.login(get_cookies(), json.toString());
+                return true;
+            }
+            
+            @Override
+            public Boolean on_unprocessable_entity(String responst_text) {
+            	UserMsgAvatarSetActivity.requestError = responst_text;
+				return false;	
+            };
+        }.go();
+    }
+    
     
     public static InputStream download_image(String image_url) {
       try {
