@@ -11,13 +11,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.R;
 import com.teamkn.activity.chat.ChatListActivity;
@@ -32,6 +40,7 @@ import com.teamkn.base.task.IndexTimerTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.service.FaceCommentService;
 import com.teamkn.service.RefreshContactStatusService;
@@ -39,125 +48,188 @@ import com.teamkn.service.IndexService;
 import com.teamkn.service.SynChatService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
+import com.teamkn.widget.adapter.NoteListAdapter;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends TeamknBaseActivity {
-  public class RequestCode{
-    public final static int NEW_TEXT = 0;
-    public final static int FROM_ALBUM = 1;
-    public final static int FROM_CAMERA = 2;
-  }
-	private TextView data_syn_textview;
-	private ProgressBar data_syn_progress_bar;
-	private SynNoteBinder syn_note_binder;
+	
+	public class RequestCode {
+        public final static int EDIT_TEXT = 1;
+    }
+	private ListView note_list;
+	
+	private TextView data_syn_textview;         // 同步更新时间
+	private ProgressBar data_syn_progress_bar;  // 同步更新进度条
+	private ImageView manual_syn_bn;
+	private SynNoteBinder syn_note_binder;      // 同步更新binder 
 	private SynUIBinder syn_ui_binder = new SynUIBinder();
 	
 	private ServiceConnection conn = new ServiceConnection(){
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      System.out.println("ServiceConnection  ServiceConnection");
-      System.out.println("ServiceConnection  ServiceConnection Thread" + Thread.currentThread());
-      syn_note_binder = (SynNoteBinder)service;
-      syn_note_binder.set_syn_ui_binder(syn_ui_binder);
-      syn_note_binder.start();
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      // 当 SynNoteService 因异常而断开连接的时候，这个方法才会被调用
-      System.out.println("ServiceConnection  onServiceDisconnected");
-      syn_note_binder = null;
-    }
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			syn_note_binder = (SynNoteBinder)service;
+			syn_note_binder.set_syn_ui_binder(syn_ui_binder);
+			syn_note_binder.start();
+		}
+		
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+		  // 当 SynNoteService 因异常而断开连接的时候，这个方法才会被调用
+		  System.out.println("ServiceConnection  onServiceDisconnected");
+		  syn_note_binder = null;
+		}
 	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		// load view
 		setContentView(R.layout.base_main);
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
+		manual_syn_bn = (ImageView)findViewById(R.id.manual_syn_bn);
+		note_list = (ListView) findViewById(R.id.note_list);
 		
 		// 注册更新服务
-    Intent intent = new Intent(MainActivity.this,SynNoteService.class);
-    bindService(intent, conn, Context.BIND_AUTO_CREATE);
-       
-    // 开始后台索引服务
-    IndexService.start(this);
-    IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
-
-	// 注册更新表情反馈服务
-    Intent intent1 = new Intent(MainActivity.this,FaceCommentService.class);
-    startService(intent1);
-    SharedParam.saveParam(this, 0);
-    FaceCommentService.context = this;
+		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
+		bindService(intent, conn, Context.BIND_AUTO_CREATE);
+		   
+		// 开始后台索引服务
+		IndexService.start(this);
+		IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
+		
+		// 注册更新表情反馈服务
+		Intent intent1 = new Intent(MainActivity.this,FaceCommentService.class);
+		startService(intent1);
+		SharedParam.saveParam(this, 0);
+		FaceCommentService.context = this;
     
-    // 设置用户头像和名字
-    AccountUser user = current_user();
-    byte[] avatar = user.avatar;
-    String name = current_user().name;
-    RelativeLayout rl = (RelativeLayout)findViewById(R.id.main_user_avatar);
-    if(avatar != null){
-      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(avatar));
-      Drawable drawable = new BitmapDrawable(bitmap);
-      rl.setBackgroundDrawable(drawable);
-    }else{
-      rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
+		// 设置用户头像和名字
+		AccountUser user = current_user();
+		byte[] avatar = user.avatar;
+		String name = current_user().name;
+		RelativeLayout rl = (RelativeLayout)findViewById(R.id.main_user_avatar);
+		if(avatar != null){
+			Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(avatar));
+			Drawable drawable = new BitmapDrawable(bitmap);
+			rl.setBackgroundDrawable(drawable);
+		}else{
+		    rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
+		}
+	    TextView user_name_tv = (TextView)findViewById(R.id.main_user_name);
+	    user_name_tv.setText(name);
+    
+		// 启动刷新联系人状态服务
+		startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+		// 启动更新 对话串的服务
+		startService(new Intent(MainActivity.this,SynChatService.class));
+		
+		//加载node_listview
+		load_list();
+		
+	}
+	//加载node_listview
+	private void load_list() {
+        List<Note> notes = new ArrayList<Note>();
+        try {
+            notes = NoteDBHelper.all(false);
+        } catch (Exception e) {
+            BaseUtils.toast("读取 note 列表失败");
+            e.printStackTrace();
+        }
+        NoteListAdapter note_list_adapter = new NoteListAdapter(this);
+        note_list_adapter.add_items(notes);
+        note_list.setAdapter(note_list_adapter);
+
+        note_list.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> list_view,View list_item,int item_id,long position) {
+            	
+                TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
+                String   uuid    = (String)   info_tv.getTag(R.id.tag_note_uuid);
+                String   kind    = (String)   info_tv.getTag(R.id.tag_note_kind);
+                
+                Intent   intent  = new Intent(MainActivity.this, EditNoteActivity.class);
+                intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
+                intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);
+                
+                if (kind == NoteDBHelper.Kind.IMAGE) {
+                    String image_path = Note.note_image_file(uuid).getPath();
+                    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
+                }
+                startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+            }
+        });
+
+        note_list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
+                menu.add(Menu.NONE, 0, 0, "删除");
+            }
+        });
     }
-    
-    TextView user_name_tv = (TextView)findViewById(R.id.main_user_name);
-    user_name_tv.setText(name);
-    
-    // 启动刷新联系人状态服务
-    startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-    // 启动更新 对话串的服务
-    startService(new Intent(MainActivity.this,SynChatService.class));
-	}
-	
-	public void click_new_text(View view){
-	  Intent intent = new Intent();
-	  intent.setClass(this, EditNoteActivity.class);
-	  intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.TEXT);
-	  startActivityForResult(intent,MainActivity.RequestCode.NEW_TEXT);
-	}
-	
-	public void click_from_album(View view){
-		 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
-	     intent.setType("image/*");
-	     startActivityForResult(intent,MainActivity.RequestCode.FROM_ALBUM);
-	}
-	
-	public void click_from_camera(View view){
-	  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	  startActivityForResult(intent, MainActivity.RequestCode.FROM_CAMERA);
-	}
-	
-	public void click_manual_syn(View view){
-	  if(syn_note_binder != null){
-	    syn_note_binder.manual_syn();
-	  }
-	}
+	//listview的长按事件
+	@Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo;
+        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-	public void click_start_search(View view) {
-		open_activity(SearchActivity.class);
-	}
+        TextView note_info_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_info_tv);
+        String   uuid  = (String) note_info_tv.getTag(R.id.tag_note_uuid);
+        destroy_note_confirm(uuid);
+
+        return super.onContextItemSelected(item);
+    }
+	//listview的长按事件的删除方法
+	protected void destroy_note_confirm(final String uuid) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
+
+        builder.setMessage("确认要删除吗？")
+               .setPositiveButton(R.string.dialog_ok,
+                       new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog,
+                                               int             which) {
+                               NoteDBHelper.destroy(uuid);
+                               // 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
+                               load_list();
+                           }
+                       })
+               .setNegativeButton(R.string.dialog_cancel, null)
+               .show();
+    }
+	// 处理其他activity界面的回调  有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
+    @Override
+    protected void onActivityResult(int  requestCode, int resultCode,Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case MainActivity.RequestCode.EDIT_TEXT:
+                load_list();
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 	
-	public void click_to_chat_list(View view){
-	  open_activity(ChatListActivity.class);
+    
+    
+	//同步
+	public void click_manual_syn(View view){
+		if(syn_note_binder != null){
+		    syn_note_binder.manual_syn();
+		}
 	}
 	
 	public void show_note_list(View view){
-	  open_activity(NoteListActivity.class);
-	}
-	
-	public void click_headbar_button_setting(View view){
-	  open_activity(TeamknSettingActivity.class);
+	    open_activity(NoteListActivity.class);
 	}
 	
 	public void click_headbar_button_contacts(View view){
-	  open_activity(ContactsActivity.class);
+	    open_activity(ContactsActivity.class);
 	}
 	
 	public void click_update_user_msg(View view){
@@ -165,17 +237,17 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	
 	@Override
-  protected void onDestroy() {
-    super.onDestroy();
-    // 解除 和 更新笔记服务的绑定
-    unbindService(conn);
-    // 关闭更新联系人状态服务
-    stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-    // 关闭更新对话串的服务
-    stopService(new Intent(MainActivity.this,SynChatService.class));
-    IndexService.stop();
-    stopService(new Intent(MainActivity.this,FaceCommentService.class));
-  }
+	protected void onDestroy() {
+		super.onDestroy();
+		// 解除 和 更新笔记服务的绑定
+		unbindService(conn);
+		// 关闭更新联系人状态服务
+		stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+		// 关闭更新对话串的服务
+		stopService(new Intent(MainActivity.this,SynChatService.class));
+		IndexService.stop();
+		stopService(new Intent(MainActivity.this,FaceCommentService.class));
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -223,110 +295,73 @@ public class MainActivity extends TeamknBaseActivity {
 		 return super.onKeyDown(keyCode, event);
 	}
 	
-	//处理其他activity界面的回调
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode != Activity.RESULT_OK){
-			return;
-		}
-		switch(requestCode){
-		  case MainActivity.RequestCode.NEW_TEXT:
-		    BaseUtils.toast("创建成功");
-		    break;
-		  case MainActivity.RequestCode.FROM_ALBUM:
-		    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
-		    
-		    start_edit_note_activity_by_image_path(image_path);
-		    break;
-		  case MainActivity.RequestCode.FROM_CAMERA:
-		    Uri uri = data.getData();
-		    String scheme = uri.getScheme();
-		    System.out.println("uri  :  scheme  --  " + uri + " : " + scheme);
-		    String path;
-		    if(scheme.equals("content")){
-		      path = BaseUtils.get_file_path_from_image_uri(data.getData());
-		    }else{
-		      path = uri.getPath();
-		    }
-		    if(new File(path).exists()){
-		      start_edit_note_activity_by_image_path(path);
-		    }
-		    break;
-		}
-		
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	private void start_edit_note_activity_by_image_path(String image_path){
-    Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-    intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.IMAGE);
-    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
-    startActivity(intent);
-	}
-	
 	 public class SynUIBinder{
 	    public void set_max_num(int max_num){
 	      final int num = max_num;
 	      System.out.println("set_max_num   " + max_num);
 	      data_syn_progress_bar.post(new Runnable() {
-          @Override
-          public void run() {
-            data_syn_progress_bar.setMax(num);
-          }
-        });
+	          @Override
+	          public void run() {
+	            data_syn_progress_bar.setMax(num);
+	          }
+          });
 	    }
 	    
 	    public void set_start_syn(){
 	      System.out.println("set_start_syn");
 	      data_syn_textview.post(new Runnable() {
-          @Override
-          public void run() {
-            data_syn_textview.setText(R.string.now_syning);
-            data_syn_progress_bar.setProgress(0);
-            data_syn_progress_bar.setVisibility(View.VISIBLE);
-          }
-        });
+		      @Override
+		      public void run() {
+		        data_syn_textview.setText(R.string.now_syning);
+		        data_syn_progress_bar.setProgress(0);
+		        ///////////////////////////////////////
+		        data_syn_progress_bar.setVisibility(View.VISIBLE);
+		      }
+          });
 	    }
 	    
 	    public void set_progress(int progress){
 	      final int num = progress;
 	      System.out.println("set_progress  " + progress);
 	      data_syn_progress_bar.post(new Runnable() {
-          @Override
-          public void run() {
-            data_syn_progress_bar.setProgress(num);
-            data_syn_progress_bar.setVisibility(View.VISIBLE);
-          }
-        });
+		      @Override
+		      public void run() {
+		        data_syn_progress_bar.setProgress(num);
+		        data_syn_progress_bar.setVisibility(View.VISIBLE);
+		        manual_syn_bn.setVisibility(View.GONE);
+		      }
+          });
 	    }
 	    
 	    public void set_syn_success(){
-	      System.out.println("syn_success");
-	      data_syn_textview.post(new Runnable() {
-          @Override
-          public void run() {
-            String str = BaseUtils.date_string(TeamknPreferences.last_syn_success_client_time()); 
-            data_syn_textview.setText("上次同步成功: " + str);
-            data_syn_progress_bar.setVisibility(View.GONE);
-          }
-        });
-	      
-	      if(TeamknApplication.current_show_activity == null 
-            || !TeamknApplication.current_show_activity.equals("com.teamkn.activity.base.MainActivity")){
-	        // TODO 增加通知提示
-        }
+			System.out.println("syn_success");
+			data_syn_textview.post(new Runnable() {
+				@Override
+				public void run() {
+					String str = BaseUtils.date_string(TeamknPreferences.last_syn_success_client_time()); 
+					data_syn_textview.setText("上次同步成功: " + str);
+					data_syn_progress_bar.setVisibility(View.GONE);
+					manual_syn_bn.setVisibility(View.VISIBLE);
+				}
+			});
+			  
+			if(TeamknApplication.current_show_activity == null 
+			    || !TeamknApplication.current_show_activity.equals("com.teamkn.activity.base.MainActivity")){
+			    // TODO 增加通知提示
+			}
 	    }
-	    
+  
       public void set_syn_fail() {
         System.out.println("syn_fail");
         TeamknPreferences.touch_last_syn_fail_client_time();
         data_syn_textview.post(new Runnable() {
-          @Override
-          public void run() {
-            String str = BaseUtils.date_string(TeamknPreferences.last_syn_fail_client_time()); 
-            data_syn_textview.setText("上次同步失败: " + str);
-            data_syn_progress_bar.setVisibility(View.GONE);
-          }
+			  @Override
+			  public void run() {
+			    String str = BaseUtils.date_string(TeamknPreferences.last_syn_fail_client_time()); 
+			    data_syn_textview.setText("上次同步失败: " + str);
+			    data_syn_progress_bar.setVisibility(View.GONE);
+			    manual_syn_bn.setVisibility(View.VISIBLE);
+			  }
         });
       }
 	  }

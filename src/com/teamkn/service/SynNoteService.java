@@ -21,8 +21,6 @@ public class SynNoteService extends Service {
   
   @Override
   public void onCreate() {
-    System.out.println("SynNoteService class  onCreate");
-    System.out.println("SynNoteService class  onCreate Thread" + Thread.currentThread());
     syn_note_binder = new SynNoteBinder();
     syn_note_thread = new SynNoteHandlerThread();
     syn_note_thread.start();
@@ -32,28 +30,21 @@ public class SynNoteService extends Service {
   
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    System.out.println("SynNoteService class  onStartCommand");
     return super.onStartCommand(intent, flags, startId);
   }
 
   @Override
   public IBinder onBind(Intent intent) {
-    System.out.println("SynNoteService class  onBind");
-    System.out.println("SynNoteService class  onBind Thread" + Thread.currentThread());
     return syn_note_binder;
   }
   
   @Override
   public boolean onUnbind(Intent intent) {
-    System.out.println("SynNoteService class  onUnbind");
-    System.out.println("SynNoteService class  onUnbind Thread" + Thread.currentThread());
     return super.onUnbind(intent);
   }
   
   @Override
   public void onDestroy() {
-    System.out.println("SynNoteService class  onDestroy");
-    System.out.println("SynNoteService class  onDestroy Thread" + Thread.currentThread());
     syn_note_handler.set_cancel_flag();
     syn_note_thread.quit();
     super.onDestroy();
@@ -61,13 +52,10 @@ public class SynNoteService extends Service {
 
   public class SynNoteBinder extends Binder {
     public void set_syn_ui_binder(SynUIBinder syn_ui_binder) {
-      System.out.println("SynNoteBinder set_syn_ui_binder ");
       SynNoteService.this.syn_ui_binder = syn_ui_binder;
     }
 
     public void start() {
-      System.out.println("SynNoteBinder start ");
-      System.out.println("SynNoteBinder start Thread" + Thread.currentThread());
       syn_note_handler.sendEmptyMessage(SynNoteHandler.SYN_MESSAGE);
     }
     

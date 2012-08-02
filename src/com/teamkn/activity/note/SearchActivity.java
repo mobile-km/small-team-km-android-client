@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import com.teamkn.R;
+import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
@@ -131,7 +132,7 @@ public class SearchActivity extends TeamknBaseActivity {
             return;
         }
         switch (requestCode) {
-            case NoteListActivity.RequestCode.EDIT_TEXT:
+            case MainActivity.RequestCode.EDIT_TEXT:
                 do_search_box_search();
                 break;
         }

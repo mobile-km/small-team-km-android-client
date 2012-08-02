@@ -20,14 +20,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -137,11 +134,11 @@ public class UserMsgActivity extends TeamknBaseActivity{
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	private void start_edit_note_activity_by_image_path(String image_path){
-	    Intent intent = new Intent(UserMsgActivity.this, UserMsgAvatarSetActivity.class);
-	    intent.putExtra(UserMsgAvatarSetActivity.RequestCode.IMAGE_PATH, image_path);
-	    startActivity(intent);
-	}
+//	private void start_edit_note_activity_by_image_path(String image_path){
+//	    Intent intent = new Intent(UserMsgActivity.this, UserMsgAvatarSetActivity.class);
+//	    intent.putExtra(UserMsgAvatarSetActivity.RequestCode.IMAGE_PATH, image_path);
+//	    startActivity(intent);
+//	}
 	
 	
 	

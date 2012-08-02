@@ -10,32 +10,18 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/head_bar"
     >
-        <TextView
-            android:textColor="#ffffff"
-            android:textSize="20dp"
+        <ImageView
+            android:src="@drawable/icon"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:paddingLeft="10dp"
-            android:text="@string/headbar_title"
+            android:contentDescription="@string/app_name"
         />
-
-        <Button
-            android:id="@+id/headbar_button_setting"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/headbar_setting"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:onClick="click_headbar_button_setting"
-        />
-
         <Button
             android:id="@+id/headbar_button_contacts"
             android:background="@drawable/headbar_contacts"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_toLeftOf="@+id/headbar_button_setting"
+            android:layout_alignParentRight="true"
             android:onClick="click_headbar_button_contacts"
         />
 
@@ -49,133 +35,69 @@
     >
         <RelativeLayout
             android:id="@+id/main_user_avatar"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:background="#cccccc"
             android:onClick="click_update_user_msg"
         >
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="96dp"
+            android:layout_height="70dp"
             android:layout_toRightOf="@+id/main_user_avatar"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
         >
             <TextView 
-                android:id="@+id/main_user_name"
-                android:text="@string/main_user_name_default"
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:layout_alignParentTop="true"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
+               android:id="@+id/main_user_name"
+               android:text="@string/main_user_name_default"
+               android:layout_width="fill_parent"
+               android:layout_height="30dp"
+               android:layout_alignParentTop="true"
+               android:textSize="20dp"
+               android:gravity="center_vertical"
+               android:layout_marginTop="10dp"
+               android:layout_marginBottom="10dp"
             />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="66dp"
-                android:layout_alignParentBottom="true"
-                android:background="#000" 
-            >
-                <Button
-                    android:id="@+id/new_text"
-                    android:text="@string/new_text"
-                    android:onClick="click_new_text"
-                    android:layout_height="fill_parent"
-                    android:layout_width="52dp"
-                    android:background="#ccc"
-                />
-                <Button
-                    android:id="@+id/from_album"
-                    android:text="@string/from_album"
-                    android:onClick="click_from_album"
-                    android:layout_height="fill_parent"
-                    android:layout_width="52dp"
-                    android:background="#F7F8FA"
-                    android:layout_toRightOf="@+id/new_text"
-                />
-                <Button
-                    android:id="@+id/from_camera"
-                    android:text="@string/from_camera"
-                    android:onClick="click_from_camera"
-                    android:layout_height="fill_parent"
-                    android:layout_width="52dp"
-                    android:background="#ccc"
-                    android:layout_toRightOf="@+id/from_album"
-                />
-                <Button
-                    android:id="@+id/to_chat_list"
-                    android:text="@string/to_chat_list"
-                    android:layout_height="fill_parent"
-                    android:layout_width="52dp"
-                    android:background="#F7F8FA"
-                    android:layout_toRightOf="@+id/from_camera"
-                    android:onClick="click_to_chat_list"
-                />
-            </RelativeLayout>
-
+            <TextView
+	           android:id="@+id/main_data_syn_text"
+	           android:layout_height="20dp"
+	           android:layout_width="fill_parent"
+	           android:textSize="13dp"
+	           android:text="同步更新时间显示在此"
+	           android:layout_below="@+id/main_user_name"
+            />
         </RelativeLayout>
-    </RelativeLayout>
-
-    <!-- 三个长条框 -->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-    >
-        <Button
-            android:id="@+id/start_search"
-            android:text="@string/start_search"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:onClick="click_start_search"
-        />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-    >
-        <Button
+        <ImageView
             android:id="@+id/manual_syn_bn"
-            android:text="@string/manual_syn_bn"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:onClick="click_manual_syn"
-        />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-    >
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="@string/base_main_show_note_list"
-            android:onClick="show_note_list"
-        />
-    </RelativeLayout>
-    
-    <!-- 同步进度条和提示文字 -->
-    <LinearLayout
-        android:id="@+id/base_main_syn_bar"
-        android:layout_width="320dp"
-        android:layout_height="66dp"
-        android:layout_marginBottom="6dp"
-        android:orientation="vertical"
-    >
-        <TextView
-            android:id="@+id/main_data_syn_text"
-            android:layout_height="20dp"
-            android:layout_width="fill_parent"
-            android:gravity="center"
-            android:textSize="13dp"
+            android:src="@drawable/refresh"
+            android:contentDescription="@string/manual_syn_bn"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:onClick="click_manual_syn" 
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
         />
         <ProgressBar
             android:id="@+id/main_data_syn_progress_bar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_height="20dp"
-            android:layout_width="fill_parent"
+            style="@android:style/Widget.ProgressBar.Inverse"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
             android:visibility="gone"
         />
-    </LinearLayout>
+    </RelativeLayout>
+
+    <!-- node_lsit -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    >
+        <ListView
+            android:id="@+id/note_list"
+            style="@style/no_padding_body"
+        />
+   </RelativeLayout>
 </LinearLayout>
