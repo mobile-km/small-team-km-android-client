@@ -142,11 +142,10 @@ public class HttpApi {
         }.go();
     }
     
-    public static Boolean user_set_avatar(String avatar) throws Exception {
-    	File image = new File(avatar);
+    public static Boolean user_set_avatar(File avatar) throws Exception {
     	return new TeamknPostRequest<Boolean>(
         		设置用户头像,
-                new PostParamFile("avatar", image.getPath(),"image/jpeg")
+                new PostParamFile("avatar", avatar.getPath(),"image/jpeg")
         ) {
 //    		new PostParamFile("chat_node[content]", image.getPath(), "image/jpeg"),
             @Override

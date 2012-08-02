@@ -1,6 +1,7 @@
 package com.teamkn.activity.usermsg;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import android.app.Activity;
@@ -10,10 +11,12 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,13 +25,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamkn.R;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.AccountUser;
 
 public class UserMsgActivity extends TeamknBaseActivity{
+	public static String requestError = null;
 	public class RequestCode{
 	    public final static int NEW_TEXT = 0;
 	    public final static int FROM_ALBUM = 1;
@@ -47,8 +54,10 @@ public class UserMsgActivity extends TeamknBaseActivity{
 				Intent intent;
 				switch (which) {
 				case 0:
-					intent = new Intent(Intent.ACTION_GET_CONTENT, null);  
-				    intent.setType("image/*");
+					intent = new Intent(Intent.ACTION_PICK, null);  
+					intent.setDataAndType(  
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,  
+                            "image/*");  
 				    startActivityForResult(intent,UserMsgActivity.RequestCode.FROM_ALBUM);
 					break;
 				case 1:
@@ -95,8 +104,8 @@ public class UserMsgActivity extends TeamknBaseActivity{
 		}
 		switch(requestCode){
 		  case UserMsgActivity.RequestCode.FROM_ALBUM:
-			    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
-			    start_edit_note_activity_by_image_path(image_path);
+			    System.out.println(" userMsgActivity "+ data.getData().getPath());
+			    startPhotoZoom(data.getData());  
 			    break;
 		  case UserMsgActivity.RequestCode.FROM_CAMERA:
 			    Uri uri = data.getData();
@@ -109,9 +118,22 @@ public class UserMsgActivity extends TeamknBaseActivity{
 			      path = uri.getPath();
 			    }
 			    if(new File(path).exists()){
-			      start_edit_note_activity_by_image_path(path);
+			    	startPhotoZoom(uri);
 			    }
 			    break;
+		  case 3:  
+              /**  
+               * 非空判断大家一定要验证，如果不验证的话，  
+               * 在剪裁之后如果发现不满意，要重新裁剪，丢弃  
+               * 当前功能时，会报NullException，小马只  
+               * 在这个地方加下，大家可以根据不同情况在合适的  
+               * 地方做判断处理类似情况  
+               *   
+               */ 
+              if(data != null){  
+                  setPicToView(data);  
+              }  
+              break; 
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -120,4 +142,66 @@ public class UserMsgActivity extends TeamknBaseActivity{
 	    intent.putExtra(UserMsgAvatarSetActivity.RequestCode.IMAGE_PATH, image_path);
 	    startActivity(intent);
 	}
+	
+	
+	
+    /**  
+     * 裁剪图片方法实现  
+     * @param uri  
+     */ 
+    public void startPhotoZoom(Uri uri) {  
+  	  System.out.println(uri.getPath());
+        Intent intent = new Intent("com.android.camera.action.CROP");  
+        intent.setDataAndType(uri, "image/*");  
+        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪  
+        intent.putExtra("crop", "true");  
+        // aspectX aspectY 是宽高的比例  
+        intent.putExtra("aspectX", 1);  
+        intent.putExtra("aspectY", 1);  
+        // outputX outputY 是裁剪图片宽高  
+        intent.putExtra("outputX", 150);  
+        intent.putExtra("outputY", 150);  
+        intent.putExtra("return-data", true);  
+        startActivityForResult(intent, 3);  
+    }  
+      
+    /**  
+     * 保存裁剪之后的图片数据  
+     * @param picdata  
+     */  
+    private void setPicToView(Intent picdata) {  
+        Bundle extras = picdata.getExtras();  
+        if (extras != null) {  
+            Bitmap photo = extras.getParcelable("data");  
+            Drawable drawable = new BitmapDrawable(photo);  
+//            iv_user_avatar.setBackgroundDrawable(drawable); 
+            
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            photo.compress(CompressFormat.PNG, 100,os);
+            byte[] bytes = os.toByteArray();
+            final File image_file = FileDirs.getFileFromBytes(bytes,
+            		Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".png" );
+            System.out.println("sdcard/  " +Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".png");
+            new TeamknAsyncTask<Void, Void, Integer>(UserMsgActivity.this,"信息提交") {
+    			@Override
+    			public Integer do_in_background(Void... params) throws Exception {
+    				if(BaseUtils.is_wifi_active(UserMsgActivity.this)){
+    			    	HttpApi.user_set_avatar(image_file);
+    			    }
+    			    return 1;
+    			}
+    			@Override
+    			public void on_success(Integer client_chat_node_id) {
+    				if(requestError!=null){
+    					Toast.makeText(UserMsgActivity.this, requestError, Toast.LENGTH_LONG).show();
+    				}
+    				open_activity(UserMsgActivity.class);
+    				finish();
+    		    }
+           }.execute();
+            
+        }
+	
+    }
+	
 }

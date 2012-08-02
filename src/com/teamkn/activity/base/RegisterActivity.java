@@ -47,7 +47,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 				@Override
 				public void on_success(Integer client_chat_node_id) {
 					
-					if(questError==null){
+					if(questError==null ){
 						open_activity(MainActivity.class);
 		                finish();
 					}else{
@@ -74,7 +74,7 @@ public class RegisterActivity extends TeamknBaseActivity{
 	     password = et_password.getText().toString();
 	     affirm_password = et_affirm_password.getText().toString();
 		
-		if( ! BaseUtils.is_wifi_active(RegisterActivity.this)){
+		if( !BaseUtils.is_wifi_active(RegisterActivity.this)){
 			tv_intent_no.setVisibility(View.VISIBLE);
 			judge = false;
 		}
