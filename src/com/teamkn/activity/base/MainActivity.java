@@ -26,6 +26,7 @@ import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
+import com.teamkn.base.CameraLogic;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.IndexTimerTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -37,7 +38,7 @@ import com.teamkn.service.SynChatService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MainActivity extends TeamknBaseActivity {
   public class RequestCode{
@@ -121,8 +122,7 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	
 	public void click_from_camera(View view){
-	  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	  startActivityForResult(intent, MainActivity.RequestCode.FROM_CAMERA);
+	  CameraLogic.call_system_camera(this,MainActivity.RequestCode.FROM_CAMERA);
 	}
 	
 	public void click_manual_syn(View view){
@@ -225,18 +225,13 @@ public class MainActivity extends TeamknBaseActivity {
 		    start_edit_note_activity_by_image_path(image_path);
 		    break;
 		  case MainActivity.RequestCode.FROM_CAMERA:
-		    Uri uri = data.getData();
-		    String scheme = uri.getScheme();
-		    String path;
-		    if(scheme.equals("content")){
-		      path = BaseUtils.get_file_path_from_image_uri(data.getData());
-		    }else{
-		      path = uri.getPath();
-		    }
-		    if(new File(path).exists()){
-		      start_edit_note_activity_by_image_path(path);
-		    }
-		    break;
+        String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
+        try {
+          Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
+          start_edit_note_activity_by_image_path(file_path);
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
