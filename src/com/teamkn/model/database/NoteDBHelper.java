@@ -356,5 +356,48 @@ public class NoteDBHelper extends BaseModelDBHelper {
         return new Note(id, uuid, content, kind, is_removed, is_changed_by_client, client_created_time,
             client_updated_time, syned_server_time);
     }
+    
+    public static int getCount()  throws Exception{
+        SQLiteDatabase db = get_read_db();
+        String sql = "select count(*) from '" + Constants.TABLE_NOTES + "'";
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+        int length = c.getInt(0);
+        c.close();
+        db.close();
+        return length;
+    }
+    
+    public static List<Note> getAllItems(int firstResult, int maxResult) throws Exception {
+        SQLiteDatabase db = get_read_db();
+        String sql = "select * from '" + Constants.TABLE_NOTES + "' limit ?,?";
+        List<Note> notes = new ArrayList<Note>();
+        Cursor cursor;
+        
+        try {
+                cursor = db.rawQuery(sql, new String[] { String.valueOf(firstResult),
+                        String.valueOf(maxResult) });
+               
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                }
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                	Note note = build_note_by_cursor(cursor);
+	                notes.add(note);
+	                System.out.println("for() " + note.kind + "  :  " + note.id);
+                }
+                cursor.close();
+                db.close();     
+                
+            return notes;
+
+        } catch (Exception e) {
+            Log.e("NoteDBHelper", "all", e);
+            throw e;
+        } finally {
+            db.close();
+        }
+
+    }
 
 }

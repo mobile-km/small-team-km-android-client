@@ -1,38 +1,50 @@
 package com.teamkn.activity.base;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.R;
-import com.teamkn.activity.chat.ChatListActivity;
+import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
-import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -43,30 +55,53 @@ import com.teamkn.model.AccountUser;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.service.FaceCommentService;
-import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.IndexService;
+import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.SynChatService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.NoteListAdapter;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends TeamknBaseActivity {
 	
 	public class RequestCode {
         public final static int EDIT_TEXT = 1;
     }
+	//  node_listView_show 数据
 	private ListView note_list;
+	// 定义每一页显示行数
+    private int VIEW_COUNT = 20;  
+    // 定义的页数
+    private int index = 0;   
+    // 当前页
+    private int currentPage = 1;     
+    // 所以数据的条数
+    private int totalCount;     
+    // 每次取的数据，只要最后一次可能不一样。
+    private int maxResult;	
+    
+    NoteListAdapter note_list_adapter;
+    List<Note> notes;
+    // 标记：上次的ID
+    private boolean isUpdating = true;
+    
+    View view;
+    
+    private LinearLayout mLoadLayout;   
+
+    private final LayoutParams mProgressBarLayoutParams = new LinearLayout.LayoutParams(   
+
+            LinearLayout.LayoutParams.WRAP_CONTENT,   
+
+            LinearLayout.LayoutParams.WRAP_CONTENT); 
+	//
 	
 	private TextView data_syn_textview;         // 同步更新时间
 	private ProgressBar data_syn_progress_bar;  // 同步更新进度条
 	private ImageView manual_syn_bn;
 	private SynNoteBinder syn_note_binder;      // 同步更新binder 
 	private SynUIBinder syn_ui_binder = new SynUIBinder();
+	
 	
 	private ServiceConnection conn = new ServiceConnection(){
 		@Override
@@ -87,12 +122,43 @@ public class MainActivity extends TeamknBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+//		 LayoutInflater inflater = LayoutInflater.from(this);
+//	     view = inflater.inflate(R.layout.progress, null);
+		 mLoadLayout = new LinearLayout(this);   
+
+	        mLoadLayout.setMinimumHeight(60);   
+
+	        mLoadLayout.setGravity(Gravity.CENTER);   
+
+	        mLoadLayout.setOrientation(LinearLayout.HORIZONTAL);   
+
+	           
+
+	        ProgressBar mProgressBar = new ProgressBar(this);   
+
+	        mProgressBar.setPadding(0, 0, 15, 0);   
+
+	        mLoadLayout.addView(mProgressBar, mProgressBarLayoutParams);   
+
+	           
+
+	        TextView mTipContent = new TextView(this);   
+
+	        mTipContent.setText("加载中...");   
+
+	        mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
+
+	        mLoadLayout.setVisibility(View.GONE);   
+		
 		// load view
 		setContentView(R.layout.base_main);
 		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
 		manual_syn_bn = (ImageView)findViewById(R.id.manual_syn_bn);
+		
 		note_list = (ListView) findViewById(R.id.note_list);
+		note_list.addFooterView(mLoadLayout);
 		
 		// 注册更新服务
 		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
@@ -132,19 +198,34 @@ public class MainActivity extends TeamknBaseActivity {
 		load_list();
 		
 	}
+	private int getMaxResult() {
+        int totalPage = (totalCount + VIEW_COUNT - 1) / VIEW_COUNT;
+        if(currentPage == totalPage-1){
+        	 return totalCount - (totalPage - 1) * VIEW_COUNT;
+        }
+        return VIEW_COUNT;
+    }
 	//加载node_listview
 	private void load_list() {
-        List<Note> notes = new ArrayList<Note>();
+		try {
+			totalCount = NoteDBHelper.getCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        maxResult = getMaxResult();
+		notes  = new ArrayList<Note>();
         try {
-            notes = NoteDBHelper.all(false);
+        	   notes=NoteDBHelper.getAllItems(index, maxResult);
+        	   System.out.println(" -----  " + index + "  :  " + maxResult + "  :  " + notes.size() + " :  " + totalCount);
+//            notes =  NoteDBHelper.all(false);
         } catch (Exception e) {
             BaseUtils.toast("读取 note 列表失败");
             e.printStackTrace();
         }
-        NoteListAdapter note_list_adapter = new NoteListAdapter(this);
+        note_list_adapter = new NoteListAdapter(this);
         note_list_adapter.add_items(notes);
         note_list.setAdapter(note_list_adapter);
-
+        
         note_list.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> list_view,View list_item,int item_id,long position) {
@@ -171,7 +252,63 @@ public class MainActivity extends TeamknBaseActivity {
                 menu.add(Menu.NONE, 0, 0, "删除");
             }
         });
+        
+        
+        note_list.setOnScrollListener(new OnScrollListener() {			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+         	   
+         	  if (firstVisibleItem + visibleItemCount == totalItemCount && isUpdating) {
+                  if (totalItemCount < totalCount) { // 防止最后一次取数据进入死循环。
+                	  isUpdating=false;
+                	  ++currentPage;
+                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
+//                    note_list.addFooterView(view);
+                	  
+                	  mLoadLayout.setVisibility(View.VISIBLE);
+                	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
+                      asyncUpdateWeiBoDatasTask.execute();
+                      
+                  }
+                  System.out.println("begin update-------------");
+              }
+         	   
+         	    
+			}
+		});
     }
+	class AsyncUpdateDatasTask extends AsyncTask<Void, Void, List<Note> > {
+		 
+        @Override
+        protected List<Note> doInBackground(Void... params) {
+            index += VIEW_COUNT;
+            List<Note> list = new ArrayList<Note>();
+            try {
+				list = NoteDBHelper.getAllItems(index, maxResult);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+            System.out.println("doInBackground  : " + list.size());
+            return list;
+        }
+        @Override
+        protected void onPostExecute(List<Note> noteOnther) {
+            super.onPostExecute(noteOnther);
+//            notes.addAll(noteOnther);
+            note_list_adapter.add_items(noteOnther);
+            note_list_adapter.notifyDataSetChanged();
+            isUpdating=true;
+            mLoadLayout.setVisibility(View.GONE); 
+            System.out.println("end update--------------");
+        }
+    } 	
+	
 	//listview的长按事件
 	@Override
     public boolean onContextItemSelected(MenuItem item) {
