@@ -90,7 +90,12 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
               WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                       | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
               PixelFormat.TRANSLUCENT);
-      mWindowManager.addView(mDialogText, lp);
+      try {
+		mWindowManager.addView(mDialogText, lp);
+	} catch (Exception e) {
+		System.out.println("ｃｏｎｔａｃｔｓａｃｔｉｖｉｔｙ　　ｅｘｃｅｐｔｉｏｎ" +e.getMessage());
+		e.printStackTrace();
+	}
       indexBar.setTextView(mDialogText);
   }
   

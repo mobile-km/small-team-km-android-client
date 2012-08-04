@@ -17,6 +17,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -26,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
@@ -42,6 +44,8 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
@@ -63,27 +67,35 @@ import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
 public class MainActivity extends TeamknBaseActivity {
-	
+	 //menu菜单
+	 MyHorizontalScrollView scrollView;
+	 View base_main;
+	 View foot_view;  //底层  图层 隐形部分
+	 ImageView iv_foot_view;
+	 
+	 boolean menuOut = false;
+	 Handler handler = new Handler();
+	//
 	public class RequestCode {
         public final static int EDIT_TEXT = 1;
     }
 	//  node_listView_show 数据
 	private ListView note_list;
 	// 定义每一页显示行数
-    private int VIEW_COUNT = 20;  
+    private  int VIEW_COUNT = 20;  
     // 定义的页数
-    private int index = 0;   
+    private  int index = 0;   
     // 当前页
-    private int currentPage = 1;     
+    private  int currentPage = 1;     
     // 所以数据的条数
-    private int totalCount;     
+    private  int  totalCount;     
     // 每次取的数据，只要最后一次可能不一样。
-    private int maxResult;	
+    private  int maxResult;	
     
     NoteListAdapter note_list_adapter;
     List<Note> notes;
     // 标记：上次的ID
-    private boolean isUpdating = true;
+    private  boolean isUpdating = true;
     
     View view;
     
@@ -122,42 +134,45 @@ public class MainActivity extends TeamknBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        // <<
+		LayoutInflater inflater = LayoutInflater.from(this);
+        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
+
+        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+        foot_view = findViewById(R.id.menu);    
 		
-//		 LayoutInflater inflater = LayoutInflater.from(this);
-//	     view = inflater.inflate(R.layout.progress, null);
-		 mLoadLayout = new LinearLayout(this);   
+        base_main = inflater.inflate(R.layout.base_main, null);
+        
+        
+        iv_foot_view = (ImageView) base_main.findViewById(R.id.iv_foot_view);
+        iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        View transparent = new TextView(this);
+        transparent.setBackgroundColor(android.R.color.transparent);
 
-	        mLoadLayout.setMinimumHeight(60);   
+        final View[] children = new View[] { transparent, base_main };
+        int scrollToViewIdx = 1;
+        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
+        //>>
+	    mLoadLayout = new LinearLayout(this);   
+        mLoadLayout.setMinimumHeight(60);   
+        mLoadLayout.setGravity(Gravity.CENTER);   
+        mLoadLayout.setOrientation(LinearLayout.HORIZONTAL);   
 
-	        mLoadLayout.setGravity(Gravity.CENTER);   
-
-	        mLoadLayout.setOrientation(LinearLayout.HORIZONTAL);   
-
-	           
-
-	        ProgressBar mProgressBar = new ProgressBar(this);   
-
-	        mProgressBar.setPadding(0, 0, 15, 0);   
-
-	        mLoadLayout.addView(mProgressBar, mProgressBarLayoutParams);   
-
-	           
-
-	        TextView mTipContent = new TextView(this);   
-
-	        mTipContent.setText("加载中...");   
-
-	        mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
-
-	        mLoadLayout.setVisibility(View.GONE);   
+        ProgressBar mProgressBar = new ProgressBar(this);   
+        mProgressBar.setPadding(0, 0, 15, 0);   
+        mLoadLayout.addView(mProgressBar, mProgressBarLayoutParams);             
+        TextView mTipContent = new TextView(this);   
+        mTipContent.setText("加载中...");   
+        mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
+        mLoadLayout.setVisibility(View.GONE);   
 		
-		// load view
-		setContentView(R.layout.base_main);
-		data_syn_textview = (TextView)findViewById(R.id.main_data_syn_text);
-		data_syn_progress_bar = (ProgressBar)findViewById(R.id.main_data_syn_progress_bar);
-		manual_syn_bn = (ImageView)findViewById(R.id.manual_syn_bn);
 		
-		note_list = (ListView) findViewById(R.id.note_list);
+		
+		data_syn_textview = (TextView)base_main.findViewById(R.id.main_data_syn_text);
+		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
+		manual_syn_bn = (ImageView)base_main.findViewById(R.id.manual_syn_bn);
+		
+		note_list = (ListView)base_main.findViewById(R.id.note_list);
 		note_list.addFooterView(mLoadLayout);
 		
 		// 注册更新服务
@@ -178,7 +193,7 @@ public class MainActivity extends TeamknBaseActivity {
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
 		String name = current_user().name;
-		RelativeLayout rl = (RelativeLayout)findViewById(R.id.main_user_avatar);
+		RelativeLayout rl = (RelativeLayout)base_main.findViewById(R.id.main_user_avatar);
 		if(avatar != null){
 			Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(avatar));
 			Drawable drawable = new BitmapDrawable(bitmap);
@@ -186,7 +201,7 @@ public class MainActivity extends TeamknBaseActivity {
 		}else{
 		    rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
-	    TextView user_name_tv = (TextView)findViewById(R.id.main_user_name);
+	    TextView user_name_tv = (TextView)base_main.findViewById(R.id.main_user_name);
 	    user_name_tv.setText(name);
     
 		// 启动刷新联系人状态服务
@@ -265,10 +280,11 @@ public class MainActivity extends TeamknBaseActivity {
 					int visibleItemCount, int totalItemCount) {
          	   
          	  if (firstVisibleItem + visibleItemCount == totalItemCount && isUpdating) {
-                  if (totalItemCount < totalCount) { // 防止最后一次取数据进入死循环。
-                	  isUpdating=false;
+                  if (currentPage <= totalCount/VIEW_COUNT) { // 防止最后一次取数据进入死循环。
+                	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
+                	  isUpdating=false ;
                 	  ++currentPage;
-                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
+//                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
 //                    note_list.addFooterView(view);
                 	  
                 	  mLoadLayout.setVisibility(View.VISIBLE);
@@ -304,6 +320,7 @@ public class MainActivity extends TeamknBaseActivity {
             note_list_adapter.add_items(noteOnther);
             note_list_adapter.notifyDataSetChanged();
             isUpdating=true;
+            
             mLoadLayout.setVisibility(View.GONE); 
             System.out.println("end update--------------");
         }
@@ -349,7 +366,8 @@ public class MainActivity extends TeamknBaseActivity {
                 load_list();
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        open_activity(MainActivity.class);
+        note_list_adapter.notifyDataSetChanged();
     }
 	
     
@@ -359,10 +377,6 @@ public class MainActivity extends TeamknBaseActivity {
 		if(syn_note_binder != null){
 		    syn_note_binder.manual_syn();
 		}
-	}
-	
-	public void show_note_list(View view){
-	    open_activity(NoteListActivity.class);
 	}
 	
 	public void click_headbar_button_contacts(View view){
@@ -479,6 +493,7 @@ public class MainActivity extends TeamknBaseActivity {
 					data_syn_textview.setText("上次同步成功: " + str);
 					data_syn_progress_bar.setVisibility(View.GONE);
 					manual_syn_bn.setVisibility(View.VISIBLE);
+					note_list_adapter.notifyDataSetChanged();
 				}
 			});
 			  

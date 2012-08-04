@@ -85,6 +85,7 @@ public class HttpApi {
             public Boolean on_success(String response_text) throws Exception {
                 JSONObject json = new JSONObject(response_text);
                 AccountManager.login(get_cookies(), json.toString());
+                System.out.println("login  json =  "  + json);
                 return true;
             }
         }.go();

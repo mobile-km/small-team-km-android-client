@@ -25,7 +25,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".activity.base.LoginActivity" android:windowSoftInputMode="stateVisible"></activity>
-		<activity android:name=".activity.base.MainActivity"></activity>
+		<activity android:name=".activity.base.MainActivity"  android:label="HorzScrollWithImageMenu"></activity>
 		<activity android:name=".activity.base.AboutActivity"></activity>
 		<activity android:name=".activity.base.TeamknSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 		<activity android:name=".activity.base.AccountManagerActivity"></activity>

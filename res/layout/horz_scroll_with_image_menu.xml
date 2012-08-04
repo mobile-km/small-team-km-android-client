@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:background="#00ffffff" android:padding="0px" android:layout_margin="0px">
+
+    <!--
+    This ImageView is used as a menu.
+    -->
+    <!-- <ImageView 
+        android:id="@+id/menu" 
+        android:src="@drawable/fb_menu" 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:scaleType="fitStart" 
+    /> -->
+    <LinearLayout 
+        android:id="@+id/menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:paddingRight="10dp"
+    >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent" 
+            android:padding="20dp" 
+        >
+            <RelativeLayout
+                android:id="@+id/foot_rl_node"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:onClick="click_go_note_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="我的笔记"   
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+            <RelativeLayout
+                android:id="@+id/foot_rl_chat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:onClick="click_go_chatlist_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="多人讨论" 
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+            <RelativeLayout
+                android:id="@+id/foot_rl_search"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:onClick="click_go_search_node_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="搜索" 
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+            <RelativeLayout
+                android:id="@+id/foot_rl_setting"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:onClick="click_go_setting_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="设置" 
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:gravity="center_horizontal"
+        >
+            <ImageView
+                android:src="@drawable/icon_edit_node"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:onClick="click_go_edit_node_activity"
+            />
+            <ImageView
+                android:src="@drawable/icon_album_camera"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:onClick="click_go_edit_node_album_camera_activity"
+            />
+            <ImageView
+                android:src="@drawable/icon_record"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:onClick="click_go_edit_node_record_activity"
+            />
+        </LinearLayout>
+    </LinearLayout>
+    <!--
+    This HorizontalScrollView will contain a LinearLayout that will contain a transparent
+    View (that allows the menu above to show through) and the other application Views.
+    -->
+    <com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView android:id="@+id/myScrollView"
+        android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#00ffffff" android:padding="0px"
+        android:layout_margin="0px" android:fadingEdge="none" android:fadingEdgeLength="0px" android:scrollbars="none">
+
+        <LinearLayout android:id="@+id/top" android:layout_height="fill_parent" android:layout_width="fill_parent"
+            android:orientation="horizontal" android:background="#00ffffff" android:padding="0px" android:layout_margin="0px">
+        <!-- The views inside here will be added programmatically. -->
+        </LinearLayout>
+
+    </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
+
+</FrameLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000"
+    android:orientation="vertical" >
+    
+     <RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     style="@style/head_bar"
+     android:id="@+id/head_bar"
+     >
+        <ImageView
+            android:id="@+id/iv_foot_view"
+            android:src="@drawable/sliding_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/app_name"
+        />
+        <TextView
+            style="@style/head_bar_text_center"
+            android:text="设置"
+        />
+    </RelativeLayout>
+    <LinearLayout 
+        android:id="@+id/ll_setting"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+        
+        <TextView
+            android:text="上传图片质量"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textSize="20dp"
+            android:layout_marginBottom="5dp"
+        />
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:text="发送主题时，上传的图片的质量"
+             android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:textSize="15dp"
+        />
+    </LinearLayout>
+     <TextView
+            android:background="#fff"
+            android:layout_width="fill_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginBottom="10dp"
+      />
+</LinearLayout>

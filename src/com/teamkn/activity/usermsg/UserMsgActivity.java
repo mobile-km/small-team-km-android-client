@@ -3,6 +3,7 @@ package com.teamkn.activity.usermsg;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +29,7 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.AccountUser;
 
@@ -35,8 +37,8 @@ public class UserMsgActivity extends TeamknBaseActivity{
 	public static String requestError = null;
 	public class RequestCode{
 	    public final static int NEW_TEXT = 0;
-	    public final static int FROM_ALBUM = 1;
-	    public final static int FROM_CAMERA = 2;
+	    public final static int FROM_ALBUM = 3;
+	    public final static int FROM_CAMERA = 4;
 	}
     ImageView iv_user_avatar;
     TextView  tv_user_name;
@@ -58,8 +60,7 @@ public class UserMsgActivity extends TeamknBaseActivity{
 				    startActivityForResult(intent,UserMsgActivity.RequestCode.FROM_ALBUM);
 					break;
 				case 1:
-					intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					startActivityForResult(intent, UserMsgActivity.RequestCode.FROM_CAMERA);
+                    CameraLogic.call_system_camera(UserMsgActivity.this,UserMsgActivity.RequestCode.FROM_CAMERA);
 					break;
 				default:
 					break;
@@ -105,20 +106,17 @@ public class UserMsgActivity extends TeamknBaseActivity{
 			    startPhotoZoom(data.getData());  
 			    break;
 		  case UserMsgActivity.RequestCode.FROM_CAMERA:
-			    Uri uri = data.getData();
-			    String scheme = uri.getScheme();
-			    System.out.println("uri  :  scheme  --  " + uri + " : " + scheme);
-			    String path;
-			    if(scheme.equals("content")){
-			      path = BaseUtils.get_file_path_from_image_uri(data.getData());
-			    }else{
-			      path = uri.getPath();
-			    }
-			    if(new File(path).exists()){
-			    	startPhotoZoom(uri);
-			    }
-			    break;
-		  case 3:  
+			  String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
+	          try {
+	             Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
+//	             start_edit_note_activity_by_image_path(file_path);
+	             startPhotoZoom(uri);  
+	          } catch (FileNotFoundException e) {
+	             e.printStackTrace();
+	          }
+              break;
+
+		  case 9:  
               /**  
                * 非空判断大家一定要验证，如果不验证的话，  
                * 在剪裁之后如果发现不满意，要重新裁剪，丢弃  
@@ -134,11 +132,6 @@ public class UserMsgActivity extends TeamknBaseActivity{
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-//	private void start_edit_note_activity_by_image_path(String image_path){
-//	    Intent intent = new Intent(UserMsgActivity.this, UserMsgAvatarSetActivity.class);
-//	    intent.putExtra(UserMsgAvatarSetActivity.RequestCode.IMAGE_PATH, image_path);
-//	    startActivity(intent);
-//	}
 	
 	
 	
@@ -159,7 +152,7 @@ public class UserMsgActivity extends TeamknBaseActivity{
         intent.putExtra("outputX", 150);  
         intent.putExtra("outputY", 150);  
         intent.putExtra("return-data", true);  
-        startActivityForResult(intent, 3);  
+        startActivityForResult(intent, 9);  
     }  
       
     /**  

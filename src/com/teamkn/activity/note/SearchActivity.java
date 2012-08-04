@@ -5,10 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.*;
 import android.widget.*;
+
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
@@ -23,15 +27,45 @@ public class SearchActivity extends TeamknBaseActivity {
     public class RequestCode {
         public final static int EDIT_TEXT = 1;
     }
-
+    //menu菜单
+  	 MyHorizontalScrollView scrollView;
+  	 View foot_view;  //底层  图层 隐形部分
+  	 ImageView iv_foot_view;
+  	 
+  	 boolean menuOut = false;
+  	 Handler handler = new Handler();
+  	 //	
+      View search;	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+//        setContentView(R.layout.search);
+        
+	    // <<
+		LayoutInflater inflater = LayoutInflater.from(this);
+	     setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
+	
+	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+	     foot_view = findViewById(R.id.menu);    
+		
+	     search = inflater.inflate(R.layout.search, null);
+	     
+	     
+	     iv_foot_view = (ImageView) search.findViewById(R.id.iv_foot_view);
+	     iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+	     View transparent = new TextView(this);
+	     transparent.setBackgroundColor(android.R.color.transparent);
+	
+	     final View[] children = new View[] { transparent, search };
+	     int scrollToViewIdx = 1;
+	     scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
+	     //>>
+        
+        
 
-        EditText search_box    = (EditText) findViewById(R.id.search_box);
-        Button   search_submit = (Button)   findViewById(R.id.search_submit);
-        Button   search_clear  = (Button)   findViewById(R.id.search_clear);
+        EditText search_box    = (EditText) search.findViewById(R.id.search_box);
+        Button   search_submit = (Button)   search.findViewById(R.id.search_submit);
+        Button   search_clear  = (Button)   search.findViewById(R.id.search_clear);
 
         search_submit.setOnClickListener(new SearchSubmitClickListener());
         search_clear.setOnClickListener(new SearchClearClickListener());
