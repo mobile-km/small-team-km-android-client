@@ -40,7 +40,7 @@ public class EditNoteActivity extends TeamknBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_note);
-        
+        System.out.println("---------------edit");
         Intent intent = getIntent();
         
         note_uuid = intent.getStringExtra(EditNoteActivity.Extra.NOTE_UUID);

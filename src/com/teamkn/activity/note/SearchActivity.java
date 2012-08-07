@@ -47,12 +47,13 @@ public class SearchActivity extends TeamknBaseActivity {
 	
 	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
 	     foot_view = findViewById(R.id.menu);    
-		
+	     RelativeLayout foot_rl_search = (RelativeLayout)findViewById(R.id.foot_rl_search);
 	     search = inflater.inflate(R.layout.search, null);
 	     
 	     
 	     iv_foot_view = (ImageView) search.findViewById(R.id.iv_foot_view);
 	     iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+	     foot_rl_search.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
 	     View transparent = new TextView(this);
 	     transparent.setBackgroundColor(android.R.color.transparent);
 	

@@ -78,7 +78,9 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
+            android:visibility="gone"
         />
+        
         <ProgressBar
             android:id="@+id/main_data_syn_progress_bar"
             style="@android:style/Widget.ProgressBar.Inverse"
@@ -87,7 +89,17 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
-            android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/progress_set_num"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="27dp"
+            android:textSize="10dp"
+            android:textColor="#000"
+            android:text=""
         />
     </RelativeLayout>
 

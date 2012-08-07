@@ -60,8 +60,8 @@ public class UserMsgActivity extends TeamknBaseActivity{
 				    startActivityForResult(intent,UserMsgActivity.RequestCode.FROM_ALBUM);
 					break;
 				case 1:
-                    CameraLogic.call_system_camera(UserMsgActivity.this,UserMsgActivity.RequestCode.FROM_CAMERA);
-					break;
+                    CameraLogic.call_system_camera(UserMsgActivity.this,UserMsgActivity.RequestCode.FROM_CAMERA);        
+                    break;
 				default:
 					break;
 				}
@@ -106,15 +106,20 @@ public class UserMsgActivity extends TeamknBaseActivity{
 			    startPhotoZoom(data.getData());  
 			    break;
 		  case UserMsgActivity.RequestCode.FROM_CAMERA:
-			  String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
-	          try {
-	             Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
-//	             start_edit_note_activity_by_image_path(file_path);
-	             startPhotoZoom(uri);  
-	          } catch (FileNotFoundException e) {
-	             e.printStackTrace();
-	          }
-              break;
+                new TeamknAsyncTask<Void, Void, Void>(UserMsgActivity.this,"请稍等") {
+					@Override
+					public Void do_in_background(Void... params)
+							throws Exception {
+						String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
+						Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
+						startPhotoZoom(uri); 
+						return null;
+					}
+
+					@Override
+					public void on_success(Void result) {}
+				}.execute();       
+            break;
 
 		  case 9:  
               /**  
@@ -139,21 +144,22 @@ public class UserMsgActivity extends TeamknBaseActivity{
      * 裁剪图片方法实现  
      * @param uri  
      */ 
-    public void startPhotoZoom(Uri uri) {  
-  	  System.out.println(uri.getPath());
-        Intent intent = new Intent("com.android.camera.action.CROP");  
-        intent.setDataAndType(uri, "image/*");  
-        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪  
-        intent.putExtra("crop", "true");  
-        // aspectX aspectY 是宽高的比例  
-        intent.putExtra("aspectX", 1);  
-        intent.putExtra("aspectY", 1);  
-        // outputX outputY 是裁剪图片宽高  
-        intent.putExtra("outputX", 150);  
-        intent.putExtra("outputY", 150);  
-        intent.putExtra("return-data", true);  
-        startActivityForResult(intent, 9);  
-    }  
+    public void startPhotoZoom( Uri uri) {  
+
+			    System.out.println(uri.getPath());
+				Intent intent = new Intent("com.android.camera.action.CROP");  
+		        intent.setDataAndType(uri, "image/*");  
+		        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪  
+		        intent.putExtra("crop", "true");  
+		        // aspectX aspectY 是宽高的比例  
+		        intent.putExtra("aspectX", 1);  
+		        intent.putExtra("aspectY", 1);  
+		        // outputX outputY 是裁剪图片宽高  
+		        intent.putExtra("outputX", 150);  
+		        intent.putExtra("outputY", 150);  
+		        intent.putExtra("return-data", true);  
+		        startActivityForResult(intent, 9);  
+    }   
       
     /**  
      * 保存裁剪之后的图片数据  

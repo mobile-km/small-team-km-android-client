@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
@@ -37,12 +41,13 @@ public class TeamknSettingActivity extends TeamknBaseActivity {
 	
 	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
 	     foot_view = findViewById(R.id.menu);    
-		
+	     RelativeLayout foot_rl_setting = (RelativeLayout)findViewById(R.id.foot_rl_setting);
 	     setting = inflater.inflate(R.layout.setting, null);
 	     
 	     
 	     iv_foot_view = (ImageView) setting.findViewById(R.id.iv_foot_view);
 	     iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+	     foot_rl_setting.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
 	     View transparent = new TextView(this);
 	     transparent.setBackgroundColor(android.R.color.transparent);
 	
@@ -65,17 +70,11 @@ public class TeamknSettingActivity extends TeamknBaseActivity {
 			     .setNegativeButton("取消", null)
 			     .show();
 	}
-	/*<resources>
-    <string-array name="upload_photo_quality_entry">
-        <item>原尺寸</item>
-        <item>50%</item>
-        <item>25%</item>
-    </string-array>
-    <string-array name="upload_photo_quality_value">
-        <item>0</item>
-        <item>2</item>
-        <item>4</item>
-    </string-array>
-    </resources>*/
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		System.out.println("--------++++++++++++++++------------- "  + event.getX());
+		return super.onTouchEvent(event);
+	}
     
 }

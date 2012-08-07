@@ -1,13 +1,6 @@
 package com.teamkn.activity.base.slidingmenu;
 
-import java.security.Guard;
-import java.util.Date;
-
-import com.teamkn.R;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView.SizeCallback;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.GestureDetector.OnGestureListener;
@@ -15,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.teamkn.R;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView.SizeCallback;
 
 /**
  * This demo uses a custom HorizontalScrollView that ignores touch events, and therefore does NOT allow manual scrolling.
@@ -69,7 +65,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     /**
      * Helper for examples with a HSV that should be scrolled by a menu View's width.
      */
-    public static class ClickListenerForScrolling implements OnClickListener {
+    public static class ClickListenerForScrolling implements OnClickListener,OnTouchListener,OnGestureListener {
         HorizontalScrollView scrollView;
         View menu;
         /**
@@ -85,7 +81,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 
         @Override
         public void onClick(View v) {
-            Context context = menu.getContext();
+            menu.getContext();
 
             int menuWidth = menu.getMeasuredWidth();
 
@@ -103,6 +99,50 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             }
             menuOut = !menuOut;
         }
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onLongPress(MotionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + event.getY());
+			return false;
+		}
     }
 
     /**

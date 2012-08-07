@@ -21,14 +21,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -40,19 +42,19 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
+import com.teamkn.activity.chat.ChatListActivity;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
-import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.IndexTimerTask;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
@@ -66,7 +68,7 @@ import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
-public class MainActivity extends TeamknBaseActivity {
+public class MainActivity extends TeamknBaseActivity{
 	 //menu菜单
 	 MyHorizontalScrollView scrollView;
 	 View base_main;
@@ -75,9 +77,10 @@ public class MainActivity extends TeamknBaseActivity {
 	 
 	 boolean menuOut = false;
 	 Handler handler = new Handler();
+
 	//
 	public class RequestCode {
-        public final static int EDIT_TEXT = 1;
+        public final static int EDIT_TEXT = 0;
     }
 	//  node_listView_show 数据
 	private ListView note_list;
@@ -110,6 +113,7 @@ public class MainActivity extends TeamknBaseActivity {
 	
 	private TextView data_syn_textview;         // 同步更新时间
 	private ProgressBar data_syn_progress_bar;  // 同步更新进度条
+	private TextView progress_set_num; //同步更新时间
 	private ImageView manual_syn_bn;
 	private SynNoteBinder syn_note_binder;      // 同步更新binder 
 	private SynUIBinder syn_ui_binder = new SynUIBinder();
@@ -140,18 +144,23 @@ public class MainActivity extends TeamknBaseActivity {
 
         scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
         foot_view = findViewById(R.id.menu);    
-		
+        RelativeLayout foot_rl_node = (RelativeLayout)findViewById(R.id.foot_rl_node);
+
         base_main = inflater.inflate(R.layout.base_main, null);
         
         
         iv_foot_view = (ImageView) base_main.findViewById(R.id.iv_foot_view);
         iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        foot_rl_node.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        
         View transparent = new TextView(this);
         transparent.setBackgroundColor(android.R.color.transparent);
 
         final View[] children = new View[] { transparent, base_main };
         int scrollToViewIdx = 1;
         scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
+       
+        
         //>>
 	    mLoadLayout = new LinearLayout(this);   
         mLoadLayout.setMinimumHeight(60);   
@@ -170,6 +179,7 @@ public class MainActivity extends TeamknBaseActivity {
 		
 		data_syn_textview = (TextView)base_main.findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
+		progress_set_num = (TextView)findViewById(R.id.progress_set_num);
 		manual_syn_bn = (ImageView)base_main.findViewById(R.id.manual_syn_bn);
 		
 		note_list = (ListView)base_main.findViewById(R.id.note_list);
@@ -222,24 +232,41 @@ public class MainActivity extends TeamknBaseActivity {
     }
 	//加载node_listview
 	private void load_list() {
-		try {
-			totalCount = NoteDBHelper.getCount();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-        maxResult = getMaxResult();
 		notes  = new ArrayList<Note>();
-        try {
-        	   notes=NoteDBHelper.getAllItems(index, maxResult);
-        	   System.out.println(" -----  " + index + "  :  " + maxResult + "  :  " + notes.size() + " :  " + totalCount);
-//            notes =  NoteDBHelper.all(false);
-        } catch (Exception e) {
-            BaseUtils.toast("读取 note 列表失败");
-            e.printStackTrace();
-        }
-        note_list_adapter = new NoteListAdapter(this);
-        note_list_adapter.add_items(notes);
-        note_list.setAdapter(note_list_adapter);
+		note_list_adapter = new NoteListAdapter(MainActivity.this);
+		new TeamknAsyncTask<Void, Void, Void>() {
+			@Override
+			public Void do_in_background(Void... params) throws Exception {
+				totalCount = NoteDBHelper.getCount();
+				maxResult = getMaxResult();
+				notes=NoteDBHelper.getAllItems(index, maxResult);
+				return null;
+			}
+			@Override
+			public void on_success(Void result) {
+		        note_list_adapter.add_items(notes);
+		        note_list.setAdapter(note_list_adapter);
+			}
+		}.execute();
+		
+//		try {
+//			totalCount = NoteDBHelper.getCount();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        maxResult = getMaxResult();
+//		
+//        try {
+//        	   notes=NoteDBHelper.getAllItems(index, maxResult);
+//        	   System.out.println(" -----  " + index + "  :  " + maxResult + "  :  " + notes.size() + " :  " + totalCount);
+////            notes =  NoteDBHelper.all(false);
+//        } catch (Exception e) {
+//            BaseUtils.toast("读取 note 列表失败");
+//            e.printStackTrace();
+//        }
+//        note_list_adapter = new NoteListAdapter(this);
+//        note_list_adapter.add_items(notes);
+//        note_list.setAdapter(note_list_adapter);
         
         note_list.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -358,7 +385,8 @@ public class MainActivity extends TeamknBaseActivity {
 	// 处理其他activity界面的回调  有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
     @Override
     protected void onActivityResult(int  requestCode, int resultCode,Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if (resultCode != Activity.RESULT_OK) {
             return;
         }
         switch (requestCode) {
@@ -366,8 +394,9 @@ public class MainActivity extends TeamknBaseActivity {
                 load_list();
                 break;
         }
-        open_activity(MainActivity.class);
+//        open_activity(MainActivity.class);
         note_list_adapter.notifyDataSetChanged();
+        
     }
 	
     
@@ -477,7 +506,9 @@ public class MainActivity extends TeamknBaseActivity {
 	      data_syn_progress_bar.post(new Runnable() {
 		      @Override
 		      public void run() {
-		        data_syn_progress_bar.setProgress(num);
+		    	progress_set_num.setVisibility(View.VISIBLE);	
+		    	int baifen = (num*100)/data_syn_progress_bar.getMax();
+		    	progress_set_num.setText(baifen+"%");
 		        data_syn_progress_bar.setVisibility(View.VISIBLE);
 		        manual_syn_bn.setVisibility(View.GONE);
 		      }
@@ -492,8 +523,9 @@ public class MainActivity extends TeamknBaseActivity {
 					String str = BaseUtils.date_string(TeamknPreferences.last_syn_success_client_time()); 
 					data_syn_textview.setText("上次同步成功: " + str);
 					data_syn_progress_bar.setVisibility(View.GONE);
+					progress_set_num.setText("");
 					manual_syn_bn.setVisibility(View.VISIBLE);
-					note_list_adapter.notifyDataSetChanged();
+					load_list();
 				}
 			});
 			  

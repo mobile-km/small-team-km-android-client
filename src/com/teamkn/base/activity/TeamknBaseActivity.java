@@ -1,6 +1,5 @@
 package com.teamkn.base.activity;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import android.app.Activity;
@@ -21,7 +20,6 @@ import com.teamkn.activity.base.TeamknSettingActivity;
 import com.teamkn.activity.chat.ChatListActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.SearchActivity;
-import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
@@ -96,18 +94,22 @@ abstract public class TeamknBaseActivity extends Activity {
 		ImageCache.load_cached_image(image_url, image_view);
 	}
 	
-	final public void click_go_note_activity(View view){
+	 public void click_go_note_activity(View view){
 		open_activity(MainActivity.class);
 	}
-	final public void click_go_chatlist_activity(View view){
+	
+	 public void click_go_chatlist_activity(View view){
 		open_activity(ChatListActivity.class);
 	}
-	final public void click_go_search_node_activity(View view){
+	
+	 public void click_go_search_node_activity(View view){
 		open_activity(SearchActivity.class);
 	}
-	final public void click_go_setting_activity(View view){
+	
+	 public void click_go_setting_activity(View view){
 		open_activity(TeamknSettingActivity.class);
 	}
+	
 	final public void click_go_edit_node_activity(View view){
 		Intent intent = new Intent();
 		intent.setClass(this, EditNoteActivity.class);
@@ -164,7 +166,7 @@ abstract public class TeamknBaseActivity extends Activity {
 		  case TeamknBaseActivity.RequestCode.FROM_CAMERA:
 			  String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
 	          try {
-	             Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
+	             Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
 	             start_edit_note_activity_by_image_path(file_path); 
 	          } catch (FileNotFoundException e) {
 	             e.printStackTrace();
