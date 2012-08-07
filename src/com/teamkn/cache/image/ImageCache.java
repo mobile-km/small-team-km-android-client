@@ -8,6 +8,11 @@ import java.io.File;
 import java.net.URI;
 
 public class ImageCache {
+  
+    final static public void load_cached_image(File file, ImageView image_view){
+      image_view.setTag(null); //这一句不能漏，否则可能图片错位
+      ImageCacheSoftRefSingleton.set_bitmap_to_imageview(file, image_view);
+    }
 
     // 尝试在传入的view上载入指定的url的图片
     final static public void load_cached_image(String image_url, ImageView image_view) {

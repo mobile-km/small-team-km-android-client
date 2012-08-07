@@ -121,6 +121,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
 
         try {
             FileUtils.copyFile(new File(origin_image_path), note_image_file);
+            Note.note_thumb_image_file(uuid);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
