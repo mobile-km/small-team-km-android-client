@@ -22,6 +22,7 @@ import android.os.IBinder;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,7 +69,8 @@ import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
-public class MainActivity extends TeamknBaseActivity{
+public class MainActivity extends TeamknBaseActivity implements OnGestureListener  {
+	 private GestureDetector detector;
 	 //menu菜单
 	 MyHorizontalScrollView scrollView;
 	 View base_main;
@@ -138,6 +140,7 @@ public class MainActivity extends TeamknBaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		detector = new GestureDetector(this);
         // <<
 		LayoutInflater inflater = LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
@@ -549,4 +552,49 @@ public class MainActivity extends TeamknBaseActivity{
         });
       }
 	  }
+	 
+	 
+	 
+	    /** 
+	     * 监听滑动 
+	     */
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return false;
+		}
+		// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			if (e1.getX() - e2.getX() > 120) {  //向左滑动 
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+	        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
+	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+	        }  
+	        return true;  
+		}
+		@Override
+		public void onLongPress(MotionEvent e) {	
+		}
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+				float distanceY) {
+			return false;
+		}
+		@Override
+		public void onShowPress(MotionEvent e) {	
+		}
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			return false;
+		}
+		@Override 
+		public boolean onTouchEvent(MotionEvent event) { 
+			return this.detector.onTouchEvent(event); 
+		}
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent ev) {
+		   this.detector.onTouchEvent(ev);
+		   return super.dispatchTouchEvent(ev);
+		}
 }

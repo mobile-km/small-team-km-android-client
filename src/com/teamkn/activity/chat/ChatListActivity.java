@@ -5,8 +5,11 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -23,7 +26,8 @@ import com.teamkn.model.Chat;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.widget.adapter.ChatListAdapter;
 
-public class ChatListActivity extends TeamknBaseActivity {
+public class ChatListActivity extends TeamknBaseActivity  implements OnGestureListener  {
+	private GestureDetector detector;
 	 //menu菜单
 	 MyHorizontalScrollView scrollView;
 	 View foot_view;  //底层  图层 隐形部分
@@ -41,7 +45,7 @@ public class ChatListActivity extends TeamknBaseActivity {
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    
+	    detector = new GestureDetector(this);
 	     // <<
  		 LayoutInflater inflater = LayoutInflater.from(this);
          setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
@@ -101,4 +105,49 @@ public class ChatListActivity extends TeamknBaseActivity {
 	  public void click_new_chat_bn(View view){
 	    open_activity(SelectChatMemberActivity.class);
 	  }
+	  
+	  
+	    /** 
+	     * 监听滑动 
+	     */
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return false;
+		}
+		// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			System.out.println("----------------  "  + e1.getX() + " : " + e2.getX());
+			if (e1.getX() - e2.getX() > 120) {  //向左滑动 
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+	        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
+	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+	        }  
+	        return true;  
+		}
+		@Override
+		public void onLongPress(MotionEvent e) {	
+		}
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+				float distanceY) {
+			return false;
+		}
+		@Override
+		public void onShowPress(MotionEvent e) {	
+		}
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			return false;
+		}
+		@Override 
+		public boolean onTouchEvent(MotionEvent event) { 
+			return this.detector.onTouchEvent(event); 
+		}
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent ev) {
+		   this.detector.onTouchEvent(ev);
+		   return super.dispatchTouchEvent(ev);
+		}
 }

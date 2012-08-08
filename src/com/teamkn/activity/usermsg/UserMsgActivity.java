@@ -43,6 +43,8 @@ public class UserMsgActivity extends TeamknBaseActivity{
     ImageView iv_user_avatar;
     TextView  tv_user_name;
     
+    Uri uri; //头像
+    File image_file;
     public void click_set_user_avatar(View view){
     	new AlertDialog.Builder(this)
     	.setTitle("设置头像")
@@ -100,6 +102,7 @@ public class UserMsgActivity extends TeamknBaseActivity{
 		if(resultCode != Activity.RESULT_OK){
 			return;
 		}
+		
 		switch(requestCode){
 		  case UserMsgActivity.RequestCode.FROM_ALBUM:
 			    System.out.println(" userMsgActivity "+ data.getData().getPath());
@@ -111,13 +114,19 @@ public class UserMsgActivity extends TeamknBaseActivity{
 					public Void do_in_background(Void... params)
 							throws Exception {
 						String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
-						Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
-						startPhotoZoom(uri); 
+			try {
+				uri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+						
 						return null;
 					}
 
 					@Override
-					public void on_success(Void result) {}
+					public void on_success(Void result) {
+						startPhotoZoom(uri); 
+					}
 				}.execute();       
             break;
 
@@ -137,8 +146,6 @@ public class UserMsgActivity extends TeamknBaseActivity{
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
-	
 	
     /**  
      * 裁剪图片方法实现  
@@ -175,9 +182,9 @@ public class UserMsgActivity extends TeamknBaseActivity{
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             photo.compress(CompressFormat.PNG, 100,os);
             byte[] bytes = os.toByteArray();
-            final File image_file = FileDirs.getFileFromBytes(bytes,
-            		Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".png" );
-            System.out.println("sdcard/  " +Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".png");
+//            final File image_file = FileDirs.getFileFromBytes(bytes,
+//            		Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".jpg" );
+            image_file = FileDirs.getFileFromBytes(bytes,FileDirs.TEAMKN_CAPTURE_TEMP_DIR+  "/IMG_TEMP.jpg");
             new TeamknAsyncTask<Void, Void, Integer>(UserMsgActivity.this,"信息提交") {
     			@Override
     			public Integer do_in_background(Void... params) throws Exception {
@@ -192,10 +199,10 @@ public class UserMsgActivity extends TeamknBaseActivity{
     					Toast.makeText(UserMsgActivity.this, requestError, Toast.LENGTH_LONG).show();
     				}
     				open_activity(UserMsgActivity.class);
+    				System.out.println("image_file  = " + image_file.getPath());
     				finish();
     		    }
-           }.execute();
-            
+           }.execute();     
         }
 	
     }

@@ -30,7 +30,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     View menu;
     View app;
     ImageView btnSlide;
-    boolean menuOut = false;
+//    boolean menuOut = false;
     Handler handler = new Handler();
     int btnWidth;
 
@@ -65,14 +65,13 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     /**
      * Helper for examples with a HSV that should be scrolled by a menu View's width.
      */
-    public static class ClickListenerForScrolling implements OnClickListener,OnTouchListener,OnGestureListener {
+    static boolean menuOut = false;
+    public static class ClickListenerForScrolling implements OnClickListener{
         HorizontalScrollView scrollView;
         View menu;
         /**
          * Menu must NOT be out/shown to start with.
          */
-        boolean menuOut = false;
-
         public ClickListenerForScrolling(HorizontalScrollView scrollView, View menu) {
             super();
             this.scrollView = scrollView;
@@ -100,49 +99,25 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             menuOut = !menuOut;
         }
 
-		@Override
-		public boolean onDown(MotionEvent e) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void onLongPress(MotionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-				float distanceX, float distanceY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void onShowPress(MotionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + event.getY());
-			return false;
-		}
+    }
+    
+    public static class MyOnGestureListener {
+    	public static void flag_show_menu(HorizontalScrollView scrollView, View menu){
+    		menu.getContext();
+            int menuWidth = menu.getMeasuredWidth();
+            // Ensure menu is visible
+            menu.setVisibility(View.VISIBLE);
+            if (!menuOut) {
+                // Scroll to 0 to reveal menu
+                int left = 0;
+                scrollView.smoothScrollTo(left, 0);
+            } else {
+                // Scroll to menuWidth so menu isn't on screen.
+                int left = menuWidth;
+                scrollView.smoothScrollTo(left, 0);
+            }
+            menuOut = !menuOut;
+    	}
     }
 
     /**

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceActivity;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +22,8 @@ import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
-public class TeamknSettingActivity extends TeamknBaseActivity {
+public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestureListener  {
+	private GestureDetector detector;
 	//menu菜单
 		 MyHorizontalScrollView scrollView;
 		 View setting;
@@ -33,6 +36,7 @@ public class TeamknSettingActivity extends TeamknBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        detector = new GestureDetector(this);
          // <<
 		 LayoutInflater inflater = LayoutInflater.from(this);
 	     setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
@@ -70,11 +74,48 @@ public class TeamknSettingActivity extends TeamknBaseActivity {
 			     .setNegativeButton("取消", null)
 			     .show();
 	}
-	
+	 
+    /** 
+     * 监听滑动 
+     */
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		System.out.println("--------++++++++++++++++------------- "  + event.getX());
-		return super.onTouchEvent(event);
+	public boolean onDown(MotionEvent e) {
+		return false;
 	}
-    
+	// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		if (e1.getX() - e2.getX() > 120) {  //向左滑动 
+            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
+        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+        }  
+        return true;  
+	}
+	@Override
+	public void onLongPress(MotionEvent e) {	
+	}
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		return false;
+	}
+	@Override
+	public void onShowPress(MotionEvent e) {	
+	}
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+	@Override 
+	public boolean onTouchEvent(MotionEvent event) { 
+		return this.detector.onTouchEvent(event); 
+	}
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+	   this.detector.onTouchEvent(ev);
+	   return super.dispatchTouchEvent(ev);
+	}
+   
 }
