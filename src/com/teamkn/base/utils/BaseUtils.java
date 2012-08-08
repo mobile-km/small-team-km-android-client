@@ -249,5 +249,20 @@ public class BaseUtils {
         //最后根据索引值获取图片路径
         return cursor.getString(column_index);
     }
+    
+    public static String file_path_join(String ... strs){
+      if(strs.length == 0) return "";
+      
+      File f = null;
+        
+      for(String str : strs){
+        if(null == f){
+          f = new File(str);
+        }else{
+          f = new File(f, str);
+        }
+      }
+      return f.getPath();
+    }
 
 }

@@ -250,6 +250,7 @@ public class HttpApi {
                     File file = Note.note_image_file(uuid);
                     FileOutputStream fos = new FileOutputStream(file);
                     IOUtils.copy(in, fos);
+                    Note.note_thumb_image_file(uuid);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
