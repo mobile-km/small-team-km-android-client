@@ -1,13 +1,6 @@
 package com.teamkn.activity.base.slidingmenu;
 
-import java.security.Guard;
-import java.util.Date;
-
-import com.teamkn.R;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView.SizeCallback;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.GestureDetector.OnGestureListener;
@@ -15,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.teamkn.R;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView.SizeCallback;
 
 /**
  * This demo uses a custom HorizontalScrollView that ignores touch events, and therefore does NOT allow manual scrolling.
@@ -34,7 +30,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     View menu;
     View app;
     ImageView btnSlide;
-    boolean menuOut = false;
+//    boolean menuOut = false;
     Handler handler = new Handler();
     int btnWidth;
 
@@ -69,14 +65,13 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     /**
      * Helper for examples with a HSV that should be scrolled by a menu View's width.
      */
-    public static class ClickListenerForScrolling implements OnClickListener {
+    static boolean menuOut = false;
+    public static class ClickListenerForScrolling implements OnClickListener{
         HorizontalScrollView scrollView;
         View menu;
         /**
          * Menu must NOT be out/shown to start with.
          */
-        boolean menuOut = false;
-
         public ClickListenerForScrolling(HorizontalScrollView scrollView, View menu) {
             super();
             this.scrollView = scrollView;
@@ -85,7 +80,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 
         @Override
         public void onClick(View v) {
-            Context context = menu.getContext();
+            menu.getContext();
 
             int menuWidth = menu.getMeasuredWidth();
 
@@ -103,6 +98,26 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             }
             menuOut = !menuOut;
         }
+
+    }
+    
+    public static class MyOnGestureListener {
+    	public static void flag_show_menu(HorizontalScrollView scrollView, View menu){
+    		menu.getContext();
+            int menuWidth = menu.getMeasuredWidth();
+            // Ensure menu is visible
+            menu.setVisibility(View.VISIBLE);
+            if (!menuOut) {
+                // Scroll to 0 to reveal menu
+                int left = 0;
+                scrollView.smoothScrollTo(left, 0);
+            } else {
+                // Scroll to menuWidth so menu isn't on screen.
+                int left = menuWidth;
+                scrollView.smoothScrollTo(left, 0);
+            }
+            menuOut = !menuOut;
+    	}
     }
 
     /**

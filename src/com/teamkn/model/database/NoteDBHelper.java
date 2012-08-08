@@ -384,7 +384,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 	Note note = build_note_by_cursor(cursor);
 	                notes.add(note);
-	                System.out.println("for() " + note.kind + "  :  " + note.id);
                 }
                 cursor.close();
                 db.close();     

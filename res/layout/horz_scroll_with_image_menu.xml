@@ -142,21 +142,21 @@
             android:gravity="center_horizontal"
         >
             <ImageView
-                android:src="@drawable/icon_edit_node"
+                android:src="@android:drawable/ic_menu_agenda"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="5dp"
                 android:onClick="click_go_edit_node_activity"
             />
             <ImageView
-                android:src="@drawable/icon_album_camera"
+                android:src="@android:drawable/ic_menu_camera"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="5dp"
                 android:onClick="click_go_edit_node_album_camera_activity"
             />
             <ImageView
-                android:src="@drawable/icon_record"
+                android:src="@android:drawable/ic_btn_speak_now"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="5dp"
