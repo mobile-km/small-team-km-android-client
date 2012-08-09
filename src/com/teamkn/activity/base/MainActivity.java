@@ -165,7 +165,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         
         //>>
 	    mLoadLayout = new LinearLayout(this);   
-        mLoadLayout.setMinimumHeight(60);   
+        mLoadLayout.setMinimumHeight(40);   
         mLoadLayout.setGravity(Gravity.CENTER);   
         mLoadLayout.setOrientation(LinearLayout.HORIZONTAL);   
 
@@ -240,7 +240,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 			public Void do_in_background(Void... params) throws Exception {
 				totalCount = NoteDBHelper.getCount();
 				maxResult = getMaxResult();
-				notes=NoteDBHelper.getAllItems(index, maxResult);
+				notes=NoteDBHelper.getAllItems(index, getMaxResult());
 				return null;
 			}
 			@Override
@@ -284,7 +284,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 					int visibleItemCount, int totalItemCount) {
          	   
          	  if (firstVisibleItem + visibleItemCount == totalItemCount && isUpdating) {
-                  if (currentPage <= totalCount/VIEW_COUNT) { // 防止最后一次取数据进入死循环。
+                  if (currentPage <= (totalCount/VIEW_COUNT+1)) { // 防止最后一次取数据进入死循环。
                 	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
                 	  isUpdating=false ;
                 	  ++currentPage;
@@ -310,7 +310,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
             index += VIEW_COUNT;
             List<Note> list = new ArrayList<Note>();
             try {
-				list = NoteDBHelper.getAllItems(index, maxResult);
+				list = NoteDBHelper.getAllItems(index, getMaxResult());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -352,7 +352,9 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	//同步
 	public void click_manual_syn(View view){
 		if(syn_note_binder != null){
-		    syn_note_binder.manual_syn();
+			manual_syn_bn.setVisibility(View.VISIBLE);
+			data_syn_progress_bar.setVisibility(View.VISIBLE);
+		    syn_note_binder.manual_syn();   
 		}
 	}
 	
@@ -403,21 +405,20 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		 if(keyCode == KeyEvent.KEYCODE_BACK){
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this); //这里只能用this，不能用appliction_context
-			
-			builder
-				.setTitle(R.string.dialog_close_app_title)
-				.setMessage(R.string.dialog_close_app_text)
-				.setPositiveButton(R.string.dialog_ok,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int which) {
-							MainActivity.this.finish();
-						}
-					})
-				.setNegativeButton(R.string.dialog_cancel, null)
-				.show();
-			
+//			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this); //这里只能用this，不能用appliction_context
+//			
+//			builder
+//				.setTitle(R.string.dialog_close_app_title)
+//				.setMessage(R.string.dialog_close_app_text)
+//				.setPositiveButton(R.string.dialog_ok,
+//					new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface dialog,
+//								int which) {
+//							MainActivity.this.finish();
+//						}
+//					})
+//				.setNegativeButton(R.string.dialog_cancel, null)
+//				.show();			
 			return true;
 		 }
 		 return super.onKeyDown(keyCode, event);
@@ -442,7 +443,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		      public void run() {
 		        data_syn_textview.setText(R.string.now_syning);
 		        data_syn_progress_bar.setProgress(0);
-		        ///////////////////////////////////////
 		        data_syn_progress_bar.setVisibility(View.VISIBLE);
 		      }
           });
@@ -498,8 +498,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
       }
 	  }
 	 
-	 
-	 
 	    /** 
 	     * 监听滑动 
 	     */
@@ -511,12 +509,16 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			/*boolean menuOut = HorzScrollWithListMenu.menuOut;
-			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
-	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        }  */
+//			float width = e1.getX() - e2.getX();
+//			boolean menuOut = HorzScrollWithListMenu.menuOut;
+////			System.out.println( "mainActivity.java menuOut =  " + menuOut + " : " + width  + " : " + distanceX);
+//			if (e1.getX() - e2.getX() < -150 && !menuOut ) {  //向左滑动 
+//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+////	            System.out.println("distanceX  = " +  distanceX );
+//			}else if(e1.getX() - e2.getX() > 150  && menuOut ){
+//	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+////	        	 System.out.println("distanceX  = " +  distanceX );
+//			}
 	        return false;  
 		}
 		@Override
@@ -527,14 +529,12 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 				float distanceY) {
 			float width = e1.getX() - e2.getX();
 			boolean menuOut = HorzScrollWithListMenu.menuOut;
-//			System.out.println( "mainActivity.java menuOut =  " + menuOut + " : " + width  + " : " + distanceX);
-			if (e1.getX() - e2.getX() < -150 && !menuOut && distanceX>-2 ) {  //向左滑动 
+			System.out.println( "settingActivity.java menuOut =  " + menuOut + " : " + distanceX + " : " +width);
+			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//	            System.out.println("distanceX  = " +  distanceX );
-			}else if(e1.getX() - e2.getX() > 150  && menuOut && distanceX<2){
+	        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
 	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//	        	 System.out.println("distanceX  = " +  distanceX );
-			}
+	        }
 			return true;
 		}
 		@Override

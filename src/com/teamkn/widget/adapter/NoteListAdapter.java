@@ -13,6 +13,7 @@ import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
+import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 
@@ -55,14 +56,15 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
             Bitmap bitmap = CompressPhoto.get_thumb_bitmap_form_file(image_file_path);
             view_holder.note_image_iv.setVisibility(View.VISIBLE);
             view_holder.note_image_iv.setImageBitmap(bitmap);
+            
+//            ImageCache.load_cached_image(image_file_path, view_holder.note_image_iv);
         } else {
             view_holder.note_image_iv.setVisibility(View.GONE);
         }
         final int p = position;
         view_holder.note_image_iv_delete.setOnClickListener(new OnClickListener() {	
 			@Override
-			public void onClick(View v) {
-				
+			public void onClick(View v) {				
 				AlertDialog.Builder builder = new AlertDialog.Builder(activity); //这里只能用this，不能用appliction_context
 				builder
 					.setTitle("删除信息")

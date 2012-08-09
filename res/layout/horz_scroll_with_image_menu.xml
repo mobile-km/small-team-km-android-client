@@ -157,8 +157,8 @@
             />
             <ImageView
                 android:src="@android:drawable/ic_btn_speak_now"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:onClick="click_go_edit_node_record_activity"
             />

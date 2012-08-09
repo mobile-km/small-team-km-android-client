@@ -74,7 +74,8 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 	  }
 	  
 	  private void load_listview() {
-		  adapter = new ChatListAdapter(ChatListActivity.this);
+		    adapter = new ChatListAdapter(ChatListActivity.this);
+		    
 			new TeamknAsyncTask<Void, Void, Void>(ChatListActivity.this,"加载中...") {
 
 				@Override
@@ -84,7 +85,7 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 				}
 				@Override
 				public void on_success(Void result) {
-				    adapter.add_items(chat_list);
+					adapter.add_items(chat_list);
 				    chat_list_lv.setAdapter(adapter);
 				}
 			}.execute();
@@ -102,12 +103,6 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		    });
 	}
 
-	@Override
-	  protected void onResume() {  
-		
-	    super.onResume();
-	  }
-	  
 	  public void click_new_chat_bn(View view){
 	    open_activity(SelectChatMemberActivity.class);
 	  }
@@ -124,12 +119,14 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			/*boolean menuOut = HorzScrollWithListMenu.menuOut;
-			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
-	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        } */ 
+//			float width = Math.abs(e1.getX() - e2.getX());
+//			boolean menuOut = HorzScrollWithListMenu.menuOut;
+////			System.out.println( "chatActivity.java menuOut =  " + menuOut);
+//			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
+//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//	        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
+//	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//	        }
 	        return false;  
 		}
 		@Override
@@ -140,10 +137,10 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 				float distanceY) {
 			float width = Math.abs(e1.getX() - e2.getX());
 			boolean menuOut = HorzScrollWithListMenu.menuOut;
-//			System.out.println( "chatActivity.java menuOut =  " + menuOut);
-			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
+//			System.out.println( "settingActivity.java menuOut =  " + menuOut);
+			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
+	        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
 	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
 	        }
 			return true;

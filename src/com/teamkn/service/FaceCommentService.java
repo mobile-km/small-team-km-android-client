@@ -34,7 +34,7 @@ public class FaceCommentService extends Service implements Runnable{
 						int service_user_id = UserDBHelper.find(att.client_user_id).user_id;
 						HttpApi.Attitudes.create(att.chat_node_id,service_user_id,att.kind,node.server_chat_node_id);
 					}
-					System.out.println(" facecommentservice... "+list.size());
+//					System.out.println(" facecommentservice... "+list.size());
 					HttpApi.Attitudes.getcreat(context);
 				}	
 				Thread.sleep(15000);		
