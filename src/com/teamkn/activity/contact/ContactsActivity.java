@@ -110,14 +110,14 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
       @Override
       public Void do_in_background(Void... params) throws Exception {
         if(TeamknPreferences.never_syn()){
-          HttpApi.Contact.refresh_status();
-        }
-        load_contacts_to_list();
+            HttpApi.Contact.refresh_status();
+        }   
         return null;
       }
 
       @Override
       public void on_success(Void resule) {
+    	  load_contacts_to_list();
         Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
       }

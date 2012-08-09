@@ -27,6 +27,7 @@ public class IndexService extends Service {
     }
 
     public static Message obtain_index_request(Note note, int action) {
+    	System.out.println("action = " + action + " : " + note.uuid);
         return Message.obtain(handler, action, note);
     }
 

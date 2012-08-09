@@ -45,7 +45,7 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    detector = new GestureDetector(this);
+	     detector = new GestureDetector(this);
 	     // <<
  		 LayoutInflater inflater = LayoutInflater.from(this);
          setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
@@ -69,36 +69,42 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
          //>>
 
 	    chat_list_lv = (ListView)chat_listview.findViewById(R.id.chat_list_lv);
+	    
+	    load_listview();
 	  }
 	  
-	  @Override
-	  protected void onResume() {  
-		adapter = new ChatListAdapter(ChatListActivity.this);
-		new TeamknAsyncTask<Void, Void, Void>() {
+	  private void load_listview() {
+		  adapter = new ChatListAdapter(ChatListActivity.this);
+			new TeamknAsyncTask<Void, Void, Void>(ChatListActivity.this,"加载中...") {
 
-			@Override
-			public Void do_in_background(Void... params) throws Exception {
-				chat_list = ChatDBHelper.find_list();
-				return null;
-			}
-			@Override
-			public void on_success(Void result) {
-			    adapter.add_items(chat_list);
-			    chat_list_lv.setAdapter(adapter);
-			}
-		}.execute();
-	    
-	    chat_list_lv.setOnItemClickListener(new OnItemClickListener() {
-	      @Override
-	      public void onItemClick(AdapterView<?> arg0, View item, int arg2,
-	          long arg3) {
-	        TextView tv = (TextView)item.findViewById(R.id.chat_id_tv);
-	        Integer chat_id = (Integer)tv.getTag();
-	        Intent intent = new Intent(ChatListActivity.this,ChatActivity.class);
-	        intent.putExtra(ChatActivity.Extra.CLIENT_CHAT_ID, chat_id);
-	        startActivity(intent);
-	      }
-	    });
+				@Override
+				public Void do_in_background(Void... params) throws Exception {
+					chat_list = ChatDBHelper.find_list();
+					return null;
+				}
+				@Override
+				public void on_success(Void result) {
+				    adapter.add_items(chat_list);
+				    chat_list_lv.setAdapter(adapter);
+				}
+			}.execute();
+		    
+		    chat_list_lv.setOnItemClickListener(new OnItemClickListener() {
+		      @Override
+		      public void onItemClick(AdapterView<?> arg0, View item, int arg2,
+		          long arg3) {
+		        TextView tv = (TextView)item.findViewById(R.id.chat_id_tv);
+		        Integer chat_id = (Integer)tv.getTag();
+		        Intent intent = new Intent(ChatListActivity.this,ChatActivity.class);
+		        intent.putExtra(ChatActivity.Extra.CLIENT_CHAT_ID, chat_id);
+		        startActivity(intent);
+		      }
+		    });
+	}
+
+	@Override
+	  protected void onResume() {  
+		
 	    super.onResume();
 	  }
 	  
@@ -118,13 +124,13 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			System.out.println("----------------  "  + e1.getX() + " : " + e2.getX());
-			if (e1.getX() - e2.getX() > 120) {  //向左滑动 
+			/*boolean menuOut = HorzScrollWithListMenu.menuOut;
+			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
+	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
 	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        }  
-	        return true;  
+	        } */ 
+	        return false;  
 		}
 		@Override
 		public void onLongPress(MotionEvent e) {	
@@ -132,7 +138,15 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
-			return false;
+			float width = Math.abs(e1.getX() - e2.getX());
+			boolean menuOut = HorzScrollWithListMenu.menuOut;
+//			System.out.println( "chatActivity.java menuOut =  " + menuOut);
+			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
+	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	        }
+			return true;
 		}
 		@Override
 		public void onShowPress(MotionEvent e) {	

@@ -65,7 +65,8 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     /**
      * Helper for examples with a HSV that should be scrolled by a menu View's width.
      */
-    static boolean menuOut = false;
+    public static boolean menuOut = false;
+    
     public static class ClickListenerForScrolling implements OnClickListener{
         HorizontalScrollView scrollView;
         View menu;
@@ -117,6 +118,83 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
                 scrollView.smoothScrollTo(left, 0);
             }
             menuOut = !menuOut;
+    	}
+    	
+    	static int ji_left_no = 0;
+    	static int ji_left_is = 0;
+    	
+    	public static void flag_show_menu_move(final HorizontalScrollView scrollView, final View menu){
+    		menu.getContext();
+    		
+            final int menuWidth = menu.getMeasuredWidth();
+            ji_left_no = menuWidth;
+            // Ensure menu is visible
+            menu.setVisibility(View.VISIBLE);
+            menuOut = !menuOut;
+            if (menuOut) {   
+            	new Thread(){
+            		public void run() {
+            			try {	
+	               			int left = 0; 
+	               			
+	                        boolean isrun = true;
+	               			while(isrun){
+	               				ji_left_no -=1;
+	               				menu.post(new Runnable() {
+	            					@Override
+	            					public void run() {
+	            						scrollView.smoothScrollTo(ji_left_no, 0);
+	            					}
+	            				}) ;
+	               				
+	               				Thread.sleep(1);
+	               				if(ji_left_no<=left){
+	               					isrun = false;
+	               					
+	               					
+	               					ji_left_no = 0;
+	               				}
+	               			}	
+	           			} catch (InterruptedException e) {
+	           				e.printStackTrace();
+	           			}
+            		};
+            	}.start();
+                
+                
+            } else {
+            	
+            	new Thread(){
+            		public void run() {
+            			try {	
+	              			int left = menuWidth; 
+	              			
+	                        boolean isrun = true;
+	              			while(isrun){
+	              				ji_left_is +=1;
+	              				menu.post(new Runnable() {					
+	            					@Override
+	            					public void run() {	
+	            						scrollView.smoothScrollTo(ji_left_is, 0);
+	            					}
+	            				}); 
+	              				
+	              				Thread.sleep(1);
+	              				if(ji_left_is>=left){
+	              					isrun = false;
+	              					 
+	              					ji_left_is = 0;
+	              				}
+	              			}	
+	          			} catch (InterruptedException e) {
+	          				e.printStackTrace();
+	          			}
+            		};
+            	}.start();
+            	
+            	
+            }  
+           
     	}
     }
 

@@ -85,7 +85,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         public final static int EDIT_TEXT = 0;
     }
 	//  node_listView_show 数据
-	private ListView note_list;
+	private static ListView note_list;
 	// 定义每一页显示行数
     private  int VIEW_COUNT = 20;  
     // 定义的页数
@@ -158,7 +158,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         
         View transparent = new TextView(this);
         transparent.setBackgroundColor(android.R.color.transparent);
-
         final View[] children = new View[] { transparent, base_main };
         int scrollToViewIdx = 1;
         scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
@@ -184,9 +183,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
 		progress_set_num = (TextView)findViewById(R.id.progress_set_num);
 		manual_syn_bn = (ImageView)base_main.findViewById(R.id.manual_syn_bn);
-		
-		note_list = (ListView)base_main.findViewById(R.id.note_list);
-		note_list.addFooterView(mLoadLayout);
 		
 		// 注册更新服务
 		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
@@ -235,6 +231,8 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
     }
 	//加载node_listview
 	private void load_list() {
+		note_list = (ListView)base_main.findViewById(R.id.note_list);
+		note_list.addFooterView(mLoadLayout);
 		notes  = new ArrayList<Note>();
 		note_list_adapter = new NoteListAdapter(MainActivity.this);
 		new TeamknAsyncTask<Void, Void, Void>() {
@@ -247,30 +245,12 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 			}
 			@Override
 			public void on_success(Void result) {
+				
 		        note_list_adapter.add_items(notes);
 		        note_list.setAdapter(note_list_adapter);
 			}
 		}.execute();
-		
-//		try {
-//			totalCount = NoteDBHelper.getCount();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//        maxResult = getMaxResult();
-//		
-//        try {
-//        	   notes=NoteDBHelper.getAllItems(index, maxResult);
-//        	   System.out.println(" -----  " + index + "  :  " + maxResult + "  :  " + notes.size() + " :  " + totalCount);
-////            notes =  NoteDBHelper.all(false);
-//        } catch (Exception e) {
-//            BaseUtils.toast("读取 note 列表失败");
-//            e.printStackTrace();
-//        }
-//        note_list_adapter = new NoteListAdapter(this);
-//        note_list_adapter.add_items(notes);
-//        note_list.setAdapter(note_list_adapter);
-        
+
         note_list.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> list_view,View list_item,int item_id,long position) {
@@ -291,12 +271,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
             }
         });
 
-        note_list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
-                menu.add(Menu.NONE, 0, 0, "删除");
-            }
-        });
         
         
         note_list.setOnScrollListener(new OnScrollListener() {			
@@ -355,36 +329,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
             System.out.println("end update--------------");
         }
     } 	
-	
-	//listview的长按事件
-	@Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo menuInfo;
-        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        TextView note_info_tv = (TextView) menuInfo.targetView.findViewById(R.id.note_info_tv);
-        String   uuid  = (String) note_info_tv.getTag(R.id.tag_note_uuid);
-        destroy_note_confirm(uuid);
-
-        return super.onContextItemSelected(item);
-    }
-	//listview的长按事件的删除方法
-	protected void destroy_note_confirm(final String uuid) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
-
-        builder.setMessage("确认要删除吗？")
-               .setPositiveButton(R.string.dialog_ok,
-                       new DialogInterface.OnClickListener() {
-                           public void onClick(DialogInterface dialog,
-                                               int             which) {
-                               NoteDBHelper.destroy(uuid);
-                               // 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
-                               load_list();
-                           }
-                       })
-               .setNegativeButton(R.string.dialog_cancel, null)
-               .show();
-    }
 	// 处理其他activity界面的回调  有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
     @Override
     protected void onActivityResult(int  requestCode, int resultCode,Intent data) {
@@ -566,12 +511,13 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			if (e1.getX() - e2.getX() > 120) {  //向左滑动 
+			/*boolean menuOut = HorzScrollWithListMenu.menuOut;
+			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
+	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
 	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-	        }  
-	        return true;  
+	        }  */
+	        return false;  
 		}
 		@Override
 		public void onLongPress(MotionEvent e) {	
@@ -579,7 +525,17 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
-			return false;
+			float width = e1.getX() - e2.getX();
+			boolean menuOut = HorzScrollWithListMenu.menuOut;
+//			System.out.println( "mainActivity.java menuOut =  " + menuOut + " : " + width  + " : " + distanceX);
+			if (e1.getX() - e2.getX() < -150 && !menuOut && distanceX>-2 ) {  //向左滑动 
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//	            System.out.println("distanceX  = " +  distanceX );
+			}else if(e1.getX() - e2.getX() > 150  && menuOut && distanceX<2){
+	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//	        	 System.out.println("distanceX  = " +  distanceX );
+			}
+			return true;
 		}
 		@Override
 		public void onShowPress(MotionEvent e) {	
@@ -596,5 +552,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		public boolean dispatchTouchEvent(MotionEvent ev) {
 		   this.detector.onTouchEvent(ev);
 		   return super.dispatchTouchEvent(ev);
-		}
+		  
+		}		
 }
