@@ -63,11 +63,12 @@ public class SynNoteService extends Service {
       if(syn_note_handler.has_syning()){
         return;
       }
-      syn_note_handler.removeMessages(SynNoteHandler.SYN_MESSAGE);
+      syn_note_handler.removeMessages(SynNoteHandler.SYN_MESSAGE);   
       syn_note_handler.sendEmptyMessage(SynNoteHandler.SYN_MESSAGE);
+      System.out.println(" manual_syn() ------------------- " );
     }
+    
   }
-
   public class SynNoteHandlerThread extends HandlerThread{
     public SynNoteHandlerThread() {
       super("同步笔记的工作线程");
@@ -108,7 +109,7 @@ public class SynNoteService extends Service {
     }
     
     public void check_network(){
-      System.out.println(BaseUtils.is_wifi_active(SynNoteService.this));
+      System.out.println("SynNoteService.java " + BaseUtils.is_wifi_active(SynNoteService.this));
       if(BaseUtils.is_wifi_active(SynNoteService.this)){
         start_syn();
       }else{
@@ -144,6 +145,7 @@ public class SynNoteService extends Service {
         syn_ui_binder.set_syn_success();
         sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
       }catch(ServerErrorException see){
+    	  int i = 1/0;
         see.printStackTrace();
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 30*60*1000);

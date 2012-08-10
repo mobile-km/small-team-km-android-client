@@ -82,7 +82,8 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
 
   	indexBar = (SideBar) contact_list_linkman.findViewById(R.id.sideBar);  
     indexBar.setListView(lvContact); 
-    mDialogText = (TextView) LayoutInflater.from(this).inflate(R.layout.list_position, null);
+    
+    mDialogText = (TextView) LayoutInflater.from(this).inflate(R.layout.list_position, null).findViewById(R.id.list_postion_tv);
     mDialogText.setVisibility(View.INVISIBLE);
     WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
               LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
@@ -91,10 +92,12 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
                       | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
               PixelFormat.TRANSLUCENT);
       try {
+    	  
 		mWindowManager.addView(mDialogText, lp);
+		
 	} catch (Exception e) {
 		System.out.println("ｃｏｎｔａｃｔｓａｃｔｉｖｉｔｙ　　ｅｘｃｅｐｔｉｏｎ" +e.getMessage());
-		e.printStackTrace();
+//		e.printStackTrace();
 	}
       indexBar.setTextView(mDialogText);
   }
@@ -110,14 +113,14 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
       @Override
       public Void do_in_background(Void... params) throws Exception {
         if(TeamknPreferences.never_syn()){
-          HttpApi.Contact.refresh_status();
-        }
-        load_contacts_to_list();
+            HttpApi.Contact.refresh_status();
+        }   
         return null;
       }
 
       @Override
       public void on_success(Void resule) {
+    	  load_contacts_to_list();
         Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
       }

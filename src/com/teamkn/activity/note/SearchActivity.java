@@ -269,24 +269,33 @@ public class SearchActivity extends TeamknBaseActivity implements OnGestureListe
 		return false;
 	}
 	// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		if (e1.getX() - e2.getX() > 120) {  //向左滑动 
-            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-        } else if (e1.getX() - e2.getX() < -120) {  //向右滑动
-        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-        }  
-        return true;  
-	}
-	@Override
-	public void onLongPress(MotionEvent e) {	
-	}
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		return false;
-	}
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+//			boolean menuOut = HorzScrollWithListMenu.menuOut;
+//			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
+//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+//	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
+//	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
+//	        }  
+	        return false;  
+		}
+		@Override
+		public void onLongPress(MotionEvent e) {	
+		}
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+				float distanceY) {
+			float width = Math.abs(e1.getX() - e2.getX());
+			boolean menuOut = HorzScrollWithListMenu.menuOut;
+//			System.out.println( "serarchActivity.java menuOut =  " + menuOut);
+			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
+	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	        }
+			return true;
+		}
 	@Override
 	public void onShowPress(MotionEvent e) {	
 	}

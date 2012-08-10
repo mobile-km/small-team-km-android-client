@@ -265,10 +265,9 @@ public class NoteDBHelper extends BaseModelDBHelper {
         values.put(Constants.TABLE_NOTES__IS_REMOVED, 1);
         values.put(Constants.TABLE_NOTES__IS_CHANGED_BY_CLIENT,1);
         values.put(Constants.TABLE_NOTES__CLIENT_UPDATED_TIME, current_seconds);
-
+        System.out.println("------------------------ **********  " + uuid);
         return update_columns(uuid, values);
     }
-
     private static String create_item_by_kind(String note_content, String kind) {
         long current_seconds = System.currentTimeMillis() / 1000;
         String uuid = UUID.randomUUID().toString();
@@ -315,6 +314,8 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 IndexService.obtain_index_request(note,
                                                   action.DELETE)
                             .sendToTarget();
+                db.delete(Constants.TABLE_NOTES,Constants.TABLE_NOTES__UUID + " = ? ",
+                        new String[]{uuid});
             } else {
                 IndexService.obtain_index_request(note,
                                                   action.UPDATE)
@@ -371,7 +372,8 @@ public class NoteDBHelper extends BaseModelDBHelper {
     
     public static List<Note> getAllItems(int firstResult, int maxResult) throws Exception {
         SQLiteDatabase db = get_read_db();
-        String sql = "select * from '" + Constants.TABLE_NOTES + "' limit ?,?";
+        String sql = "select * from '" + Constants.TABLE_NOTES+ "' " + " limit ?,? ";
+//        String sql = "select * from '" + Constants.TABLE_NOTES+ "' order by uuid desc " + " limit ?,? ";
         List<Note> notes = new ArrayList<Note>();
         Cursor cursor;
         
