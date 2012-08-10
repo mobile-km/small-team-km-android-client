@@ -25,7 +25,9 @@ import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.widget.adapter.NoteListAdapter;
 
 abstract public class TeamknBaseActivity extends Activity {
 	public class RequestCode{

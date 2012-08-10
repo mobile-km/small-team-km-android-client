@@ -2,6 +2,7 @@ package com.teamkn.activity.note;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -35,7 +36,17 @@ public class EditNoteActivity extends TeamknBaseActivity {
         public static final String NOTE_KIND = "note_kind";
         public static final String NOTE_IMAGE_PATH = "note_image_path";
     }
-
+    public String getRealPathFromURI(Activity act, Uri contentUri) {
+    	  // can post image
+    	  String[] proj = { MediaStore.Images.Media.DATA };
+    	  Cursor cursor = act.managedQuery(contentUri, proj, // Which columns to return
+    	    null, // WHERE clause; which rows to return (all rows)
+    	    null, // WHERE clause selection arguments (none)
+    	    null); // Order-by clause (ascending by name)
+    	  int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+    	  cursor.moveToFirst();
+    	  return cursor.getString(column_index);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +65,12 @@ public class EditNoteActivity extends TeamknBaseActivity {
         System.out.println( "content.getParcelable(Intent.EXTRA_STREAM)  " +content.getParcelable(Intent.EXTRA_STREAM) );
         if ( content.getParcelable(Intent.EXTRA_STREAM) != null ) {
         	 uri = (Uri)content.getParcelable(Intent.EXTRA_STREAM); 
-        	 image_path = uri.toString();
+        	 image_path = getRealPathFromURI(this,uri);
         }
         
-        System.out.println(" getIntent() text = " + text);
-        System.out.println(" getIntent() uri = " + uri);
-        System.out.println(" getIntent() image_path = " + image_path);
+//        System.out.println(" getIntent() text = " + text);
+//        System.out.println(" getIntent() uri = " + uri);
+//        System.out.println(" getIntent() image_path = " + image_path);
         if(!is_logged_in()){
         	open_activity(LoginActivity.class);
             finish();
@@ -183,7 +194,7 @@ public class EditNoteActivity extends TeamknBaseActivity {
             @Override
             public Void do_in_background(String... params) throws Exception {
                 String image_path = params[0];
-
+                System.out.println("editNoteActivity.java image_path =    " +  params[0]);
                 NoteDBHelper.create_image_note(image_path);
                 return null;
             }

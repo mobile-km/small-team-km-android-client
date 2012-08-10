@@ -231,6 +231,11 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
     }
 	//加载node_listview
 	private void load_list() {
+		// 定义的页数
+	    index = 0;   
+	    // 当前页
+	    currentPage = 1;  
+	    
 		note_list = (ListView)base_main.findViewById(R.id.note_list);
 		note_list.addFooterView(mLoadLayout);
 		notes  = new ArrayList<Note>();
@@ -289,17 +294,14 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
                 	  isUpdating=false ;
                 	  ++currentPage;
 //                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
-//                    note_list.addFooterView(view);
-                	  
+//                    note_list.addFooterView(view);  
                 	  mLoadLayout.setVisibility(View.VISIBLE);
                 	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
                       asyncUpdateWeiBoDatasTask.execute();
                       
                   }
                   System.out.println("begin update-------------");
-              }
-         	   
-         	    
+              }  
 			}
 		});
     }
@@ -346,9 +348,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         note_list_adapter.notifyDataSetChanged();
         
     }
-	
-    
-    
+
 	//同步
 	public void click_manual_syn(View view){
 		if(syn_note_binder != null){
@@ -473,7 +473,14 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 					data_syn_progress_bar.setVisibility(View.GONE);
 					progress_set_num.setText("");
 					manual_syn_bn.setVisibility(View.VISIBLE);
-					load_list();
+
+					note_list.post(new Runnable() {
+						@Override
+						public void run() {
+							load_list(); 
+//							note_list_adapter.remove_item(totalCount);
+						}
+					});
 				}
 			});
 			  

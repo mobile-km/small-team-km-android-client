@@ -22,6 +22,8 @@ public class ImageCacheSoftRefSingleton {
         used_bitmap_list = Collections.synchronizedMap(new LinkedHashMap<File, SoftReference<Bitmap>>());
     }
 
+    
+    
     // 解读一个文件为 bitmap 并放入 image_view
     // 如果页面上产生了太多的 image_view 和 bitmap 就会导致内存溢出
     // 因此需要手动管理他们的内存释放
