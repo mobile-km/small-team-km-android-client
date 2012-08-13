@@ -77,23 +77,33 @@ public class RegisterActivity extends TeamknBaseActivity{
 		if( !BaseUtils.is_wifi_active(RegisterActivity.this)){
 			tv_intent_no.setVisibility(View.VISIBLE);
 			judge = false;
+		}else{
+			tv_intent_no.setVisibility(View.GONE);
 		}
 		
 		if(BaseUtils.is_str_blank(email)){
 			tv_email_no.setVisibility(View.VISIBLE);
 			judge = false;
+		}else{
+			tv_email_no.setVisibility(View.GONE);
 		}
 		if(BaseUtils.is_str_blank(name)){
 			tv_name_no.setVisibility(View.VISIBLE);
 			judge = false;
+		}else{
+			tv_name_no.setVisibility(View.GONE);
 		}
 		if(BaseUtils.is_str_blank(password)){
 			tv_password_no.setVisibility(View.VISIBLE);
 			judge = false;
+		}else{
+			tv_password_no.setVisibility(View.GONE);
 		}
 		if(BaseUtils.is_str_blank(affirm_password)){
 			tv_affirm_password_no.setVisibility(View.VISIBLE);
 			judge = false;
+		}else{
+			tv_affirm_password_no.setVisibility(View.GONE);
 		}
 		if(!judge){
 			ll_show.setVisibility(View.VISIBLE);

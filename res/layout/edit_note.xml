@@ -14,18 +14,19 @@
             android:layout_height="fill_parent"
             android:layout_above="@+id/bottom_bar"
             >
+        <ImageView
+                android:id="@+id/note_image_iv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone"
+                />
         <EditText
                 android:id="@+id/note_content_et"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:hint="@string/note_content_et"
+                android:autoLink="all"
                 style="@style/note_content_inputer_layout"
-                android:visibility="gone"
-                />
-        <ImageView
-                android:id="@+id/note_image_iv"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
                 android:visibility="gone"
                 />
     </LinearLayout>

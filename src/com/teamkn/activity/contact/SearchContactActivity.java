@@ -57,6 +57,7 @@ public class SearchContactActivity extends TeamknBaseActivity {
 
       @Override
       public void on_success(List<SearchUser> list) {
+    	  System.out.println("SearchContactActivity " + list.size());
         adapter = new SearchUserListAdapter(SearchContactActivity.this);
         adapter.add_items(list);
         search_user_lv.setAdapter(adapter);

@@ -32,7 +32,8 @@ import java.util.List;
 
 public class HttpApi {
 
-    public static final String SITE = "http://192.168.1.38:9527";
+//    public static final String SITE = "http://192.168.1.38:9527";
+	public static final String SITE = "http://teamkn.mindpin.com";
 
     // 各种路径常量
     public static final String 用户注册 = "/signup_submit";
@@ -304,8 +305,14 @@ public class HttpApi {
             ){
           @Override
           public List<SearchUser> on_success(String response_text) throws Exception {
+            
             List<SearchUser> list = new ArrayList<SearchUser>();
+            
+           
+            
             JSONArray array = new JSONArray(response_text);
+            System.out.println("search = " + array);
+            
             for (int i = 0; i < array.length(); i++) {
               JSONObject obj = (JSONObject)array.get(i);
               int user_id = obj.getInt("user_id");

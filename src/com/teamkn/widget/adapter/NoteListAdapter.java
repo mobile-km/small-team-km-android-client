@@ -3,14 +3,12 @@ package com.teamkn.widget.adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.teamkn.Logic.CompressPhoto;
+
 import com.teamkn.R;
-import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.cache.image.ImageCache;
@@ -35,7 +33,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         ViewHolder view_holder      = new ViewHolder();
         view_holder.note_info_tv    = (TextView)  view.findViewById(R.id.note_info_tv);
         view_holder.note_content_tv = (TextView)  view.findViewById(R.id.note_content_tv);
-        view_holder.note_image_iv   = (ImageView) view.findViewById(R.id.note_image_iv);
+        view_holder.note_image_iv   = (ImageView) view.findViewById(R.id.note_image_show_iv);
         view_holder.note_image_iv_delete = (ImageView) view.findViewById(R.id.note_image_iv_delete);
         return view_holder;
 
@@ -46,11 +44,14 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
                                final Note item,
                                int position) {
 
-        final ViewHolder view_holder = (ViewHolder) holder;
+        ViewHolder view_holder = (ViewHolder) holder;
         view_holder.note_info_tv.setTag(R.id.tag_note_uuid, item.uuid);
         view_holder.note_info_tv.setTag(R.id.tag_note_kind, item.kind);
-
+        
+        System.out.println("item  " +  item.kind + " : " + item.content );
+        
         if (item.kind.equals(NoteDBHelper.Kind.IMAGE)) {
+        	System.out.println("note_thumb_image_file  " + Note.note_thumb_image_file(item.uuid).getPath());
             ImageCache.load_cached_image(Note.note_thumb_image_file(item.uuid), view_holder.note_image_iv);
             view_holder.note_image_iv.setVisibility(View.VISIBLE);
         } else {

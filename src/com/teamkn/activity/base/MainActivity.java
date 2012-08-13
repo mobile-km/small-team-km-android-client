@@ -224,7 +224,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	}
 	private int getMaxResult() {
         int totalPage = (totalCount + VIEW_COUNT - 1) / VIEW_COUNT;
-        if(currentPage == totalPage-1){
+        if(currentPage == totalPage){
         	 return totalCount - (totalPage - 1) * VIEW_COUNT;
         }
         return VIEW_COUNT;
@@ -237,7 +237,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	    currentPage = 1;  
 	    
 		note_list = (ListView)base_main.findViewById(R.id.note_list);
-		note_list.addFooterView(mLoadLayout);
+		
 		notes  = new ArrayList<Note>();
 		note_list_adapter = new NoteListAdapter(MainActivity.this);
 		new TeamknAsyncTask<Void, Void, Void>() {
@@ -246,6 +246,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 				totalCount = NoteDBHelper.getCount();
 				maxResult = getMaxResult();
 				notes=NoteDBHelper.getAllItems(index, getMaxResult());
+				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				return null;
 			}
 			@Override
@@ -280,21 +281,19 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         
         note_list.setOnScrollListener(new OnScrollListener() {			
 			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				
-			}
-			
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
          	   
          	  if (firstVisibleItem + visibleItemCount == totalItemCount && isUpdating) {
-                  if (currentPage <= (totalCount/VIEW_COUNT+1)) { // 防止最后一次取数据进入死循环。
+                  if (currentPage < (totalCount/VIEW_COUNT+1)) { // 防止最后一次取数据进入死循环。
                 	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
                 	  isUpdating=false ;
                 	  ++currentPage;
 //                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
 //                    note_list.addFooterView(view);  
+                	  note_list.addFooterView(mLoadLayout);
                 	  mLoadLayout.setVisibility(View.VISIBLE);
                 	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
                       asyncUpdateWeiBoDatasTask.execute();
@@ -328,6 +327,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
             isUpdating=true;
             
             mLoadLayout.setVisibility(View.GONE); 
+            note_list.removeFooterView(mLoadLayout);
             System.out.println("end update--------------");
         }
     } 	
@@ -478,6 +478,8 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 						@Override
 						public void run() {
 							load_list(); 
+//							open_activity(MainActivity.class);
+//							MainActivity.this.finish();
 //							note_list_adapter.remove_item(totalCount);
 						}
 					});
@@ -536,10 +538,10 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 				float distanceY) {
 			float width = e1.getX() - e2.getX();
 			boolean menuOut = HorzScrollWithListMenu.menuOut;
-			System.out.println( "settingActivity.java menuOut =  " + menuOut + " : " + distanceX + " : " +width);
-			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
+//			System.out.println( "settingActivity.java menuOut =  " + menuOut + " : " + distanceX + " : " +width);
+			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
+	        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
 	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
 	        }
 			return true;

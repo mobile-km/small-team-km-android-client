@@ -60,7 +60,7 @@ public class ChatActivity extends TeamknBaseActivity {
 	  static int y ;
 	  public class Extra {
 		public static final String CLIENT_CHAT_ID = "client_chat_id";
-		public static final int CHAT_ALBUM = 1;
+		public static final int CHAT_ALBUM = 5;
 	  }
 	  
 	 static ListView chat_node_lv;
@@ -184,7 +184,6 @@ public class ChatActivity extends TeamknBaseActivity {
 			}
 		}.execute();     
      }
-	 
 	 
 	 //111
 	 public static void click_send_attitudes_kind(final ChatActivity context,String kindStr,final int chat_node_id,final int server_chat_node_id){
