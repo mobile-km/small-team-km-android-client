@@ -1,9 +1,15 @@
 package com.teamkn.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Bitmap;
+
+import com.teamkn.Logic.CompressPhoto;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.base.BaseModel;
 import com.teamkn.model.database.ChatDBHelper;
@@ -52,5 +58,24 @@ public class Chat extends BaseModel {
           dir.mkdir();
       }
       return new File(dir, "image");
+  }
+  public static File note_list_image_file(String uuid) {
+	  File chat_image_file = note_list_image_file(uuid);
+      if(!chat_image_file.exists()){ return null; }
+      
+      String thumb_image_file_path = BaseUtils.file_path_join(FileDirs.TEAMKN_CHATS_DIR.getPath(),uuid,"thumb_image");
+      File thumb_image = new File(thumb_image_file_path);
+      
+      if(!thumb_image.exists()){
+          Bitmap bitmap = CompressPhoto.get_thumb_bitmap_form_file(chat_image_file.getPath());
+          try {
+            FileOutputStream out = new FileOutputStream(thumb_image.getPath());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          }
+      }
+      
+      return thumb_image;
   }
 }

@@ -455,10 +455,10 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		      @Override
 		      public void run() {
 		    	progress_set_num.setVisibility(View.VISIBLE);	
+		    	data_syn_progress_bar.setVisibility(View.VISIBLE);
+		        manual_syn_bn.setVisibility(View.GONE);
 		    	int baifen = (num*100)/data_syn_progress_bar.getMax();
 		    	progress_set_num.setText(baifen+"%");
-		        data_syn_progress_bar.setVisibility(View.VISIBLE);
-		        manual_syn_bn.setVisibility(View.GONE);
 		      }
           });
 	    }
@@ -500,6 +500,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 			  public void run() {
 			    String str = BaseUtils.date_string(TeamknPreferences.last_syn_fail_client_time()); 
 			    data_syn_textview.setText("上次同步失败: " + str);
+			    progress_set_num.setText("");
 			    data_syn_progress_bar.setVisibility(View.GONE);
 			    manual_syn_bn.setVisibility(View.VISIBLE);
 			  }

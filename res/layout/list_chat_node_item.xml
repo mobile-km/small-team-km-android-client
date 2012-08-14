@@ -5,7 +5,12 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
 >
-    <ImageView
+    <RelativeLayout 
+        android:id="@+id/relativelayout_top"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
         android:id="@+id/user_avatar_iv"
         android:layout_margin="2dp"
         android:layout_width="56dp"
@@ -41,11 +46,13 @@
         android:layout_alignParentRight="true"
         android:clickable="true" 
         android:focusable="false"
-    /> 
+    />
+        
+    </RelativeLayout> 
     <LinearLayout 
             android:id="@+id/subLayout" 
             android:orientation="vertical" 
-            android:layout_below="@+id/imagebutton_comment" 
+            android:layout_below="@+id/relativelayout_top" 
             android:layout_alignParentRight="true"
             android:background="@drawable/comment_bubble" 
             android:layout_width="250dp" 
