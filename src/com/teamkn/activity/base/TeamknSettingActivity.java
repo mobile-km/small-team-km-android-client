@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
@@ -25,14 +26,15 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestureListener  {
 	private GestureDetector detector;
 	//menu菜单
-		 MyHorizontalScrollView scrollView;
-		 View setting;
-		 View foot_view;  //底层  图层 隐形部分
-		 ImageView iv_foot_view;
-		 
-		 boolean menuOut = false;
-		 Handler handler = new Handler();
-		//
+	 MyHorizontalScrollView scrollView;
+	 View setting;
+	 View foot_view;  //底层  图层 隐形部分
+	 ImageView iv_foot_view;
+	 ImageView foot_view_masking;
+	 
+	 boolean menuOut = false;
+	 Handler handler = new Handler();
+	//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,11 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 //	     addPreferencesFromResource(R.xml.settings);
 	
 	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-	     foot_view = findViewById(R.id.menu);    
+	     foot_view = findViewById(R.id.menu);
+	     foot_view_masking = (ImageView) findViewById(R.id.foot_view_masking);
+	     
+//	     foot_view_masking.setVisibility(View.VISIBLE);
+	     
 	     RelativeLayout foot_rl_setting = (RelativeLayout)findViewById(R.id.foot_rl_setting);
 	     setting = inflater.inflate(R.layout.setting, null);
 	     
@@ -86,12 +92,6 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-//		boolean menuOut = HorzScrollWithListMenu.menuOut;
-//		if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
-//            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-//        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
-//        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-//        }  
         return false;  
 	}
 	@Override
@@ -105,8 +105,12 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 //		System.out.println( "settingActivity.java menuOut =  " + menuOut);
 		if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
             HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//            foot_view_masking.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "width " + (e1.getX() - e2.getX()), 10).show();
         }else if(e1.getX() - e2.getX() < -120  && !menuOut){
-        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+//            foot_view_masking.setVisibility(View.GONE);
+        	Toast.makeText(this, "width " + (e1.getX() - e2.getX()), 10).show();
         }
 		return true;
 	}

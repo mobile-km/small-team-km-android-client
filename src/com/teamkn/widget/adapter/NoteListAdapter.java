@@ -48,11 +48,9 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         view_holder.note_info_tv.setTag(R.id.tag_note_uuid, item.uuid);
         view_holder.note_info_tv.setTag(R.id.tag_note_kind, item.kind);
         
-        System.out.println("item  " +  item.kind + " : " + item.content );
-        
+
         if (item.kind.equals(NoteDBHelper.Kind.IMAGE)) {
-        	System.out.println("note_thumb_image_file  " + Note.note_thumb_image_file(item.uuid).getPath());
-            ImageCache.load_cached_image(Note.note_thumb_image_file(item.uuid), view_holder.note_image_iv);
+        	ImageCache.load_cached_image(Note.note_thumb_image_file(item.uuid), view_holder.note_image_iv);
             view_holder.note_image_iv.setVisibility(View.VISIBLE);
         } else {
             view_holder.note_image_iv.setVisibility(View.GONE);

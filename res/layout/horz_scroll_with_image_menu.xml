@@ -31,6 +31,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
                 android:onClick="click_go_note_activity"
             >
                 <TextView
@@ -58,6 +59,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
                 android:onClick="click_go_chatlist_activity"
             >
                 <TextView
@@ -85,6 +87,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
                 android:onClick="click_go_search_node_activity"
             >
                 <TextView
@@ -112,6 +115,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
                 android:onClick="click_go_setting_activity"
             >
                 <TextView
@@ -134,6 +138,63 @@
                     android:layout_height="0.1dp"
                     android:layout_marginBottom="10dp"
             />
+            <RelativeLayout
+                android:id="@+id/foot_rl_setting"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
+                android:onClick="click_go_account_manage_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="账号管理" 
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+            <RelativeLayout
+                android:id="@+id/foot_rl_setting"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp" 
+                android:layout_marginTop="5dp"
+                android:onClick="click_go_about_teamkn_activity"
+            >
+                <TextView
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="关于" 
+                />
+                <ImageView
+                    android:src="@drawable/camera_accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true" 
+                />
+            </RelativeLayout>
+            <TextView
+                    android:background="#000"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginBottom="10dp"
+            />
+            
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
@@ -162,8 +223,23 @@
                 android:layout_margin="5dp"
                 android:onClick="click_go_edit_node_record_activity"
             />
+            <ImageView
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:onClick="click_exit_teamkn_activity"
+            />
         </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:id="@+id/foot_view_masking"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent" 
+        android:visibility="gone"
+    />
+    
     <!--
     This HorizontalScrollView will contain a LinearLayout that will contain a transparent
     View (that allows the menu above to show through) and the other application Views.
@@ -178,5 +254,5 @@
         </LinearLayout>
 
     </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
-
+    
 </FrameLayout>

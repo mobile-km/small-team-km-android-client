@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -17,21 +15,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -48,7 +38,6 @@ import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.chat.ChatListActivity;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
@@ -78,8 +67,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	 ImageView iv_foot_view;
 	 
 	 boolean menuOut = false;
-	 Handler handler = new Handler();
-
 	//
 	public class RequestCode {
         public final static int EDIT_TEXT = 0;
@@ -95,7 +82,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
     // 所以数据的条数
     private  int  totalCount;     
     // 每次取的数据，只要最后一次可能不一样。
-    private  int maxResult;	
     
     NoteListAdapter note_list_adapter;
     List<Note> notes;
@@ -244,14 +230,13 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
 				totalCount = NoteDBHelper.getCount();
-				maxResult = getMaxResult();
 				notes=NoteDBHelper.getAllItems(index, getMaxResult());
 				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				return null;
 			}
 			@Override
 			public void on_success(Void result) {
-				
+//				note_list.removeAllViews();
 		        note_list_adapter.add_items(notes);
 		        note_list.setAdapter(note_list_adapter);
 			}
@@ -291,15 +276,12 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
                 	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
                 	  isUpdating=false ;
                 	  ++currentPage;
-//                	  Toast.makeText(MainActivity.this,"正在取第" + (currentPage) + "的数据",Toast.LENGTH_LONG).show();
-//                    note_list.addFooterView(view);  
+ 
                 	  note_list.addFooterView(mLoadLayout);
                 	  mLoadLayout.setVisibility(View.VISIBLE);
                 	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
-                      asyncUpdateWeiBoDatasTask.execute();
-                      
+                      asyncUpdateWeiBoDatasTask.execute();   
                   }
-                  System.out.println("begin update-------------");
               }  
 			}
 		});
@@ -321,14 +303,12 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         @Override
         protected void onPostExecute(List<Note> noteOnther) {
             super.onPostExecute(noteOnther);
-//            notes.addAll(noteOnther);
             note_list_adapter.add_items(noteOnther);
             note_list_adapter.notifyDataSetChanged();
             isUpdating=true;
             
             mLoadLayout.setVisibility(View.GONE); 
             note_list.removeFooterView(mLoadLayout);
-            System.out.println("end update--------------");
         }
     } 	
 
@@ -379,51 +359,29 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		stopService(new Intent(MainActivity.this,FaceCommentService.class));
 	}
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_about:
-			open_activity(AboutActivity.class);
-			break;
-		case R.id.menu_setting:
-			open_activity(TeamknSettingActivity.class);
-			break;
-		case R.id.menu_account_management:
-			open_activity(AccountManagerActivity.class);
-			break;
-		}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return super.onCreateOptionsMenu(menu);
+//	}
+//	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.menu_about:
+//			open_activity(AboutActivity.class);
+//			break;
+//		case R.id.menu_setting:
+//			open_activity(TeamknSettingActivity.class);
+//			break;
+//		case R.id.menu_account_management:
+//			open_activity(AccountManagerActivity.class);
+//			break;
+//		}
+//
+//		return super.onOptionsItemSelected(item);
+//	}
 
-		return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		 if(keyCode == KeyEvent.KEYCODE_BACK){
-//			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this); //这里只能用this，不能用appliction_context
-//			
-//			builder
-//				.setTitle(R.string.dialog_close_app_title)
-//				.setMessage(R.string.dialog_close_app_text)
-//				.setPositiveButton(R.string.dialog_ok,
-//					new DialogInterface.OnClickListener() {
-//						public void onClick(DialogInterface dialog,
-//								int which) {
-//							MainActivity.this.finish();
-//						}
-//					})
-//				.setNegativeButton(R.string.dialog_cancel, null)
-//				.show();			
-			return true;
-		 }
-		 return super.onKeyDown(keyCode, event);
-	}
-	
 	 public class SynUIBinder{
 	    public void set_max_num(int max_num){
 	      final int num = max_num;
@@ -537,7 +495,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
-			float width = e1.getX() - e2.getX();
+//			float width = e1.getX() - e2.getX();
 			boolean menuOut = HorzScrollWithListMenu.menuOut;
 //			System.out.println( "settingActivity.java menuOut =  " + menuOut + " : " + distanceX + " : " +width);
 			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 

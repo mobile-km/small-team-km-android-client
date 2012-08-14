@@ -91,7 +91,7 @@ public class AccountListAdapter extends TeamknBaseAdapter<AccountUser> {
         is_edit_mode = false;
         this.notifyDataSetChanged();
     }
-
+    
     public boolean is_edit_mode() {
         return is_edit_mode;
     }

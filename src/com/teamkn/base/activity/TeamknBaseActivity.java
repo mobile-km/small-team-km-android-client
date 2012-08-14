@@ -10,9 +10,14 @@ import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
+import com.teamkn.activity.base.AboutActivity;
 import com.teamkn.activity.base.AccountManagerActivity;
 import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
@@ -111,6 +116,31 @@ abstract public class TeamknBaseActivity extends Activity {
 	 public void click_go_setting_activity(View view){
 		open_activity(TeamknSettingActivity.class);
 	}
+	 
+	 public void click_go_account_manage_activity(View view){
+		 open_activity(AccountManagerActivity.class);
+	}
+	 public void click_go_about_teamkn_activity(View view){
+		 open_activity(AboutActivity.class);
+	}
+	 public void click_exit_teamkn_activity(View view){
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
+			new AlertDialog.Builder(this)
+	    	.setTitle("选择图片")
+				.setTitle("退出程序")
+				.setMessage("是否退出 teamkn？")
+				.setPositiveButton("确定",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int which) {
+//							TeamknBaseActivity.this.finish();
+							ActivitiesStackSingleton.clear_activities_stack();
+						}
+					})
+				.setNegativeButton("取消", null)
+				.show();
+	}
+	 
 	
 	final public void click_go_edit_node_activity(View view){
 		Intent intent = new Intent();
@@ -184,5 +214,12 @@ abstract public class TeamknBaseActivity extends Activity {
 	    startActivity(intent);
 	}
 	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		 if(keyCode == KeyEvent.KEYCODE_BACK){			
+			return true;
+		 }
+		 return super.onKeyDown(keyCode, event);
+	}
 	
 }

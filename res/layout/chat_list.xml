@@ -30,7 +30,6 @@
         android:layout_below="@+id/head_bar"
         android:layout_above="@+id/new_chat_bn"
     />
-    
     <Button
         android:id="@+id/new_chat_bn"
         android:layout_width="fill_parent"

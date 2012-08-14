@@ -6,10 +6,26 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/body"
         >
-    <com.teamkn.widget.view.HeadBar
+   <!--  <com.teamkn.widget.view.HeadBar
             style="@style/head_bar"
             title="关于…"
-            />
+            /> -->
+   <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            >
+        <ImageView
+            android:id="@+id/iv_foot_view"
+            android:src="@drawable/sliding_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/app_name"
+        />
+        <TextView
+                style="@style/head_bar_text_center"
+                android:text="关于..."
+                />
+    </RelativeLayout>
 
     <ScrollView
             android:scrollbars="vertical"
@@ -48,7 +64,7 @@
                     />
 
             <TextView
-                    android:text="参与测试：fushang318, ben7th, liyutong, 月如卡卡, cagia"
+                    android:text="参与测试：fushang318, ben7th, liyutong, 月如卡卡, cagia,展翅"
                     style="@style/about_text"
                     />
 

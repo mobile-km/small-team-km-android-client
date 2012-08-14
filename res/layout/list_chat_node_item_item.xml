@@ -8,7 +8,8 @@
 	    android:id="@+id/imageview_avatar"
 	    android:layout_width="50dp"
 	    android:layout_height="50dp"
-	    android:paddingLeft="10dp"
+	    android:paddingTop="20dp"
+	    android:paddingLeft="20dp"
     />
     <TextView
 	    android:id="@+id/textview_content"

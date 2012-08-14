@@ -25,7 +25,15 @@
             android:layout_alignParentRight="true"
             android:onClick="click_headbar_button_contacts"
         />
-
+        <ImageView
+            android:src="@android:drawable/ic_input_add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="45dp"
+            android:layout_alignRight="@+id/headbar_button_contacts"
+            android:contentDescription="@string/app_name"
+            android:onClick="click_go_edit_node_activity"
+        />
     </RelativeLayout>    
     
     <RelativeLayout

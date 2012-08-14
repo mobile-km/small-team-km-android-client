@@ -75,6 +75,8 @@ public class ChatActivity extends TeamknBaseActivity {
 	  private int client_chat_id;
 	  private static Chat chat;
 	  private static ChatNodeListAdapter adapter;
+	  
+	  private int visibleItemTop = 0;
 	
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +96,18 @@ public class ChatActivity extends TeamknBaseActivity {
 	    List<ChatNode> chat_node_list = ChatNodeDBHelper.find_list(client_chat_id);
 	    adapter = new ChatNodeListAdapter(this);
 	    adapter.add_items(chat_node_list);
-	    
 	    chat_node_lv.setAdapter(adapter); 
 	    
-	    
+	    chat_node_lv.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}	
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {	
+				visibleItemTop = totalItemCount - visibleItemCount + 2;
+			}
+		});
 	  }
 	  public void click_send_chat_node_bn(View view){
 	    final String content = chat_node_et.getText().toString();
@@ -121,6 +131,7 @@ public class ChatActivity extends TeamknBaseActivity {
 			    ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
 			    adapter.add_item(chat_node);
 			    chat_node_et.setText("");
+			    chat_node_lv.setSelection(visibleItemTop);
 		    }
 		 }.execute();
 	    
@@ -181,6 +192,7 @@ public class ChatActivity extends TeamknBaseActivity {
 			     ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
 			     adapter.add_item(chat_node);
 			     chat_node_et.setText("");
+			     chat_node_lv.setSelection(visibleItemTop);
 			}
 		}.execute();     
      }

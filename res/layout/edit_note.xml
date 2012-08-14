@@ -53,6 +53,15 @@
                     android:layout_height="fill_parent"
                     android:onClick="click_save_note_bn"
                     />
+            
+            <Button
+                    android:text="取消"
+                    android:layout_width="60dp"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="200dp"
+                    android:layout_height="fill_parent"
+                    android:onClick="go_back"
+                    />
         </LinearLayout>
     </LinearLayout>
 
