@@ -44,7 +44,13 @@ public class UserDBHelper extends BaseModelDBHelper {
   }
   
   public static int get_client_user_id(int server_user_id){
-    SQLiteDatabase db = get_read_db();
+    SQLiteDatabase db = null;
+	try {
+		db = get_read_db();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     Cursor cursor = db.query(Constants.TABLE_USERS, 
         new String[]{Constants.KEY_ID},
         Constants.TABLE_USERS__USER_ID + " = ?", 

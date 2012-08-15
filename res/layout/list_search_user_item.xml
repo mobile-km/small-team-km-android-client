@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" 
+    android:padding="10dp"
 >
     <ImageView
         android:id="@+id/search_user_avatar_iv"
@@ -17,5 +18,6 @@
         android:id="@+id/search_user_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
     />
 </LinearLayout>

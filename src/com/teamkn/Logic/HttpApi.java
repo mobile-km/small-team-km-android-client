@@ -478,7 +478,7 @@ public class HttpApi {
                   }
             }.go();        
         }
-    	public static void getcreat(final Context context){
+    	public static void getcreat(final Context context) throws Exception {
     		int time = SharedParam.getParam(context);
     		try {
 				new TeamknGetRequest<Void>(获取对话表情反馈,

@@ -64,7 +64,9 @@
             <ListView 
                  android:id="@+id/listview_comment_result"
                  android:background="#fff"
-                 android:padding="10dp" 
+                 android:paddingTop="10dp" 
+                 android:paddingBottom="5dp"
+                 android:layout_marginBottom="5dp"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content">     
              </ListView>

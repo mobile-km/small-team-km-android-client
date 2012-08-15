@@ -132,16 +132,17 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public void onLongPress(MotionEvent e) {	
 		}
+		boolean is_out = false;
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
-			float width = Math.abs(e1.getX() - e2.getX());
-			boolean menuOut = HorzScrollWithListMenu.menuOut;
-//			System.out.println( "settingActivity.java menuOut =  " + menuOut);
-			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
+			if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
+				is_out = !is_out;
 	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
-	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	            System.out.println(" ----- " + (e1.getX() - e2.getX()));
+	        }else if(e1.getX() - e2.getX() < -120  && is_out){
+	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+	            is_out = !is_out;
 	        }
 			return true;
 		}

@@ -3,6 +3,7 @@ package com.teamkn.activity.base;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
@@ -26,6 +28,7 @@ public class AboutActivity extends TeamknBaseActivity   implements OnGestureList
 		 ImageView iv_foot_view;
 		 
 		 boolean menuOut = false;
+		 Handler handler = new Handler();
 	//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +42,14 @@ public class AboutActivity extends TeamknBaseActivity   implements OnGestureList
 
         scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
         foot_view = findViewById(R.id.menu);    
-        RelativeLayout foot_rl_node = (RelativeLayout)findViewById(R.id.foot_rl_node);
+        RelativeLayout foot_rl_about = (RelativeLayout)findViewById(R.id.foot_rl_about);
 
         base_about = inflater.inflate(R.layout.base_about, null);
         
         
         iv_foot_view = (ImageView) base_about.findViewById(R.id.iv_foot_view);
         iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
-        foot_rl_node.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        foot_rl_about.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
         
         View transparent = new TextView(this);
         transparent.setBackgroundColor(android.R.color.transparent);
@@ -81,16 +84,17 @@ public class AboutActivity extends TeamknBaseActivity   implements OnGestureList
 	@Override
 	public void onLongPress(MotionEvent e) {	
 	}
+	boolean is_out = false;
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-//		float width = e1.getX() - e2.getX();
-		boolean menuOut = HorzScrollWithListMenu.menuOut;
-//		System.out.println( "settingActivity.java menuOut =  " + menuOut + " : " + distanceX + " : " +width);
-		if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
+		if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
+			is_out = !is_out;
             HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
-        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+            System.out.println(" ----- " + (e1.getX() - e2.getX()));
+        }else if(e1.getX() - e2.getX() < -120  && is_out){
+            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
+            is_out = !is_out;
         }
 		return true;
 	}

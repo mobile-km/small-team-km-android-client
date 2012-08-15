@@ -130,7 +130,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             ji_left_no = menuWidth;
             // Ensure menu is visible
             menu.setVisibility(View.VISIBLE);
-            menuOut = !menuOut;
+            
             if (menuOut) {   
             	new Thread(){
             		public void run() {
@@ -150,9 +150,9 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 	               				Thread.sleep(1);
 	               				if(ji_left_no<=left){
 	               					isrun = false;
-	               					
-	               					
 	               					ji_left_no = 0;
+//	               					menu.setFocusable(false);
+	               					menuOut = !menuOut;
 	               				}
 	               			}	
 	           			} catch (InterruptedException e) {
@@ -184,6 +184,8 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 	              					isrun = false;
 	              					 
 	              					ji_left_is = 0;
+//	              					menu.setFocusable(true);
+	              					menuOut = !menuOut;
 	              				}
 	              			}	
 	          			} catch (InterruptedException e) {

@@ -123,6 +123,11 @@ abstract public class TeamknBaseActivity extends Activity {
 	 public void click_go_about_teamkn_activity(View view){
 		 open_activity(AboutActivity.class);
 	}
+	 
+	 
+	 public void click_not(View view){}
+	 
+	 
 	 public void click_exit_teamkn_activity(View view){
 //			AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
 			new AlertDialog.Builder(this)

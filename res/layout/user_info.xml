@@ -3,10 +3,21 @@
     android:layout_width="300dp"
     android:layout_height="250dp"
     android:orientation="vertical" >
+    
+    <ImageView
+        android:layout_gravity="right|top"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/btn_dialog"
+        android:onClick="go_back"
+    />
+    
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
     >
         <ImageView
             android:id="@+id/user_info_user_avatar_iv"
@@ -20,6 +31,8 @@
             android:id="@+id/user_info_user_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_marginLeft="10dp"
         />
     </LinearLayout>
     
@@ -30,6 +43,7 @@
         android:layout_width="fill_parent"
         android:orientation="vertical"
         android:visibility="gone"
+        android:padding="10dp"
     >
         <EditText
             android:id="@+id/user_info_invite_message_et"
@@ -37,6 +51,7 @@
             android:layout_height="120dp"
             android:layout_width="fill_parent"
             android:gravity="top"
+            android:textColor="#000"
         />
         <Button
             android:id="@+id/user_info_send_invite_bn"
@@ -44,6 +59,7 @@
             android:layout_height="50dp"
             android:layout_width="fill_parent"
             android:text="发送邀请"
+            android:textColor="#000"
         />
     </LinearLayout>
     
@@ -54,6 +70,7 @@
         android:layout_width="fill_parent"
         android:orientation="vertical"
         android:visibility="gone"
+        android:padding="10dp"
     >
         <Button
             android:id="@+id/user_info_accept_invite_bn"
@@ -64,6 +81,7 @@
             android:layout_height="50dp"
             android:layout_width="fill_parent"
             android:text="接受邀请"
+            android:textColor="#000"
         />
         <Button
             android:id="@+id/user_info_refuse_invite_bn"
@@ -74,6 +92,7 @@
             android:layout_height="50dp"
             android:layout_width="fill_parent"
             android:text="拒绝邀请"
+            android:textColor="#000"
         />
     </LinearLayout>
     
@@ -84,11 +103,13 @@
         android:layout_width="fill_parent"
         android:orientation="vertical"
         android:visibility="gone"
+        android:paddingLeft="10dp"
     >
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="互为联系人" 
+            android:textColor="#000"
         />
     </LinearLayout>
 </LinearLayout>

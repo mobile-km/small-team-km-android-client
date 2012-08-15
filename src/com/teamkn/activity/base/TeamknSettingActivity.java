@@ -30,7 +30,6 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 	 View setting;
 	 View foot_view;  //底层  图层 隐形部分
 	 ImageView iv_foot_view;
-	 ImageView foot_view_masking;
 	 
 	 boolean menuOut = false;
 	 Handler handler = new Handler();
@@ -47,7 +46,6 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 	
 	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
 	     foot_view = findViewById(R.id.menu);
-	     foot_view_masking = (ImageView) findViewById(R.id.foot_view_masking);
 	     
 //	     foot_view_masking.setVisibility(View.VISIBLE);
 	     
@@ -97,20 +95,20 @@ public class TeamknSettingActivity extends TeamknBaseActivity implements OnGestu
 	@Override
 	public void onLongPress(MotionEvent e) {	
 	}
+	boolean is_out = false;
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		float width = Math.abs(e1.getX() - e2.getX());
 		boolean menuOut = HorzScrollWithListMenu.menuOut;
 //		System.out.println( "settingActivity.java menuOut =  " + menuOut);
-		if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
+		if (e1.getX() - e2.getX() > 120 && is_out) {  //向左滑动 
+			is_out = !is_out;
             HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//            foot_view_masking.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "width " + (e1.getX() - e2.getX()), 10).show();
-        }else if(e1.getX() - e2.getX() < -120  && !menuOut){
+            System.out.println(" ----- " + (e1.getX() - e2.getX()));
+        }else if(e1.getX() - e2.getX() < -120  && !is_out){
             HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//            foot_view_masking.setVisibility(View.GONE);
-        	Toast.makeText(this, "width " + (e1.getX() - e2.getX()), 10).show();
+            is_out = !is_out;
         }
 		return true;
 	}
