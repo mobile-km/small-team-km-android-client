@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class AboutActivity extends TeamknBaseActivity   implements OnGestureListener  {
@@ -48,8 +50,21 @@ public class AboutActivity extends TeamknBaseActivity   implements OnGestureList
         
         
         iv_foot_view = (ImageView) base_about.findViewById(R.id.iv_foot_view);
-        iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
-        foot_rl_about.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
+        HorzScrollWithListMenu.menuOut = false;
+        iv_foot_view.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				is_menuOut();
+			}
+		});
+        foot_rl_about.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				is_menuOut();
+			}
+		});
+        
         
         View transparent = new TextView(this);
         transparent.setBackgroundColor(android.R.color.transparent);
@@ -88,15 +103,16 @@ public class AboutActivity extends TeamknBaseActivity   implements OnGestureList
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
-			is_out = !is_out;
-            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-            System.out.println(" ----- " + (e1.getX() - e2.getX()));
+		if (e1.getX() - e2.getX() > 120 && !is_out ) {  //向左滑动 
+			is_menuOut();
         }else if(e1.getX() - e2.getX() < -120  && is_out){
-            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-            is_out = !is_out;
+        	is_menuOut();
         }
 		return true;
+	}
+	public void is_menuOut(){
+		is_out = !is_out;
+		ClickListenerForScrolling.flag_show_menu_move();
 	}
 	@Override
 	public void onShowPress(MotionEvent e) {	

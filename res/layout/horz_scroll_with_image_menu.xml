@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
     android:layout_height="fill_parent" android:background="#00ffffff" android:padding="0px" android:layout_margin="0px">
-
-    <!--
-    This ImageView is used as a menu.
-    -->
-    <!-- <ImageView 
-        android:id="@+id/menu" 
-        android:src="@drawable/fb_menu" 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:scaleType="fitStart" 
-    /> -->
     <LinearLayout 
         android:id="@+id/menu"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:background="#ffffff"
+        android:background="#5B5B5B"
         android:paddingRight="10dp"
     >   
 			<LinearLayout
@@ -40,7 +29,7 @@
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
 			            android:text="我的笔记"   
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			        />
 			        <ImageView
 			            android:src="@drawable/camera_accept"
@@ -69,7 +58,7 @@
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
 			            android:text="多人讨论" 
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			        />
 			        <ImageView
 			            android:src="@drawable/camera_accept"
@@ -98,7 +87,7 @@
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
 			            android:text="搜索" 
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			        />
 			        <ImageView
 			            android:src="@drawable/camera_accept"
@@ -127,7 +116,7 @@
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
 			            android:text="设置" 
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			        />
 			        <ImageView
 			            android:src="@drawable/camera_accept"
@@ -156,7 +145,7 @@
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
 			            android:text="账号管理" 
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			        />
 			        <ImageView
 			            android:src="@drawable/camera_accept"
@@ -184,7 +173,7 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="30dp"
 			            android:gravity="center_vertical"
-			            android:textColor="#000"
+			            android:textColor="#fff"
 			            android:text="关于" 
 			        />
 			        <ImageView

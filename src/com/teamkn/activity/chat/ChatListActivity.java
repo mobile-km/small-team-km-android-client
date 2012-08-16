@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.model.Chat;
@@ -35,10 +37,10 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 	 
 	 boolean menuOut = false;
 	 Handler handler = new Handler();
-	  //	
-       View chat_listview;	
-      List<Chat> chat_list = null;
-	   ChatListAdapter adapter = null;
+	 //	
+     View chat_listview;	
+     List<Chat> chat_list = null;
+	 ChatListAdapter adapter = null;
     
 	  private ListView chat_list_lv;
 	
@@ -57,9 +59,20 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
          
          
          iv_foot_view = (ImageView) chat_listview.findViewById(R.id.iv_foot_view);
-         iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
-         foot_rl_chat.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
-       
+         new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
+         HorzScrollWithListMenu.menuOut = false;
+         iv_foot_view.setOnClickListener(new OnClickListener() {
+ 			@Override
+ 			public void onClick(View v) {
+ 				is_menuOut();
+ 			}
+ 		});
+         foot_rl_chat.setOnClickListener(new OnClickListener() {
+ 			@Override
+ 			public void onClick(View v) {
+ 				is_menuOut();
+ 			}
+ 		});
          View transparent = new TextView(this);
          transparent.setBackgroundColor(android.R.color.transparent);
 
@@ -119,15 +132,12 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-//			float width = Math.abs(e1.getX() - e2.getX());
-//			boolean menuOut = HorzScrollWithListMenu.menuOut;
-////			System.out.println( "chatActivity.java menuOut =  " + menuOut);
-//			if (e1.getX() - e2.getX() > 200 && menuOut) {  //向左滑动 
-//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//	        }else if(e1.getX() - e2.getX() < -200  && !menuOut){
-//	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-//	        }
-	        return false;  
+			if (e1.getX() - e2.getX() > 120 && !is_out ) {  //向左滑动 
+				is_menuOut();
+	        }else if(e1.getX() - e2.getX() < -120  && is_out){
+	        	is_menuOut();
+	        }
+			return true;  
 		}
 		@Override
 		public void onLongPress(MotionEvent e) {	
@@ -136,15 +146,16 @@ public class ChatListActivity extends TeamknBaseActivity  implements OnGestureLi
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
-			if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
-				is_out = !is_out;
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	            System.out.println(" ----- " + (e1.getX() - e2.getX()));
+			if (e1.getX() - e2.getX() > 120 && !is_out ) {  //向左滑动 
+				is_menuOut();
 	        }else if(e1.getX() - e2.getX() < -120  && is_out){
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	            is_out = !is_out;
+	        	is_menuOut();
 	        }
 			return true;
+		}
+		public void is_menuOut(){
+			is_out = !is_out;
+			ClickListenerForScrolling.flag_show_menu_move();
 		}
 		@Override
 		public void onShowPress(MotionEvent e) {	

@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
@@ -139,8 +141,22 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         
         
         iv_foot_view = (ImageView) base_main.findViewById(R.id.iv_foot_view);
-        iv_foot_view.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
-        foot_rl_node.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+   
+        new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
+        HorzScrollWithListMenu.menuOut = false;
+        iv_foot_view.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				is_menuOut();
+			}
+		});
+        foot_rl_node.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				is_menuOut();
+			}
+		});
+        
         
         View transparent = new TextView(this);
         transparent.setBackgroundColor(android.R.color.transparent);
@@ -436,9 +452,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 						@Override
 						public void run() {
 							load_list(); 
-//							open_activity(MainActivity.class);
-//							MainActivity.this.finish();
-//							note_list_adapter.remove_item(totalCount);
 						}
 					});
 				}
@@ -477,35 +490,30 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-//			float width = e1.getX() - e2.getX();
-//			boolean menuOut = HorzScrollWithListMenu.menuOut;
-////			System.out.println( "mainActivity.java menuOut =  " + menuOut + " : " + width  + " : " + distanceX);
-//			if (e1.getX() - e2.getX() < -150 && !menuOut ) {  //向左滑动 
-//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-////	            System.out.println("distanceX  = " +  distanceX );
-//			}else if(e1.getX() - e2.getX() > 150  && menuOut ){
-//	        	 HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-////	        	 System.out.println("distanceX  = " +  distanceX );
-//			}
 	        return false;  
 		}
 		@Override
 		public void onLongPress(MotionEvent e) {	
 		}
 		boolean is_out = false;
+		int i = 0 ;
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
 			if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
-				is_out = !is_out;
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	            System.out.println(" ----- " + (e1.getX() - e2.getX()));
-	        }else if(e1.getX() - e2.getX() < -120  && is_out){
-	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu_move(scrollView, foot_view);
-	            is_out = !is_out;
+				is_menuOut();
+	        }else if(e1.getX() - e2.getX() < -120  && is_out ){
+	        	is_menuOut();
 	        }
 			return true;
 		}
+		public void is_menuOut(){
+			i++;
+			is_out = !is_out;
+			ClickListenerForScrolling.flag_show_menu_move();
+			System.out.println(i+" mainActivity.java is_out : menuOut "+ is_out + " : " + HorzScrollWithListMenu.menuOut);	
+		}
+		
 		@Override
 		public void onShowPress(MotionEvent e) {	
 		}
@@ -521,6 +529,5 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		public boolean dispatchTouchEvent(MotionEvent ev) {
 		   this.detector.onTouchEvent(ev);
 		   return super.dispatchTouchEvent(ev);
-		  
 		}		
 }

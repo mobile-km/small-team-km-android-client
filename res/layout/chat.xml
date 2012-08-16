@@ -34,6 +34,7 @@
         android:id="@+id/send_chat_node_bar"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
+        android:background="#fff"
         android:layout_gravity="bottom"
     >
         <Button

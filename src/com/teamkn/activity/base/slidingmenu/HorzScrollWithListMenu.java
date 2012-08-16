@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -68,64 +67,24 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     public static boolean menuOut = false;
     
     public static class ClickListenerForScrolling implements OnClickListener{
-        HorizontalScrollView scrollView;
-        View menu;
+        static HorizontalScrollView scrollView;
+        static View menu;
         /**
          * Menu must NOT be out/shown to start with.
          */
         public ClickListenerForScrolling(HorizontalScrollView scrollView, View menu) {
             super();
-            this.scrollView = scrollView;
-            this.menu = menu;
+            ClickListenerForScrolling.scrollView = scrollView;
+            ClickListenerForScrolling.menu = menu;
         }
-
         @Override
         public void onClick(View v) {
-            menu.getContext();
-
-            int menuWidth = menu.getMeasuredWidth();
-
-            // Ensure menu is visible
-            menu.setVisibility(View.VISIBLE);
-
-            if (!menuOut) {
-                // Scroll to 0 to reveal menu
-                int left = 0;
-                scrollView.smoothScrollTo(left, 0);
-            } else {
-                // Scroll to menuWidth so menu isn't on screen.
-                int left = menuWidth;
-                scrollView.smoothScrollTo(left, 0);
-            }
-            menuOut = !menuOut;
+        	flag_show_menu_move();
         }
-
-    }
-    
-    public static class MyOnGestureListener {
-    	public static void flag_show_menu(HorizontalScrollView scrollView, View menu){
-    		menu.getContext();
-            int menuWidth = menu.getMeasuredWidth();
-            // Ensure menu is visible
-            menu.setVisibility(View.VISIBLE);
-            if (!menuOut) {
-                // Scroll to 0 to reveal menu
-                int left = 0;
-                scrollView.smoothScrollTo(left, 0);
-            } else {
-                // Scroll to menuWidth so menu isn't on screen.
-                int left = menuWidth;
-                scrollView.smoothScrollTo(left, 0);
-            }
-            menuOut = !menuOut;
-    	}
-    	
-    	static int ji_left_no = 0;
+        static int ji_left_no = 0;
     	static int ji_left_is = 0;
-    	
-    	public static void flag_show_menu_move(final HorizontalScrollView scrollView, final View menu){
+    	public static void flag_show_menu_move(){
     		menu.getContext();
-    		
             final int menuWidth = menu.getMeasuredWidth();
             ji_left_no = menuWidth;
             // Ensure menu is visible
@@ -136,7 +95,6 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             		public void run() {
             			try {	
 	               			int left = 0; 
-	               			
 	                        boolean isrun = true;
 	               			while(isrun){
 	               				ji_left_no -=1;
@@ -151,24 +109,20 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 	               				if(ji_left_no<=left){
 	               					isrun = false;
 	               					ji_left_no = 0;
-//	               					menu.setFocusable(false);
-	               					menuOut = !menuOut;
+	               					menuOut = false;
 	               				}
 	               			}	
 	           			} catch (InterruptedException e) {
 	           				e.printStackTrace();
 	           			}
             		};
-            	}.start();
-                
-                
+            	}.start();        
             } else {
             	
             	new Thread(){
             		public void run() {
             			try {	
 	              			int left = menuWidth; 
-	              			
 	                        boolean isrun = true;
 	              			while(isrun){
 	              				ji_left_is +=1;
@@ -178,28 +132,21 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 	            						scrollView.smoothScrollTo(ji_left_is, 0);
 	            					}
 	            				}); 
-	              				
 	              				Thread.sleep(1);
 	              				if(ji_left_is>=left){
 	              					isrun = false;
-	              					 
 	              					ji_left_is = 0;
-//	              					menu.setFocusable(true);
-	              					menuOut = !menuOut;
+	              					menuOut = true;
 	              				}
 	              			}	
 	          			} catch (InterruptedException e) {
 	          				e.printStackTrace();
 	          			}
             		};
-            	}.start();
-            	
-            	
+            	}.start();	
             }  
-           
     	}
     }
-
     /**
      * Helper that remembers the width of the 'slide' button, so that the 'slide' button remains in view, even when the menu is
      * showing.
@@ -218,7 +165,6 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             btnWidth = btnSlide.getMeasuredWidth();
             System.out.println("btnWidth=" + btnWidth);
         }
-
         @Override
         public void getViewSize(int idx, int w, int h, int[] dims) {
             dims[0] = w;
@@ -232,34 +178,27 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void onLongPress(MotionEvent e) {		
 	}
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void onShowPress(MotionEvent e) {	
 	}
 
 	@Override
