@@ -42,7 +42,32 @@ public class UserDBHelper extends BaseModelDBHelper {
     
     create(user_id,user_name,user_avatar,server_created_time,server_updated_time);
   }
-  
+  public static void updateAccount(int user_id , String user_name,String user_avatar_url){
+	  SQLiteDatabase db = get_write_db();  
+	  byte[] user_avatar = null;
+	    if(user_avatar_url != null && !user_avatar_url.equals("")){
+	      InputStream is = HttpApi.download_image(user_avatar_url);
+	      try {
+	        user_avatar = IOUtils.toByteArray(is);
+	      } catch (IOException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	    User user = find(get_client_user_id(user_id));
+	    user.setUser_avatar(user_avatar);
+	    user.setUser_name(user_name);
+	    ContentValues values = new ContentValues();
+	    values.put(Constants.TABLE_USERS__USER_NAME,user.user_name);
+	    values.put(Constants.TABLE_USERS__USER_AVATAR,user.user_avatar);
+	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_created_time);
+	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_updated_time);
+	    
+	    db.update(Constants.TABLE_USERS, values, Constants.TABLE_USERS__USER_ID + " = ? ", new String[]{user.user_id+""});
+        
+	    System.out.println("user_id : name : avatar = " + user_id + " : " + user_name  + " : " + user_avatar_url );
+	    
+	    db.close();
+  }
   public static int get_client_user_id(int server_user_id){
     SQLiteDatabase db = null;
 	try {

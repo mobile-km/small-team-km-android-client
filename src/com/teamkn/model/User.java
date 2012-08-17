@@ -24,4 +24,22 @@ public class User extends BaseModel {
     this.server_created_time = server_created_time;
     this.server_updated_time = server_updated_time;
   }
+
+public String getUser_name() {
+	return user_name;
+}
+
+public void setUser_name(String user_name) {
+	this.user_name = user_name;
+}
+
+public byte[] getUser_avatar() {
+	return user_avatar;
+}
+
+public void setUser_avatar(byte[] user_avatar) {
+	this.user_avatar = user_avatar;
+}
+  
+  
 }

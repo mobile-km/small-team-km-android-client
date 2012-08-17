@@ -110,10 +110,7 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    if(attitudes.chat_node_id==0){
 	    	view_holder.imagebutton_comment.setImageDrawable(context.getResources().getDrawable(R.drawable.emotion_icn_smile_extrasmall));
 	    }else{
-	    	System.out.println("------------------------------ " + attitudes.kind);
-	    	String kind = attitudes.kind;
 	    	if(AttitudesDBHelper.Kind.HEART.equals(attitudes.kind)){
-	    		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$");
 		    	view_holder.imagebutton_comment.setImageDrawable(context.getResources().getDrawable(R.drawable.emotion_icn_heart_extrasmall));
 		    }
 		    if(AttitudesDBHelper.Kind.GASP.equals(attitudes.kind)){

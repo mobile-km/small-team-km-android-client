@@ -37,28 +37,6 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-        scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.horz_scroll_with_list_menu, null);
-        setContentView(scrollView);
-
-        menu = inflater.inflate(R.layout.horz_scroll_menu, null);
-        app = inflater.inflate(R.layout.horz_scroll_app, null);
-        ViewGroup tabBar = (ViewGroup) app.findViewById(R.id.tabBar);
-
-        ListView listView = (ListView) app.findViewById(R.id.list);
-        ViewUtils.initListView(this, listView, "Item ", 30, android.R.layout.simple_list_item_1);
-
-        listView = (ListView) menu.findViewById(R.id.list);
-        ViewUtils.initListView(this, listView, "Menu ", 30, android.R.layout.simple_list_item_1);
-
-        btnSlide = (ImageView) tabBar.findViewById(R.id.BtnSlide);
-        btnSlide.setOnClickListener(new ClickListenerForScrolling(scrollView, menu));
-
-        final View[] children = new View[] { menu, app };
-
-        // Scroll to app (view[1]) when layout finished.
-        int scrollToViewIdx = 1;
-        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
     }
 
     /**
@@ -67,8 +45,12 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
     public static boolean menuOut = false;
     
     public static class ClickListenerForScrolling implements OnClickListener{
-        static HorizontalScrollView scrollView;
-        static View menu;
+        static HorizontalScrollView scrollView;  //横向的scrollview
+        static View menu;  // 导航抽屉界面
+        static int menuWidth;  // 导航抽屉宽
+        
+        static int ji_left_no = 0; // 左边的距离
+    	static int ji_left_is = 0; // 右边的距离
         /**
          * Menu must NOT be out/shown to start with.
          */
@@ -76,40 +58,40 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             super();
             ClickListenerForScrolling.scrollView = scrollView;
             ClickListenerForScrolling.menu = menu;
+            ClickListenerForScrolling.menu.getContext();
+            
+            // Ensure menu is visible
+            ClickListenerForScrolling.menu.setVisibility(View.VISIBLE);
         }
+        
         @Override
         public void onClick(View v) {
         	flag_show_menu_move();
         }
-        static int ji_left_no = 0;
-    	static int ji_left_is = 0;
     	public static void flag_show_menu_move(){
-    		menu.getContext();
-            final int menuWidth = menu.getMeasuredWidth();
-            ji_left_no = menuWidth;
-            // Ensure menu is visible
-            menu.setVisibility(View.VISIBLE);
-            
+    		ClickListenerForScrolling.menuWidth = menu.getMeasuredWidth();
+            ClickListenerForScrolling.ji_left_no = ClickListenerForScrolling.menuWidth;
+    		System.out.println(menuOut);
             if (menuOut) {   
             	new Thread(){
+            	    boolean isrun = true;
+            	    int left = 0;
             		public void run() {
             			try {	
-	               			int left = 0; 
-	                        boolean isrun = true;
 	               			while(isrun){
-	               				ji_left_no -=1;
-	               				menu.post(new Runnable() {
+	               				ClickListenerForScrolling.ji_left_no -=1;
+	               				ClickListenerForScrolling.menu.post(new Runnable() {
 	            					@Override
 	            					public void run() {
-	            						scrollView.smoothScrollTo(ji_left_no, 0);
+	            						ClickListenerForScrolling.scrollView.smoothScrollTo(ClickListenerForScrolling.ji_left_no, 0);
+	            					    System.out.println(ji_left_no);
 	            					}
 	            				}) ;
-	               				
 	               				Thread.sleep(1);
-	               				if(ji_left_no<=left){
+	               				if(ClickListenerForScrolling.ji_left_no<=left){
 	               					isrun = false;
-	               					ji_left_no = 0;
-	               					menuOut = false;
+	               					ClickListenerForScrolling.ji_left_no = 0;
+//	               					menuOut = false;
 	               				}
 	               			}	
 	           			} catch (InterruptedException e) {
@@ -120,23 +102,24 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             } else {
             	
             	new Thread(){
+            	    boolean isrun = true;
+            	    int left = ClickListenerForScrolling.menuWidth;
             		public void run() {
-            			try {	
-	              			int left = menuWidth; 
-	                        boolean isrun = true;
+            			try {	  
 	              			while(isrun){
-	              				ji_left_is +=1;
-	              				menu.post(new Runnable() {					
+	              				ClickListenerForScrolling.ji_left_is +=1;
+	              				ClickListenerForScrolling.menu.post(new Runnable() {					
 	            					@Override
 	            					public void run() {	
-	            						scrollView.smoothScrollTo(ji_left_is, 0);
+	            						ClickListenerForScrolling.scrollView.smoothScrollTo(ClickListenerForScrolling.ji_left_is, 0);
+	            						 System.out.println(ji_left_is);
 	            					}
 	            				}); 
 	              				Thread.sleep(1);
-	              				if(ji_left_is>=left){
+	              				if(ClickListenerForScrolling.ji_left_is>=left){
 	              					isrun = false;
-	              					ji_left_is = 0;
-	              					menuOut = true;
+	              					ClickListenerForScrolling.ji_left_is = 0;
+//	              					menuOut = true;
 	              				}
 	              			}	
 	          			} catch (InterruptedException e) {
@@ -145,6 +128,7 @@ public class HorzScrollWithListMenu extends Activity implements OnGestureListene
             		};
             	}.start();	
             }  
+            menuOut = !menuOut;
     	}
     }
     /**

@@ -143,7 +143,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         iv_foot_view = (ImageView) base_main.findViewById(R.id.iv_foot_view);
    
         new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
-        HorzScrollWithListMenu.menuOut = false;
+//        HorzScrollWithListMenu.menuOut = false;
         iv_foot_view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -179,8 +179,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
         mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
         mLoadLayout.setVisibility(View.GONE);   
 		
-		
-		
 		data_syn_textview = (TextView)base_main.findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
 		progress_set_num = (TextView)findViewById(R.id.progress_set_num);
@@ -198,8 +196,23 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		Intent intent1 = new Intent(MainActivity.this,FaceCommentService.class);
 		startService(intent1);
 		SharedParam.saveParam(this, 0);
-		FaceCommentService.context = this;
+		FaceCommentService.context = this;	
     
+		// 启动刷新联系人状态服务
+		startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+		// 启动更新 对话串的服务
+		startService(new Intent(MainActivity.this,SynChatService.class));
+		
+		
+		note_list = (ListView)base_main.findViewById(R.id.note_list);
+        note_list.addFooterView(mLoadLayout);
+        
+		//加载node_listview
+		load_list();
+		
+	}
+	@Override
+	protected void onResume() {
 		// 设置用户头像和名字
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
@@ -214,15 +227,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		}
 	    TextView user_name_tv = (TextView)base_main.findViewById(R.id.main_user_name);
 	    user_name_tv.setText(name);
-    
-		// 启动刷新联系人状态服务
-		startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-		// 启动更新 对话串的服务
-		startService(new Intent(MainActivity.this,SynChatService.class));
-		
-		//加载node_listview
-		load_list();
-		
+		super.onResume();
 	}
 	private int getMaxResult() {
         int totalPage = (totalCount + VIEW_COUNT - 1) / VIEW_COUNT;
@@ -237,24 +242,22 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	    index = 0;   
 	    // 当前页
 	    currentPage = 1;  
-	    
-		note_list = (ListView)base_main.findViewById(R.id.note_list);
-		
-		notes  = new ArrayList<Note>();
+	    notes  = new ArrayList<Note>();
 		note_list_adapter = new NoteListAdapter(MainActivity.this);
 		new TeamknAsyncTask<Void, Void, Void>() {
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
 				totalCount = NoteDBHelper.getCount();
-				notes=NoteDBHelper.getAllItems(index, getMaxResult());
+				notes=NoteDBHelper.getAllItems(0, getMaxResult());
+				
 				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				return null;
 			}
 			@Override
 			public void on_success(Void result) {
-//				note_list.removeAllViews();
-		        note_list_adapter.add_items(notes);
+				note_list_adapter.add_items(notes);
 		        note_list.setAdapter(note_list_adapter);
+                System.out.println();
 			}
 		}.execute();
 
@@ -292,9 +295,10 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
                 	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
                 	  isUpdating=false ;
                 	  ++currentPage;
- 
-                	  note_list.addFooterView(mLoadLayout);
+                      
                 	  mLoadLayout.setVisibility(View.VISIBLE);
+                	 
+                	 
                 	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
                       asyncUpdateWeiBoDatasTask.execute();   
                   }
@@ -324,7 +328,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
             isUpdating=true;
             
             mLoadLayout.setVisibility(View.GONE); 
-            note_list.removeFooterView(mLoadLayout);
+//            note_list.removeFooterView(mLoadLayout);
         }
     } 	
 
@@ -501,17 +505,20 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 				float distanceY) {
 			if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
+				System.out.print(e1.getX() - e2.getX());
 				is_menuOut();
-	        }else if(e1.getX() - e2.getX() < -120  && is_out ){
-	        	is_menuOut();
+	        }else if(e1.getX() - e2.getX() < -120  && (is_out || i == 0)){
+	        	System.out.print(e1.getX() - e2.getX());
+	        	is_menuOut();	
 	        }
 			return true;
 		}
 		public void is_menuOut(){
+			System.out.println("    " + i+" mainActivity.java ------  is_out : menuOut ="+ is_out + " : " + HorzScrollWithListMenu.menuOut);
 			i++;
 			is_out = !is_out;
 			ClickListenerForScrolling.flag_show_menu_move();
-			System.out.println(i+" mainActivity.java is_out : menuOut "+ is_out + " : " + HorzScrollWithListMenu.menuOut);	
+		
 		}
 		
 		@Override

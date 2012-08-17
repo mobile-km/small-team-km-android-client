@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 public class HttpApi {
@@ -133,6 +134,8 @@ public class HttpApi {
                 JSONObject json = new JSONObject(response_text);
                 System.out.println(json);
                 AccountManager.login(get_cookies(), json.toString());
+//                AccountUser manager = AccountManager.current_user();
+//                UserDBHelper.updateAccount(manager.user_id, manager.name, manager.avatar_url);
                 return true;
             }
             
@@ -156,6 +159,8 @@ public class HttpApi {
                 JSONObject json = new JSONObject(response_text);
                 System.out.println(json);
                 AccountManager.login(get_cookies(), json.toString());
+                AccountUser manager = AccountManager.current_user();
+                UserDBHelper.updateAccount(manager.user_id, manager.name, manager.avatar_url);   
                 return true;
             }
             
