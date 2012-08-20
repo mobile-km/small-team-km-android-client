@@ -16,18 +16,15 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,9 +34,6 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
@@ -60,16 +54,10 @@ import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
-public class MainActivity extends TeamknBaseActivity implements OnGestureListener  {
-	 private GestureDetector detector;
-	 //menu菜单
-	 MyHorizontalScrollView scrollView;
-	 View base_main;
-	 View foot_view;  //底层  图层 隐形部分
-	 ImageView iv_foot_view;
+public class MainActivity extends TeamknBaseActivity{
+
+	View base_main;
 	 
-	 boolean menuOut = false;
-	//
 	public class RequestCode {
         public final static int EDIT_TEXT = 0;
     }
@@ -87,10 +75,10 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
     
     NoteListAdapter note_list_adapter;
     List<Note> notes;
+    
     // 标记：上次的ID
     private  boolean isUpdating = true;
-    
-    View view;
+
     
     private LinearLayout mLoadLayout;   
 
@@ -128,44 +116,13 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		detector = new GestureDetector(this);
-        // <<
-		LayoutInflater inflater = LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-        foot_view = findViewById(R.id.menu);    
-        RelativeLayout foot_rl_node = (RelativeLayout)findViewById(R.id.foot_rl_node);
-
+		setContentView(R.layout.horz_scroll_with_image_menu);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+        
+        LayoutInflater inflater = LayoutInflater.from(this);
         base_main = inflater.inflate(R.layout.base_main, null);
-        
-        
-        iv_foot_view = (ImageView) base_main.findViewById(R.id.iv_foot_view);
-   
-        new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
-//        HorzScrollWithListMenu.menuOut = false;
-        iv_foot_view.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				is_menuOut();
-			}
-		});
-        foot_rl_node.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				is_menuOut();
-			}
-		});
-        
-        
-        View transparent = new TextView(this);
-        transparent.setBackgroundColor(android.R.color.transparent);
-        final View[] children = new View[] { transparent, base_main };
-        int scrollToViewIdx = 1;
-        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
-       
-        
-        //>>
+        layout.addView(base_main);
+
 	    mLoadLayout = new LinearLayout(this);   
         mLoadLayout.setMinimumHeight(40);   
         mLoadLayout.setGravity(Gravity.CENTER);   
@@ -181,7 +138,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		
 		data_syn_textview = (TextView)base_main.findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
-		progress_set_num = (TextView)findViewById(R.id.progress_set_num);
+		progress_set_num = (TextView)base_main.findViewById(R.id.progress_set_num);
 		manual_syn_bn = (ImageView)base_main.findViewById(R.id.manual_syn_bn);
 		
 		// 注册更新服务
@@ -204,7 +161,7 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		startService(new Intent(MainActivity.this,SynChatService.class));
 		
 		
-		note_list = (ListView)base_main.findViewById(R.id.note_list);
+		note_list = (ListView)layout.findViewById(R.id.note_list);
         note_list.addFooterView(mLoadLayout);
         
 		//加载node_listview
@@ -243,22 +200,21 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 	    // 当前页
 	    currentPage = 1;  
 	    notes  = new ArrayList<Note>();
-		note_list_adapter = new NoteListAdapter(MainActivity.this);
+		note_list_adapter = new NoteListAdapter(MainActivity.this);	
 		new TeamknAsyncTask<Void, Void, Void>() {
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
 				totalCount = NoteDBHelper.getCount();
 				notes=NoteDBHelper.getAllItems(0, getMaxResult());
-				
-				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				return null;
 			}
 			@Override
 			public void on_success(Void result) {
+				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				note_list_adapter.add_items(notes);
-		        note_list.setAdapter(note_list_adapter);
-                System.out.println();
-			}
+				note_list.setAdapter(note_list_adapter);
+		        note_list_adapter.notifyDataSetChanged();
+		    }
 		}.execute();
 
         note_list.setOnItemClickListener(new OnItemClickListener() {
@@ -378,29 +334,6 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 		IndexService.stop();
 		stopService(new Intent(MainActivity.this,FaceCommentService.class));
 	}
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		getMenuInflater().inflate(R.menu.main, menu);
-//		return super.onCreateOptionsMenu(menu);
-//	}
-//	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case R.id.menu_about:
-//			open_activity(AboutActivity.class);
-//			break;
-//		case R.id.menu_setting:
-//			open_activity(TeamknSettingActivity.class);
-//			break;
-//		case R.id.menu_account_management:
-//			open_activity(AccountManagerActivity.class);
-//			break;
-//		}
-//
-//		return super.onOptionsItemSelected(item);
-//	}
 
 	 public class SynUIBinder{
 	    public void set_max_num(int max_num){
@@ -451,7 +384,8 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 					data_syn_progress_bar.setVisibility(View.GONE);
 					progress_set_num.setText("");
 					manual_syn_bn.setVisibility(View.VISIBLE);
-
+                    
+					
 					note_list.post(new Runnable() {
 						@Override
 						public void run() {
@@ -481,60 +415,28 @@ public class MainActivity extends TeamknBaseActivity implements OnGestureListene
 			  }
         });
       }
-	  }
+	  }		
 	 
-	    /** 
-	     * 监听滑动 
-	     */
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return false;
-		}
-		// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-	        return false;  
-		}
-		@Override
-		public void onLongPress(MotionEvent e) {	
-		}
-		boolean is_out = false;
-		int i = 0 ;
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-				float distanceY) {
-			if (e1.getX() - e2.getX() > 120 && !is_out) {  //向左滑动 
-				System.out.print(e1.getX() - e2.getX());
-				is_menuOut();
-	        }else if(e1.getX() - e2.getX() < -120  && (is_out || i == 0)){
-	        	System.out.print(e1.getX() - e2.getX());
-	        	is_menuOut();	
-	        }
-			return true;
-		}
-		public void is_menuOut(){
-			System.out.println("    " + i+" mainActivity.java ------  is_out : menuOut ="+ is_out + " : " + HorzScrollWithListMenu.menuOut);
-			i++;
-			is_out = !is_out;
-			ClickListenerForScrolling.flag_show_menu_move();
-		
-		}
-		
-		@Override
-		public void onShowPress(MotionEvent e) {	
-		}
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			return false;
-		}
-		@Override 
-		public boolean onTouchEvent(MotionEvent event) { 
-			return this.detector.onTouchEvent(event); 
-		}
-		@Override
-		public boolean dispatchTouchEvent(MotionEvent ev) {
-		   this.detector.onTouchEvent(ev);
-		   return super.dispatchTouchEvent(ev);
-		}		
+//		@Override
+//		public boolean onCreateOptionsMenu(Menu menu) {
+//			getMenuInflater().inflate(R.menu.main, menu);
+//			return super.onCreateOptionsMenu(menu);
+//		}
+	//	
+//		@Override
+//		public boolean onOptionsItemSelected(MenuItem item) {
+//			switch (item.getItemId()) {
+//			case R.id.menu_about:
+//				open_activity(AboutActivity.class);
+//				break;
+//			case R.id.menu_setting:
+//				open_activity(TeamknSettingActivity.class);
+//				break;
+//			case R.id.menu_account_management:
+//				open_activity(AccountManagerActivity.class);
+//				break;
+//			}
+	//
+//			return super.onOptionsItemSelected(item);
+//		}
 }

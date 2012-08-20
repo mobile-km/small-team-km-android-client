@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout 
+<RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -19,18 +19,17 @@
     </RelativeLayout>
 
     <ListView
+        android:layout_below="@+id/head_bar"
         android:id="@+id/chat_node_list"
         android:layout_width="fill_parent"
         android:layout_height="312dp"
-        android:padding="5dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="60dp"
-        android:layout_marginTop="30dp"
         android:clickable="false"
         android:scrollbars="none" >
 
     </ListView>
     <RelativeLayout
+        android:layout_below="@+id/chat_node_list"
         android:id="@+id/send_chat_node_bar"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -57,15 +56,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chat_node_et"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentLeft="true" 
             android:onClick="click_chat_node_button_album"
             android:text="发送图片"
         />
     </RelativeLayout> 
     <LinearLayout android:id="@+id/showdialog"
 	       android:layout_width="fill_parent"
-	       android:layout_height="fill_parent"
+	       android:layout_height="fill_parent" 
 	    >
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

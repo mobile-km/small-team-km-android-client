@@ -56,6 +56,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
             view_holder.note_image_iv.setVisibility(View.GONE);
         }
         final int p = position;
+        
         view_holder.note_image_iv_delete.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {				

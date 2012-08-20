@@ -3,86 +3,40 @@ package com.teamkn.activity.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.teamkn.Logic.AccountManager;
 import com.teamkn.R;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
+import com.teamkn.Logic.AccountManager;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.database.AccountUserDBHelper;
 import com.teamkn.widget.adapter.AccountListAdapter;
 
-public class AccountManagerActivity extends TeamknBaseActivity  implements OnGestureListener  {
+public class AccountManagerActivity extends TeamknBaseActivity{
 	
-	private GestureDetector detector;
-	 //menu菜单
-	 MyHorizontalScrollView scrollView;
-	 View base_account_manager;
-	 View foot_view;  //底层  图层 隐形部分
-	 ImageView iv_foot_view;
-	 
-	 boolean menuOut = false;
-	//
-
+	View base_account_manager;
+	
     private ListView list_view;
     private AccountListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        detector = new GestureDetector(this);
         
-        // <<
-		LayoutInflater inflater = LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-        foot_view = findViewById(R.id.menu);    
-        RelativeLayout foot_rl_account_manage = (RelativeLayout)findViewById(R.id.foot_rl_account_manage);
-
+        setContentView(R.layout.horz_scroll_with_image_menu);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+        
+        LayoutInflater inflater = LayoutInflater.from(this);
         base_account_manager = inflater.inflate(R.layout.base_account_manager, null);
+        layout.addView(base_account_manager);
         
-        
-        iv_foot_view = (ImageView) base_account_manager.findViewById(R.id.iv_foot_view);
-        new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
-        HorzScrollWithListMenu.menuOut = false;
-        iv_foot_view.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				is_menuOut();
-			}
-		});
-        foot_rl_account_manage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				is_menuOut();
-			}
-		});
-        View transparent = new TextView(this);
-        transparent.setBackgroundColor(android.R.color.transparent);
-        final View[] children = new View[] { transparent, base_account_manager };
-        int scrollToViewIdx = 1;
-        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
-       
-        
-        //>>
-
         list_view = (ListView)base_account_manager. findViewById(R.id.account_list);
         bind_add_account_event();
         fill_list();
@@ -177,51 +131,4 @@ public class AccountManagerActivity extends TeamknBaseActivity  implements OnGes
 //        }
 //    }
 //    
-    /** 
-     * 监听滑动 
-     */
-	@Override
-	public boolean onDown(MotionEvent e) {
-		return false;
-	}
-	// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-        return false;  
-	}
-	@Override
-	public void onLongPress(MotionEvent e) {	
-	}
-	boolean is_out = false;
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		if (e1.getX() - e2.getX() > 120 && !is_out ) {  //向左滑动 
-			is_menuOut();
-        }else if(e1.getX() - e2.getX() < -120  && is_out){
-        	is_menuOut();
-        }
-		return true;
-	}
-	public void is_menuOut(){
-		is_out = !is_out;
-		ClickListenerForScrolling.flag_show_menu_move();
-	}
-	@Override
-	public void onShowPress(MotionEvent e) {	
-	}
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		return false;
-	}
-	@Override 
-	public boolean onTouchEvent(MotionEvent event) { 
-		return this.detector.onTouchEvent(event); 
-	}
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-	   this.detector.onTouchEvent(ev);
-	   return super.dispatchTouchEvent(ev);
-	}
 }

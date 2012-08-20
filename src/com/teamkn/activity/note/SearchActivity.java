@@ -1,21 +1,29 @@
 package com.teamkn.activity.note;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.*;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.View.OnClickListener;
-import android.widget.*;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ClickListenerForScrolling;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.search.SearchHistory;
 import com.teamkn.base.search.Searcher;
@@ -23,61 +31,22 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.widget.adapter.NoteListAdapter;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class SearchActivity extends TeamknBaseActivity implements OnGestureListener   {
+public class SearchActivity extends TeamknBaseActivity{
     public class RequestCode {
-        public final static int EDIT_TEXT = 1;
+        public final static int EDIT_TEXT = 9;
     }
-    private GestureDetector detector;
-    //menu菜单
-  	 MyHorizontalScrollView scrollView;
-  	 View foot_view;  //底层  图层 隐形部分
-  	 ImageView iv_foot_view;
-  	 
-  	 boolean menuOut = false;
-  	 Handler handler = new Handler();
-  	 //	
+   
       View search;	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.search);
-        detector = new GestureDetector(this);
-	    // <<
-		LayoutInflater inflater = LayoutInflater.from(this);
-	     setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-	
-	     scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-	     foot_view = findViewById(R.id.menu);    
-	     RelativeLayout foot_rl_search = (RelativeLayout)findViewById(R.id.foot_rl_search);
-	     search = inflater.inflate(R.layout.search, null);
-	     
-	     
-	     iv_foot_view = (ImageView) search.findViewById(R.id.iv_foot_view);
-	     new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view);
-	        HorzScrollWithListMenu.menuOut = false;
-	        iv_foot_view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					is_menuOut();
-				}
-			});
-	        foot_rl_search.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					is_menuOut();
-				}
-			});
-	     View transparent = new TextView(this);
-	     transparent.setBackgroundColor(android.R.color.transparent);
-	
-	     final View[] children = new View[] { transparent, search };
-	     int scrollToViewIdx = 1;
-	     scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(iv_foot_view));    
-	     //>>
-        
+
+	    
+	    setContentView(R.layout.horz_scroll_with_image_menu);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        search = inflater.inflate(R.layout.search, null);
+        layout.addView(search);
         
 
         EditText search_box    = (EditText) search.findViewById(R.id.search_box);
@@ -275,57 +244,4 @@ public class SearchActivity extends TeamknBaseActivity implements OnGestureListe
             menu.add(Menu.NONE, 0, 0, "删除");
         }
     }
-    /** 
-     * 监听滑动 
-     */
-	@Override
-	public boolean onDown(MotionEvent e) {
-		return false;
-	}
-	// // 滑动一段距离，up时触发，e1为down时的MotionEvent，e2为up时的MotionEvent  
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-//			boolean menuOut = HorzScrollWithListMenu.menuOut;
-//			if (e1.getX() - e2.getX() > 120 && menuOut) {  //向左滑动 
-//	            HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-//	        } else if (e1.getX() - e2.getX() < -120 && !menuOut) {  //向右滑动
-//	        	HorzScrollWithListMenu.MyOnGestureListener.flag_show_menu(scrollView, foot_view);
-//	        }  
-	        return false;  
-		}
-		@Override
-		public void onLongPress(MotionEvent e) {	
-		}
-		boolean is_out = false;
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-				float distanceY) {
-			if (e1.getX() - e2.getX() > 120 && !is_out ) {  //向左滑动 
-				is_menuOut();
-	        }else if(e1.getX() - e2.getX() < -120  && is_out){
-	        	is_menuOut();
-	        }
-			return true;
-		}
-		public void is_menuOut(){
-			is_out = !is_out;
-			ClickListenerForScrolling.flag_show_menu_move();
-		}
-	@Override
-	public void onShowPress(MotionEvent e) {	
-	}
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		return false;
-	}
-	@Override 
-	public boolean onTouchEvent(MotionEvent event) { 
-		return this.detector.onTouchEvent(event); 
-	}
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-	   this.detector.onTouchEvent(ev);
-	   return super.dispatchTouchEvent(ev);
-	}
 }

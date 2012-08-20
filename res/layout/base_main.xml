@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- 主界面，包含功能选择 -->
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/body"
-    android:onClick="click_not"
 >    
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -77,6 +75,7 @@
 	           android:layout_below="@+id/main_user_name"
             />
         </RelativeLayout>
+        
         <ImageView
             android:id="@+id/manual_syn_bn"
             android:src="@drawable/refresh"
@@ -87,7 +86,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
-            android:visibility="gone"
         />
         
         <ProgressBar
@@ -113,13 +111,13 @@
     </RelativeLayout>
 
     <!-- node_lsit -->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-    >
-        <ListView
-            android:id="@+id/note_list"
-            style="@style/no_padding_body"
-        />
-   </RelativeLayout>
-</LinearLayout>
+  <RelativeLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+  >
+      <ListView
+          android:id="@+id/note_list"
+          style="@style/no_padding_body"
+      />
+ </RelativeLayout>
+   </LinearLayout>

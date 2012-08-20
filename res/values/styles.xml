@@ -25,7 +25,6 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">#222222</item>
-        <item name="android:onClick">click_not</item>
     </style>
 
     <style name="head_bar_text">
