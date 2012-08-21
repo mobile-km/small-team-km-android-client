@@ -102,9 +102,7 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 	    final int server_chat_node_id = item.server_chat_node_id;
 	    
 	    User user = UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id);
-	    
-	    System.out.println(user.id + " : " + user.user_id + " : " + user.user_name);
-	  
+
 	    Attitudes attitudes = AttitudesDBHelper.find_by_chat_node_id_AND_user_id
 	    		(item.id,  user.id);
 	    if(attitudes.chat_node_id==0){
@@ -126,9 +124,7 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 		    	view_holder.imagebutton_comment.setImageDrawable(context.getResources().getDrawable(R.drawable.emotion_icn_smile_extrasmall));
 		    }
 	    }
-	    System.out.println("attitudes.kind  " + attitudes.kind);
-	    System.out.println("item.client_user_id "  + attitudes.client_user_id );
-	    System.out.println("item.chat_node_id "  +attitudes.chat_node_id);
+
 		view_holder.imagebutton_comment.setOnClickListener(new OnClickListener() {		
 			@Override
 			public void onClick(View v) {
@@ -136,11 +132,9 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
 				view_holder.imagebutton_comment.getLocationOnScreen(intXY);
 				ChatActivity.showDialog(context,intXY,chat_id,server_chat_node_id,view_holder.imagebutton_comment,attitudes_adapter,view_holder.listview_comment_result);
 			}
-		});
-        
-	    
+		});    
   } 
-  
+
   private class ViewHolder implements BaseViewHolder {
 	    ImageView user_avatar_iv;
 	    TextView chat_node_content_tv; 

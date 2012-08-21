@@ -147,7 +147,7 @@ public class ScrollLayout extends ViewGroup {
 		final int action = event.getAction();
 		final float x = event.getX();
 		final float y = event.getY();
-		System.out.println( "x : y = "  + x + " : " + y);
+//		System.out.println( "x : y = "  + x + " : " + y);
 		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:

@@ -21,7 +21,7 @@ import com.teamkn.widget.adapter.ChatListAdapter;
 
 public class ChatListActivity extends TeamknBaseActivity{
 
-     View chat_listview;	
+     View view_show;	
      List<Chat> chat_list = null;
 	 ChatListAdapter adapter = null;
     
@@ -36,10 +36,10 @@ public class ChatListActivity extends TeamknBaseActivity{
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
         LayoutInflater inflater = LayoutInflater.from(this);
-        chat_listview = inflater.inflate(R.layout.chat_list, null);
-        layout.addView(chat_listview);
+        view_show = inflater.inflate(R.layout.chat_list, null);
+        layout.addView(view_show);
 
-	    chat_list_lv = (ListView)chat_listview.findViewById(R.id.chat_list_lv);
+	    chat_list_lv = (ListView)view_show.findViewById(R.id.chat_list_lv);
 	    
 	    load_listview();
 	  }
@@ -83,5 +83,10 @@ public class ChatListActivity extends TeamknBaseActivity{
 	  public void click_new_chat_bn(View view){
 	    open_activity(SelectChatMemberActivity.class);
 	  }
+	  
+	// 钩子，自行重载
+		public void on_go_back() {
+			open_activity(ChatListActivity.class);
+		};
 
 }

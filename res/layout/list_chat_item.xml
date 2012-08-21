@@ -14,10 +14,18 @@
         android:visibility="gone"
         android:gravity="center_vertical"
     />
+   <TextView
+        android:id="@+id/chat_data_tv"
+        android:layout_width="wrap_content" 
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical"    
+    />
     <TextView
         android:id="@+id/chat_title_tv"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:gravity="center_vertical"
-    />    
+    />     
 </LinearLayout>

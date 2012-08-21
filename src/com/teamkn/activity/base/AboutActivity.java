@@ -12,7 +12,7 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class AboutActivity extends TeamknBaseActivity{
 
-	View base_about;
+	View view_show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,8 @@ public class AboutActivity extends TeamknBaseActivity{
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
         LayoutInflater inflater = LayoutInflater.from(this);
-        base_about = inflater.inflate(R.layout.base_about, null);
-        layout.addView(base_about);
+        view_show = inflater.inflate(R.layout.base_about, null);
+        layout.addView(view_show);
 
     }
 

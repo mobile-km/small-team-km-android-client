@@ -56,7 +56,7 @@ import com.teamkn.widget.adapter.NoteListAdapter;
 
 public class MainActivity extends TeamknBaseActivity{
 
-	View base_main;
+	View view_show;
 	 
 	public class RequestCode {
         public final static int EDIT_TEXT = 0;
@@ -120,8 +120,8 @@ public class MainActivity extends TeamknBaseActivity{
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
         LayoutInflater inflater = LayoutInflater.from(this);
-        base_main = inflater.inflate(R.layout.base_main, null);
-        layout.addView(base_main);
+        view_show = inflater.inflate(R.layout.base_main, null);
+        layout.addView(view_show);
 
 	    mLoadLayout = new LinearLayout(this);   
         mLoadLayout.setMinimumHeight(40);   
@@ -136,10 +136,10 @@ public class MainActivity extends TeamknBaseActivity{
         mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
         mLoadLayout.setVisibility(View.GONE);   
 		
-		data_syn_textview = (TextView)base_main.findViewById(R.id.main_data_syn_text);
-		data_syn_progress_bar = (ProgressBar)base_main.findViewById(R.id.main_data_syn_progress_bar);
-		progress_set_num = (TextView)base_main.findViewById(R.id.progress_set_num);
-		manual_syn_bn = (ImageView)base_main.findViewById(R.id.manual_syn_bn);
+		data_syn_textview = (TextView)view_show.findViewById(R.id.main_data_syn_text);
+		data_syn_progress_bar = (ProgressBar)view_show.findViewById(R.id.main_data_syn_progress_bar);
+		progress_set_num = (TextView)view_show.findViewById(R.id.progress_set_num);
+		manual_syn_bn = (ImageView)view_show.findViewById(R.id.manual_syn_bn);
 		
 		// 注册更新服务
 		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
@@ -150,8 +150,7 @@ public class MainActivity extends TeamknBaseActivity{
 		IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
 		
 		// 注册更新表情反馈服务
-		Intent intent1 = new Intent(MainActivity.this,FaceCommentService.class);
-		startService(intent1);
+		startService(new Intent(MainActivity.this,FaceCommentService.class));
 		SharedParam.saveParam(this, 0);
 		FaceCommentService.context = this;	
     
@@ -174,7 +173,7 @@ public class MainActivity extends TeamknBaseActivity{
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
 		String name = current_user().name;
-		RelativeLayout rl = (RelativeLayout)base_main.findViewById(R.id.main_user_avatar);
+		RelativeLayout rl = (RelativeLayout)view_show.findViewById(R.id.main_user_avatar);
 		if(avatar != null){
 			Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(avatar));
 			Drawable drawable = new BitmapDrawable(bitmap);
@@ -182,7 +181,7 @@ public class MainActivity extends TeamknBaseActivity{
 		}else{
 		    rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
-	    TextView user_name_tv = (TextView)base_main.findViewById(R.id.main_user_name);
+	    TextView user_name_tv = (TextView)view_show.findViewById(R.id.main_user_name);
 	    user_name_tv.setText(name);
 		super.onResume();
 	}

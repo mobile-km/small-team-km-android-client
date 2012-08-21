@@ -3,8 +3,10 @@ package com.teamkn.Logic;
 import android.content.Context;
 
 import com.teamkn.activity.base.RegisterActivity;
+import com.teamkn.activity.chat.ChatActivity;
 import com.teamkn.activity.usermsg.UserMsgAvatarSetActivity;
 import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.http.*;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
@@ -593,6 +595,16 @@ public class HttpApi {
               
               ChatNodeDBHelper.pull_from_server(uuid, server_chat_id, server_chat_node_id, sender_id, content, server_created_time);
               max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
+           
+              System.out.println(TeamknApplication.current_show_activity + "  ------------  current_show_activity   "
+            		   + content);
+              if( TeamknApplication.current_show_activity
+            		  .equals("com.teamkn.activity.chat.ChatActivity")){
+            	  System.out.println("  ------------  current_show_activity");
+            	  com.teamkn.model.ChatNode chat_node = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id);
+            	  ChatActivity.add_chat_node_item(chat_node);
+              }
+            
             }
             TeamknPreferences.set_last_syn_chat_node_created_time(max_last_syn_chat_node_created_time);
             return null;

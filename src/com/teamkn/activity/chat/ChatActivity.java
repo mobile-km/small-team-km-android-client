@@ -5,7 +5,9 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter.BaseViewHolder;
 import com.teamkn.base.task.TeamknAsyncTask;
@@ -58,6 +61,9 @@ public class ChatActivity extends TeamknBaseActivity {
 	  static AttitudesListAdapter attitudesListAdapter_chat;
 	  static int x ;
 	  static int y ;
+	  
+	  boolean isRun = true;
+	  
 	  public class Extra {
 		public static final String CLIENT_CHAT_ID = "client_chat_id";
 		public static final int CHAT_ALBUM = 5;
@@ -76,11 +82,13 @@ public class ChatActivity extends TeamknBaseActivity {
 	  private static Chat chat;
 	  private static ChatNodeListAdapter adapter;
 	  
-	  private int visibleItemTop = 0;
+	  private static int visibleItemTop = 0;
 	
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
+	    visibleItemTop = 0;
 	    client_chat_id = getIntent().getIntExtra(Extra.CLIENT_CHAT_ID, 0);
 	    chat = ChatDBHelper.find(client_chat_id);
 	    setContentView(R.layout.chat);
@@ -98,14 +106,13 @@ public class ChatActivity extends TeamknBaseActivity {
 	    adapter.add_items(chat_node_list);
 	    chat_node_lv.setAdapter(adapter); 
 	    
-	    chat_node_lv.setOnScrollListener(new OnScrollListener() {
-			
+	    chat_node_lv.setOnScrollListener(new OnScrollListener() {		
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}	
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {	
-				visibleItemTop = totalItemCount - visibleItemCount + 2;
+				visibleItemTop = totalItemCount - visibleItemCount + 3;
 			}
 		});
 	  }
@@ -130,6 +137,7 @@ public class ChatActivity extends TeamknBaseActivity {
 			public void on_success(Integer client_chat_node_id) {
 			    ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
 			    adapter.add_item(chat_node);
+			    
 			    chat_node_et.setText("");
 			    chat_node_lv.setSelection(visibleItemTop);
 		    }
@@ -191,11 +199,22 @@ public class ChatActivity extends TeamknBaseActivity {
 			public void on_success(Integer client_chat_node_id) {
 			     ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
 			     adapter.add_item(chat_node);
+ 
 			     chat_node_et.setText("");
 			     chat_node_lv.setSelection(visibleItemTop);
 			}
 		}.execute();     
      }
+	 public static void add_chat_node_item(final ChatNode chatNode){
+		 chat_node_lv.post(new Runnable() {
+			@Override
+			public void run() {
+				 adapter.add_item(chatNode);
+				 System.out.println("  &&&&&  "  + chatNode.content);
+				 chat_node_lv.setSelection(visibleItemTop);
+			}
+		});
+	 }
 	 
 	 //111
 	 public static void click_send_attitudes_kind(final ChatActivity context,String kindStr,final int chat_node_id,final int server_chat_node_id){
@@ -389,5 +408,11 @@ public class ChatActivity extends TeamknBaseActivity {
 		}	
 		
 	};
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		
+		return super.onKeyDown(keyCode, event);
+	}
 
 }

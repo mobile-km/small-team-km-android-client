@@ -36,7 +36,7 @@ public class SearchActivity extends TeamknBaseActivity{
         public final static int EDIT_TEXT = 9;
     }
    
-      View search;	
+    View view_show;	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +45,13 @@ public class SearchActivity extends TeamknBaseActivity{
 	    setContentView(R.layout.horz_scroll_with_image_menu);
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         LayoutInflater inflater = LayoutInflater.from(this);
-        search = inflater.inflate(R.layout.search, null);
-        layout.addView(search);
+        view_show = inflater.inflate(R.layout.search, null);
+        layout.addView(view_show);
         
 
-        EditText search_box    = (EditText) search.findViewById(R.id.search_box);
-        Button   search_submit = (Button)   search.findViewById(R.id.search_submit);
-        Button   search_clear  = (Button)   search.findViewById(R.id.search_clear);
+        EditText search_box    = (EditText) view_show.findViewById(R.id.search_box);
+        Button   search_submit = (Button)   view_show.findViewById(R.id.search_submit);
+        Button   search_clear  = (Button)   view_show.findViewById(R.id.search_clear);
 
         search_submit.setOnClickListener(new SearchSubmitClickListener());
         search_clear.setOnClickListener(new SearchClearClickListener());
@@ -152,14 +152,10 @@ public class SearchActivity extends TeamknBaseActivity{
             return;
         }
         switch (requestCode) {
-            case MainActivity.RequestCode.EDIT_TEXT:
+            case SearchActivity.RequestCode.EDIT_TEXT:
                 do_search_box_search();
                 break;
         }
-
-        super.onActivityResult(requestCode,
-                               resultCode,
-                               data);
     }
 
 

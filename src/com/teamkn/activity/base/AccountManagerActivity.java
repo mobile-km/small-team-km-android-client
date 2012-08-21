@@ -21,7 +21,7 @@ import com.teamkn.widget.adapter.AccountListAdapter;
 
 public class AccountManagerActivity extends TeamknBaseActivity{
 	
-	View base_account_manager;
+	View view_show;
 	
     private ListView list_view;
     private AccountListAdapter adapter;
@@ -34,10 +34,10 @@ public class AccountManagerActivity extends TeamknBaseActivity{
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
         LayoutInflater inflater = LayoutInflater.from(this);
-        base_account_manager = inflater.inflate(R.layout.base_account_manager, null);
-        layout.addView(base_account_manager);
+        view_show = inflater.inflate(R.layout.base_account_manager, null);
+        layout.addView(view_show);
         
-        list_view = (ListView)base_account_manager. findViewById(R.id.account_list);
+        list_view = (ListView)view_show. findViewById(R.id.account_list);
         bind_add_account_event();
         fill_list();
 

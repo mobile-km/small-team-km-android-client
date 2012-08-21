@@ -30,7 +30,7 @@ public class ChatListAdapter extends TeamknBaseAdapter<Chat> {
     
     view_holder.chat_id_tv = (TextView)  view.findViewById(R.id.chat_id_tv);
     view_holder.chat_title_tv = (TextView)  view.findViewById(R.id.chat_title_tv);
-    
+    view_holder.chat_data_tv = (TextView) view.findViewById(R.id.chat_data_tv);
     return view_holder;
   }
 
@@ -45,11 +45,14 @@ public class ChatListAdapter extends TeamknBaseAdapter<Chat> {
     String names_str = BaseUtils.string_list_to_string(name_list);
     
     view_holder.chat_title_tv.setText(names_str);
+    view_holder.chat_data_tv.setVisibility(View.VISIBLE);
+    view_holder.chat_data_tv.setText(item.server_updated_time+"");
     view_holder.chat_id_tv.setTag(item.id);
   }
   
   private class ViewHolder implements BaseViewHolder {
     TextView chat_id_tv;
     TextView chat_title_tv;
+    TextView chat_data_tv;
   }
 }
