@@ -357,4 +357,10 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowIsTranslucent">false</item>
     </style>
+    <!-- android关于输入框弹出后 点击输入框以外的位置会让输入框消失  -->
+    <style name="demo" parent="android:Theme">  
+        <item name="android:windowBackground">@color/teamkn_bgc</item>
+        <item name="android:listViewStyle">@style/teamkn_list_theme</item>
+        <item name="android:focusableInTouchMode">true</item>  
+    </style>
 </resources>

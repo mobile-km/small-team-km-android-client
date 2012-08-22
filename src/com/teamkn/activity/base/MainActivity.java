@@ -24,7 +24,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -57,6 +56,7 @@ import com.teamkn.widget.adapter.NoteListAdapter;
 public class MainActivity extends TeamknBaseActivity{
 
 	View view_show;
+	TextView show_contacts_msg_tv;
 	 
 	public class RequestCode {
         public final static int EDIT_TEXT = 0;

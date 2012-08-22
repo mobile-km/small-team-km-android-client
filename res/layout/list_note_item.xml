@@ -17,7 +17,6 @@
             android:id="@+id/note_content_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:autoLink="all"
 	     ></TextView>
 	    <ImageView
             android:id="@+id/note_image_show_iv"

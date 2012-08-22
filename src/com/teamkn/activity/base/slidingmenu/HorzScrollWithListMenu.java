@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView.SizeCallback;
 
 /**

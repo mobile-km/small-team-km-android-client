@@ -9,12 +9,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
@@ -50,6 +53,8 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
       View view) {
     
 	    ViewHolder view_holder = new ViewHolder();
+	    view_holder.list_chat_node_item_relativelayout = (RelativeLayout)view.findViewById(R.id.list_chat_node_item_relativelayout);
+	    
 	    view_holder.user_avatar_iv   = (ImageView) view.findViewById(R.id.user_avatar_iv);
 	    view_holder.chat_node_content_tv = (TextView)  view.findViewById(R.id.chat_node_content_tv);
 	    view_holder.user_content_iv = (ImageView)view.findViewById(R.id.user_content_iv);
@@ -62,6 +67,13 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
   @Override
   public void fill_with_data(BaseViewHolder holder, ChatNode item, int position) {
 	    final ViewHolder view_holder = (ViewHolder) holder;
+	    view_holder.list_chat_node_item_relativelayout.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+                ChatActivity.closeEditTextFouse();
+				return false;
+			}
+		});
 	    if(item.sender.user_avatar != null){
 	      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(item.sender.user_avatar));
 	      Drawable drawable = new BitmapDrawable(bitmap);
@@ -136,6 +148,7 @@ public class ChatNodeListAdapter extends TeamknBaseAdapter<ChatNode> {
   } 
 
   private class ViewHolder implements BaseViewHolder {
+	    RelativeLayout list_chat_node_item_relativelayout;
 	    ImageView user_avatar_iv;
 	    TextView chat_node_content_tv; 
 	    ImageView user_content_iv;

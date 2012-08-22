@@ -7,16 +7,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.chat.ChatActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.ChatNode;
-import com.teamkn.model.User;
-import com.teamkn.model.database.ChatNodeDBHelper;
-import com.teamkn.model.database.ChatNodeDBHelper.Kind;
 
 public class RegisterActivity extends TeamknBaseActivity{
 	public static String questError = null;

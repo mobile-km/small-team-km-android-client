@@ -5,47 +5,32 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
+import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AbsoluteLayout;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
-import com.teamkn.base.adapter.TeamknBaseAdapter.BaseViewHolder;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.base.utils.JudgeNetWork;
 import com.teamkn.model.Attitudes;
 import com.teamkn.model.Chat;
 import com.teamkn.model.ChatNode;
-import com.teamkn.model.IsShow;
 import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
@@ -70,7 +55,9 @@ public class ChatActivity extends TeamknBaseActivity {
 	  }
 	  
 	 static ListView chat_node_lv;
-	 private static EditText chat_node_et;
+	 TextView chat_node_list_below;
+	 static EditText chat_node_et;
+	 static InputMethodManager imm;
 	 
 	 static ImageView emotion_icon_smile;
 	 static ImageView emotion_icon_wink;
@@ -78,6 +65,8 @@ public class ChatActivity extends TeamknBaseActivity {
 	 static ImageView emotion_icon_sad;
 	 static ImageView emotion_icon_heart;
 	 
+	 static boolean chat_node_et_focus_yes = true;
+	  
 	  private int client_chat_id;
 	  private static Chat chat;
 	  private static ChatNodeListAdapter adapter;
@@ -94,9 +83,32 @@ public class ChatActivity extends TeamknBaseActivity {
 	    setContentView(R.layout.chat);
 
 	    chat_node_lv = (ListView)findViewById(R.id.chat_node_list);
+	    chat_node_list_below = (TextView)findViewById(R.id.chat_node_list_below);
 	    chat_node_et = (EditText)findViewById(R.id.chat_node_et);
 	    showdialog = (LinearLayout)findViewById(R.id.showdialog);
 	    
+	    chat_node_list_below.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				closeEditTextFouse();
+			}
+		});
+	    //点击输入框以外的地方则隐藏输入法  
+	    chat_node_et_focus_yes = true;
+	    chat_node_et.setOnFocusChangeListener(new OnFocusChangeListener() {  
+	        @Override  
+	        public void onFocusChange(View v, boolean hasFocus) {  
+	            // TODO Auto-generated method stub  
+	            if (!hasFocus) {  
+	                System.out.println("失去焦点"); 
+	                chat_node_et_focus_yes = true;
+	                // 失去焦点  
+	            }else{
+	            	chat_node_et_focus_yes = false;
+	            }
+	        }  
+	    });  
+	   imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
    	    build_list();
 	  } 
 	  private void build_list() {
@@ -105,17 +117,22 @@ public class ChatActivity extends TeamknBaseActivity {
 	    adapter = new ChatNodeListAdapter(this);
 	    adapter.add_items(chat_node_list);
 	    chat_node_lv.setAdapter(adapter); 
-	    
+
 	    chat_node_lv.setOnScrollListener(new OnScrollListener() {		
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}	
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {	
-				visibleItemTop = totalItemCount - visibleItemCount + 3;
+				if(totalItemCount>3){
+					visibleItemTop = totalItemCount - visibleItemCount + 3;
+				}else{
+					visibleItemTop = totalItemCount - visibleItemCount + 1;
+				}	
 			}
 		});
 	  }
+	  
 	  public void click_send_chat_node_bn(View view){
 	    final String content = chat_node_et.getText().toString();
 	    if(content == null || content.equals("")){
@@ -136,13 +153,13 @@ public class ChatActivity extends TeamknBaseActivity {
 			@Override
 			public void on_success(Integer client_chat_node_id) {
 			    ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
+			   
 			    adapter.add_item(chat_node);
 			    
 			    chat_node_et.setText("");
 			    chat_node_lv.setSelection(visibleItemTop);
 		    }
 		 }.execute();
-	    
 	  }
 	public void click_chat_node_button_album(View view){
 		    
@@ -210,7 +227,6 @@ public class ChatActivity extends TeamknBaseActivity {
 			@Override
 			public void run() {
 				 adapter.add_item(chatNode);
-				 System.out.println("  &&&&&  "  + chatNode.content);
 				 chat_node_lv.setSelection(visibleItemTop);
 			}
 		});
@@ -249,7 +265,7 @@ public class ChatActivity extends TeamknBaseActivity {
 				
 				@Override
 				public void on_success(Integer client_chat_node_id) {
-				    Attitudes attitudes = AttitudesDBHelper.find(client_chat_node_id);
+				    AttitudesDBHelper.find(client_chat_node_id);
 				    
 //				    attitudesListAdapter_chat.add_item(attitudes);
 //				    attitudesListAdapter_chat.notifyDataSetChanged();
@@ -262,53 +278,44 @@ public class ChatActivity extends TeamknBaseActivity {
 	 
      public static boolean showDialog(final ChatActivity context,int[] intXY ,  final int chat_id,int server_chat_node_id,final ImageButton button,
     		 AttitudesListAdapter attitudesListAdapter,ListView listview){
-    	attitudesListAdapter_chat = attitudesListAdapter; //内部listview的适配器
-    	listview_att = listview; //内部的listview
+    	if(chat_node_et_focus_yes){
+    		attitudesListAdapter_chat = attitudesListAdapter; //内部listview的适配器
+        	listview_att = listview; //内部的listview
 
-    	x = intXY[0];
- 		y = intXY[1];
-        
- 		LayoutInflater inflater = LayoutInflater.from(context);// 取得LayoutInflater对象
-	    popView = inflater.inflate(R.layout.pupupwindow, null);// 读取布局管理器
-		
-	    
-	    showdialog.setVisibility(View.VISIBLE);
-		popView.setVisibility(View.VISIBLE);
-		showdialog.setPadding(10, y-60, 10+popView.getWidth()+50, -(y+popView.getHeight()-60));
-		showdialog.addView(popView);
-		
-		
-		emotion_icon_smile = (ImageView)popView.findViewById(R.id.emotion_icon_smile);
-		emotion_icon_wink = (ImageView)popView.findViewById(R.id.emotion_icon_wink);
-		emotion_icon_gasp = (ImageView)popView.findViewById(R.id.emotion_icon_gasp);
-		emotion_icon_sad = (ImageView)popView.findViewById(R.id.emotion_icon_sad);
-		emotion_icon_heart = (ImageView)popView.findViewById(R.id.emotion_icon_heart);
-		
-		start_animation_from();
-		
-		ImageView imageView = (ImageView)popView.findViewById(R.id.comment_1);
-		emotion_icon_smile.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
-		emotion_icon_wink.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
-		emotion_icon_gasp.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
-		emotion_icon_sad.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
-		emotion_icon_heart.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
-        showdialog.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+        	x = intXY[0];
+     		y = intXY[1];
+            
+     		LayoutInflater inflater = LayoutInflater.from(context);// 取得LayoutInflater对象
+    	    popView = inflater.inflate(R.layout.pupupwindow, null);// 读取布局管理器
+    		
+    	    
+    	    showdialog.setVisibility(View.VISIBLE);
+    		popView.setVisibility(View.VISIBLE);
+    		showdialog.setPadding(10, y-60, 10+popView.getWidth()+50, -(y+popView.getHeight()-60));
+    		showdialog.addView(popView);
+    		
+    		
+    		emotion_icon_smile = (ImageView)popView.findViewById(R.id.emotion_icon_smile);
+    		emotion_icon_wink = (ImageView)popView.findViewById(R.id.emotion_icon_wink);
+    		emotion_icon_gasp = (ImageView)popView.findViewById(R.id.emotion_icon_gasp);
+    		emotion_icon_sad = (ImageView)popView.findViewById(R.id.emotion_icon_sad);
+    		emotion_icon_heart = (ImageView)popView.findViewById(R.id.emotion_icon_heart);
+    		
+    		start_animation_from();
+    		
+    		ImageView imageView = (ImageView)popView.findViewById(R.id.comment_1);
+    		emotion_icon_smile.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+    		emotion_icon_wink.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+    		emotion_icon_gasp.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+    		emotion_icon_sad.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+    		emotion_icon_heart.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+            showdialog.setOnClickListener(new EmotionClick(context,button,imageView,chat_id ,server_chat_node_id));
+    	}else{
+    		closeEditTextFouse();
+    	}
 		return false; 
      }
-    private static void end_animation_from(){
-	        // 框体消失
-			Animation dialog_set_alpha_animation = new AlphaAnimation(1.0f, 0.0f);
-			dialog_set_alpha_animation.setFillAfter(true);
-			Animation dialog_set_translate_animation=new TranslateAnimation(10, 10, y-90, y-50); 
-			dialog_set_translate_animation.setFillAfter(true);
-			
-			final AnimationSet dialog_set_animation = new AnimationSet(false);
-			dialog_set_animation.addAnimation( dialog_set_alpha_animation);
-			dialog_set_animation.addAnimation(dialog_set_translate_animation);
-			dialog_set_animation.setDuration(500);
-			dialog_set_animation.setFillAfter(true);
-			showdialog.startAnimation(dialog_set_animation);
-    }
+
     private static void start_animation_from(){
     	 Animation smial = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,
                  Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -403,16 +410,13 @@ public class ChatActivity extends TeamknBaseActivity {
 //			end_animation_from();
 			popView.setVisibility(View.GONE);
 			showdialog.setVisibility(View.GONE);
-			showdialog.removeView(popView);
-			
-		}	
-		
+			showdialog.removeView(popView);			
+		}			
 	};
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-		
-		return super.onKeyDown(keyCode, event);
+	
+	public static void closeEditTextFouse(){
+        // 失去焦点  
+        chat_node_et.clearFocus();  
+        imm.hideSoftInputFromWindow(chat_node_et.getWindowToken(), 0);  
 	}
-
 }

@@ -57,7 +57,8 @@
     
     <!-- 对话串 -->
     <activity android:name=".activity.chat.SelectChatMemberActivity"></activity>
-    <activity android:name=".activity.chat.ChatActivity"></activity>
+    <activity android:name=".activity.chat.ChatActivity" 
+        android:windowSoftInputMode="adjustPan" android:screenOrientation="portrait"></activity>
     <activity android:name=".activity.chat.ChatListActivity"></activity>
 	
 	<!-- 用户信息 -->

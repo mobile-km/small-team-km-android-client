@@ -17,19 +17,29 @@
             android:text="@string/chat_title"
         />
     </RelativeLayout>
-
-    <ListView
-        android:layout_below="@+id/head_bar"
-        android:id="@+id/chat_node_list"
-        android:layout_width="fill_parent"
-        android:layout_height="312dp"
-        android:layout_gravity="center"
-        android:clickable="false"
-        android:scrollbars="none" >
-
-    </ListView>
     <RelativeLayout
-        android:layout_below="@+id/chat_node_list"
+        android:layout_below="@+id/head_bar"
+        android:id="@+id/chat_node_list_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+    >
+	   <ListView 
+	       android:id="@+id/chat_node_list"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:layout_gravity="center"
+	       android:clickable="false"
+	       android:scrollbars="none" >
+	   </ListView>
+       <TextView
+           android:layout_below="@+id/chat_node_list"
+           android:id="@+id/chat_node_list_below"
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent" 
+       />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/chat_node_list_rl"
         android:id="@+id/send_chat_node_bar"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"

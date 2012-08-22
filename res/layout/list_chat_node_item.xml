@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
+    android:id="@+id/list_chat_node_item_relativelayout"
 >
     <RelativeLayout 
         android:id="@+id/relativelayout_top"
@@ -25,6 +26,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/user_avatar_iv"
         android:visibility="gone"
+        android:textColor="#000"
     />
     <ImageView
         android:id="@+id/user_content_iv"
@@ -49,6 +51,7 @@
     />
         
     </RelativeLayout> 
+    
     <LinearLayout 
             android:id="@+id/subLayout" 
             android:orientation="vertical" 

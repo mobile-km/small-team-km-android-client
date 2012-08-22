@@ -1,7 +1,6 @@
 package com.teamkn.activity.base.slidingmenu;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -34,7 +33,7 @@ public class ScrollLayout extends ViewGroup {
 	private int mTouchState = TOUCH_STATE_REST;
 	private int mTouchSlop;
 	private float mLastMotionX;
-	private float mLastMotionY;
+//	private float mLastMotionY;
 
 	public ScrollLayout(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -221,7 +220,7 @@ public class ScrollLayout extends ViewGroup {
 		}
 		
 		final float x = ev.getX();
-		final float y = ev.getY();
+//		final float y = ev.getY();
 		
 		switch (action) {
 		case MotionEvent.ACTION_MOVE:
@@ -234,7 +233,7 @@ public class ScrollLayout extends ViewGroup {
 			
 		case MotionEvent.ACTION_DOWN:
 			mLastMotionX = x;
-			mLastMotionY = y;
+//			mLastMotionY = y;
 			mTouchState = mScroller.isFinished()? TOUCH_STATE_REST : TOUCH_STATE_SCROLLING;
 			break;
 			

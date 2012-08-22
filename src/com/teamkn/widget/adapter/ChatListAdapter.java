@@ -44,9 +44,9 @@ public class ChatListAdapter extends TeamknBaseAdapter<Chat> {
     }
     String names_str = BaseUtils.string_list_to_string(name_list);
     
-    view_holder.chat_title_tv.setText(names_str);
+    view_holder.chat_title_tv.setText(BaseUtils.date_string(item.server_updated_time)+"   "+names_str);
     view_holder.chat_data_tv.setVisibility(View.VISIBLE);
-    view_holder.chat_data_tv.setText(item.server_updated_time+"");
+//    view_holder.chat_data_tv.setText(item.server_updated_time+"   ");
     view_holder.chat_id_tv.setTag(item.id);
   }
   

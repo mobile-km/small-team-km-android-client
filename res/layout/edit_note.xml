@@ -45,7 +45,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:hint="@string/note_content_et"
-                android:autoLink="all"
                 style="@style/note_content_inputer_layout"
                 android:visibility="gone"
                 />

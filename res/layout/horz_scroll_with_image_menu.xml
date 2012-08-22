@@ -10,13 +10,19 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#5B5B5B"
-    >       
+    >   
+        <TextView
+            android:id="@+id/show_contacts_msg_tv" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"   
+        /> 
+            
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:layout_marginRight="50dp" 
-       >
+        >
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_height="wrap_content"

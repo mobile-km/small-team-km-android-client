@@ -19,6 +19,7 @@
     <!-- 头像 -->
     <ImageView
             android:id="@+id/account_avatar"
+            android:src="@drawable/default_avatar"
             android:layout_height="32dp"
             android:layout_width="32dp"
             android:layout_marginLeft="38dp"

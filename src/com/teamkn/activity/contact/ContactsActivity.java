@@ -15,10 +15,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
@@ -31,7 +30,6 @@ import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.pinyin4j.SideBar;
 import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusBinder;
-import com.teamkn.widget.adapter.ContactListAdapter;
 import com.teamkn.widget.adapter.ContactListAdapter_update;
 
 public class ContactsActivity extends TeamknBaseActivity implements  OnClickListener{
@@ -46,6 +44,7 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   private String item = null;
   private Button button_contact_list_linkman ;
   private Button button_contact_list_send_invite ;
+  private Button button_contact_list_get_invite;
   private ServiceConnection conn = new ServiceConnection(){
 
     @Override
@@ -71,12 +70,14 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     findView();
     button_contact_list_linkman.setOnClickListener(this);
     button_contact_list_send_invite.setOnClickListener(this);
+    button_contact_list_get_invite.setOnClickListener(this);
     import_contact();
   }
   private void findView(){	
 	button_contact_list_linkman = (Button)this.findViewById(R.id.button_contact_list_linkman);
     button_contact_list_send_invite = (Button)this.findViewById(R.id.button_contact_list_send_invite);
-	  
+    button_contact_list_get_invite = (Button)this.findViewById(R.id.button_contact_list_get_invite);
+    
 	contact_list_linkman = (View)this.findViewById(R.id.contact_list_linkman);
 	lvContact = (ListView)contact_list_linkman.findViewById(R.id.contact_list_lv);
 
@@ -169,6 +170,10 @@ public void onClick(View v) {
 		break;
 	case R.id.button_contact_list_send_invite:
 		item = ContactDBHelper.Status.INVITED;
+		load_contacts_to_list();
+		break;
+	case R.id.button_contact_list_get_invite:
+		item = ContactDBHelper.Status.BE_INVITED;
 		load_contacts_to_list();
 		break;
 	default:
