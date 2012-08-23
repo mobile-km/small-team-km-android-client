@@ -65,7 +65,7 @@
     <string name="chat_title">对话串</string>
     
     <!-- 选择对话串成员页面 -->
-    <string name="select_chat_member_title">对话串</string>
+    <string name="select_chat_member_title">创建对话串</string>
 
     <!-- 搜索页面 -->
     <string name="search_prompt">请输入搜索内容</string>
@@ -105,7 +105,9 @@
     <!-- 笔记列表项的 tag key -->
     <item type="id" name="tag_note_uuid"></item>
     <item type="id" name="tag_note_kind"></item>
-
+    
+    <!-- pinyin4j -->
+    <string name="unchecked">unchecked</string>
     <!-- TeamknPreferences 的 keys -->
     <string name="preferences_key_upload_photo_quality">upload_photo_quality</string>
     <string name="preferences_key_current_user_id">current_user_id</string>

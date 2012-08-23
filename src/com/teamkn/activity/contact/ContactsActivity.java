@@ -121,7 +121,7 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
 
       @Override
       public void on_success(Void resule) {
-    	  load_contacts_to_list();
+    	load_contacts_to_list();
         Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
       }

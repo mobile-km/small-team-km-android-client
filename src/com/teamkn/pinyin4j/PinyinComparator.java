@@ -3,7 +3,7 @@ package com.teamkn.pinyin4j;
 
 import java.util.Comparator;
 
-public class PinyinComparator implements Comparator{
+public class PinyinComparator implements Comparator<Object>{
 
 	@Override
 	public int compare(Object o1, Object o2) {

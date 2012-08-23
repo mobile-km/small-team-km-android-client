@@ -17,7 +17,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class AttitudesListAdapter extends TeamknBaseAdapter<Attitudes>{
     Context context;
@@ -36,7 +35,7 @@ public class AttitudesListAdapter extends TeamknBaseAdapter<Attitudes>{
 			View view) {
 		 ViewHolder view_holder= new ViewHolder();   
 		 view_holder.chat_id_user_avatar_iv = (ImageView)  view.findViewById(R.id.imageview_avatar);
-		 view_holder.chat_id_user_comment_tv = (TextView)  view.findViewById(R.id.textview_content);  
+//		 view_holder.chat_id_user_comment_tv = (TextView)  view.findViewById(R.id.textview_content);  
 		return view_holder;
 	}
 
@@ -74,6 +73,6 @@ public class AttitudesListAdapter extends TeamknBaseAdapter<Attitudes>{
 	}
 	private class ViewHolder implements BaseViewHolder {
 	    ImageView chat_id_user_avatar_iv;
-	    TextView chat_id_user_comment_tv;
+//	    TextView chat_id_user_comment_tv;
 	} 
 }

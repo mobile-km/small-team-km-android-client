@@ -9,7 +9,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.teamkn.model.Attitudes;
-import com.teamkn.model.ChatNode;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 

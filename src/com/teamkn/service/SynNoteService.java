@@ -145,7 +145,6 @@ public class SynNoteService extends Service {
         syn_ui_binder.set_syn_success();
         sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
       }catch(ServerErrorException see){
-    	  int i = 1/0;
         see.printStackTrace();
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 30*60*1000);

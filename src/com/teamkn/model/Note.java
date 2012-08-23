@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import org.apache.commons.io.FileUtils;
-
 public class Note extends BaseModel {
     public int id;
     public String uuid;

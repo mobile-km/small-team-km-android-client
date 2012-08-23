@@ -29,10 +29,11 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 public class ContactListAdapter_update  extends BaseAdapter implements SectionIndexer {
+//	private String[] unchecked = {"unchecked"};
     private String item = null;
 	private Context mContext;
 	private List<Contact> list;
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings(value="unchecked")
 	public ContactListAdapter_update(Context mContext,List<Contact> list,String item){
 		this.mContext = mContext;
 		this.item = item;

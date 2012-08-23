@@ -177,7 +177,7 @@ public final class R {
         public static final int emotion_icon_sad=0x7f0a0087;
         public static final int emotion_icon_smile=0x7f0a0084;
         public static final int emotion_icon_wink=0x7f0a0085;
-        public static final int et_set_name=0x7f0a00b3;
+        public static final int et_set_name=0x7f0a00b4;
         public static final int following_grid=0x7f0a0035;
         public static final int foot_rl_about=0x7f0a004a;
         public static final int foot_rl_account_manage=0x7f0a0049;
@@ -191,8 +191,8 @@ public final class R {
         public static final int imagebutton_comment=0x7f0a005b;
         public static final int imageview_avatar=0x7f0a005e;
         public static final int iv_foot_view=0x7f0a0002;
-        public static final int iv_show_avatar=0x7f0a00b2;
-        public static final int iv_user_avatar=0x7f0a00ae;
+        public static final int iv_show_avatar=0x7f0a00b3;
+        public static final int iv_user_avatar=0x7f0a00af;
         public static final int linearlayout_help_left=0x7f0a007b;
         public static final int linearlayout_help_top=0x7f0a007a;
         public static final int linearlayout_loading=0x7f0a004b;
@@ -203,7 +203,7 @@ public final class R {
         public static final int list_more_button_loading=0x7f0a006e;
         public static final int list_postion_tv=0x7f0a0073;
         public static final int listview_comment_result=0x7f0a005d;
-        public static final int ll_setting=0x7f0a0099;
+        public static final int ll_setting=0x7f0a009a;
         public static final int login_button=0x7f0a0007;
         public static final int lvContact=0x7f0a0033;
         public static final int main_data_syn_progress_bar=0x7f0a000e;
@@ -212,9 +212,9 @@ public final class R {
         public static final int main_user_name=0x7f0a000b;
         public static final int manual_syn_bn=0x7f0a000d;
         public static final int menu=0x7f0a0042;
-        public static final int menu_about=0x7f0a00b6;
-        public static final int menu_account_management=0x7f0a00b8;
-        public static final int menu_setting=0x7f0a00b7;
+        public static final int menu_about=0x7f0a00b7;
+        public static final int menu_account_management=0x7f0a00b9;
+        public static final int menu_setting=0x7f0a00b8;
         public static final int new_chat_bn=0x7f0a0026;
         public static final int note_content_et=0x7f0a003d;
         public static final int note_content_tv=0x7f0a0070;
@@ -244,8 +244,8 @@ public final class R {
         public static final int register_tv_error_show_intent=0x7f0a0016;
         public static final int register_tv_error_show_name_no=0x7f0a0019;
         public static final int register_tv_error_show_password_no=0x7f0a001a;
-        public static final int relativelayout_set_user_avatar=0x7f0a00ad;
-        public static final int relativelayout_set_user_name=0x7f0a00af;
+        public static final int relativelayout_set_user_avatar=0x7f0a00ae;
+        public static final int relativelayout_set_user_name=0x7f0a00b0;
         public static final int relativelayout_top=0x7f0a0057;
         public static final int search_box=0x7f0a008e;
         public static final int search_clear=0x7f0a0090;
@@ -257,58 +257,59 @@ public final class R {
         public static final int search_user_avatar_iv=0x7f0a0074;
         public static final int search_user_list=0x7f0a0096;
         public static final int search_user_name_tv=0x7f0a0075;
-        public static final int select_chat_member_lv=0x7f0a0097;
+        public static final int select_chat_member_lv=0x7f0a0098;
         public static final int select_chat_member_select_cb=0x7f0a0079;
         public static final int select_chat_member_user_avatar_iv=0x7f0a0077;
         public static final int select_chat_member_user_id_tv=0x7f0a0076;
         public static final int select_chat_member_user_name_tv=0x7f0a0078;
+        public static final int select_chat_nember_top=0x7f0a0097;
         public static final int send_chat_node_bar=0x7f0a0020;
         public static final int send_chat_node_bn=0x7f0a0021;
-        public static final int show_contacts_msg_tv=0x7f0a0044;
         public static final int showdialog=0x7f0a0024;
         public static final int sideBar=0x7f0a0032;
         public static final int subLayout=0x7f0a005c;
-        public static final int submit_select_chat_member_bn=0x7f0a0098;
+        public static final int submit_select_chat_member_bn=0x7f0a0099;
         public static final int tabBar=0x7f0a003f;
         public static final int tag_note_kind=0x7f0a0001;
         /**  view.getTag(key,value) 中的 key 
  笔记列表项的 tag key 
          */
         public static final int tag_note_uuid=0x7f0a0000;
-        public static final int teamkn_alert_dialog_button1=0x7f0a00a0;
-        public static final int teamkn_alert_dialog_button2=0x7f0a00a2;
-        public static final int teamkn_alert_dialog_button3=0x7f0a00a1;
-        public static final int teamkn_alert_dialog_button_panel=0x7f0a009f;
-        public static final int teamkn_alert_dialog_content_panel=0x7f0a009c;
-        public static final int teamkn_alert_dialog_content_panel_scrollView=0x7f0a009d;
-        public static final int teamkn_alert_dialog_message=0x7f0a009e;
-        public static final int teamkn_alert_dialog_title=0x7f0a009b;
-        public static final int teamkn_alert_dialog_title_panel=0x7f0a009a;
-        public static final int teamkn_progress_dialog_message=0x7f0a00a3;
+        public static final int teamkn_alert_dialog_button1=0x7f0a00a1;
+        public static final int teamkn_alert_dialog_button2=0x7f0a00a3;
+        public static final int teamkn_alert_dialog_button3=0x7f0a00a2;
+        public static final int teamkn_alert_dialog_button_panel=0x7f0a00a0;
+        public static final int teamkn_alert_dialog_content_panel=0x7f0a009d;
+        public static final int teamkn_alert_dialog_content_panel_scrollView=0x7f0a009e;
+        public static final int teamkn_alert_dialog_message=0x7f0a009f;
+        public static final int teamkn_alert_dialog_title=0x7f0a009c;
+        public static final int teamkn_alert_dialog_title_panel=0x7f0a009b;
+        public static final int teamkn_progress_dialog_message=0x7f0a00a4;
+        public static final int teamkn_show_msg_tv=0x7f0a0044;
         public static final int textview_content=0x7f0a005f;
         public static final int to_search_contact_page=0x7f0a002f;
         public static final int top=0x7f0a004c;
-        public static final int tv_show_update_error=0x7f0a00b4;
-        public static final int tv_user_name=0x7f0a00b1;
+        public static final int tv_show_update_error=0x7f0a00b5;
+        public static final int tv_user_name=0x7f0a00b2;
         public static final int user_avatar=0x7f0a0037;
         public static final int user_avatar_iv=0x7f0a0058;
         public static final int user_content_iv=0x7f0a005a;
         public static final int user_id=0x7f0a0036;
-        public static final int user_info_accept_invite_bn=0x7f0a00aa;
-        public static final int user_info_be_invite_action_ll=0x7f0a00a9;
-        public static final int user_info_contact_action_ll=0x7f0a00ac;
-        public static final int user_info_invite_action_ll=0x7f0a00a6;
-        public static final int user_info_invite_message_et=0x7f0a00a7;
-        public static final int user_info_refuse_invite_bn=0x7f0a00ab;
-        public static final int user_info_send_invite_bn=0x7f0a00a8;
-        public static final int user_info_user_avatar_iv=0x7f0a00a4;
-        public static final int user_info_user_name_tv=0x7f0a00a5;
+        public static final int user_info_accept_invite_bn=0x7f0a00ab;
+        public static final int user_info_be_invite_action_ll=0x7f0a00aa;
+        public static final int user_info_contact_action_ll=0x7f0a00ad;
+        public static final int user_info_invite_action_ll=0x7f0a00a7;
+        public static final int user_info_invite_message_et=0x7f0a00a8;
+        public static final int user_info_refuse_invite_bn=0x7f0a00ac;
+        public static final int user_info_send_invite_bn=0x7f0a00a9;
+        public static final int user_info_user_avatar_iv=0x7f0a00a5;
+        public static final int user_info_user_name_tv=0x7f0a00a6;
         public static final int user_name=0x7f0a0038;
-        public static final int user_name_=0x7f0a00b0;
+        public static final int user_name_=0x7f0a00b1;
         public static final int user_sign=0x7f0a0039;
         public static final int v2_activate=0x7f0a003a;
         public static final int webView1=0x7f0a0003;
-        public static final int widget_head_bar_title=0x7f0a00b5;
+        public static final int widget_head_bar_title=0x7f0a00b6;
     }
     public static final class layout {
         public static final int base_about=0x7f030000;
@@ -441,17 +442,17 @@ public final class R {
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
         public static final int placeholder=0x7f090011;
-        public static final int preferences_key_current_user_id=0x7f090046;
-        public static final int preferences_key_last_syn_chat_node_created_time=0x7f09004d;
-        public static final int preferences_key_last_syn_chat_updated_time=0x7f09004c;
-        public static final int preferences_key_last_syn_fail_client_time=0x7f09004b;
-        public static final int preferences_key_last_syn_server_meta_updated_time=0x7f090048;
-        public static final int preferences_key_last_syn_success_client_time=0x7f09004a;
-        public static final int preferences_key_last_syn_success_server_time=0x7f090049;
-        public static final int preferences_key_syn_contact_timestamp=0x7f090047;
+        public static final int preferences_key_current_user_id=0x7f090047;
+        public static final int preferences_key_last_syn_chat_node_created_time=0x7f09004e;
+        public static final int preferences_key_last_syn_chat_updated_time=0x7f09004d;
+        public static final int preferences_key_last_syn_fail_client_time=0x7f09004c;
+        public static final int preferences_key_last_syn_server_meta_updated_time=0x7f090049;
+        public static final int preferences_key_last_syn_success_client_time=0x7f09004b;
+        public static final int preferences_key_last_syn_success_server_time=0x7f09004a;
+        public static final int preferences_key_syn_contact_timestamp=0x7f090048;
         /**  TeamknPreferences 的 keys 
          */
-        public static final int preferences_key_upload_photo_quality=0x7f090045;
+        public static final int preferences_key_upload_photo_quality=0x7f090046;
         public static final int save_note_bn=0x7f090034;
         public static final int saving=0x7f090035;
         public static final int search_contact=0x7f090044;
@@ -474,6 +475,9 @@ public final class R {
         public static final int submit_bn=0x7f090038;
         public static final int to_chat_list=0x7f09002c;
         public static final int to_search_contact_page=0x7f090042;
+        /**  pinyin4j 
+         */
+        public static final int unchecked=0x7f090045;
     }
     public static final class style {
         public static final int ChoicePreferenceButton=0x7f080007;

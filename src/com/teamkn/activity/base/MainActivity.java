@@ -56,7 +56,15 @@ import com.teamkn.widget.adapter.NoteListAdapter;
 public class MainActivity extends TeamknBaseActivity{
 
 	View view_show;
-	TextView show_contacts_msg_tv;
+	static TextView teamkn_show_msg_tv;
+	public static void set_teamkn_show_msg_tv(final String msg){
+		teamkn_show_msg_tv.post(new Runnable() {
+			@Override
+			public void run() {
+		        teamkn_show_msg_tv.setText(msg);
+			}
+		});
+	}
 	 
 	public class RequestCode {
         public final static int EDIT_TEXT = 0;
@@ -116,8 +124,12 @@ public class MainActivity extends TeamknBaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+
 		setContentView(R.layout.horz_scroll_with_image_menu);
         LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+        
+        teamkn_show_msg_tv = (TextView)findViewById(R.id.teamkn_show_msg_tv);
         
         LayoutInflater inflater = LayoutInflater.from(this);
         view_show = inflater.inflate(R.layout.base_main, null);

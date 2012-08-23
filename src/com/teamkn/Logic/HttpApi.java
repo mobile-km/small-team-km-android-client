@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 public class HttpApi {
@@ -108,10 +107,6 @@ public class HttpApi {
             public Boolean on_success(String response_text) throws Exception {
                 JSONObject json = new JSONObject(response_text);
                 System.out.println(json);
-                String user_name = json.getString("name");
-                String avatar_url = json.getString("avatar_url");
-                Integer user_id = json.getInt("id");
-            
                 AccountManager.login(get_cookies(), json.toString());
                 
                 return true;
@@ -480,7 +475,7 @@ public class HttpApi {
                   @Override
                   public Void on_success(String response_text) throws Exception {
                       System.out.println("fu wu qi lian jie cheng gong ````````` ========== 999999 ");
-                	  com.teamkn.model.Attitudes attitudes =  AttitudesDBHelper.create(chat_node_id,current_user_id,kind,"true");
+                	  AttitudesDBHelper.create(chat_node_id,current_user_id,kind,"true");
                     return null;
                   }
             }.go();        

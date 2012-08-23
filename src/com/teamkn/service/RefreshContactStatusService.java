@@ -1,8 +1,5 @@
 package com.teamkn.service;
 
-import com.teamkn.Logic.HttpApi;
-import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.contact.ContactsActivity.RefreshContactUiBinder;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -11,8 +8,18 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 
-public class RefreshContactStatusService extends Service {
+import com.teamkn.Logic.AccountManager;
+import com.teamkn.Logic.HttpApi;
+import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.contact.ContactsActivity.RefreshContactUiBinder;
+import com.teamkn.application.TeamknApplication;
+import com.teamkn.model.database.ContactDBHelper;
 
+public class RefreshContactStatusService extends Service {
+  
+  public static int contactstatus_be_invited = 0 ;
+  
   private RefreshContactStatusHandlerThread refresh_contact_status_handler_thread;
   private RefreshContactStatusHandler refresh_contact_status_handler;
   private RefreshContactStatusBinder refresh_contact_status_binder;
@@ -75,6 +82,11 @@ public class RefreshContactStatusService extends Service {
       try {
         System.out.println("services  refresh_contact_status");
         HttpApi.Contact.refresh_status();
+        
+        int be_invited_size =  ContactDBHelper.be_invite_contacts(AccountManager.current_user().user_id).size();
+        
+        
+        
         if(refresh_contact_ui_binder !=null){
           refresh_contact_ui_binder.refresh_list();
         }

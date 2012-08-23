@@ -12,12 +12,17 @@
         android:background="#5B5B5B"
     >   
         <TextView
-            android:id="@+id/show_contacts_msg_tv" 
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:id="@+id/teamkn_show_msg_tv" 
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"   
+            android:layout_height="wrap_content"
+            android:text="Seen by 1 friend"  
+            android:textColor="#fff"
         /> 
             
         <LinearLayout
+            android:layout_below="@+id/teamkn_show_msg_tv"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="vertical"

@@ -51,8 +51,7 @@ public class ChatListActivity extends TeamknBaseActivity{
 	  private void load_listview() {
 		    adapter = new ChatListAdapter(ChatListActivity.this);
 		    chat_list = ChatDBHelper.find_list();
-//		    adapter.add_items(chat_list);
-//		    chat_list_lv.setAdapter(adapter);
+
 			new TeamknAsyncTask<Void, Void, Void>(ChatListActivity.this,"加载中...") {
 
 				@Override

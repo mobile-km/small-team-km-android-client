@@ -12,16 +12,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.teamkn.model.Chat;
 import com.teamkn.model.ChatNode;
-import com.teamkn.model.Note;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
-import com.teamkn.model.database.NoteDBHelper.Kind;
-import com.teamkn.service.IndexService;
-import com.teamkn.service.IndexService.IndexHandler.action;
 
 public class ChatNodeDBHelper extends BaseModelDBHelper {
   public class Kind {
@@ -131,6 +126,7 @@ public class ChatNodeDBHelper extends BaseModelDBHelper {
 
   public static ChatNode create(int client_chat_id, String content,
       int current_user_id, String kind) {
+	System.out.println("ChatNode " + client_chat_id + " : " + content + " :　"+ current_user_id + " : " + kind);
     int client_user_id = UserDBHelper.get_client_user_id(current_user_id);
     String uuid = UUID.randomUUID().toString();
     
