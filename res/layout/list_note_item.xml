@@ -28,12 +28,22 @@
             android:visibility="gone"
 	     />
    </LinearLayout>
+   
    <ImageView
         android:id="@+id/note_image_iv_delete"
-        android:layout_width="40dp"
-        android:layout_height="40dp" 
+        android:layout_width="30dp"
+        android:layout_height="30dp" 
         android:layout_alignParentRight="true"
         android:src="@android:drawable/ic_delete"
+        android:clickable="true"
+   />
+   <ImageView
+        android:id="@+id/note_image_iv_edit"
+        android:layout_width="30dp"
+        android:layout_height="30dp" 
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:src="@android:drawable/ic_menu_edit"
         android:clickable="true"
    />
 </RelativeLayout>

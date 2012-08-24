@@ -105,7 +105,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:gravity="center_vertical"
-                        android:text="搜索" 
+                        android:text="搜索笔记" 
+                        android:textColor="#fff"
+                    />
+                    <ImageView
+                        android:src="@drawable/camera_accept"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true" 
+                    />
+                </RelativeLayout>
+                <TextView
+                        android:background="#000"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="10dp"
+                />
+                <RelativeLayout
+                    android:id="@+id/foot_rl_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp" 
+                    android:layout_marginTop="5dp"
+                    android:onClick="click_go_contacts_activity"
+                >
+                    <TextView
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="联系人" 
                         android:textColor="#fff"
                     />
                     <ImageView
@@ -150,65 +179,6 @@
                         android:layout_height="0.1dp"
                         android:layout_marginBottom="10dp"
                 />
-                <RelativeLayout
-                    android:id="@+id/foot_rl_account_manage"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp" 
-                    android:layout_marginTop="5dp"
-                    android:onClick="click_go_account_manage_activity"
-                >
-                    <TextView
-                        android:layout_alignParentLeft="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:gravity="center_vertical"
-                        android:text="账号管理" 
-                        android:textColor="#fff"
-                    />
-                    <ImageView
-                        android:src="@drawable/camera_accept"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true" 
-                    />
-                </RelativeLayout>
-                <TextView
-                        android:background="#000"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginBottom="10dp"
-                />
-                <RelativeLayout
-                    android:id="@+id/foot_rl_about"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp" 
-                    android:layout_marginTop="5dp"
-                    android:onClick="click_go_about_teamkn_activity"
-                >
-                    <TextView
-                        android:layout_alignParentLeft="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:gravity="center_vertical"
-                        android:textColor="#fff"
-                        android:text="关于" 
-                    />
-                    <ImageView
-                        android:src="@drawable/camera_accept"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true" 
-                    />
-                </RelativeLayout>
-                <TextView
-                        android:background="#000"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginBottom="10dp"
-                />
-                
             </LinearLayout>
             
             <LinearLayout

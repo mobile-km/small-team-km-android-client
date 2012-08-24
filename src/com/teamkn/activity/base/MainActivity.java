@@ -35,6 +35,7 @@ import com.teamkn.R;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
+import com.teamkn.activity.note.ShowNodeActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -177,7 +178,6 @@ public class MainActivity extends TeamknBaseActivity{
         
 		//加载node_listview
 		load_list();
-		
 	}
 	@Override
 	protected void onResume() {
@@ -221,7 +221,6 @@ public class MainActivity extends TeamknBaseActivity{
 			}
 			@Override
 			public void on_success(Void result) {
-				System.out.println("************************* " + index + " : " + getMaxResult() + " : " + notes.size());
 				note_list_adapter.add_items(notes);
 				note_list.setAdapter(note_list_adapter);
 		        note_list_adapter.notifyDataSetChanged();
@@ -236,20 +235,21 @@ public class MainActivity extends TeamknBaseActivity{
                 String   uuid    = (String)   info_tv.getTag(R.id.tag_note_uuid);
                 String   kind    = (String)   info_tv.getTag(R.id.tag_note_kind);
                 
-                Intent   intent  = new Intent(MainActivity.this, EditNoteActivity.class);
+//                Intent   intent  = new Intent(MainActivity.this, EditNoteActivity.class);
+                Intent   intent  = new Intent(MainActivity.this, ShowNodeActivity.class);
                 intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
                 intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);
                 
                 if (kind == NoteDBHelper.Kind.IMAGE) {
                     String image_path = Note.note_image_file(uuid).getPath();
                     intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
-                }
-                startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+                }               
+//                startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+                
+                startActivityForResult(intent, 0);
             }
         });
-
-        
-        
+ 
         note_list.setOnScrollListener(new OnScrollListener() {			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
@@ -260,12 +260,10 @@ public class MainActivity extends TeamknBaseActivity{
          	  if (firstVisibleItem + visibleItemCount == totalItemCount && isUpdating) {
                   if (currentPage < (totalCount/VIEW_COUNT+1)) { // 防止最后一次取数据进入死循环。
                 	  System.out.println(totalItemCount + " : " + totalCount + " : " + isUpdating  + " : " + currentPage );
-                	  isUpdating=false ;
+                	  isUpdating=false;
                 	  ++currentPage;
                       
                 	  mLoadLayout.setVisibility(View.VISIBLE);
-                	 
-                	 
                 	  AsyncUpdateDatasTask asyncUpdateWeiBoDatasTask = new AsyncUpdateDatasTask();
                       asyncUpdateWeiBoDatasTask.execute();   
                   }

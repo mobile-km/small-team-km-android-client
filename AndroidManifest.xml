@@ -33,6 +33,11 @@
 		
 		<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 		</activity>
+		<activity android:name=".activity.note.ShowNodeActivity" android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".activity.bitmapshow.BitmapShowActivity" android:windowSoftInputMode="adjustResize">
+        </activity>
+        
 		<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
 		    <intent-filter>  
 				<action android:name="android.intent.action.SEND"/>  

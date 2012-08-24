@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusBinder
 import com.teamkn.widget.adapter.ContactListAdapter_update;
 
 public class ContactsActivity extends TeamknBaseActivity implements  OnClickListener{
+	View view_show;
   private View contact_list_linkman;
   private SideBar indexBar;
   private WindowManager mWindowManager;
@@ -64,7 +66,16 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);  
-    setContentView(R.layout.contact_list);
+    setContentView(R.layout.horz_scroll_with_image_menu);
+    LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+
+    LayoutInflater inflater = LayoutInflater.from(this);
+    view_show = inflater.inflate(R.layout.contact_list, null);
+    layout.addView(view_show);
+    
+    
+    
+    
     item = ContactDBHelper.Status.APPLIED;
     mWindowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
     findView();
@@ -74,11 +85,11 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     import_contact();
   }
   private void findView(){	
-	button_contact_list_linkman = (Button)this.findViewById(R.id.button_contact_list_linkman);
-    button_contact_list_send_invite = (Button)this.findViewById(R.id.button_contact_list_send_invite);
-    button_contact_list_get_invite = (Button)this.findViewById(R.id.button_contact_list_get_invite);
+	button_contact_list_linkman = (Button)view_show.findViewById(R.id.button_contact_list_linkman);
+    button_contact_list_send_invite = (Button)view_show.findViewById(R.id.button_contact_list_send_invite);
+    button_contact_list_get_invite = (Button)view_show.findViewById(R.id.button_contact_list_get_invite);
     
-	contact_list_linkman = (View)this.findViewById(R.id.contact_list_linkman);
+	contact_list_linkman = (View)view_show.findViewById(R.id.contact_list_linkman);
 	lvContact = (ListView)contact_list_linkman.findViewById(R.id.contact_list_lv);
 
   	indexBar = (SideBar) contact_list_linkman.findViewById(R.id.sideBar);  
@@ -131,9 +142,7 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   public void load_contacts_to_list(){
     int current_user_id = AccountManager.current_user().user_id;
     List<Contact> all_contacts = ContactDBHelper.build_all_contacts(current_user_id); 
-    
-//    final ContactListAdapter adapter = new ContactListAdapter(ContactsActivity.this);
-    
+
     final ContactListAdapter_update adapter_update = 
     		new ContactListAdapter_update(this, 
     				all_contacts,item);

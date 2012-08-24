@@ -8,12 +8,8 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
             >
-        <ImageView
-            android:id="@+id/iv_foot_view"
-            android:src="@drawable/sliding_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/app_name"
+        <Button
+            style="@style/head_bar_button_go_back"
         />
         <TextView
                 style="@style/head_bar_text_center"

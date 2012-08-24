@@ -3,12 +3,15 @@ package com.teamkn.widget.adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamkn.R;
+import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.cache.image.ImageCache;
@@ -34,6 +37,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         view_holder.note_info_tv    = (TextView)  view.findViewById(R.id.note_info_tv);
         view_holder.note_content_tv = (TextView)  view.findViewById(R.id.note_content_tv);
         view_holder.note_image_iv   = (ImageView) view.findViewById(R.id.note_image_show_iv);
+        view_holder.note_image_iv_edit  = (ImageView) view.findViewById(R.id.note_image_iv_edit);
         view_holder.note_image_iv_delete = (ImageView) view.findViewById(R.id.note_image_iv_delete);
         return view_holder;
 
@@ -55,8 +59,9 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         } else {
             view_holder.note_image_iv.setVisibility(View.GONE);
         }
-        final int p = position;
+        view_holder.note_content_tv.setText(item.content);
         
+        final int p = position;
         view_holder.note_image_iv_delete.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {				
@@ -76,14 +81,30 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
 					.show();
 			}
 		});
-        view_holder.note_content_tv.setText(item.content);
+        view_holder.note_image_iv_edit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent   intent  = new Intent(activity, EditNoteActivity.class);
+                intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, item.uuid);
+                intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, item.kind);
+                
+                if (item.kind == NoteDBHelper.Kind.IMAGE) {
+                    String image_path = Note.note_image_file(item.uuid).getPath();
+                    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
+                } 
+                activity.startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+			}
+		});
+        
     }
 
     private class ViewHolder implements BaseViewHolder {
         TextView  note_info_tv;
         TextView  note_content_tv;
         ImageView note_image_iv;
+        ImageView note_image_iv_edit;
         ImageView note_image_iv_delete;
+        
     }
 
 }

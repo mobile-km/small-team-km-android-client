@@ -14,6 +14,7 @@ import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.contact.ContactsActivity.RefreshContactUiBinder;
 import com.teamkn.application.TeamknApplication;
+import com.teamkn.base.utils.ActivityShowMSG;
 import com.teamkn.model.database.ContactDBHelper;
 
 public class RefreshContactStatusService extends Service {
@@ -84,7 +85,7 @@ public class RefreshContactStatusService extends Service {
         HttpApi.Contact.refresh_status();
         
         int be_invited_size =  ContactDBHelper.be_invite_contacts(AccountManager.current_user().user_id).size();
-        
+        ActivityShowMSG.showMsg(be_invited_size, be_invited_size);
         
         
         if(refresh_contact_ui_binder !=null){
@@ -104,5 +105,4 @@ public class RefreshContactStatusService extends Service {
       RefreshContactStatusService.this.refresh_contact_ui_binder = refresh_contact_ui_binder;
     }
   }
-
 }

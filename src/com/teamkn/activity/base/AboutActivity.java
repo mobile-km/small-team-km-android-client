@@ -11,22 +11,10 @@ import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class AboutActivity extends TeamknBaseActivity{
-
-	View view_show;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-		
-		
-        setContentView(R.layout.horz_scroll_with_image_menu);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
-        
-        LayoutInflater inflater = LayoutInflater.from(this);
-        view_show = inflater.inflate(R.layout.base_about, null);
-        layout.addView(view_show);
-
+        setContentView(R.layout.base_about);
     }
 
     public void open_teamkn_website(View view) {

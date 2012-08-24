@@ -21,6 +21,7 @@ import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.TeamknSettingActivity;
 import com.teamkn.activity.chat.ChatListActivity;
+import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
@@ -108,22 +109,13 @@ abstract public class TeamknBaseActivity extends Activity {
 	 public void click_go_search_node_activity(View view){
 		open_activity(SearchActivity.class);
 	}
-	
+	 public void click_go_contacts_activity(View view){
+		open_activity(ContactsActivity.class);
+	}
 	 public void click_go_setting_activity(View view){
 		open_activity(TeamknSettingActivity.class);
 	}
-	 
-	 public void click_go_account_manage_activity(View view){
-		 open_activity(AccountManagerActivity.class);
-	}
-	 public void click_go_about_teamkn_activity(View view){
-		 open_activity(AboutActivity.class);
-	}
-	 
-	 
-	 public void click_not(View view){}
-	 
-	 
+
 	 public void click_exit_teamkn_activity(View view){
 //			AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
 			new AlertDialog.Builder(this)

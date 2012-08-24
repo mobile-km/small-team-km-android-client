@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/body"
-        >
-
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/body"
+>
     <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
-            >
+    >
         <ImageView
             android:id="@+id/iv_foot_view"
             android:src="@drawable/sliding_menu"
@@ -16,42 +15,98 @@
             android:contentDescription="@string/app_name"
         />
         <TextView
-                style="@style/head_bar_text_center"
-                android:text="@string/menu_setting"
-                />
+            style="@style/head_bar_text_center"
+            android:text="@string/menu_setting"
+        />
     </RelativeLayout>
-    <LinearLayout 
-        android:id="@+id/ll_setting"
-        android:layout_width="fill_parent"
+    <ScrollView 
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
-        
-        <TextView
-            android:text="上传图片质量"
-            android:textColor="#fff"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
-            android:textSize="20dp"
-            android:layout_marginBottom="5dp"
-        />
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:text="发送主题时，上传的图片的质量"
-            android:textColor="#fff"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
-            android:textSize="15dp"
-        />
-     </LinearLayout>
-     <TextView
-            android:background="#fff"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginBottom="10dp"
-      />
-     
-     <ListView 
-         android:layout_width="fill_parent"
-         android:layout_height="1dp"/>
+        android:layout_width="fill_parent"
+    >  
+       <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical" 
+       >
+		   <LinearLayout 
+		       android:id="@+id/ll_setting"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content"
+		       android:padding="10dp"
+		       android:orientation="vertical"
+		   >
+		       
+		       <TextView
+		           android:text="上传图片质量"
+		           android:textColor="#fff"
+		           android:layout_width="fill_parent"
+		           android:layout_height="wrap_content" 
+		           android:textSize="20dp"
+		           android:layout_marginBottom="5dp"
+		       />
+		       <TextView
+		           android:layout_marginBottom="5dp"
+		           android:text="发送主题时，上传的图片的质量"
+		           android:textColor="#fff"
+		           android:layout_width="fill_parent"
+		           android:layout_height="wrap_content" 
+		           android:textSize="15dp"
+		       />
+		       <TextView
+	               android:background="#fff"
+	               android:layout_width="fill_parent"
+	               android:layout_height="0.1dp"
+	           />
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+	           android:onClick="click_go_account_manage_activity"
+	           android:layout_width="fill_parent"
+	           android:layout_height="wrap_content"
+	           android:padding="10dp"
+	           android:orientation="vertical"
+	         >
+	           
+	           <TextView
+	               android:text="账号管理"
+	               android:textColor="#fff"
+	               android:layout_width="fill_parent"
+	               android:layout_height="wrap_content" 
+	               android:textSize="20dp"
+	               android:layout_marginBottom="5dp"
+	           />
+	           <TextView
+	               android:background="#fff"
+	               android:layout_width="fill_parent"
+	               android:layout_height="0.1dp"
+	           />
+	        </LinearLayout>
+	        <LinearLayout 
+	           android:onClick="click_go_about_teamkn_activity"
+	           android:layout_width="fill_parent"
+	           android:layout_height="wrap_content"
+	           android:padding="10dp"
+	           android:orientation="vertical"
+	        >
+	           
+	           <TextView
+	               android:text="关于"
+	               android:textColor="#fff"
+	               android:layout_width="fill_parent"
+	               android:layout_height="wrap_content" 
+	               android:textSize="20dp"
+	               android:layout_marginBottom="5dp"
+	           />
+	           <TextView
+	               android:background="#fff"
+	               android:layout_width="fill_parent"
+	               android:layout_height="0.1dp"
+	           />
+	        </LinearLayout>
+	    </LinearLayout>
+    </ScrollView>
+    <ListView 
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+    />
 </LinearLayout>

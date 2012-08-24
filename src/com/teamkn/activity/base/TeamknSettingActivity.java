@@ -15,8 +15,6 @@ public class TeamknSettingActivity extends TeamknBaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-	     
 	        setContentView(R.layout.horz_scroll_with_image_menu);
 	        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
 	        
@@ -38,5 +36,11 @@ public class TeamknSettingActivity extends TeamknBaseActivity{
 		         .setMultiChoiceItems( new String[] { "原尺寸", "50%","25%" }, null, null)
 			     .setNegativeButton("取消", null)
 			     .show();
+	}
+	public void click_go_account_manage_activity(View view){
+		 open_activity(AccountManagerActivity.class);
+	}
+	 public void click_go_about_teamkn_activity(View view){
+		 open_activity(AboutActivity.class);
 	}
 }

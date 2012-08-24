@@ -3,13 +3,11 @@ package com.teamkn.activity.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.teamkn.R;
@@ -20,9 +18,6 @@ import com.teamkn.model.database.AccountUserDBHelper;
 import com.teamkn.widget.adapter.AccountListAdapter;
 
 public class AccountManagerActivity extends TeamknBaseActivity{
-	
-	View view_show;
-	
     private ListView list_view;
     private AccountListAdapter adapter;
 
@@ -30,14 +25,9 @@ public class AccountManagerActivity extends TeamknBaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.horz_scroll_with_image_menu);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+        setContentView(R.layout.base_account_manager);
         
-        LayoutInflater inflater = LayoutInflater.from(this);
-        view_show = inflater.inflate(R.layout.base_account_manager, null);
-        layout.addView(view_show);
-        
-        list_view = (ListView)view_show. findViewById(R.id.account_list);
+        list_view = (ListView) findViewById(R.id.account_list);
         bind_add_account_event();
         fill_list();
 
