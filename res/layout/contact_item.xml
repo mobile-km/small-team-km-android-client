@@ -6,6 +6,7 @@
         <ImageView android:id="@+id/contactitem_avatar_iv" android:layout_width="40.0dip" android:layout_height="40.0dip" />
         <LinearLayout android:orientation="vertical" android:paddingLeft="8.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1.0">
             <TextView android:id="@+id/contactitem_nick" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" style="@style/MMFontTitleInList" />
+            <TextView android:id="@+id/contactitem_gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone"/>
         </LinearLayout>
         <CheckBox android:id="@+id/contactitem_select_cb" android:focusable="false" android:focusableInTouchMode="false" android:visibility="visible" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="21.0dip" />
     </LinearLayout>

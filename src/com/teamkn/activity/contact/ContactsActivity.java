@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
@@ -23,10 +25,13 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.Logic.SearchUser;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.model.Contact;
+import com.teamkn.model.User;
 import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.pinyin4j.SideBar;
 import com.teamkn.service.RefreshContactStatusService;
@@ -134,7 +139,11 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
       public void on_success(Void resule) {
     	load_contacts_to_list();
         Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
+        
+        // 启动刷新联系人状态服务
+     	startService(new Intent(ContactsActivity.this,RefreshContactStatusService.class));
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
+        
       }
     }.execute();
   }
@@ -147,14 +156,33 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     		new ContactListAdapter_update(this, 
     				all_contacts,item);
 //    adapter.add_items(all_contacts);
-    
     lvContact.post(new Runnable() {
       @Override
       public void run() {
-//        lvContact.setAdapter(adapter);
+    	  System.out.println("RefreshContactStatusService   00000000000000000000000000");
     	  lvContact.setAdapter(adapter_update);
       }
     });
+    
+    lvContact.setOnItemClickListener(new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+		          long id) {
+			TextView info_tv = (TextView) view.findViewById(R.id.contactitem_gone);
+			Contact contact = (Contact)  info_tv.getTag(R.id.tag_note_uuid);
+			System.out.println(contact.contact_user_name + " : " 
+			+ contact.contact_user_id + " : " + contact.contact_user_avatar + "  : "
+					+ contact.status);
+			
+	        Intent intent = new Intent(ContactsActivity.this,UserInfoActivity.class);
+	        intent.putExtra(UserInfoActivity.Extra.USER_ID, contact.contact_user_id);
+	        intent.putExtra(UserInfoActivity.Extra.USER_NAME, contact.contact_user_name);
+	        intent.putExtra(UserInfoActivity.Extra.USER_AVATAR_BYTE, contact.contact_user_avatar);
+	        intent.putExtra(UserInfoActivity.Extra.CONTACT_STATUS, contact.status);
+	        startActivity(intent);
+		}
+	});
   }
 
   @Override
@@ -164,7 +192,8 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   }
   
   public class RefreshContactUiBinder extends Binder{
-    public void refresh_list(){
+    public void refresh_list(){ 
+     System.out.println("RefreshContactStatusService   11111111111111111111111111111111111111");
       ContactsActivity.this.load_contacts_to_list();
     }
   }

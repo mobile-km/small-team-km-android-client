@@ -24,6 +24,12 @@
                 style="@style/head_bar_text_center"
                 android:text="显示图片"
                 />
+        <Button
+                android:text="保存"
+                style="@style/head_bar_button_right"
+                android:onClick="click_save_image_button"
+                />
+        
     </RelativeLayout>
     <LinearLayout 
         android:orientation="horizontal"

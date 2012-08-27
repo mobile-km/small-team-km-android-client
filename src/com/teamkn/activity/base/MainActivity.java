@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
+import com.teamkn.R.layout;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
@@ -58,6 +59,7 @@ public class MainActivity extends TeamknBaseActivity{
 
 	View view_show;
 	static TextView teamkn_show_msg_tv;
+	LinearLayout layout;
 	public static void set_teamkn_show_msg_tv(final String msg){
 		teamkn_show_msg_tv.post(new Runnable() {
 			@Override
@@ -71,7 +73,7 @@ public class MainActivity extends TeamknBaseActivity{
         public final static int EDIT_TEXT = 0;
     }
 	//  node_listView_show 数据
-	private static ListView note_list;
+	private  ListView note_list;
 	// 定义每一页显示行数
     private  int VIEW_COUNT = 20;  
     // 定义的页数
@@ -128,7 +130,7 @@ public class MainActivity extends TeamknBaseActivity{
 		
 
 		setContentView(R.layout.horz_scroll_with_image_menu);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+		layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
         teamkn_show_msg_tv = (TextView)findViewById(R.id.teamkn_show_msg_tv);
         
@@ -173,8 +175,8 @@ public class MainActivity extends TeamknBaseActivity{
 		startService(new Intent(MainActivity.this,SynChatService.class));
 		
 		
-		note_list = (ListView)layout.findViewById(R.id.note_list);
-        note_list.addFooterView(mLoadLayout);
+//		note_list = (ListView)layout.findViewById(R.id.note_list);
+//        note_list.addFooterView(mLoadLayout);
         
 		//加载node_listview
 		load_list();
@@ -210,6 +212,12 @@ public class MainActivity extends TeamknBaseActivity{
 	    index = 0;   
 	    // 当前页
 	    currentPage = 1;  
+	    
+	    note_list = (ListView)layout.findViewById(R.id.note_list);
+	    System.out.println("-- " + note_list.getCount());
+  
+        note_list.addFooterView(mLoadLayout);
+	    
 	    notes  = new ArrayList<Note>();
 		note_list_adapter = new NoteListAdapter(MainActivity.this);	
 		new TeamknAsyncTask<Void, Void, Void>() {
@@ -221,8 +229,11 @@ public class MainActivity extends TeamknBaseActivity{
 			}
 			@Override
 			public void on_success(Void result) {
-				note_list_adapter.add_items(notes);
-				note_list.setAdapter(note_list_adapter);
+				System.out.println("()()()()()()()()()  ---  " + notes.size());
+				if( notes.size()+1 >= note_list.getCount() ){
+					note_list_adapter.add_items(notes);
+					note_list.setAdapter(note_list_adapter);
+				}
 		        note_list_adapter.notifyDataSetChanged();
 		    }
 		}.execute();
@@ -271,6 +282,7 @@ public class MainActivity extends TeamknBaseActivity{
 			}
 		});
     }
+
 	class AsyncUpdateDatasTask extends AsyncTask<Void, Void, List<Note> > {
 		 
         @Override

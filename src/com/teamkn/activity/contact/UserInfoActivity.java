@@ -14,6 +14,7 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.SearchUser;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
+import com.teamkn.base.utils.ImageTools;
 import com.teamkn.cache.image.ImageCache;
 
 public class UserInfoActivity extends TeamknBaseActivity {
@@ -21,6 +22,7 @@ public class UserInfoActivity extends TeamknBaseActivity {
     public static final String USER_ID = "user_id";
     public static final String USER_NAME = "user_name";
     public static final String USER_AVATAR_URL = "user_avatar_url";
+    public static final String USER_AVATAR_BYTE = "user_avatar_byte";
     public static final String CONTACT_STATUS = "contact_status";
 }
 
@@ -46,13 +48,18 @@ public class UserInfoActivity extends TeamknBaseActivity {
     user_id = intent.getIntExtra(Extra.USER_ID, 0);
     String user_name = intent.getStringExtra(Extra.USER_NAME);
     String user_avatar_url = intent.getStringExtra(Extra.USER_AVATAR_URL);
+    byte[] user_avatar_byte = intent.getByteArrayExtra(Extra.USER_AVATAR_BYTE);
     String contact_status = intent.getStringExtra(Extra.CONTACT_STATUS);
     
     // 显示用户名和头像
     user_info_user_name_tv = (TextView)findViewById(R.id.user_info_user_name_tv);
     user_info_user_avatar_iv = (ImageView)findViewById(R.id.user_info_user_avatar_iv);
     user_info_user_name_tv.setText(user_name);
-    ImageCache.load_cached_image(user_avatar_url, user_info_user_avatar_iv);
+    if(user_avatar_url!=null){
+    	ImageCache.load_cached_image(user_avatar_url, user_info_user_avatar_iv);
+    }else if(user_avatar_byte!=null){
+    	user_info_user_avatar_iv.setImageBitmap(ImageTools.bytesToBimap(user_avatar_byte));
+    }    
 
     if(SearchUser.ContactStatus.APPLIED.equals(contact_status)){
       // 互为联系人

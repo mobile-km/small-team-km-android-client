@@ -24,6 +24,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".activity.base.BrowseSDCard" />
 		<activity android:name=".activity.base.LoginActivity" android:windowSoftInputMode="stateVisible"></activity>
 		<activity android:name=".activity.base.MainActivity"  android:label="HorzScrollWithImageMenu"></activity>
 		<activity android:name=".activity.base.AboutActivity"></activity>

@@ -368,11 +368,19 @@ public class ImageTools {
 	 * @param bm
 	 * @return
 	 */
-	public static Bitmap bitmapToRotate(Bitmap bm) {
+	public static Bitmap bitmapToRotate(Bitmap bm,int angle) {
 		Matrix matrix = new Matrix();
-		matrix.postRotate(45);
+		matrix.postRotate(angle);
 		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0,
 				bm.getWidth(), bm.getHeight(), matrix, true);
 		return resizedBitmap;
 	}
+	
+	public static File mkdir_file(String path,String name) {
+        File dir = new File(path, name);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return dir;
+    }
 }

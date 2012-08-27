@@ -88,6 +88,7 @@ public class ContactListAdapter_update  extends BaseAdapter implements SectionIn
 			viewHolder.tvCatalog = (TextView)convertView.findViewById(R.id.contactitem_catalog);
 			viewHolder.ivAvatar = (ImageView)convertView.findViewById(R.id.contactitem_avatar_iv);
 			viewHolder.tvNick = (TextView)convertView.findViewById(R.id.contactitem_nick);
+			viewHolder.contactitem_gone = (TextView)convertView.findViewById(R.id.contactitem_gone);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder = (ViewHolder)convertView.getTag();
@@ -109,6 +110,11 @@ public class ContactListAdapter_update  extends BaseAdapter implements SectionIn
 		
 		viewHolder.tvNick.setText(nickName);
 		
+		viewHolder.contactitem_gone.setTag(R.id.tag_note_uuid, contact);
+//		viewHolder.contactitem_gone.setTag(1, contact.contact_user_name);
+//		viewHolder.contactitem_gone.setTag(2, contact.contact_user_avatar);
+//		viewHolder.contactitem_gone.setTag(3, contact.status);
+		
 		if(list.get(position).contact_user_avatar != null){
 		      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(list.get(position).contact_user_avatar));
 		      Drawable drawable = new BitmapDrawable(bitmap);
@@ -120,6 +126,7 @@ public class ContactListAdapter_update  extends BaseAdapter implements SectionIn
 	}
 
 	static class ViewHolder{
+		TextView  contactitem_gone;
 		TextView tvCatalog;//目录
 		ImageView ivAvatar;//头像
 		TextView tvNick;//昵称
