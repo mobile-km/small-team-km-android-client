@@ -88,14 +88,12 @@ public class HttpApi {
             public Boolean on_success(String response_text) throws Exception {
                 JSONObject json = new JSONObject(response_text);
                 AccountManager.login(get_cookies(), json.toString());
-                System.out.println("login  json =  "  + json);
                 return true;
             }
         }.go();
     }
     
     public static Boolean user_register(String email,String name, String password,String affirm_password) throws Exception {
-    	System.out.println(email + "  :  " + name + " :  " + password + "  :  " + affirm_password);
     	return new TeamknPostRequest<Boolean>(
         		用户注册,
                 new PostParamText("user[email]", email),
@@ -106,7 +104,6 @@ public class HttpApi {
             @Override
             public Boolean on_success(String response_text) throws Exception {
                 JSONObject json = new JSONObject(response_text);
-                System.out.println(json);
                 AccountManager.login(get_cookies(), json.toString());
                 
                 return true;
@@ -129,7 +126,6 @@ public class HttpApi {
             public Boolean on_success(String response_text) throws Exception {
             	
                 JSONObject json = new JSONObject(response_text);
-                System.out.println(json);
                 AccountManager.login(get_cookies(), json.toString());
 //                AccountUser manager = AccountManager.current_user();
 //                UserDBHelper.updateAccount(manager.user_id, manager.name, manager.avatar_url);
@@ -154,7 +150,6 @@ public class HttpApi {
             public Boolean on_success(String response_text) throws Exception {
             	
                 JSONObject json = new JSONObject(response_text);
-                System.out.println(json);
                 AccountManager.login(get_cookies(), json.toString());
                 AccountUser manager = AccountManager.current_user();
                 UserDBHelper.updateAccount(manager.user_id, manager.name, manager.avatar_url);   
@@ -313,7 +308,6 @@ public class HttpApi {
            
             
             JSONArray array = new JSONArray(response_text);
-            System.out.println("search = " + array);
             
             for (int i = 0; i < array.length(); i++) {
               JSONObject obj = (JSONObject)array.get(i);
@@ -474,8 +468,7 @@ public class HttpApi {
                 ) {
                   @Override
                   public Void on_success(String response_text) throws Exception {
-                      System.out.println("fu wu qi lian jie cheng gong ````````` ========== 999999 ");
-                	  AttitudesDBHelper.create(chat_node_id,current_user_id,kind,"true");
+                      AttitudesDBHelper.create(chat_node_id,current_user_id,kind,"true");
                     return null;
                   }
             }.go();        
@@ -591,11 +584,8 @@ public class HttpApi {
               ChatNodeDBHelper.pull_from_server(uuid, server_chat_id, server_chat_node_id, sender_id, content, server_created_time);
               max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
            
-              System.out.println(TeamknApplication.current_show_activity + "  ------------  current_show_activity   "
-            		   + content);
-              if( TeamknApplication.current_show_activity
+              if( TeamknApplication.current_show_activity!=null && TeamknApplication.current_show_activity
             		  .equals("com.teamkn.activity.chat.ChatActivity")){
-            	  System.out.println("  ------------  current_show_activity");
             	  com.teamkn.model.ChatNode chat_node = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id);
             	  ChatActivity.add_chat_node_item(chat_node);
               }

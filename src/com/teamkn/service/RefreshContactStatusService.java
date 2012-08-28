@@ -11,9 +11,7 @@ import android.os.Message;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.contact.ContactsActivity.RefreshContactUiBinder;
-import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.utils.ActivityShowMSG;
 import com.teamkn.model.database.ContactDBHelper;
 
@@ -81,7 +79,7 @@ public class RefreshContactStatusService extends Service {
 
     private void refresh_contact_status() {
       try {
-        System.out.println("services  refresh_contact_status");
+//        System.out.println("services  refresh_contact_status");
         HttpApi.Contact.refresh_status();
         
         int be_invited_size =  ContactDBHelper.be_invite_contacts(AccountManager.current_user().user_id).size();
@@ -95,7 +93,7 @@ public class RefreshContactStatusService extends Service {
         e.printStackTrace();
       }finally{
         sendEmptyMessageDelayed(REFRESH_STATUS, 5*1000);
-        System.out.println("send delayed refresh_status");
+//        System.out.println("send delayed refresh_status");
       }
     }
   }

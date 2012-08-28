@@ -3,9 +3,7 @@ package com.teamkn.activity.base;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;

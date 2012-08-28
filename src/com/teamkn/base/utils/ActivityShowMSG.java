@@ -5,7 +5,7 @@ import com.teamkn.application.TeamknApplication;
 
 public class ActivityShowMSG {
      public static void showMsg(int be_invited_size,int contactstatus_be_invited){
-    	 if( TeamknApplication.current_show_activity
+    	 if( TeamknApplication.current_show_activity != null && TeamknApplication.current_show_activity
          		  .equals("com.teamkn.activity.base.MainActivity")){
     		 if(be_invited_size>0){
            		contactstatus_be_invited = be_invited_size;

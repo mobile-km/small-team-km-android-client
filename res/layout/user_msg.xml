@@ -89,5 +89,5 @@
 	              android:layout_marginRight="20dp"
 	          /> 
 	       </RelativeLayout>
-    </RelativeLayout>
+    </RelativeLayout> 
 </LinearLayout>

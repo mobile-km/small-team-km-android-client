@@ -55,7 +55,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
                 Constants.KEY_ID + " DESC");
 
           while (cursor.moveToNext()) {
-              System.out.println("moveToNext");
               Note note = build_note_by_cursor(cursor);
               notes.add(note);
           }

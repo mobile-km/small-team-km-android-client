@@ -2,8 +2,11 @@ package com.teamkn.activity.contact;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
@@ -16,22 +19,21 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.Logic.SearchUser;
 import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.Contact;
-import com.teamkn.model.User;
 import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.pinyin4j.SideBar;
 import com.teamkn.service.RefreshContactStatusService;
@@ -138,15 +140,22 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
       @Override
       public void on_success(Void resule) {
     	load_contacts_to_list();
-        Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
         
         // 启动刷新联系人状态服务
-     	startService(new Intent(ContactsActivity.this,RefreshContactStatusService.class));
-        bindService(intent, conn, Context.BIND_AUTO_CREATE);
+//     	startService(new Intent(ContactsActivity.this,RefreshContactStatusService.class));	
+        
         
       }
     }.execute();
   }
+    @Override
+	protected void onResume() {
+    	System.out.println("contactsActivity  bindService ------");
+    	 startService(new Intent(ContactsActivity.this,RefreshContactStatusService.class));
+    	 Intent intent = new Intent(ContactsActivity.this,RefreshContactStatusService.class);
+    	 bindService(intent, conn, Context.BIND_AUTO_CREATE); 
+		super.onResume();
+	}
   // 添加适配器
   public void load_contacts_to_list(){
     int current_user_id = AccountManager.current_user().user_id;
@@ -171,9 +180,6 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
 		          long id) {
 			TextView info_tv = (TextView) view.findViewById(R.id.contactitem_gone);
 			Contact contact = (Contact)  info_tv.getTag(R.id.tag_note_uuid);
-			System.out.println(contact.contact_user_name + " : " 
-			+ contact.contact_user_id + " : " + contact.contact_user_avatar + "  : "
-					+ contact.status);
 			
 	        Intent intent = new Intent(ContactsActivity.this,UserInfoActivity.class);
 	        intent.putExtra(UserInfoActivity.Extra.USER_ID, contact.contact_user_id);
@@ -183,17 +189,49 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
 	        startActivity(intent);
 		}
 	});
+    lvContact.setOnItemLongClickListener(new OnItemLongClickListener() {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+				int arg2, long arg3) {
+			if(item.equals(ContactDBHelper.Status.APPLIED)){
+				TextView info_tv = (TextView) arg1.findViewById(R.id.contactitem_gone);
+				Contact contact = (Contact)  info_tv.getTag(R.id.tag_note_uuid);
+				dialog(contact);
+			}
+			return false;
+		}
+	});
   }
-
+  protected void dialog(final Contact contact) {
+	  AlertDialog.Builder builder = new Builder(ContactsActivity.this);
+	  builder.setMessage("请确认删除联系人 ：  "+ contact.contact_user_name );
+	  builder.setTitle("提示");
+	  builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				try {
+					if(BaseUtils.is_wifi_active(ContactsActivity.this)){
+						HttpApi.Contact.remove_contact(contact.contact_user_id);
+						load_contacts_to_list();
+					}	
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+	  });
+	  builder.setNegativeButton("取消", null);
+	  builder.create().show();
+  }
   @Override
   protected void onDestroy() {
-    unbindService(conn);
+	stopService(new Intent(ContactsActivity.this,RefreshContactStatusService.class));
+	unbindService(conn);
     super.onDestroy();
   }
   
   public class RefreshContactUiBinder extends Binder{
     public void refresh_list(){ 
-     System.out.println("RefreshContactStatusService   11111111111111111111111111111111111111");
+      System.out.println("RefreshContactStatusService   11111111111111111111111111111111111111");
       ContactsActivity.this.load_contacts_to_list();
     }
   }

@@ -32,7 +32,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.R.layout;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
@@ -255,9 +254,8 @@ public class MainActivity extends TeamknBaseActivity{
                     String image_path = Note.note_image_file(uuid).getPath();
                     intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
                 }               
-//                startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
-                
-                startActivityForResult(intent, 0);
+//                startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);                
+                startActivityForResult(intent, MainActivity.RequestCode.EDIT_TEXT);
             }
         });
  
@@ -319,11 +317,10 @@ public class MainActivity extends TeamknBaseActivity{
         switch (requestCode) {
             case MainActivity.RequestCode.EDIT_TEXT:
                 load_list();
-                break;
+                break; 	
         }
 //        open_activity(MainActivity.class);
-        note_list_adapter.notifyDataSetChanged();
-        
+        note_list_adapter.notifyDataSetChanged(); 
     }
 
 	//同步

@@ -1,5 +1,6 @@
 package com.teamkn.activity.note;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -62,4 +63,16 @@ public class ShowNodeActivity extends TeamknBaseActivity{
         } 
         startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
 	}
+	@Override
+    protected void onActivityResult(int  requestCode, int resultCode,Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case MainActivity.RequestCode.EDIT_TEXT:
+              loadUI();
+                break;
+        }     
+    }
 }

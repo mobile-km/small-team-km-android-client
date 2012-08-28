@@ -16,15 +16,24 @@
             android:layout_height="40dp"
             android:contentDescription="@string/app_name"
         />
-        <Button
+        <!-- <Button
             android:id="@+id/headbar_button_contacts"
             android:background="@drawable/headbar_contacts"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_alignParentRight="true"
             android:onClick="click_headbar_button_contacts"
+        /> -->
+        
+         <Button
+            android:id="@+id/headbar_button_contacts"
+            android:background="@android:drawable/ic_input_add"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:onClick="click_go_edit_node_activity"
         />
-        <ImageView
+        <!-- <ImageView
             android:src="@android:drawable/ic_input_add"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -32,7 +41,7 @@
             android:layout_alignRight="@+id/headbar_button_contacts"
             android:contentDescription="@string/app_name"
             android:onClick="click_go_edit_node_activity"
-        />
+        /> -->
     </RelativeLayout>    
     
     <RelativeLayout

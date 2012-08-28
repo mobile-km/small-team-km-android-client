@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.teamkn.Logic.AccountManager;
-import com.teamkn.activity.base.AboutActivity;
 import com.teamkn.activity.base.AccountManagerActivity;
 import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
