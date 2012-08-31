@@ -17,6 +17,7 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 
 public class ShowNodeActivity extends TeamknBaseActivity{
+	public static boolean isRefash = false;
 	String note_uuid;
 	Note item ;
 	ImageView show_node_msg_iv;
@@ -32,6 +33,7 @@ public class ShowNodeActivity extends TeamknBaseActivity{
 		
         Intent intent = getIntent();
         note_uuid = intent.getStringExtra(EditNoteActivity.Extra.NOTE_UUID);
+        isRefash = false;
         loadUI();
 	}
 	private void loadUI(){
@@ -50,7 +52,7 @@ public class ShowNodeActivity extends TeamknBaseActivity{
 	        	intent.putExtra("note_uuid", item.uuid);
 	        	startActivityForResult(intent, 0);
 			}
-		});
+		});	
 	}
 	public void on_edit_note_button_click(View view){
 		Intent   intent  = new Intent(ShowNodeActivity.this, EditNoteActivity.class);
@@ -61,7 +63,10 @@ public class ShowNodeActivity extends TeamknBaseActivity{
             String image_path = Note.note_image_file(item.uuid).getPath();
             intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
         } 
+        
         startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+        
+        isRefash = true;
 	}
 	@Override
     protected void onActivityResult(int  requestCode, int resultCode,Intent data) {
@@ -72,7 +77,15 @@ public class ShowNodeActivity extends TeamknBaseActivity{
         switch (requestCode) {
             case MainActivity.RequestCode.EDIT_TEXT:
               loadUI();
-                break;
+              break;
         }     
     }
+	public void go_show_refash(View view){
+		if(isRefash){
+			open_activity(MainActivity.class);
+			ShowNodeActivity.this.finish();
+		}else{
+			this.finish();
+		}
+	}
 }

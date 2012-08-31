@@ -20,6 +20,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,28 @@ public class BaseUtils {
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(time));
     }
-
+    public static String date_curront_time_String(long createTime){ 
+    	Calendar ca = Calendar.getInstance();
+    	long nowTime = ca.getTimeInMillis();
+    	long ss=(nowTime-createTime)/(1000); //共计秒数
+    	int MM = (int)ss/60;   //共计分钟数
+    	int hh=(int)ss/3600;  //共计小时数
+    	int dd=(int)hh/24;   //共计天数 
+    	
+    	String ji= "刚发布" ;
+    	if(dd>2){
+    		ji = date_string(createTime);
+    	}else if(dd>=1){
+    		ji = dd+" 天前";
+    	}else if(hh >=1){
+    		ji = hh+" 小时前";
+    	}else if(MM >= 1){
+    		ji = MM+" 分前";
+    	}else{
+    		ji = ss+" 秒前";
+    	}
+    	return ji;
+    }
     // yyyy-MM-ddTHH:mm:ssZ
     public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat();

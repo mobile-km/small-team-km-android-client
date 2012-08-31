@@ -6,6 +6,7 @@
    <LinearLayout 
        style="@style/list_item"
        android:orientation="vertical"
+       android:layout_below="@+id/hlep_time_edit_delete"
    >
 	    <TextView
             android:id="@+id/note_info_tv"
@@ -28,22 +29,37 @@
             android:visibility="gone"
 	     />
    </LinearLayout>
+   <RelativeLayout 
+       android:layout_width="fill_parent"
+       android:layout_height="30dp"
+       android:id="@+id/hlep_time_edit_delete"
+   >
+       <ImageView
+	       android:id="@+id/note_image_iv_delete"
+	       android:layout_width="30dp"
+	       android:layout_height="30dp" 
+	       android:layout_alignParentRight="true"
+	       android:src="@android:drawable/ic_delete"
+	       android:clickable="true"
+	   />
+	   <ImageView
+	        android:id="@+id/note_image_iv_edit"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp" 
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="30dp"
+	        android:src="@android:drawable/ic_menu_edit"
+	        android:clickable="true"
+	   />
+	   <TextView
+	        android:id="@+id/note_time_tv"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginRight="30dp"
+	        android:textColor="#000"
+	        android:text="1970-08-31 16:59:55"
+	   />      
+   </RelativeLayout>
    
-   <ImageView
-        android:id="@+id/note_image_iv_delete"
-        android:layout_width="30dp"
-        android:layout_height="30dp" 
-        android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_delete"
-        android:clickable="true"
-   />
-   <ImageView
-        android:id="@+id/note_image_iv_edit"
-        android:layout_width="30dp"
-        android:layout_height="30dp" 
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="30dp"
-        android:src="@android:drawable/ic_menu_edit"
-        android:clickable="true"
-   />
 </RelativeLayout>

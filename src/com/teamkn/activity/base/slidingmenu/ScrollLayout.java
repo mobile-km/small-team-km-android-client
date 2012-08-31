@@ -2,7 +2,6 @@ package com.teamkn.activity.base.slidingmenu;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -18,9 +17,11 @@ import android.widget.Scroller;
  */
 public class ScrollLayout extends ViewGroup {
 
-	private static final String TAG = "ScrollLayout";
 	private Scroller mScroller;
 	private VelocityTracker mVelocityTracker;
+	
+	int countMIX=0;
+	int countMIY=0;
 	
 	private int mCurScreen;
 	private int mDefaultScreen = 1;
@@ -29,11 +30,12 @@ public class ScrollLayout extends ViewGroup {
 	private static final int TOUCH_STATE_SCROLLING = 1;
 	
 	private static final int SNAP_VELOCITY = 600;
+	private static final int SNAP_VELOCITY_Y = 10;
 	
 	private int mTouchState = TOUCH_STATE_REST;
 	private int mTouchSlop;
 	private float mLastMotionX;
-//	private float mLastMotionY;
+	private float mLastMotionY;
 
 	public ScrollLayout(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -69,7 +71,6 @@ public class ScrollLayout extends ViewGroup {
 //	}
     @Override  
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {   
-    	Log.e(TAG, "onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);   
   
         final int width = MeasureSpec.getSize(widthMeasureSpec);   
@@ -87,8 +88,7 @@ public class ScrollLayout extends ViewGroup {
         final int count = getChildCount();   
         for (int i = 0; i < count; i++) {   
             getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);   
-        }   
-        // Log.e(TAG, "moving to screen "+mCurScreen);   
+        } 
         scrollTo(mCurScreen * width, 0);         
     }  
     
@@ -108,8 +108,16 @@ public class ScrollLayout extends ViewGroup {
     	if (getScrollX() != (whichScreen*getWidth())) {
     		
     		final int delta = whichScreen*getWidth()-getScrollX();
-    		mScroller.startScroll(getScrollX(), 0, 
-    				delta, 0, Math.abs(delta)*2);
+    		if(whichScreen == 0 && mCurScreen ==1){
+    			mScroller.startScroll(getScrollX(), 0, 
+        				delta + 40, 0, Math.abs(delta)*2);
+    		}else if(whichScreen == 0 && mCurScreen == 0){
+//    			mScroller.startScroll(getScrollX(), 0, 
+//        				delta + 40, 0, Math.abs(delta)*2);
+    		}else{
+    			mScroller.startScroll(getScrollX(), 0, 
+        				delta, 0, Math.abs(delta)*2);
+    		}
     		mCurScreen = whichScreen;
     		invalidate();		// Redraw the layout
     	}
@@ -146,52 +154,65 @@ public class ScrollLayout extends ViewGroup {
 		final int action = event.getAction();
 		final float x = event.getX();
 		final float y = event.getY();
-//		System.out.println( "x : y = "  + x + " : " + y);
 		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			Log.e(TAG, "event down!");
 			if (!mScroller.isFinished()){
 				mScroller.abortAnimation();
 			}
 			mLastMotionX = x;
+			mLastMotionY = y;
 			break;
 			
 		case MotionEvent.ACTION_MOVE:
 			int deltaX = (int)(mLastMotionX - x);
-			mLastMotionX = x;
-			
-            scrollBy(deltaX, 0);
+			int deltaY = (int)(mLastMotionY - y);
+		
+			if(Math.abs(deltaY) > 50){		
+//				System.out.println(" deltaY : " + deltaY);
+			}else{
+				if( mCurScreen == 0 && deltaX <= SNAP_VELOCITY){		
+				}else if(mCurScreen == getChildCount() -1 && deltaX>0 && countMIX>0){	
+				}else{
+					countMIX += deltaX;
+					mLastMotionX = x;
+		            scrollBy(deltaX, 0);
+				}
+			}
 			break;
 			
-		case MotionEvent.ACTION_UP:
-			Log.e(TAG, "event : up");   
+		case MotionEvent.ACTION_UP: 
             // if (mTouchState == TOUCH_STATE_SCROLLING) {   
             final VelocityTracker velocityTracker = mVelocityTracker;   
             velocityTracker.computeCurrentVelocity(1000);   
             int velocityX = (int) velocityTracker.getXVelocity();   
-
-            Log.e(TAG, "velocityX:"+velocityX); 
+//            向左是负的
+//            向右是正的
             
             if (velocityX > SNAP_VELOCITY && mCurScreen > 0) {   
-                // Fling enough to move left   
-            	Log.e(TAG, "snap left");
+                // Fling enough to move left  
                 snapToScreen(mCurScreen - 1);   
             } else if (velocityX < -SNAP_VELOCITY   
                     && mCurScreen < getChildCount() - 1) {   
-                // Fling enough to move right   
-            	Log.e(TAG, "snap right");
-                snapToScreen(mCurScreen + 1);   
-            } else if(mCurScreen==1 && (x<60&&x>0) && (y>0 && y<60) ){
-            	
+                // Fling enough to move right  
+            	countMIX  = 0;
+                snapToScreen(mCurScreen + 1);                  
+            } else if(mCurScreen==1 && (x<60&&x>0) && (y>0 && y<60) ){	
             	snapToScreen(mCurScreen - 1); 
             }else if(mCurScreen==0 && (x<getChildAt(0).getMeasuredWidth()
             		&&x>getChildAt(0).getMeasuredWidth()-40) 
             		&& (y>0 && y<50) ){
-            	snapToScreen(mCurScreen + 1); 
+            	 countMIX  = 0;
+            	 snapToScreen(mCurScreen + 1); 
             }else {   
-                snapToDestination();   
-            }    
+            	if(mCurScreen == getChildCount() -1 ){
+            		countMIX  = 0;
+            	}
+            	if(mCurScreen == 0){	
+            	}else{
+                    snapToDestination();   
+            	}
+            }  
 
             if (mVelocityTracker != null) {   
                 mVelocityTracker.recycle();   
@@ -211,8 +232,6 @@ public class ScrollLayout extends ViewGroup {
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		// TODO Auto-generated method stub
-		Log.e(TAG, "onInterceptTouchEvent-slop:"+mTouchSlop);
-		
 		final int action = ev.getAction();
 		if ((action == MotionEvent.ACTION_MOVE) && 
 				(mTouchState != TOUCH_STATE_REST)) {
@@ -220,29 +239,27 @@ public class ScrollLayout extends ViewGroup {
 		}
 		
 		final float x = ev.getX();
-//		final float y = ev.getY();
+		final float y = ev.getY();
 		
 		switch (action) {
 		case MotionEvent.ACTION_MOVE:
 			final int xDiff = (int)Math.abs(mLastMotionX-x);
-			if (xDiff>mTouchSlop) {
-				mTouchState = TOUCH_STATE_SCROLLING;
-				
-			}
-			break;
+			final int yDiff = (int)Math.abs(mLastMotionY-y);
 			
+			if (xDiff> mTouchSlop && yDiff < SNAP_VELOCITY_Y) {
+				mTouchState = TOUCH_STATE_SCROLLING;
+			}
+			break;	
 		case MotionEvent.ACTION_DOWN:
 			mLastMotionX = x;
-//			mLastMotionY = y;
+			mLastMotionY = y;
 			mTouchState = mScroller.isFinished()? TOUCH_STATE_REST : TOUCH_STATE_SCROLLING;
 			break;
-			
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			mTouchState = TOUCH_STATE_REST;
 			break;
 		}
-		
 		return mTouchState != TOUCH_STATE_REST;
 	}
 	

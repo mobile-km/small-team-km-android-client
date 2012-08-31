@@ -66,7 +66,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
       } finally {
           db.close();
       }
-
     }
 
     public static List<Note> all(boolean has_removed) throws Exception {
@@ -88,7 +87,6 @@ public class NoteDBHelper extends BaseModelDBHelper {
             }
 
             while (cursor.moveToNext()) {
-                System.out.println("moveToNext");
                 Note note = build_note_by_cursor(cursor);
                 notes.add(note);
             }
@@ -368,7 +366,7 @@ public class NoteDBHelper extends BaseModelDBHelper {
         db.close();
         return length;
     }
-    
+
     public static List<Note> getAllItems(int firstResult, int maxResult) throws Exception {
         SQLiteDatabase db = get_read_db();
         String sql = "select * from '" + Constants.TABLE_NOTES+ "' " + " limit ?,? ";

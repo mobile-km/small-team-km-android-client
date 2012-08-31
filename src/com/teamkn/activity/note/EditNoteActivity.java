@@ -20,6 +20,8 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 
 public class EditNoteActivity extends TeamknBaseActivity {
+	
+	
     private EditText note_content_et;
     private ImageView note_image_iv;
 
@@ -27,8 +29,7 @@ public class EditNoteActivity extends TeamknBaseActivity {
     private String kind;
     private String note_uuid;
     private String image_path;
-    
-    
+        
     private  String text;
     private  Uri uri;
     public class Extra {
@@ -51,7 +52,6 @@ public class EditNoteActivity extends TeamknBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_note);
-        System.out.println("---------------edit");
         Intent intent = getIntent();
         
         note_uuid = intent.getStringExtra(EditNoteActivity.Extra.NOTE_UUID);
@@ -66,6 +66,7 @@ public class EditNoteActivity extends TeamknBaseActivity {
         if ( content.getParcelable(Intent.EXTRA_STREAM) != null ) {
         	 uri = (Uri)content.getParcelable(Intent.EXTRA_STREAM); 
         	 image_path = getRealPathFromURI(this,uri);
+        	 
         }
         
 //        System.out.println(" getIntent() text = " + text);
@@ -83,8 +84,6 @@ public class EditNoteActivity extends TeamknBaseActivity {
         		kind = NoteDBHelper.Kind.IMAGE;
         	}        	
         }
-        
-        
        
         if (is_text_note()) {
             init_text_note();
@@ -166,20 +165,22 @@ public class EditNoteActivity extends TeamknBaseActivity {
     private void update_image_note() {
         String note_content = note_content_et.getText().toString();
 
-        new TeamknAsyncTask<String, Void, Void>(this, R.string.saving) {
+        new TeamknAsyncTask<String, Void, Boolean>(this, R.string.saving) {
             @Override
-            public Void do_in_background(String... params) throws Exception {
+            public Boolean do_in_background(String... params) throws Exception {
                 String note_content = params[0];
 
-                NoteDBHelper.update(note.uuid, note_content);
-                return null;
+                boolean isSuccess = NoteDBHelper.update(note.uuid, note_content);
+                return isSuccess;
             }
 
             @Override
-            public void on_success(Void v) {
-                Intent intent = new Intent();
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            public void on_success(Boolean isSuccess) {
+            	if(isSuccess){
+            		Intent intent = new Intent();
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+            	}  
             }
         }.execute(note_content);
     }
@@ -194,7 +195,6 @@ public class EditNoteActivity extends TeamknBaseActivity {
             @Override
             public Void do_in_background(String... params) throws Exception {
                 String image_path = params[0];
-                System.out.println("editNoteActivity.java image_path =    " +  params[0]);
                 NoteDBHelper.create_image_note(image_path);
                 return null;
             }

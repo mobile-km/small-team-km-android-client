@@ -14,6 +14,7 @@ import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
@@ -39,6 +40,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         view_holder.note_image_iv   = (ImageView) view.findViewById(R.id.note_image_show_iv);
         view_holder.note_image_iv_edit  = (ImageView) view.findViewById(R.id.note_image_iv_edit);
         view_holder.note_image_iv_delete = (ImageView) view.findViewById(R.id.note_image_iv_delete);
+        view_holder.note_time_tv = (TextView) view.findViewById(R.id.note_time_tv);
         return view_holder;
 
     }
@@ -47,7 +49,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
     public void fill_with_data(BaseViewHolder holder,
                                final Note item,
                                int position) {
-
+	
         ViewHolder view_holder = (ViewHolder) holder;
         view_holder.note_info_tv.setTag(R.id.tag_note_uuid, item.uuid);
         view_holder.note_info_tv.setTag(R.id.tag_note_kind, item.kind);
@@ -60,7 +62,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
             view_holder.note_image_iv.setVisibility(View.GONE);
         }
         view_holder.note_content_tv.setText(item.content);
-        
+        view_holder.note_time_tv.setText(BaseUtils.date_curront_time_String(item.client_created_time));
         final int p = position;
         view_holder.note_image_iv_delete.setOnClickListener(new OnClickListener() {	
 			@Override
@@ -104,6 +106,8 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         ImageView note_image_iv;
         ImageView note_image_iv_edit;
         ImageView note_image_iv_delete;
+        
+        TextView note_time_tv;
         
     }
 

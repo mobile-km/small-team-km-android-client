@@ -69,6 +69,11 @@
         <item name="android:layout_marginLeft">9dp</item>
         <item name="android:onClick">go_back</item>
     </style>
+    <style name="head_bar_button_go_back_remove_click" parent="@style/head_bar_button">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:text">@string/button_go_back</item>
+        <item name="android:layout_marginLeft">9dp</item>
+    </style>
    
     <style name="head_bar_button_go_back_register" parent="@style/head_bar_button">
         <item name="android:layout_alignParentLeft">true</item>

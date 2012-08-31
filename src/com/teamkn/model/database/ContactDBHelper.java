@@ -140,7 +140,7 @@ public class ContactDBHelper extends BaseModelDBHelper {
           null, null,null);
       
       while(cursor.moveToNext()){
-        System.out.println("moveToNext");
+//        System.out.println("moveToNext");
         Contact contact = build_contact_by_cursor(cursor);
         list.add(contact);
       }

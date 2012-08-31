@@ -7,7 +7,7 @@
 	<com.teamkn.activity.base.slidingmenu.ScrollLayout
 	  android:id="@+id/ScrollLayoutTest"
 	  android:layout_width="fill_parent"
-	  android:layout_height="418dp">
+	  android:layout_height="fill_parent">
 	  
 	<RelativeLayout 
 		android:id="@+id/menu"
@@ -23,14 +23,14 @@
 	            android:layout_height="wrap_content"
 	            android:text=""  
 	            android:textColor="#fff"
-	        /> 
-	            
+	        />  
 	        <LinearLayout
 	            android:layout_below="@+id/teamkn_show_msg_tv"
 	            android:layout_width="wrap_content"
 	            android:layout_height="fill_parent"
 	            android:orientation="vertical"
-	            android:layout_marginRight="50dp" 
+	            android:layout_marginLeft="50dp" 
+	            android:layout_alignParentRight="true"
 	        >
 	            <LinearLayout
 	                android:orientation="vertical"
@@ -222,14 +222,6 @@
 	                />
 	            </LinearLayout>  
 	        </LinearLayout>  
-	       <ImageView
-	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
-	             android:src="@drawable/ic_menu_forward"
-	             android:layout_alignParentRight="true"
-	             android:layout_alignParentTop="true"
-	             android:contentDescription="@string/app_name"
-	       />
 	   </RelativeLayout>
 	   
 	   <LinearLayout 
@@ -245,6 +237,7 @@
         android:layout_gravity="bottom"
         android:background="#222222"
         android:gravity="center_vertical"
+        android:visibility="gone"
     >
        <TextView
            android:layout_width="wrap_content"

@@ -168,7 +168,6 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     lvContact.post(new Runnable() {
       @Override
       public void run() {
-    	  System.out.println("RefreshContactStatusService   00000000000000000000000000");
     	  lvContact.setAdapter(adapter_update);
       }
     });
@@ -231,7 +230,6 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   
   public class RefreshContactUiBinder extends Binder{
     public void refresh_list(){ 
-      System.out.println("RefreshContactStatusService   11111111111111111111111111111111111111");
       ContactsActivity.this.load_contacts_to_list();
     }
   }

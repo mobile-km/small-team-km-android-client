@@ -580,7 +580,6 @@ public class HttpApi {
               int sender_id = chat_node_obj.getInt("sender_id");
               String content = chat_node_obj.getString("content");
               long server_created_time = chat_node_obj.getLong("server_created_time");
-              
               ChatNodeDBHelper.pull_from_server(uuid, server_chat_id, server_chat_node_id, sender_id, content, server_created_time);
               max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
            

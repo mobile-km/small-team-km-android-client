@@ -8,7 +8,8 @@
        style="@style/head_bar"
     >
 	       <Button
-	          style="@style/head_bar_button_go_back"
+	          style="@style/head_bar_button_go_back_remove_click"
+	          android:onClick="go_show_refash"
 	       />
 	       <TextView
               style="@style/head_bar_text_center"
