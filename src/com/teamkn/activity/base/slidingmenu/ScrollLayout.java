@@ -1,5 +1,8 @@
 package com.teamkn.activity.base.slidingmenu;
 
+import com.teamkn.activity.contact.ContactsActivity;
+import com.teamkn.application.TeamknApplication;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -103,9 +106,20 @@ public class ScrollLayout extends ViewGroup {
     }
     
     public void snapToScreen(int whichScreen) {
+
     	// get the valid layout page
     	whichScreen = Math.max(0, Math.min(whichScreen, getChildCount()-1));
     	if (getScrollX() != (whichScreen*getWidth())) {
+    		 if( TeamknApplication.current_show_activity!=null && TeamknApplication.current_show_activity
+           		  .equals("com.teamkn.activity.contact.ContactsActivity")){
+//    			System.out.println("com.teamkn.activity.contact.ContactsActivity  " + whichScreen  + " : " + mCurScreen);
+             	if(whichScreen == 0 && mCurScreen ==1){
+             		ContactsActivity.isShow_Scroll = true;
+             	}else if(whichScreen == 0 && mCurScreen == 0){}else{
+             		ContactsActivity.isShow_Scroll = false;
+             	}
+             }
+    		
     		
     		final int delta = whichScreen*getWidth()-getScrollX();
     		if(whichScreen == 0 && mCurScreen ==1){
@@ -167,16 +181,17 @@ public class ScrollLayout extends ViewGroup {
 		case MotionEvent.ACTION_MOVE:
 			int deltaX = (int)(mLastMotionX - x);
 			int deltaY = (int)(mLastMotionY - y);
-		
+		    
+//			System.out.println("mCurScreen : deltax : countMIX = " + mCurScreen + " : " + deltaX + " : " + countMIX);
 			if(Math.abs(deltaY) > 50){		
 //				System.out.println(" deltaY : " + deltaY);
 			}else{
 				if( mCurScreen == 0 && deltaX <= SNAP_VELOCITY){		
-				}else if(mCurScreen == getChildCount() -1 && deltaX>0 && countMIX>0){	
+				}else if(mCurScreen == getChildCount() -1 && deltaX>=0 && countMIX>=0){	
 				}else{
 					countMIX += deltaX;
 					mLastMotionX = x;
-		            scrollBy(deltaX, 0);
+		            scrollBy(deltaX, 0);  
 				}
 			}
 			break;
@@ -192,11 +207,13 @@ public class ScrollLayout extends ViewGroup {
             if (velocityX > SNAP_VELOCITY && mCurScreen > 0) {   
                 // Fling enough to move left  
                 snapToScreen(mCurScreen - 1);   
+                
             } else if (velocityX < -SNAP_VELOCITY   
                     && mCurScreen < getChildCount() - 1) {   
                 // Fling enough to move right  
             	countMIX  = 0;
-                snapToScreen(mCurScreen + 1);                  
+                snapToScreen(mCurScreen + 1);    
+                
             } else if(mCurScreen==1 && (x<60&&x>0) && (y>0 && y<60) ){	
             	snapToScreen(mCurScreen - 1); 
             }else if(mCurScreen==0 && (x<getChildAt(0).getMeasuredWidth()

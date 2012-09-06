@@ -67,7 +67,7 @@ public class ChatActivity extends TeamknBaseActivity {
 	 
 	 static boolean chat_node_et_focus_yes = true;
 	  
-	  private int client_chat_id;
+	  private static int client_chat_id;
 	  private static Chat chat;
 	  private static ChatNodeListAdapter adapter;
 	  
@@ -152,8 +152,7 @@ public class ChatActivity extends TeamknBaseActivity {
 			
 			@Override
 			public void on_success(Integer client_chat_node_id) {
-			    ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);
-			   
+			    ChatNode chat_node = ChatNodeDBHelper.find(client_chat_node_id);	    
 			    adapter.add_item(chat_node);
 			    
 			    chat_node_et.setText("");
@@ -226,8 +225,11 @@ public class ChatActivity extends TeamknBaseActivity {
 		 chat_node_lv.post(new Runnable() {
 			@Override
 			public void run() {
-				 adapter.add_item(chatNode);
-				 chat_node_lv.setSelection(visibleItemTop);
+				 if(chatNode.chat_id == client_chat_id){	
+					 adapter.add_item(chatNode);
+					 chat_node_lv.setSelection(visibleItemTop);
+					 System.out.println("service chat_node =  " + chatNode.content);
+				 }
 			}
 		});
 	 }
@@ -265,8 +267,7 @@ public class ChatActivity extends TeamknBaseActivity {
 				
 				@Override
 				public void on_success(Integer client_chat_node_id) {
-				    AttitudesDBHelper.find(client_chat_node_id);
-				    
+				    AttitudesDBHelper.find(client_chat_node_id);				    
 //				    attitudesListAdapter_chat.add_item(attitudes);
 //				    attitudesListAdapter_chat.notifyDataSetChanged();
 			    }

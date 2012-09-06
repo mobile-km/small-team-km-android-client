@@ -17,6 +17,7 @@ import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
+import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.model.database.UserDBHelper;
 import org.apache.commons.io.IOUtils;
@@ -34,8 +35,8 @@ import java.util.List;
 
 public class HttpApi {
 
-//    public static final String SITE = "http://192.168.1.38:9527";
-	public static final String SITE = "http://teamkn.mindpin.com";
+    public static final String SITE = "http://192.168.1.38:9527";
+//	public static final String SITE = "http://teamkn.mindpin.com";
 
     // 各种路径常量
     public static final String 用户注册 = "/signup_submit";
@@ -75,6 +76,11 @@ public class HttpApi {
     public static final String 创建对话表情反馈     =  "/api/attitudes/push";
     
     public static final String 获取对话表情反馈     =  "/api/attitudes/pull";
+    
+    //data_lists
+    public static final String 获取_data_list     =  "/api/data_lists";
+    public static final String 创建_data_list     =  "/api/data_lists";
+    public static final String 修改_data_list     =  "/api/data_lists/:";
 
     // LoginActivity
     // 用户登录请求
@@ -580,15 +586,16 @@ public class HttpApi {
               int sender_id = chat_node_obj.getInt("sender_id");
               String content = chat_node_obj.getString("content");
               long server_created_time = chat_node_obj.getLong("server_created_time");
+            
               ChatNodeDBHelper.pull_from_server(uuid, server_chat_id, server_chat_node_id, sender_id, content, server_created_time);
+              
               max_last_syn_chat_node_created_time = Math.max(max_last_syn_chat_node_created_time, server_created_time);
            
               if( TeamknApplication.current_show_activity!=null && TeamknApplication.current_show_activity
             		  .equals("com.teamkn.activity.chat.ChatActivity")){
             	  com.teamkn.model.ChatNode chat_node = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id);
-            	  ChatActivity.add_chat_node_item(chat_node);
+//            	  ChatActivity.add_chat_node_item(chat_node);
               }
-            
             }
             TeamknPreferences.set_last_syn_chat_node_created_time(max_last_syn_chat_node_created_time);
             return null;
@@ -597,7 +604,86 @@ public class HttpApi {
       }
       
     }
+    
+    public static class DataList{
+    	public DataList(int creator_id, String title, String kind,
+				String public_boolean, int server_id) {
+			// TODO Auto-generated constructor stub
+		}
 
+		public static void pull(String kind,int page , int per_page) throws Exception{  
+    		 new TeamknGetRequest<Void>(获取_data_list,
+	            new BasicNameValuePair("kind", kind),
+	            new BasicNameValuePair("page", page+""),
+	            new BasicNameValuePair("per_page",per_page+"")
+	            ){
+		          @Override
+		          public Void on_success(String response_text) throws Exception {
+		        	  JSONArray data_list_array = new JSONArray(response_text);
+	                  System.out.println("data_list pull response_text " + response_text);
+	            	  for (int i = 0; i < data_list_array.length(); i++) {
+			                JSONObject json = data_list_array.getJSONObject(i);
+			                int server_id = json.getInt("id");
+			                int creator_id  = json.getInt("creator_id");
+			                String title  = json.getString("title");
+			                String kind   = json.getString("kind");
+			                String public_boolean  = json.getString("public");
+			                
+			                com.teamkn.model.DataList dataList_server =
+			                		new com.teamkn.model.DataList( creator_id, title, kind, public_boolean,server_id);
+			                DataListDBHelper.update(dataList_server);
+	                  }  
+		              return null;
+		          }
+		        }.go();
+        }
+    	
+    	public static void create(final com.teamkn.model.DataList dataList) throws Exception{
+            
+ 		   new TeamknPostRequest<Void>( 创建_data_list,
+ 	            new PostParamText("data_list[title]",dataList.title),
+ 	            new PostParamText("data_list[kind]",dataList.kind)
+ 		   ) {
+ 	              @Override
+ 	              public Void on_success(String response_text) throws Exception {
+		                System.out.println("data_list pull response_text " + response_text);
+		                JSONObject json = new JSONObject(response_text);
+		                int server_id = json.getInt("id");
+		                int creator_id  = json.getInt("creator_id");
+		                String title  = json.getString("title");
+		                String kind   = json.getString("kind");
+		                String public_boolean  = json.getString("public");
+		                com.teamkn.model.DataList dataList_server =
+		                		new com.teamkn.model.DataList
+		                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
+		                DataListDBHelper.update(dataList_server);
+					    return null;   	
+ 	              }
+ 	     }.go();
+       }
+    	public static void update(final com.teamkn.model.DataList dataList) throws Exception{
+    		new TeamknPutRequest<Void>( 修改_data_list + dataList.server_data_list_id,
+    				new PostParamText("title", dataList.title)) {
+						@Override
+						public Void on_success(String response_text)
+								throws Exception {
+							    JSONObject json = new JSONObject(response_text);
+				                int server_id = json.getInt("id");
+				                int creator_id  = json.getInt("creator_id");
+				                String title  = json.getString("title");
+				                String kind   = json.getString("kind");
+				                String public_boolean  = json.getString("public");
+				                com.teamkn.model.DataList dataList_server =
+				                		new com.teamkn.model.DataList
+				                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
+				                DataListDBHelper.update(dataList_server);
+							return null;
+						}
+			}.go();
+    	}
+    }
+    
+    
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;
     }

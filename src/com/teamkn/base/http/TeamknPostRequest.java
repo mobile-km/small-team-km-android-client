@@ -21,6 +21,7 @@ public abstract class TeamknPostRequest<TResult> extends TeamknHttpRequest<TResu
 
     private HttpPost build_http_post(HttpEntity entity, String request_path) {
         HttpPost http_post = new HttpPost(TeamknHttpRequest.SITE + request_path);
+        System.out.println("http_post " + TeamknHttpRequest.SITE + request_path);
         http_post.setHeader("User-Agent", "android");
         http_post.setEntity(entity);
         return http_post;

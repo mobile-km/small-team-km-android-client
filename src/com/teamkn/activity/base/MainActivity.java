@@ -19,9 +19,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,9 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamkn.R;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.note.EditNoteActivity;
-import com.teamkn.activity.note.ShowNodeActivity;
 import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -42,21 +41,20 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
-import com.teamkn.model.Note;
-import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.model.DataList;
+import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.service.FaceCommentService;
 import com.teamkn.service.IndexService;
 import com.teamkn.service.RefreshContactStatusService;
 import com.teamkn.service.SynChatService;
 import com.teamkn.service.SynNoteService;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
-import com.teamkn.widget.adapter.NoteListAdapter;
+import com.teamkn.widget.adapter.DataListAdapter;
 
 public class MainActivity extends TeamknBaseActivity{
 
 	View view_show;
 	static TextView teamkn_show_msg_tv;
-	static boolean isFirst = true;
 	LinearLayout layout;
 	public static void set_teamkn_show_msg_tv(final String msg){
 		teamkn_show_msg_tv.post(new Runnable() {
@@ -68,26 +66,23 @@ public class MainActivity extends TeamknBaseActivity{
 	}
 	 
 	public static class RequestCode {
-        public final static int EDIT_TEXT = 0;
+		public final static int EDIT_TEXT = 0;
         public final static int SHOW_BACK= 9;
+		
+        public final static String COLLECTION = "COLLECTION";
+        public final static String STEP= "STEP";
         static int account_page = 10;
         static int now_page = 1;
     }
-	//  node_listView_show 数据
-	private  ListView note_list;
-
-    NoteListAdapter note_list_adapter;
-    List<Note> notes;
-
-    private LinearLayout mLoadLayout;   
-    TextView mTipContent;
-    private final LayoutParams mProgressBarLayoutParams = new LinearLayout.LayoutParams(   
-
-            LinearLayout.LayoutParams.WRAP_CONTENT,   
-
-            LinearLayout.LayoutParams.WRAP_CONTENT); 
-	//
 	
+	//  node_listView_show 数据
+	private  ListView data_list;
+    DataListAdapter dataListAdapter;
+    List<DataList> datalists;
+    View footer_view;
+    EditText add_data_list_et;
+    RelativeLayout show_add_data_list_rl;
+    
 	private TextView data_syn_textview;         // 同步更新时间
 	private ProgressBar data_syn_progress_bar;  // 同步更新进度条
 	private TextView progress_set_num; //同步更新时间
@@ -115,8 +110,6 @@ public class MainActivity extends TeamknBaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-
 		setContentView(R.layout.horz_scroll_with_image_menu);
 		layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
         
@@ -126,15 +119,7 @@ public class MainActivity extends TeamknBaseActivity{
         view_show = inflater.inflate(R.layout.base_main, null);
         layout.addView(view_show);
 
-	    mLoadLayout = new LinearLayout(this);   
-	    mLoadLayout.setMinimumHeight(30);
-	    mLoadLayout.setPadding(0, 5, 0, 5);
-        mLoadLayout.setGravity(Gravity.CENTER);   
-        mLoadLayout.setOrientation(LinearLayout.HORIZONTAL);               
-        mTipContent = new TextView(this);   
-        mTipContent.setText("加载更多");   
-        mLoadLayout.addView(mTipContent, mProgressBarLayoutParams);   
-
+	  
 		
 		data_syn_textview = (TextView)view_show.findViewById(R.id.main_data_syn_text);
 		data_syn_progress_bar = (ProgressBar)view_show.findViewById(R.id.main_data_syn_progress_bar);
@@ -159,13 +144,54 @@ public class MainActivity extends TeamknBaseActivity{
 		// 启动更新 对话串的服务
 		startService(new Intent(MainActivity.this,SynChatService.class));
 		
+        
 		//加载node_listview
-		note_list = (ListView)layout.findViewById(R.id.note_list);
-		note_list.addFooterView(mLoadLayout);
-		mLoadLayout.setVisibility(View.VISIBLE);
+		data_list = (ListView)layout.findViewById(R.id.data_list);
+		bind_add_footer_view();
 		load_list();
 	}
-	
+	// 设置 创建新列表按钮事件
+    private void bind_add_footer_view() {
+        footer_view = getLayoutInflater().inflate(R.layout.list_data_list_item_footer, null);
+        data_list.addFooterView(footer_view);
+        add_data_list_et = (EditText)findViewById(R.id.add_data_list_et);
+        footer_view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                open_activity(LoginActivity.class);
+//            	BaseUtils.toast("  show  footer view");
+            	show_add_data_list_rl = (RelativeLayout)footer_view.findViewById(R.id.show_add_data_list_rl);
+            	show_add_data_list_rl.setVisibility(View.GONE);
+            	add_data_list_et.setVisibility(View.VISIBLE);	 
+            }
+        });
+        add_data_list_et.setOnFocusChangeListener(new OnFocusChangeListener() {  
+            @Override  
+            public void onFocusChange(View v, boolean hasFocus) {  
+                if(add_data_list_et.hasFocus()==false){       
+                    String add_data_list_et_str = add_data_list_et.getText().toString();
+                    if(add_data_list_et_str!=null 
+                    		&& !add_data_list_et_str.equals(null)
+                    		&& !BaseUtils.is_str_blank(add_data_list_et_str)){
+                    	Toast.makeText(MainActivity.this, "可以进行验证  " + add_data_list_et_str, Toast.LENGTH_SHORT).show(); 
+                    	if(BaseUtils.is_wifi_active(MainActivity.this)){
+    						try {
+    							DataListDBHelper.create(current_user().user_id , add_data_list_et_str, RequestCode.COLLECTION, "true");
+								HttpApi.DataList.create(DataListDBHelper.find());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+    					}
+                    	add_data_list_et.setText(null);
+                    	show_add_data_list_rl.setVisibility(View.VISIBLE);
+                    	add_data_list_et.setVisibility(View.GONE);
+//                    	add_data_list_et.setFocusable(false);
+                    	load_list();
+                    }
+                }      
+            }  
+        });
+    }
 	@Override
 	protected void onResume() {
 		// 设置用户头像和名字
@@ -184,89 +210,37 @@ public class MainActivity extends TeamknBaseActivity{
 	    user_name_tv.setText(name);
 		super.onResume();
 	}
-	private ArrayList<Note> get_list_note(List<Note> notes2,int begin,int end){
-		ArrayList<Note> get_notes = new ArrayList<Note>();
-		for(int i = begin ;i < end ;i ++){
-			get_notes.add(notes2.get(i));
-		}
-		RequestCode.now_page++;
-		return get_notes;
-	}
 	//加载node_listview
 	private void load_list() { 
-		mTipContent.setText("加载更多");
-	    notes  = new ArrayList<Note>();
-		note_list_adapter = new NoteListAdapter(MainActivity.this);	
+		datalists  = new ArrayList<DataList>();
+		dataListAdapter = new DataListAdapter(MainActivity.this);	
 		
-		new TeamknAsyncTask<Void, Void, ArrayList<Note>>() {
+		new TeamknAsyncTask<Void, Void, List<DataList>>() {
 			@Override
-			public ArrayList<Note> do_in_background(Void... params) throws Exception {
-				try {
-					notes = NoteDBHelper.all(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				RequestCode.now_page = 1 ;
-				if(notes.size()<RequestCode.account_page){
-					return get_list_note(notes,0,notes.size());
-				}else{
-					return get_list_note(notes,0,RequestCode.account_page);
-				}
-				
-				
-			}
-			@Override
-			public void on_success(ArrayList<Note> get_note) {
-					note_list_adapter.add_items(get_note);
-					note_list.setAdapter(note_list_adapter);	
-		    }
-		}.execute();
-
-        note_list.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> list_view,View list_item,int item_id,long position) {	
-
-                TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
-                String   uuid    = (String)   info_tv.getTag(R.id.tag_note_uuid);
-                String   kind    = (String)   info_tv.getTag(R.id.tag_note_kind);
-
-                Intent   intent  = new Intent(MainActivity.this, ShowNodeActivity.class);
-                intent.putExtra(EditNoteActivity.Extra.NOTE_UUID, uuid);
-                intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, kind);
-                
-                if (kind == NoteDBHelper.Kind.IMAGE) {
-                    String image_path = Note.note_image_file(uuid).getPath();
-                    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
-                }                               
-                startActivityForResult(intent, MainActivity.RequestCode.SHOW_BACK);
-            }
-        });
-        mLoadLayout.setOnClickListener(new OnClickListener() {	
-			@Override
-			public void onClick(View v) {
-				
-				if((RequestCode.now_page-1)*RequestCode.account_page < notes.size() && 
-						 RequestCode.now_page*RequestCode.account_page < notes.size()){
-					ArrayList<Note> get_notes;
-					if( RequestCode.now_page*RequestCode.account_page >notes.size() ){
-						get_notes = get_list_note(notes,(RequestCode.now_page-1)*RequestCode.account_page,notes.size());
-					}else{
-						get_notes = get_list_note(notes,(RequestCode.now_page-1)*RequestCode.account_page,RequestCode.now_page*RequestCode.account_page);
+			public List<DataList> do_in_background(Void... params) throws Exception {
+//					datalists = NoteDBHelper.all(true);
+					if(BaseUtils.is_wifi_active(MainActivity.this)){
+//						HttpApi.DataList.pull(RequestCode.COLLECTION, RequestCode.now_page, RequestCode.account_page);
+						datalists = DataListDBHelper.all();
 					}
-					note_list_adapter.add_items(get_notes);
-					note_list_adapter.notifyDataSetChanged();
-				}else if((RequestCode.now_page-1)*RequestCode.account_page < notes.size()
-						&& RequestCode.now_page*RequestCode.account_page > notes.size()){
-					ArrayList<Note> get_notes = get_list_note(notes,(RequestCode.now_page-1)*RequestCode.account_page,notes.size());
-					note_list_adapter.add_items(get_notes);
-					note_list_adapter.notifyDataSetChanged();
-				}else{
-					mTipContent.setText("没有了");
-				}
+					return datalists;
 			}
-		});
-                	   
+			@Override
+			public void on_success(List<DataList> datalists) {
+				dataListAdapter.add_items(datalists);
+				data_list.setAdapter(dataListAdapter);	
+				dataListAdapter.notifyDataSetChanged();
+		    }
+		}.execute();    
+		
+		
+//		data_list.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//					long arg3) {
+//				System.out.println(arg2 + " : " + arg3);
+//			}
+//		});
     }	
 
 	// 处理其他activity界面的回调  有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
@@ -276,19 +250,6 @@ public class MainActivity extends TeamknBaseActivity{
     	if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode) {
-            case MainActivity.RequestCode.EDIT_TEXT:
-                load_list();
-                break; 	
-            case MainActivity.RequestCode.SHOW_BACK:
-				Toast.makeText(MainActivity.this,notes.size() +" :  "
-						+ RequestCode.now_page , 100).show();
-            	load_list();
-            	break;
-        }
-        Toast.makeText(MainActivity.this,notes.size() +" :  "
-				+ RequestCode.now_page  + " -----------------", 200).show();
-        note_list_adapter.notifyDataSetChanged(); 
     }
 
 	//同步
@@ -364,22 +325,9 @@ public class MainActivity extends TeamknBaseActivity{
 						data_syn_textview.setText("上次同步成功: " + str);
 						data_syn_progress_bar.setVisibility(View.GONE);
 						progress_set_num.setText("");
-						manual_syn_bn.setVisibility(View.VISIBLE);
-	                    
+						manual_syn_bn.setVisibility(View.VISIBLE);	  
 						
-						note_list.post(new Runnable() {
-							@Override
-							public void run() {
-//								System.out.println("ShowNodeActivity.isRefash = " + ShowNodeActivity.isRefash);
-								if(ShowNodeActivity.isRefash){
-									ShowNodeActivity.isRefash = false;
-								}else if(isFirst){
-									isFirst = false;
-								}else{
-									load_list();
-								}	 
-							}
-						});
+						load_list();
 					}
 				});
 				  

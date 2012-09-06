@@ -75,7 +75,7 @@ public class SynChatService extends Service {
 
     private void syn_chat_and_chat_node() throws Exception {
       push_data();
-      pull_data();
+//      pull_data();
     }
 
     private void pull_data() throws Exception {

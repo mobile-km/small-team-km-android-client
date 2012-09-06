@@ -72,4 +72,53 @@ public class Constants {
     public static final String TABLE_ATTITUDES__KIND = "kind";
     public static final String TABLE_ATTITUDES_IS_SYNED = "is_syned";
     
+    
+    // data_lists
+    
+    public static final String TABLE_DATA_LISTS = "data_lists";
+    public static final String TABLE_DATA_LISTS_USER_ID = "user_id";
+    public static final String TABLE_DATA_LISTS_TITLE = "title";
+    public static final String TABLE_DATA_LISTS_KIND = "kind";
+    public static final String TABLE_DATA_LISTS_PUBLIC = "public";
+    public static final String TABLE_DATA_LISTS_SERVER_DATA_LIST_ID = "server_data_list_id";
+    
+    
+    // data_items
+    public static final String TABLE_DATA_ITEMS = "data_items";
+    public static final String TABLE_DATA_ITEMS_TITLE = "title";
+    public static final String TABLE_DATA_ITEMS_CONTENT = "content";
+    public static final String TABLE_DATA_ITEMS_URL = "url";
+    public static final String TABLE_DATA_ITEMS_KIND = "kind";
+    public static final String TABLE_DATA_ITEMS_DATA_LIST_ID = "data_list_id";
+    public static final String TABLE_DATA_ITEMS_POSITION = "position";
+    
+    // watch
+    public static final String TABLE_WATCH = "watch";
+    public static final String TABLE_WATCH_USER_ID = "user_id";
+    public static final String TABLE_WATCH_DATA_LIST_ID = "data_list_id";
 }
+/*
+ *  users
+ 2  integer :user_id
+ 3  text :user_name
+ 4  blob :user_avatar
+ 5
+ 6  data_lists
+ 7  integer :user_id
+ 8  text    :title
+ 9  text    :kind  # COLLECTION STEP
+10  text    :public  # true false
+11  integer :server_data_list_id
+12
+13  data_items
+14  text :title
+15  text :content
+16  text :url
+17  text :kind  # URL TEXT IMAGE
+18  integer :data_list_id
+19  integer :position
+20
+21  watch
+22  integer :user_id
+23  integer :data_list_id
+ * */

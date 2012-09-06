@@ -42,7 +42,7 @@ public class FaceCommentService extends Service implements Runnable{
 				e.printStackTrace();
 			}catch (Exception e) {
 				// TODO Auto-generated catch block
-//				System.out.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}
 		}
 	}

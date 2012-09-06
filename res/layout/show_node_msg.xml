@@ -40,6 +40,7 @@
 		        android:layout_below="@+id/show_node_msg_iv"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content" 
+		        android:autoLink="all"		        
 		    />
 		  </RelativeLayout>
 	</ScrollView>

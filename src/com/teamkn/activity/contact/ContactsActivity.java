@@ -41,7 +41,9 @@ import com.teamkn.service.RefreshContactStatusService.RefreshContactStatusBinder
 import com.teamkn.widget.adapter.ContactListAdapter_update;
 
 public class ContactsActivity extends TeamknBaseActivity implements  OnClickListener{
-	View view_show;
+  public static boolean isShow_Scroll = false;
+	
+  View view_show;
   private View contact_list_linkman;
   private SideBar indexBar;
   private WindowManager mWindowManager;
@@ -79,10 +81,7 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     LayoutInflater inflater = LayoutInflater.from(this);
     view_show = inflater.inflate(R.layout.contact_list, null);
     layout.addView(view_show);
-    
-    
-    
-    
+
     item = ContactDBHelper.Status.APPLIED;
     mWindowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
     findView();
@@ -90,6 +89,8 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
     button_contact_list_send_invite.setOnClickListener(this);
     button_contact_list_get_invite.setOnClickListener(this);
     import_contact();
+    
+//    isShow_Scroll = false;
   }
   private void findView(){	
 	button_contact_list_linkman = (Button)view_show.findViewById(R.id.button_contact_list_linkman);
@@ -230,7 +231,12 @@ public class ContactsActivity extends TeamknBaseActivity implements  OnClickList
   
   public class RefreshContactUiBinder extends Binder{
     public void refresh_list(){ 
-      ContactsActivity.this.load_contacts_to_list();
+      if(isShow_Scroll){
+    	  
+      }else{
+    	  ContactsActivity.this.load_contacts_to_list();
+      }
+//      System.out.println("isShow_Scroll = " + isShow_Scroll);
     }
   }
 

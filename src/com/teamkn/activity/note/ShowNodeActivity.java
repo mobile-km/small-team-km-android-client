@@ -42,7 +42,8 @@ public class ShowNodeActivity extends TeamknBaseActivity{
         	ImageCache.load_cached_image(Note.note_thumb_image_file(item.uuid),show_node_msg_iv);
         	show_node_msg_iv.setVisibility(View.VISIBLE);
         } else {
-        	show_node_msg_iv.setVisibility(View.GONE);
+//        	show_node_msg_iv.setVisibility(View.GONE);
+        	show_node_msg_iv.setImageDrawable(getResources().getDrawable(R.drawable.test_test_feiji));
         }
 		show_node_msg_tv.setText(item.content);
 		show_node_msg_iv.setOnClickListener(new OnClickListener() {

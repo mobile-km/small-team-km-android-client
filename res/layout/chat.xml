@@ -21,7 +21,7 @@
         android:layout_below="@+id/head_bar"
         android:id="@+id/chat_node_list_rl"
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_height="305dp"
     >
 	   <ListView 
 	       android:id="@+id/chat_node_list"

@@ -145,15 +145,18 @@ public class SynNoteService extends Service {
         syn_ui_binder.set_syn_success();
         sendEmptyMessageDelayed(SYN_MESSAGE, 60*60*1000);
       }catch(ServerErrorException see){
-        see.printStackTrace();
+//        see.printStackTrace();
+    	  System.out.println(see.getMessage());
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 30*60*1000);
       }catch(NetworkUnusableException nue){
-        nue.printStackTrace();
+//        nue.printStackTrace();
+    	  System.out.println(nue.getMessage());
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);
       }catch (Exception e) {
-        e.printStackTrace();
+//        e.printStackTrace();
+    	  System.out.println(e.getMessage());
         syn_ui_binder.set_syn_fail();
         sendEmptyMessageDelayed(SYN_MESSAGE, 15*1000);
       }finally{

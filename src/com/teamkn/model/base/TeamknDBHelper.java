@@ -79,6 +79,31 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_ATTITUDES__CLIENT_USER_ID + " integer not null, " + 
     		Constants.TABLE_ATTITUDES__KIND + " text not null ,"+
             Constants.TABLE_ATTITUDES_IS_SYNED + "  text);";
+    
+    private static final String create_data_lists = "create table "+
+            Constants.TABLE_DATA_LISTS + " ( " + 
+            Constants.KEY_ID + " integer primary key autoincrement, " +
+    		Constants.TABLE_DATA_LISTS_USER_ID + " integer , " + 
+            Constants.TABLE_DATA_LISTS_TITLE + " text , " + 
+    		Constants.TABLE_DATA_LISTS_KIND + " text , "+
+    		Constants.TABLE_DATA_LISTS_PUBLIC + " text , "+
+            Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " integer );";
+    
+    private static final String create_data_items = "create table "+
+            Constants.TABLE_DATA_ITEMS + " ( " + 
+            Constants.KEY_ID + " integer primary key, " +
+    		Constants.TABLE_DATA_ITEMS_TITLE + " text , " + 
+            Constants.TABLE_DATA_ITEMS_CONTENT + " text , " + 
+    		Constants.TABLE_DATA_ITEMS_URL + " text , "+
+    		Constants.TABLE_DATA_ITEMS_KIND + " text , "+
+    		Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " integer, "+
+            Constants.TABLE_DATA_ITEMS_POSITION + " integer );";
+    
+    private static final String create_watch = "create table "+
+            Constants.TABLE_WATCH + " ( " + 
+            Constants.KEY_ID + " integer primary key, " +
+    		Constants.TABLE_WATCH_USER_ID + " integer , " + 
+            Constants.TABLE_WATCH_DATA_LIST_ID + " integer );";
 
     public TeamknDBHelper(Context context, String name, CursorFactory factory,
                           int version) {
@@ -98,7 +123,14 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL(create_users);
             
         db.execSQL(create_attitudes);
-        System.out.println("create_attitudes = " + create_attitudes);
+        
+        db.execSQL(create_data_lists);
+        db.execSQL(create_data_items);
+        db.execSQL(create_watch);
+        
+//        System.out.println("data_lists " +create_data_lists );
+//        System.out.println("create_data_items " + create_data_items);
+//        System.out.println("watch " + create_watch);
         
     }
 
@@ -114,6 +146,11 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists " + Constants.TABLE_USERS);
         
         db.execSQL("drop table if exists " + Constants.TABLE_ATTITUDES);
+        
+        db.execSQL("drop table if exists " + Constants.TABLE_DATA_LISTS);
+        db.execSQL("drop table if exists " + Constants.TABLE_DATA_ITEMS);
+        db.execSQL("drop table if exists " + Constants.TABLE_WATCH);
+        
         onCreate(db);
     }
 }
