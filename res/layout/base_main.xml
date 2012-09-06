@@ -85,7 +85,7 @@
             />
         </RelativeLayout>
         
-        <ImageView
+       <!--  <ImageView
             android:id="@+id/manual_syn_bn"
             android:src="@drawable/refresh"
             android:contentDescription="@string/manual_syn_bn"
@@ -116,7 +116,7 @@
             android:textSize="10dp"
             android:textColor="#000"
             android:text=""
-        />
+        /> -->
     </RelativeLayout>
 
     <!-- data_list -->
@@ -127,6 +127,8 @@
       <ListView
           android:id="@+id/data_list"
           style="@style/no_padding_body"
+          android:divider="#00000000"
+          android:descendantFocusability="beforeDescendants"
       />
  </RelativeLayout>
 </LinearLayout>

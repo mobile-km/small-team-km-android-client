@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.model.DataList;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
@@ -23,7 +24,6 @@ public class DataListDBHelper extends BaseModelDBHelper {
     values.put(Constants.TABLE_DATA_LISTS_PUBLIC,public_boolean);
     
     db.insert(Constants.TABLE_DATA_LISTS, null, values);
-    
     db.close();
   }
   
@@ -36,31 +36,31 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    
-	    if(dataList.id==0){
+	    if(find(dataList.id).id == -1){ 
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    	System.out.println("insert= " + dataList.toString());
 	    }else{
-	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.id+""});
+	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	    	System.out.println("update= " + dataList.toString());
 	    }
 	    db.close();
   }
-  
-  public static DataList find(){
-	  DataList datalist;
-    SQLiteDatabase db = get_read_db();
-    Cursor cursor = db.rawQuery("SELECT * FROM " + Constants.TABLE_DATA_LISTS + " where max("+Constants.KEY_ID+")",
-            null);
-
-    boolean has_value = cursor.moveToFirst();
-    if(has_value){
-    	datalist = build_by_cursor(cursor);
-    }else{
-    	datalist = DataList.NIL_DATA_LIST;
-    }
-    
-    cursor.close();
-    db.close();
-    return datalist;
-  }
+  public static void pull(DataList dataList){
+	    SQLiteDatabase db = get_write_db();  
+	    ContentValues values = new ContentValues();
+	    values.put(Constants.TABLE_DATA_LISTS_USER_ID,dataList.user_id);
+	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
+	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
+	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
+	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
+	    
+	    if(find_by_server_data_list_id(dataList.server_data_list_id).id == -1){ 
+	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    }else{
+	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	    }
+	    db.close();
+}
   public static List<DataList> all() throws Exception {
       SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
@@ -73,6 +73,8 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  DataList datalist = build_by_cursor(cursor);
           datalists.add(datalist);
       }
+      cursor.close();
+      db.close();
 	return datalists;
   }
   public static DataList find(int id){

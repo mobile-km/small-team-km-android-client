@@ -21,6 +21,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,13 +74,13 @@ public class MainActivity extends TeamknBaseActivity{
 		
         public final static String COLLECTION = "COLLECTION";
         public final static String STEP= "STEP";
-        static int account_page = 10;
+        static int account_page = 20;
         static int now_page = 1;
     }
 	
 	//  node_listView_show 数据
-	private  ListView data_list;
-    DataListAdapter dataListAdapter;
+	ListView data_list;
+	DataListAdapter dataListAdapter;
     List<DataList> datalists;
     View footer_view;
     EditText add_data_list_et;
@@ -119,34 +122,33 @@ public class MainActivity extends TeamknBaseActivity{
         view_show = inflater.inflate(R.layout.base_main, null);
         layout.addView(view_show);
 
-	  
-		
-		data_syn_textview = (TextView)view_show.findViewById(R.id.main_data_syn_text);
-		data_syn_progress_bar = (ProgressBar)view_show.findViewById(R.id.main_data_syn_progress_bar);
-		progress_set_num = (TextView)view_show.findViewById(R.id.progress_set_num);
-		manual_syn_bn = (ImageView)view_show.findViewById(R.id.manual_syn_bn);
-		
-		// 注册更新服务
-		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
-		bindService(intent, conn, Context.BIND_AUTO_CREATE);
-		   
-		// 开始后台索引服务
-		IndexService.start(this);
-		IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
-		
-		// 注册更新表情反馈服务
-		startService(new Intent(MainActivity.this,FaceCommentService.class));
-		SharedParam.saveParam(this, 0);
-		FaceCommentService.context = this;	
-    
-		// 启动刷新联系人状态服务
-		startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-		// 启动更新 对话串的服务
-		startService(new Intent(MainActivity.this,SynChatService.class));
+//		data_syn_textview = (TextView)view_show.findViewById(R.id.main_data_syn_text);
+//		data_syn_progress_bar = (ProgressBar)view_show.findViewById(R.id.main_data_syn_progress_bar);
+//		progress_set_num = (TextView)view_show.findViewById(R.id.progress_set_num);
+//		manual_syn_bn = (ImageView)view_show.findViewById(R.id.manual_syn_bn);
+//		
+//		// 注册更新服务
+//		Intent intent = new Intent(MainActivity.this,SynNoteService.class);
+//		bindService(intent, conn, Context.BIND_AUTO_CREATE);
+//		   
+//		// 开始后台索引服务
+//		IndexService.start(this);
+//		IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
+//		
+//		// 注册更新表情反馈服务
+//		startService(new Intent(MainActivity.this,FaceCommentService.class));
+//		SharedParam.saveParam(this, 0);
+//		FaceCommentService.context = this;	
+//    
+//		// 启动刷新联系人状态服务
+//		startService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+//		// 启动更新 对话串的服务
+//		startService(new Intent(MainActivity.this,SynChatService.class));
 		
         
 		//加载node_listview
 		data_list = (ListView)layout.findViewById(R.id.data_list);
+		data_list.setItemsCanFocus(true);
 		bind_add_footer_view();
 		load_list();
 	}
@@ -173,12 +175,11 @@ public class MainActivity extends TeamknBaseActivity{
                     if(add_data_list_et_str!=null 
                     		&& !add_data_list_et_str.equals(null)
                     		&& !BaseUtils.is_str_blank(add_data_list_et_str)){
-                    	Toast.makeText(MainActivity.this, "可以进行验证  " + add_data_list_et_str, Toast.LENGTH_SHORT).show(); 
                     	if(BaseUtils.is_wifi_active(MainActivity.this)){
     						try {
     							DataListDBHelper.create(current_user().user_id , add_data_list_et_str, RequestCode.COLLECTION, "true");
-								HttpApi.DataList.create(DataListDBHelper.find());
-							} catch (Exception e) {
+    							HttpApi.DataList.create(DataListDBHelper.all().get(0));
+    						} catch (Exception e) {
 								e.printStackTrace();
 							}
     					}
@@ -220,7 +221,7 @@ public class MainActivity extends TeamknBaseActivity{
 			public List<DataList> do_in_background(Void... params) throws Exception {
 //					datalists = NoteDBHelper.all(true);
 					if(BaseUtils.is_wifi_active(MainActivity.this)){
-//						HttpApi.DataList.pull(RequestCode.COLLECTION, RequestCode.now_page, RequestCode.account_page);
+						HttpApi.DataList.pull(RequestCode.COLLECTION, RequestCode.now_page, RequestCode.account_page);
 						datalists = DataListDBHelper.all();
 					}
 					return datalists;
@@ -234,13 +235,13 @@ public class MainActivity extends TeamknBaseActivity{
 		}.execute();    
 		
 		
-//		data_list.setOnItemClickListener(new OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//					long arg3) {
-//				System.out.println(arg2 + " : " + arg3);
-//			}
-//		});
+		data_list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				System.out.println(arg2 + " : " + arg3);
+			}
+		});
     }	
 
 	// 处理其他activity界面的回调  有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
@@ -268,14 +269,14 @@ public class MainActivity extends TeamknBaseActivity{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// 解除 和 更新笔记服务的绑定
-		unbindService(conn);
-		// 关闭更新联系人状态服务
-		stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
-		// 关闭更新对话串的服务
-		stopService(new Intent(MainActivity.this,SynChatService.class));
-		IndexService.stop();
-		stopService(new Intent(MainActivity.this,FaceCommentService.class));
+//		// 解除 和 更新笔记服务的绑定
+//		unbindService(conn);
+//		// 关闭更新联系人状态服务
+//		stopService(new Intent(MainActivity.this,RefreshContactStatusService.class));
+//		// 关闭更新对话串的服务
+//		stopService(new Intent(MainActivity.this,SynChatService.class));
+//		IndexService.stop();
+//		stopService(new Intent(MainActivity.this,FaceCommentService.class));
 	}
 
 	 public class SynUIBinder{

@@ -80,7 +80,7 @@ public class HttpApi {
     //data_lists
     public static final String 获取_data_list     =  "/api/data_lists";
     public static final String 创建_data_list     =  "/api/data_lists";
-    public static final String 修改_data_list     =  "/api/data_lists/:";
+    public static final String 修改_data_list     =  "/api/data_lists/";
 
     // LoginActivity
     // 用户登录请求
@@ -631,7 +631,7 @@ public class HttpApi {
 			                
 			                com.teamkn.model.DataList dataList_server =
 			                		new com.teamkn.model.DataList( creator_id, title, kind, public_boolean,server_id);
-			                DataListDBHelper.update(dataList_server);
+			                DataListDBHelper.pull(dataList_server);
 	                  }  
 		              return null;
 		          }
@@ -653,6 +653,7 @@ public class HttpApi {
 		                String title  = json.getString("title");
 		                String kind   = json.getString("kind");
 		                String public_boolean  = json.getString("public");
+		                
 		                com.teamkn.model.DataList dataList_server =
 		                		new com.teamkn.model.DataList
 		                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
@@ -662,6 +663,7 @@ public class HttpApi {
  	     }.go();
        }
     	public static void update(final com.teamkn.model.DataList dataList) throws Exception{
+    		System.out.println("dataList " + dataList.toString());
     		new TeamknPutRequest<Void>( 修改_data_list + dataList.server_data_list_id,
     				new PostParamText("title", dataList.title)) {
 						@Override

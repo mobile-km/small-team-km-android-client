@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/list_item"
-    android:descendantFocusability="blocksDescendants"   
+    style="@style/list_item"  
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"     
+    android:id="@+id/list_data_list_item_rl"
+    android:descendantFocusability="beforeDescendants"
 >
     <!-- android:clickable="true" -->
     <RelativeLayout 
@@ -26,13 +27,12 @@
 	       android:text="@string/app_name"
 	       android:padding="10dp"
 	       android:background="@color/gainsboro"
-	       android:clickable="true"
-	       android:paddingRight="70dp"
+	       android:paddingRight="80dp"
 	   />
 	   <TextView
 	       android:id="@+id/list_note_title_tv_go"
 	       style="@style/text"
-	       android:layout_width="wrap_content"
+	       android:layout_width="80dp"
 	       android:gravity="center"
 	       android:textColor="@color/black"
 	       android:text="@string/app_name"
@@ -50,9 +50,10 @@
         android:gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"  
-        style="?android:attr/textViewStyle"
-        android:hint="新建列表"
+        android:hint="修改列表"
         android:textColor="@color/black"
-        android:padding="10dp"       
+        android:padding="10dp" 
+        android:clickable="false" 
+        android:enabled="false"
     />
 </RelativeLayout>

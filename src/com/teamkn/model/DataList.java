@@ -2,7 +2,7 @@ package com.teamkn.model;
 import com.teamkn.model.base.BaseModel;
 
 public class DataList extends BaseModel {
-	  public int id;
+	  public int id = -1;
 	  public int user_id;
 	  public String title;
 	  public String kind;
@@ -75,5 +75,8 @@ public class DataList extends BaseModel {
 		this.public_boolean = public_boolean;
 		this.server_data_list_id = server_data_list_id;
 	}  
-	
+	@Override
+	public String toString() {
+		return id+" : "+user_id+" : "+title+" : "+kind+" : "+ public_boolean+" : "+server_data_list_id;
+	}
 }
