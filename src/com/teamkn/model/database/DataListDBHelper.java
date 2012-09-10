@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.teamkn.Logic.HttpApi;
 import com.teamkn.model.DataList;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
@@ -61,17 +60,19 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
 }
-  public static List<DataList> all() throws Exception {
-      SQLiteDatabase db = get_read_db();
+  public static List<DataList> all(String data_list_type,String data_list_public) throws Exception {
+	  SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
       Cursor cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      null, null, null, null,
+                      Constants.TABLE_DATA_LISTS_KIND + " = ?  AND " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
+                      new String[]{data_list_type,data_list_public}, null, null,
                       Constants.KEY_ID + " DESC");
 
       while (cursor.moveToNext()) {
     	  DataList datalist = build_by_cursor(cursor);
           datalists.add(datalist);
+          System.out.println(datalist.toString());
       }
       cursor.close();
       db.close();

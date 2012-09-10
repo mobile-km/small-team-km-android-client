@@ -17,6 +17,7 @@ import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
+import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.model.database.UserDBHelper;
@@ -81,7 +82,11 @@ public class HttpApi {
     public static final String 获取_data_list     =  "/api/data_lists";
     public static final String 创建_data_list     =  "/api/data_lists";
     public static final String 修改_data_list     =  "/api/data_lists/";
-
+    
+    // data_item
+    public static final String 获取_data_item    =  "/api/data_lists/";
+//    /api/data_list/:data_list_id/data_items
+    public static final String 创建_data_item    =  "/api/data_lists/";
     // LoginActivity
     // 用户登录请求
     public static boolean user_authenticate(String email, String password) throws Exception {
@@ -606,11 +611,6 @@ public class HttpApi {
     }
     
     public static class DataList{
-    	public DataList(int creator_id, String title, String kind,
-				String public_boolean, int server_id) {
-			// TODO Auto-generated constructor stub
-		}
-
 		public static void pull(String kind,int page , int per_page) throws Exception{  
     		 new TeamknGetRequest<Void>(获取_data_list,
 	            new BasicNameValuePair("kind", kind),
@@ -639,7 +639,7 @@ public class HttpApi {
         }
     	
     	public static void create(final com.teamkn.model.DataList dataList) throws Exception{
-            
+           System.out.println("create server datalist :  " +dataList.toString());
  		   new TeamknPostRequest<Void>( 创建_data_list,
  	            new PostParamText("data_list[title]",dataList.title),
  	            new PostParamText("data_list[kind]",dataList.kind)
@@ -656,7 +656,7 @@ public class HttpApi {
 		                
 		                com.teamkn.model.DataList dataList_server =
 		                		new com.teamkn.model.DataList
-		                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
+		                		(dataList.id, creator_id, title, kind, dataList.public_boolean,server_id);
 		                DataListDBHelper.update(dataList_server);
 					    return null;   	
  	              }
@@ -684,7 +684,140 @@ public class HttpApi {
 			}.go();
     	}
     }
-    
+    public static class DataItem{
+    	public static void pull(final int data_list_id) throws Exception{  
+   		 new TeamknGetRequest<Void>(获取_data_item + data_list_id+ "/data_items"){
+		          @Override
+		          public Void on_success(String response_text) throws Exception {
+		        	  
+		        	  JSONArray data_list_array = new JSONArray(response_text);
+	                  System.out.println("data_item pull response_text " + response_text);
+	            	  for (int i = 0; i < data_list_array.length(); i++) {
+			                JSONObject json = data_list_array.getJSONObject(i);
+			                
+			                int server_id = json.getInt("id");
+			                String title  = json.getString("title");
+			                String kind   = json.getString("kind");
+			                String content  = json.getString("content");
+			                String url   = json.getString("url");
+			                String image_url  = json.getString("image_url");
+			                int position = json.getInt("position");
+			                
+			                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
+			                    HttpApi.DataItem.pull_image(server_id+"", image_url);
+			                }
+			                com.teamkn.model.DataItem data_item_server =
+			                		new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_id, position,server_id);
+			                DataItemDBHelper.pull(data_item_server);
+	                  }  
+		              return null;
+		          }
+		        }.go();
+        }
+    	private static void pull_image(String uuid, String attachment_url) {
+
+            try {
+                HttpGet httpget = new HttpGet(attachment_url);
+                HttpResponse response = TeamknHttpRequest.get_httpclient_instance().execute(httpget);
+                int status_code = response.getStatusLine().getStatusCode();
+                if (HttpStatus.SC_OK == status_code) {
+                    InputStream in = response.getEntity().getContent();
+                    File file = com.teamkn.model.DataItem.data_item_image_file(uuid);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    IOUtils.copy(in, fos);
+                    com.teamkn.model.DataItem.data_item_thumb_image_file(uuid);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+   	public static void create(final com.teamkn.model.DataItem dataItem) throws Exception{
+   		  String value = null;
+   		  if(dataItem.kind.equals(DataItemDBHelper.Kind.URL)){
+   			value = dataItem.url;
+   		  }else{
+   			value = dataItem.content;
+   		  }
+		   new TeamknPostRequest<Void>( 创建_data_item + dataItem.data_list_id+ "/data_items",
+	            new PostParamText("title",dataItem.title),
+	            new PostParamText("kind",dataItem.kind),
+	            new PostParamText("value",value)
+		   ) {
+	              @Override
+	              public Void on_success(String response_text) throws Exception {
+		                System.out.println("data_list pull response_text " + response_text);
+		                JSONObject json = new JSONObject(response_text);
+		                
+		                int server_id = json.getInt("id");
+		                String title  = json.getString("title");
+		                String kind   = json.getString("kind");
+		                String content  = json.getString("content");
+		                String url   = json.getString("url");
+		                String image_url  = json.getString("image_url");
+		                int position = json.getInt("position");
+		                
+		                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
+		                    HttpApi.DataItem.pull_image(server_id+"", image_url);
+		                }
+		                com.teamkn.model.DataItem data_item_server =
+		                		new com.teamkn.model.DataItem(dataItem.id, title, content, url, kind, dataItem.data_list_id, position,server_id);
+		                DataItemDBHelper.update(data_item_server);
+					    return null;   	
+	              }
+	     }.go();
+      }
+   	public static void create_image(final com.teamkn.model.DataItem dataItem,File image) throws Exception{
+ 		  
+		   new TeamknPostRequest<Void>( 创建_data_item + dataItem.data_list_id+ "/data_items",
+	            new PostParamText("title",dataItem.title),
+	            new PostParamText("kind",dataItem.kind),
+	            new PostParamFile("value", image.getPath(), "image/jpeg")
+		   ) {
+	              @Override
+	              public Void on_success(String response_text) throws Exception {
+		                System.out.println("data_list pull response_text " + response_text);
+		                JSONObject json = new JSONObject(response_text);
+		                
+		                int server_id = json.getInt("id");
+		                String title  = json.getString("title");
+		                String kind   = json.getString("kind");
+		                String content  = json.getString("content");
+		                String url   = json.getString("url");
+		                String image_url  = json.getString("image_url");
+		                int position = json.getInt("position");
+		                
+		                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
+		                    HttpApi.DataItem.pull_image(server_id+"", image_url);
+		                }
+		                com.teamkn.model.DataItem data_item_server =
+		                		new com.teamkn.model.DataItem(-1, title, content, url, kind, dataItem.data_list_id, position,server_id);
+		                DataItemDBHelper.pull(data_item_server);
+					    return null;   	
+	              }
+	     }.go();
+    }
+   	public static void update(final com.teamkn.model.DataList dataList) throws Exception{
+   		System.out.println("dataList " + dataList.toString());
+   		new TeamknPutRequest<Void>( 修改_data_list + dataList.server_data_list_id,
+   				new PostParamText("title", dataList.title)) {
+						@Override
+						public Void on_success(String response_text)
+								throws Exception {
+							    JSONObject json = new JSONObject(response_text);
+				                int server_id = json.getInt("id");
+				                int creator_id  = json.getInt("creator_id");
+				                String title  = json.getString("title");
+				                String kind   = json.getString("kind");
+				                String public_boolean  = json.getString("public");
+				                com.teamkn.model.DataList dataList_server =
+				                		new com.teamkn.model.DataList
+				                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
+				                DataListDBHelper.update(dataList_server);
+							return null;
+						}
+			}.go();
+   	}
+    }
     
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;

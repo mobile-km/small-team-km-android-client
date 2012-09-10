@@ -91,7 +91,7 @@ public class Constants {
     public static final String TABLE_DATA_ITEMS_KIND = "kind";
     public static final String TABLE_DATA_ITEMS_DATA_LIST_ID = "data_list_id";
     public static final String TABLE_DATA_ITEMS_POSITION = "position";
-    
+    public static final String TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID = "server_data_item_id";
     // watch
     public static final String TABLE_WATCH = "watch";
     public static final String TABLE_WATCH_USER_ID = "user_id";

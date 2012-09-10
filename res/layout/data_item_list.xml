@@ -20,7 +20,7 @@
         <Button
              android:text="新建子项"
              style="@style/head_bar_button_right"
-             android:onClick="on_edit_account_button_click"
+             android:onClick="on_create_data_item_click"
         />
     </RelativeLayout>
     <RelativeLayout
@@ -81,8 +81,10 @@
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
-    <ListView
-            android:id="@+id/note_list"
-            style="@style/no_padding_body"
-     />
+    <com.teamkn.activity.dataitem.ListViewInterceptor
+	    android:id="@+id/list"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent"
+	    android:drawSelectorOnTop="false" 
+    />
 </LinearLayout>

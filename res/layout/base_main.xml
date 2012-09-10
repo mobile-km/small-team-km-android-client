@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- 主界面，包含功能选择 -->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/body"
 >    
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/head_bar"
+        android:id="@+id/head"
     >
         <ImageView
             android:id="@+id/iv_foot_view"
@@ -45,6 +46,8 @@
     </RelativeLayout>    
     
     <RelativeLayout
+        android:id="@+id/top"
+        android:layout_below="@+id/head"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -60,7 +63,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/main_user_avatar"
             android:layout_marginLeft="10dp"
         >
@@ -72,20 +75,35 @@
                android:layout_alignParentTop="true"
                android:textSize="20dp"
                android:gravity="center_vertical"
-               android:layout_marginTop="10dp"
-               android:layout_marginBottom="10dp"
+               android:layout_marginBottom="20dp"
             />
-            <TextView
+            <!-- <TextView
 	           android:id="@+id/main_data_syn_text"
 	           android:layout_height="20dp"
 	           android:layout_width="fill_parent"
 	           android:textSize="13dp"
 	           android:text="同步更新时间显示在此"
 	           android:layout_below="@+id/main_user_name"
-            />
+            /> -->
+            <LinearLayout 
+                android:layout_below="@+id/main_user_name"
+                 android:layout_height="40dp"
+                android:layout_width="fill_parent">
+                <ImageButton
+                    android:id="@+id/data_list_search_ib"
+                    android:src="@android:drawable/ic_search_category_default" 
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                />
+                <EditText
+                    android:id="@+id/data_list_search_edit_et"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" 
+                />
+            </LinearLayout>
         </RelativeLayout>
         
-       <!--  <ImageView
+      <ImageView
             android:id="@+id/manual_syn_bn"
             android:src="@drawable/refresh"
             android:contentDescription="@string/manual_syn_bn"
@@ -93,17 +111,16 @@
             android:layout_width="50dp"
             android:onClick="click_manual_syn" 
             android:layout_alignParentRight="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="15dp"
         />
-        
         <ProgressBar
             android:id="@+id/main_data_syn_progress_bar"
             style="@android:style/Widget.ProgressBar.Inverse"
             android:layout_height="50dp"
             android:layout_width="50dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="15dp"
         />
         <TextView
@@ -111,18 +128,47 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="27dp"
             android:textSize="10dp"
             android:textColor="#000"
             android:text=""
-        /> -->
+        />
     </RelativeLayout>
-
+  <LinearLayout 
+      android:id="@+id/bar"
+      android:layout_below="@+id/top"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:orientation="horizontal"
+      android:gravity="center"
+  >
+      <Button
+           android:onClick="click_collection_button"
+           android:layout_width="80dp"
+           android:layout_height="wrap_content"
+           android:text="收集列表"
+      />
+      <Button
+           android:onClick="click_step_button"
+           android:layout_width="80dp"
+           android:layout_height="wrap_content"
+           android:text="步骤列表"
+      />
+      <Button
+           android:onClick="click_all_button"
+           android:layout_width="80dp"
+           android:layout_height="wrap_content"
+           android:text="所有"
+      />
+  </LinearLayout>
     <!-- data_list -->
   <RelativeLayout
+      android:id="@+id/list"
+      android:layout_below="@+id/bar"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="50dp"
   >
       <ListView
           android:id="@+id/data_list"
@@ -131,4 +177,31 @@
           android:descendantFocusability="beforeDescendants"
       />
  </RelativeLayout>
-</LinearLayout>
+ <RelativeLayout 
+     android:layout_gravity="bottom"
+     android:layout_alignParentBottom="true"
+     android:layout_width="fill_parent"
+     android:background="@color/white"
+     android:gravity="center"
+     android:layout_height="50dp">
+      
+      <TextView
+         android:text="私有"
+         android:textColor="@color/black"
+         android:gravity="center"
+         android:layout_width="50dp"
+         android:layout_height="50dp"
+         android:background="#789"
+         android:id="@+id/public_data_list_tv"
+     />
+     <ImageView
+         android:layout_marginLeft="80dp"
+         android:layout_alignLeft="@+id/public_data_list_tv"
+         android:onClick="click_add_data_list_iv"
+         android:layout_width="50dp"
+         android:layout_height="50dp"
+         android:background="#789"
+         android:src="@android:drawable/ic_input_add"  
+     />
+ </RelativeLayout>
+</RelativeLayout>

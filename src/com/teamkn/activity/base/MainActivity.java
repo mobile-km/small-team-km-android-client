@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.datalist.CreateDataListActivity;
+import com.teamkn.activity.datalist.CreateDataListActivity.RequestCode;
 import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
@@ -71,9 +73,15 @@ public class MainActivity extends TeamknBaseActivity{
 	public static class RequestCode {
 		public final static int EDIT_TEXT = 0;
         public final static int SHOW_BACK= 9;
-		
+
         public final static String COLLECTION = "COLLECTION";
         public final static String STEP= "STEP";
+        public final static String ALL = "ALL";
+        
+        public static String data_list_type = COLLECTION;
+        
+        public static String data_list_public = "true";
+        
         static int account_page = 20;
         static int now_page = 1;
     }
@@ -85,6 +93,9 @@ public class MainActivity extends TeamknBaseActivity{
     View footer_view;
     EditText add_data_list_et;
     RelativeLayout show_add_data_list_rl;
+    
+    TextView public_data_list_tv;
+    
     
 	private TextView data_syn_textview;         // 同步更新时间
 	private ProgressBar data_syn_progress_bar;  // 同步更新进度条
@@ -145,11 +156,9 @@ public class MainActivity extends TeamknBaseActivity{
 //		// 启动更新 对话串的服务
 //		startService(new Intent(MainActivity.this,SynChatService.class));
 		
-        
+        public_data_list_tv = (TextView)findViewById(R.id.public_data_list_tv);
+        public_data_list_tv.setOnClickListener(click_public_tv);
 		//加载node_listview
-		data_list = (ListView)layout.findViewById(R.id.data_list);
-		data_list.setItemsCanFocus(true);
-		bind_add_footer_view();
 		load_list();
 	}
 	// 设置 创建新列表按钮事件
@@ -177,8 +186,9 @@ public class MainActivity extends TeamknBaseActivity{
                     		&& !BaseUtils.is_str_blank(add_data_list_et_str)){
                     	if(BaseUtils.is_wifi_active(MainActivity.this)){
     						try {
-    							DataListDBHelper.create(current_user().user_id , add_data_list_et_str, RequestCode.COLLECTION, "true");
-    							HttpApi.DataList.create(DataListDBHelper.all().get(0));
+    							DataList dataList = new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type,RequestCode.data_list_public,-1);
+    							DataListDBHelper.update(dataList);
+    							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
     						} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -213,6 +223,8 @@ public class MainActivity extends TeamknBaseActivity{
 	}
 	//加载node_listview
 	private void load_list() { 
+		data_list = (ListView)layout.findViewById(R.id.data_list);
+//		bind_add_footer_view();
 		datalists  = new ArrayList<DataList>();
 		dataListAdapter = new DataListAdapter(MainActivity.this);	
 		
@@ -221,8 +233,8 @@ public class MainActivity extends TeamknBaseActivity{
 			public List<DataList> do_in_background(Void... params) throws Exception {
 //					datalists = NoteDBHelper.all(true);
 					if(BaseUtils.is_wifi_active(MainActivity.this)){
-						HttpApi.DataList.pull(RequestCode.COLLECTION, RequestCode.now_page, RequestCode.account_page);
-						datalists = DataListDBHelper.all();
+						HttpApi.DataList.pull(RequestCode.data_list_type, RequestCode.now_page, RequestCode.account_page);
+						datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 					}
 					return datalists;
 			}
@@ -353,4 +365,35 @@ public class MainActivity extends TeamknBaseActivity{
 		        });
 	       }
 	  }		
+	 public void click_add_data_list_iv(View view){
+		 open_activity(CreateDataListActivity.class);
+	 }
+	 public void click_collection_button(View view){
+		 RequestCode.data_list_type  = RequestCode.COLLECTION;
+		 load_list();
+	 }
+	 public void click_step_button(View view){
+		 RequestCode.data_list_type  = RequestCode.STEP;
+		 load_list();
+	 }
+	 public void click_all_button(View view){
+		 RequestCode.data_list_type  = RequestCode.ALL;
+		 load_list();
+	 }
+	 public void base_main_click_public_data_list_tv(){
+			if(RequestCode.data_list_public .equals("true")){
+				public_data_list_tv.setText("公开");
+				RequestCode.data_list_public = "false";
+			}else{
+				public_data_list_tv.setText("私有");
+				RequestCode.data_list_public = "true";
+			}
+			load_list();
+	 }
+	 OnClickListener click_public_tv = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			base_main_click_public_data_list_tv();
+		}
+	};
 }

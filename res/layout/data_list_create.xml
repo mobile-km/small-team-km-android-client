@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            android:id="@+id/head"
+            >
+        <Button
+            style="@style/head_bar_button_go_back"
+        />
+        <TextView
+	           style="@style/head_bar_text_center"
+	           android:text="创建列表"
+        />
+        <!-- <Button
+             android:text="@string/account_edit_button"
+             style="@style/head_bar_button_right"
+             android:onClick="on_edit_account_button_click"
+        /> -->
+    </RelativeLayout>
+    <TableRow
+        android:layout_below="@+id/head"
+        android:id="@+id/radio"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+		 <RadioGroup
+		     android:layout_width="fill_parent"
+		     android:layout_height="wrap_content"    
+		     android:gravity="center"
+		     android:orientation="horizontal" >
+			 <RadioButton    
+			    android:id="@+id/radiobutton_COLLECTION"
+			    android:layout_width="wrap_content"    
+			    android:layout_height="wrap_content"
+			    android:text="收集列表" /> 
+			 <RadioButton    
+			    android:id="@+id/radiobutton_STEP"
+			    android:layout_marginLeft="40dp"
+			    android:layout_width="wrap_content"    
+			    android:layout_height="wrap_content"
+			    android:text="步骤列表" />
+		 </RadioGroup>
+    </TableRow>
+    
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/radio"
+        android:id="@+id/create_data_list_et"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent" 
+    />
+    <RelativeLayout 
+        android:layout_below="@+id/create_data_list_et"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/create_data_list_msg_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="列表名称已存在" 
+            android:layout_marginRight="20dp"
+        />
+        <ImageView
+            android:layout_alignRight="@+id/click_data_list_save_iv"
+            android:onClick="click_data_list_public_iv"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="50dp"
+            android:id="@+id/data_list_public_iv"
+            android:src="@android:drawable/ic_lock_lock" 
+        />
+        <ImageView
+            android:id="@+id/click_data_list_save_iv"
+            android:layout_alignParentRight="true"
+            android:onClick="click_data_list_save_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_save"
+        />
+    </RelativeLayout>
+</RelativeLayout>

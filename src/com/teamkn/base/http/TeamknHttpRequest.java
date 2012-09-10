@@ -61,8 +61,6 @@ public abstract class TeamknHttpRequest<TResult> {
                 throw new ResponseNot200Exception();    //不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
         }
     }
-    
-
     public TResult on_unprocessable_entity(String responst_text) {
 		return null;
 	}

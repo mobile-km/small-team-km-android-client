@@ -25,24 +25,24 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.activity.dataitem.DataItemListActivity;
-import com.teamkn.activity.note.EditNoteActivity;
 import com.teamkn.activity.note.NoteListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataListDBHelper;
 
-public class DataListAdapter extends TeamknBaseAdapter<DataList> {
+public class DataItemListAdapter extends TeamknBaseAdapter<DataItem> {
     Activity activity ;
-    public DataListAdapter(TeamknBaseActivity activity) {
+    public DataItemListAdapter(TeamknBaseActivity activity) {
         super(activity);
         this.activity = activity;
     }
 
     @Override
     public View inflate_view() {
-        return inflate(R.layout.list_data_list_item, null);
+        return inflate(R.layout.list_data_item_list_item, null);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 
     @Override
     public void fill_with_data(BaseViewHolder holder,
-                               final DataList item,
+                               final DataItem item,
                                int position) {
         final ViewHolder view_holder = (ViewHolder) holder;
         view_holder.note_info_tv.setTag(R.id.tag_note_uuid, item);
@@ -68,70 +68,11 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.list_note_title_tv_go.setText(item.id+"");
         view_holder.update_data_list_et.setText(item.title);
         
-      view_holder.list_note_title_tv_edit.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				System.out.println("view_holder.list_note_title_tv_edit  show_left   "  + item.id);
-//				InputMethodManager imm = (InputMethodManager)activity. getSystemService(Context.INPUT_METHOD_SERVICE);
-//		        imm.showSoftInput(view_holder.update_data_list_et, InputMethodManager.HIDE_NOT_ALWAYS);
-//		        View contentView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup, null);
-				
-//				view_holder.show_relativelayout.setVisibility(View.GONE);
-//				view_holder.update_data_list_et.setVisibility(View.VISIBLE);
-//
-//				view_holder.update_data_list_et.setFocusable(true);
-//				view_holder.update_data_list_et.setEnabled(true);
-//				
-//				view_holder.update_data_list_et.requestFocus();
-				
-				AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		
-				builder.setTitle("请修改");
-				builder.setIcon(android.R.drawable.ic_dialog_info);
-				
-				final EditText view = new EditText(activity);
-				view.setText(item.title);
-				builder.setView(view);
-				builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final String add_data_list_et_str = view.getText().toString();
-	                    if(add_data_list_et_str!=null 
-	                    		&& !add_data_list_et_str.equals(null)
-	                    		&& !BaseUtils.is_str_blank(add_data_list_et_str)
-	                    		&& !add_data_list_et_str.equals(item.title)){
-	                    	Toast.makeText(activity, item.id + "  可以进行验证  " + add_data_list_et_str, Toast.LENGTH_SHORT).show(); 
-	                    	if(BaseUtils.is_wifi_active(activity)){	
-	                    		item.setTitle(add_data_list_et_str);
-	                    		DataListDBHelper.update(item);
-	                    		try {
-									HttpApi.DataList.update(DataListDBHelper.find(item.id));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-	    					}
-//	                    	view_holder.update_data_list_et.setText(null);
-	                    	view_holder.show_relativelayout.setVisibility(View.VISIBLE);
-	        				view_holder.update_data_list_et.setVisibility(View.GONE);
-	        				view_holder.list_note_title_tv_edit.post(new Runnable() {
-								
-								@Override
-								public void run() {
-									view_holder.list_note_title_tv_edit.setText(add_data_list_et_str);	
-								}
-							});
-	                    }
-					}
-				});
-				builder.setNegativeButton("取消", null);
-				builder.show();
-			}
-		});
+      
         view_holder.list_note_title_tv_go.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(activity,DataItemListActivity.class);
-				intent.putExtra("data_list_id",item.id);
 				activity.startActivity(intent);
 			}
 		}); 

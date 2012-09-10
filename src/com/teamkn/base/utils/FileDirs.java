@@ -102,6 +102,8 @@ public class FileDirs {
      }
 
     public final static File TEAMKN_DIR = get_or_create_dir("/teamkn");
+    public final static File TEAMKN_DATA_ITEM_DIR = get_or_create_dir("/teamkn/dataitems");
+    
     public final static File TEAMKN_TEMP_DIR = get_or_create_dir("/teamkn/temp");
     public final static File TEAMKN_NOTES_DIR = get_or_create_dir("/teamkn/notes");
     public final static File TEAMKN_CAPTURE_DIR = get_or_create_dir("/teamkn/capture");

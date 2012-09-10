@@ -91,17 +91,18 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     
     private static final String create_data_items = "create table "+
             Constants.TABLE_DATA_ITEMS + " ( " + 
-            Constants.KEY_ID + " integer primary key, " +
+            Constants.KEY_ID + " integer primary key autoincrement, " +
     		Constants.TABLE_DATA_ITEMS_TITLE + " text , " + 
             Constants.TABLE_DATA_ITEMS_CONTENT + " text , " + 
     		Constants.TABLE_DATA_ITEMS_URL + " text , "+
     		Constants.TABLE_DATA_ITEMS_KIND + " text , "+
     		Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " integer, "+
-            Constants.TABLE_DATA_ITEMS_POSITION + " integer );";
+            Constants.TABLE_DATA_ITEMS_POSITION + " integer ,"+
+    		Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " integer );";
     
     private static final String create_watch = "create table "+
             Constants.TABLE_WATCH + " ( " + 
-            Constants.KEY_ID + " integer primary key, " +
+            Constants.KEY_ID + " integer primary key autoincrement, " +
     		Constants.TABLE_WATCH_USER_ID + " integer , " + 
             Constants.TABLE_WATCH_DATA_LIST_ID + " integer );";
 

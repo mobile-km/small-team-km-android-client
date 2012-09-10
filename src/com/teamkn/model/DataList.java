@@ -7,7 +7,7 @@ public class DataList extends BaseModel {
 	  public String title;
 	  public String kind;
 	  public String public_boolean;
-	  public int server_data_list_id;
+	  public int server_data_list_id=-1;
 	  
 	  
     public int getId() {
