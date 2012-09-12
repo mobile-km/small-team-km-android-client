@@ -26,7 +26,7 @@
 	</activity>
 	<activity android:name=".activity.base.BrowseSDCard" />
 	<activity android:name=".activity.base.LoginActivity" android:windowSoftInputMode="stateVisible"></activity>
-	<activity android:name=".activity.base.MainActivity"  android:label="HorzScrollWithImageMenu" android:windowSoftInputMode="adjustResize"></activity>
+	<activity android:name=".activity.base.MainActivity"  android:label="HorzScrollWithImageMenu" android:windowSoftInputMode="stateHidden"></activity>
 	<activity android:name=".activity.base.AboutActivity"></activity>
 	<activity android:name=".activity.base.TeamknSettingActivity" android:theme="@android:style/Theme.Black"></activity>
 	<activity android:name=".activity.base.AccountManagerActivity"></activity>

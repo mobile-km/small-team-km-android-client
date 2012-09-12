@@ -39,7 +39,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    	System.out.println("insert= " + dataList.toString());
 	    }else{
-	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.KEY_ID + " = ? ", new String[]{dataList.id+""});
 	    	System.out.println("update= " + dataList.toString());
 	    }
 	    db.close();
@@ -51,9 +51,10 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
 	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
 	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
-	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
+	    
 	    
 	    if(find_by_server_data_list_id(dataList.server_data_list_id).id == -1){ 
+	    	values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    }else{
 	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
@@ -63,11 +64,21 @@ public class DataListDBHelper extends BaseModelDBHelper {
   public static List<DataList> all(String data_list_type,String data_list_public) throws Exception {
 	  SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
-      Cursor cursor= db.query(Constants.TABLE_DATA_LISTS,
-                      get_columns(),
-                      Constants.TABLE_DATA_LISTS_KIND + " = ?  AND " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
-                      new String[]{data_list_type,data_list_public}, null, null,
-                      Constants.KEY_ID + " DESC");
+      Cursor cursor;
+      if(data_list_type.equals("ALL")){
+    	  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                  get_columns(),
+                   Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
+                  new String[]{data_list_public}, null, null,
+                  Constants.KEY_ID + " DESC");
+      }else{
+    	  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                  get_columns(),
+                  Constants.TABLE_DATA_LISTS_KIND + " = ?  AND " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
+                  new String[]{data_list_type,data_list_public}, null, null,
+                  Constants.KEY_ID + " DESC");
+      }
+      
 
       while (cursor.moveToNext()) {
     	  DataList datalist = build_by_cursor(cursor);

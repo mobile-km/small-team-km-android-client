@@ -215,7 +215,7 @@ public class ScrollLayout extends ViewGroup {
                 snapToScreen(mCurScreen + 1);    
                 
             } else if(mCurScreen==1 && (x<60&&x>0) && (y>0 && y<60) ){	
-            	snapToScreen(mCurScreen - 1); 
+            	/*snapToScreen(mCurScreen - 1); */
             }else if(mCurScreen==0 && (x<getChildAt(0).getMeasuredWidth()
             		&&x>getChildAt(0).getMeasuredWidth()-40) 
             		&& (y>0 && y<50) ){

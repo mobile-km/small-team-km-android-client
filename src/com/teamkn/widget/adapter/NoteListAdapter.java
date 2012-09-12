@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.note.EditNoteActivity;
+import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.base.utils.BaseUtils;
@@ -42,7 +43,6 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
         view_holder.note_image_iv_delete = (ImageView) view.findViewById(R.id.note_image_iv_delete);
         view_holder.note_time_tv = (TextView) view.findViewById(R.id.note_time_tv);
         return view_holder;
-
     }
 
     @Override
@@ -94,7 +94,7 @@ public class NoteListAdapter extends TeamknBaseAdapter<Note> {
                     String image_path = Note.note_image_file(item.uuid).getPath();
                     intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
                 } 
-                activity.startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+                activity.startActivityForResult(intent,SearchActivity.RequestCode.EDIT_TEXT);
 			}
 		});
         

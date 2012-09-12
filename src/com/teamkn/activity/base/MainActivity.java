@@ -71,7 +71,7 @@ public class MainActivity extends TeamknBaseActivity{
 	}
 	 
 	public static class RequestCode {
-		public final static int EDIT_TEXT = 0;
+		public final static int CREATE_DATA_LIST = 0 ;
         public final static int SHOW_BACK= 9;
 
         public final static String COLLECTION = "COLLECTION";
@@ -156,6 +156,14 @@ public class MainActivity extends TeamknBaseActivity{
 //		// 启动更新 对话串的服务
 //		startService(new Intent(MainActivity.this,SynChatService.class));
 		
+        Intent intent =getIntent();
+        String data_list_public = intent.getStringExtra("data_list_public");
+        String data_list_type = intent.getStringExtra("data_list_type");
+        if(data_list_public!=null && data_list_type!=null){
+        	RequestCode.data_list_public = data_list_public;
+        	RequestCode.data_list_type = data_list_type;
+        }
+        
         public_data_list_tv = (TextView)findViewById(R.id.public_data_list_tv);
         public_data_list_tv.setOnClickListener(click_public_tv);
 		//加载node_listview
@@ -233,7 +241,7 @@ public class MainActivity extends TeamknBaseActivity{
 			public List<DataList> do_in_background(Void... params) throws Exception {
 //					datalists = NoteDBHelper.all(true);
 					if(BaseUtils.is_wifi_active(MainActivity.this)){
-						HttpApi.DataList.pull(RequestCode.data_list_type, RequestCode.now_page, RequestCode.account_page);
+						HttpApi.DataList.pull(RequestCode.data_list_type, RequestCode.now_page,100);
 						datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 					}
 					return datalists;
@@ -244,9 +252,7 @@ public class MainActivity extends TeamknBaseActivity{
 				data_list.setAdapter(dataListAdapter);	
 				dataListAdapter.notifyDataSetChanged();
 		    }
-		}.execute();    
-		
-		
+		}.execute();    			
 		data_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -263,8 +269,14 @@ public class MainActivity extends TeamknBaseActivity{
     	if (resultCode != Activity.RESULT_OK) {
             return;
         }
+    	switch(requestCode){
+		  case RequestCode.CREATE_DATA_LIST:
+			  load_list();
+			  BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    " + RequestCode.CREATE_DATA_LIST);
+		    break;
+		}  
+		super.onActivityResult(requestCode, resultCode, data);
     }
-
 	//同步
 	public void click_manual_syn(View view){
 		if(syn_note_binder != null){
@@ -366,7 +378,9 @@ public class MainActivity extends TeamknBaseActivity{
 	       }
 	  }		
 	 public void click_add_data_list_iv(View view){
-		 open_activity(CreateDataListActivity.class);
+		 Intent intent = new Intent(MainActivity.this,CreateDataListActivity.class);
+		 startActivityForResult(intent, RequestCode.CREATE_DATA_LIST);
+		 
 	 }
 	 public void click_collection_button(View view){
 		 RequestCode.data_list_type  = RequestCode.COLLECTION;

@@ -1,5 +1,6 @@
 package com.teamkn.activity.datalist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -43,8 +44,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		create_data_list_et = (EditText)findViewById(R.id.create_data_list_et);
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
 		data_list_public_iv = (ImageView)findViewById(R.id.data_list_public_iv);
-		
 	}
+	
 	RadioButton.OnClickListener radioButtonListener = new RadioButton.OnClickListener(){
 		public void onClick(View v) {
 		  RadioButton radio= (RadioButton)v;
@@ -84,7 +85,12 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 						e.printStackTrace();
 					}
 			}
-         	create_data_list_et.setText("");
+         	Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
+         	
+         	intent.putExtra("data_list_public", RequestCode.data_list_public);
+         	intent.putExtra("data_list_type", RequestCode.data_list_type);
+         	startActivity(intent);
+         	this.finish();
          }
 	}
 }

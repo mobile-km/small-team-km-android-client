@@ -100,7 +100,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 	                    		&& !add_data_list_et_str.equals(null)
 	                    		&& !BaseUtils.is_str_blank(add_data_list_et_str)
 	                    		&& !add_data_list_et_str.equals(item.title)){
-	                    	Toast.makeText(activity, item.id + "  可以进行验证  " + add_data_list_et_str, Toast.LENGTH_SHORT).show(); 
 	                    	if(BaseUtils.is_wifi_active(activity)){	
 	                    		item.setTitle(add_data_list_et_str);
 	                    		DataListDBHelper.update(item);

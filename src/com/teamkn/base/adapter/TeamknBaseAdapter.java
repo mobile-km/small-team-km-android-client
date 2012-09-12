@@ -30,38 +30,6 @@ public abstract class TeamknBaseAdapter<M> extends BaseAdapter {
         this.items.remove(item);
         this.notifyDataSetChanged();
     }
-    public void insert_item(M item , int to){
-    	List<M> items_insert = new ArrayList<M>();
-    	if(to==items.size()+1){
-    		for(int i = 0 ; i <items.size(); i ++){
-    			items_insert.add(items.get(i));
-    		}
-    		items_insert.add(item);
-    	}else if (to==items.size()){
-    		for(int i = 0 ; i <items.size() ; i ++){
-    			if( i == to-1){
-    				items_insert.add(item);
-    				items_insert.add(items.get(i));	
-    			}else{
-    				items_insert.add(items.get(i));
-    			}
-    	   }
-    	}else{
-    		for(int i = 0 ; i <items.size(); i ++){
-    			if( i == to-1){
-    				items_insert.add(item);
-    				if(to-1 != items.size()){
-    					items_insert.add(items.get(i));
-    				}	
-    			}else{
-    				items_insert.add(items.get(i));
-    			}
-    		}
-    	} 
-//    	this.items.add(to, item);
-    	this.items = items_insert;
-    	this.notifyDataSetChanged();
-    }
     public void remove_item(int position) {
         this.items.remove(position);
         this.notifyDataSetChanged();

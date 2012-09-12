@@ -17,6 +17,9 @@ import com.teamkn.model.Note;
 import com.teamkn.model.database.NoteDBHelper;
 
 public class ShowNodeActivity extends TeamknBaseActivity{
+	public static class RequestCode {
+		public final static int EDIT_TEXT = 0 ;
+    }
 	public static boolean isRefash = false;
 	String note_uuid;
 	Note item ;
@@ -65,7 +68,7 @@ public class ShowNodeActivity extends TeamknBaseActivity{
             intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH,image_path);
         } 
         
-        startActivityForResult(intent,MainActivity.RequestCode.EDIT_TEXT);
+        startActivityForResult(intent,RequestCode.EDIT_TEXT);
         
         isRefash = true;
 	}
@@ -76,7 +79,7 @@ public class ShowNodeActivity extends TeamknBaseActivity{
             return;
         }
         switch (requestCode) {
-            case MainActivity.RequestCode.EDIT_TEXT:
+            case RequestCode.EDIT_TEXT:
               loadUI();
               break;
         }     

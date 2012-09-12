@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.dataitem.DataItemListActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
@@ -54,9 +55,13 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 						e.printStackTrace();
 					}
 			}
-         	create_data_item_title_et.setText("");
-         	create_data_item_content_et.setText("");
          	
+//         	create_data_item_title_et.setText("");
+//         	create_data_item_content_et.setText("");
+         	Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
+    		intent.putExtra("data_list_id", data_list_id);
+         	startActivity(intent);
+         	this.finish();
          }	
 	}
 	public boolean juast(String title,String content){
