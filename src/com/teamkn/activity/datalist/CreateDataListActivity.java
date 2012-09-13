@@ -44,6 +44,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		create_data_list_et = (EditText)findViewById(R.id.create_data_list_et);
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
 		data_list_public_iv = (ImageView)findViewById(R.id.data_list_public_iv);
+		
+		data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_lock));
 	}
 	
 	RadioButton.OnClickListener radioButtonListener = new RadioButton.OnClickListener(){
@@ -62,7 +64,6 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		}
 	}; 	
 	public void click_data_list_public_iv(View view){
-		Toast.makeText(CreateDataListActivity.this, RequestCode.data_list_public, 100).show();
 		if(RequestCode.data_list_public .equals("false")){
 			RequestCode.data_list_public = "true";
 			data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_lock));
@@ -85,6 +86,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 						e.printStackTrace();
 					}
 			}
+         	
          	Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
          	
          	intent.putExtra("data_list_public", RequestCode.data_list_public);

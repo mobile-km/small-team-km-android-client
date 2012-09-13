@@ -15,6 +15,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.note_info_tv = (TextView) view.findViewById(R.id.note_info_tv);
         view_holder.show_relativelayout = (RelativeLayout) view.findViewById(R.id.show_relativelayout);
         view_holder.update_data_list_et = (EditText) view.findViewById(R.id.update_data_list_et);
+        view_holder.list_data_list_eye_iv = (ImageView) view.findViewById(R.id.list_data_list_eye_iv);
         return view_holder;
     }
 
@@ -67,8 +69,13 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.list_note_title_tv_edit.setText(item.title);
         view_holder.list_note_title_tv_go.setText(item.id+"");
         view_holder.update_data_list_et.setText(item.title);
-        
-      view_holder.list_note_title_tv_edit.setOnClickListener(new OnClickListener() {
+		if(item.public_boolean.equals("true")){
+			view_holder.list_data_list_eye_iv.setVisibility(View.VISIBLE);
+		}else if(item.public_boolean.equals("false")){
+			view_holder.list_data_list_eye_iv.setVisibility(View.GONE);
+		}
+    /*
+		view_holder.list_note_title_tv_edit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				System.out.println("view_holder.list_note_title_tv_edit  show_left   "  + item.id);
@@ -126,6 +133,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 				builder.show();
 			}
 		});
+      */
         view_holder.list_note_title_tv_go.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -142,6 +150,8 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         
         RelativeLayout show_relativelayout;
         EditText update_data_list_et;
+        
+        ImageView list_data_list_eye_iv;
         
         RelativeLayout list_data_list_item_rl;
         TextView note_info_tv;

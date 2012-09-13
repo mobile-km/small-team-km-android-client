@@ -60,7 +60,8 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 //         	create_data_item_content_et.setText("");
          	Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
     		intent.putExtra("data_list_id", data_list_id);
-         	startActivity(intent);
+    		intent.putExtra("create_data_item", true);
+    		startActivity(intent);
          	this.finish();
          }	
 	}

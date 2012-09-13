@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +18,11 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,14 +30,12 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.chat.ChatActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.database.DataItemDBHelper;
-import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemListAdapter;
 
 public class DataItemListActivity extends TeamknBaseActivity {
@@ -44,14 +47,20 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	List<DataItem> dataItems ;
 	
 	Integer data_list_id;
+	boolean create_data_item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_item_list);
+        Intent intent = getIntent();
+		data_list_id = intent.getIntExtra("data_list_id", -1);
+		create_data_item = intent.getBooleanExtra("create_data_item", false);
+		System.out.println(create_data_item);
         load_list();
-       //注册上下文菜单
-	    registerForContextMenu(tlv);
+        //注册上下文菜单
+//	    registerForContextMenu(tlv);      
     }
+    
     private void load_list() {
     	tlv = (ListViewInterceptor) findViewById(R.id.list);
     	dataItems  = new ArrayList<DataItem>();
@@ -59,23 +68,62 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public List<DataItem> do_in_background(Void... params) throws Exception {
 					if(BaseUtils.is_wifi_active(DataItemListActivity.this)){
-						Intent intent = getIntent();
-						data_list_id = intent.getIntExtra("data_list_id", -1);
+						
 						HttpApi.DataItem.pull(data_list_id);
 						dataItems = DataItemDBHelper.all(data_list_id);
 					}
 					return dataItems;
 			}
 			@Override
-			public void on_success(List<DataItem> dataItems) {
+			public void on_success(final List<DataItem> dataItems) {
 				dataItemListAdapter = new DataItemListAdapter(DataItemListActivity.this,R.layout.list_data_item_list_item,dataItems);
 				tlv.setAdapter(dataItemListAdapter);
 				tlv.setDropListener(onDrop);
 				tlv.getAdapter();	
 				dataItemListAdapter.notifyDataSetChanged();
+				
+				tlv.setOnScrollListener(new OnScrollListener() {			
+					@Override
+					public void onScrollStateChanged(AbsListView view, int scrollState) {	
+					}			
+					@Override
+					public void onScroll(AbsListView view, int firstVisibleItem,
+							int visibleItemCount, int totalItemCount) {	
+						if(create_data_item && visibleItemCount <= dataItems.size()){
+							System.out.println(dataItems.size());
+							System.out.println(firstVisibleItem + " : " + visibleItemCount+ " :　" + totalItemCount + " : " + create_data_item);
+							tlv.setSelection(dataItems.size()-visibleItemCount);
+							create_data_item = false;
+						}
+					}
+				});
 		    }
 		}.execute(); 	
+		
+		tlv.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+//				BaseUtils.toast(arg3 + " : "+ arg1.getId() ) ;
+				DataItem from_item = dataItems.get((int) arg3);
+				new AlertDialog.Builder(DataItemListActivity.this)
+		    	.setTitle("当前选项：   " + from_item.title)
+		    	.setItems(
+		    			new String[] {
+		    				    "向上移动一行",
+		    					"向下移动一行",
+		    					"编辑当前子项", 
+		    					"删除当前子项" 
+		    			}, 
+		    			new CreateContextMenu((int) arg3)
+				)
+		    	.setNegativeButton("取消", null)
+		    	.show();
+				return false;
+			}
+		});
 	}
+    
     private ListViewInterceptor.DropListener onDrop = new ListViewInterceptor.DropListener() {
 		@Override
 		public void drop(int from, int to) {
@@ -110,7 +158,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		DataItem from_itemn = dataItems.get((int) adapterContextMenuInfo.id);
 		BaseUtils.toast(adapterContextMenuInfo.id  +  "  : " + dataItems.size()+ " : "+from_itemn.title );
 		switch (item.getItemId()) {
-		case 1://向上移动一行
+		case 0://向上移动一行
 			if((int) adapterContextMenuInfo.id>0){
 				DataItem from_item = dataItems.get((int) adapterContextMenuInfo.id);
 				DataItem to_item = dataItems.get((int) adapterContextMenuInfo.id-1);
@@ -119,7 +167,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				insert_into(from_item.server_data_item_id,to_item.server_data_item_id);
 			}
 			break;
-		case 2://向下移动一行
+		case 1://向下移动一行
 			if((int) adapterContextMenuInfo.id<dataItems.size()-1){
 				DataItem from_item1 = dataItems.get((int) adapterContextMenuInfo.id);
 				DataItem to_item1 = dataItems.get((int) adapterContextMenuInfo.id+1);
@@ -128,7 +176,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				insert_into(from_item1.server_data_item_id,to_item1.server_data_item_id);
 			}
 			break;
-		case 3://编辑当前子项
+		case 2://编辑当前子项
 			final DataItem dataItem2 = dataItems.get((int) adapterContextMenuInfo.id);
 			Toast.makeText(DataItemListActivity.this, dataItem2.title, Toast.LENGTH_SHORT).show();			
 			
@@ -163,7 +211,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			builder.setNegativeButton("取消", null);
 			builder.show();
 			break;
-		case 4://删除当前子项
+		case 3://删除当前子项
 			AlertDialog.Builder builder1 = new AlertDialog.Builder(DataItemListActivity.this);
 			
 			builder1.setTitle("确定要删除吗");
@@ -200,10 +248,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		AdapterContextMenuInfo adapterContextMenuInfo = (AdapterContextMenuInfo)menuInfo;
 		if (adapterContextMenuInfo.id!=0&&adapterContextMenuInfo.id!=-1) {
 			menu.setHeaderTitle("弹出菜单");
-			menu.add(1, 1, 1,  "向上移动一行");
-			menu.add(1, 2, 2,  "向下移动一行");
-			menu.add(1, 3, 3,  "编辑当前子项");
-			menu.add(1,4,4,"删除当前子项");
+			menu.add(0, 0, 0,  "向上移动一行");
+			menu.add(0, 1, 1,  "向下移动一行");
+			menu.add(0, 2, 2,  "编辑当前子项");
+			menu.add(0, 3, 3,  "删除当前子项");
 		}
 	}
 	public void on_create_data_item_click(View view){
@@ -245,6 +293,97 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 		}.execute();	
 	}
-	
-	
+	class CreateContextMenu implements OnClickListener{
+		int from_id ;
+        public CreateContextMenu(int from_id){
+        	this.from_id = from_id;
+        }
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case 0://向上移动一行
+				if(from_id>0){
+					DataItem from_item = dataItems.get(from_id);
+					DataItem to_item = dataItems.get(from_id-1);
+					dataItemListAdapter.remove(from_item);
+					dataItemListAdapter.insert(from_item,from_id-1);
+					insert_into(from_item.server_data_item_id,to_item.server_data_item_id);
+				}
+				break;
+			case 1://向下移动一行
+				if(from_id<dataItems.size()-1){
+					DataItem from_item1 = dataItems.get(from_id);
+					DataItem to_item1 = dataItems.get(from_id+1);
+					dataItemListAdapter.remove(from_item1);
+					dataItemListAdapter.insert(from_item1, from_id+1);
+					insert_into(from_item1.server_data_item_id,to_item1.server_data_item_id);
+				}
+				break;
+			case 2://编辑当前子项
+				final DataItem dataItem2 = dataItems.get(from_id);
+				Toast.makeText(DataItemListActivity.this, dataItem2.title, Toast.LENGTH_SHORT).show();			
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(DataItemListActivity.this);
+				
+				builder.setTitle("请修改");
+				builder.setIcon(android.R.drawable.ic_dialog_info);
+				
+				final EditText view = new EditText(DataItemListActivity.this);
+				view.setText(dataItem2.title);
+				builder.setView(view);
+				builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						final String add_data_list_et_str = view.getText().toString();
+	                    if(add_data_list_et_str!=null 
+	                    		&& !add_data_list_et_str.equals(null)
+	                    		&& !BaseUtils.is_str_blank(add_data_list_et_str)
+	                    		&& !add_data_list_et_str.equals(dataItem2.title)){
+	                    	if(BaseUtils.is_wifi_active(DataItemListActivity.this)){	
+	                    		dataItem2.setTitle(add_data_list_et_str);
+	                    		DataItemDBHelper.update(dataItem2);
+	                    		try {
+									HttpApi.DataItem.update(DataItemDBHelper.find(dataItem2.id));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+	                    		load_list();
+	    					}
+	                    }
+					}
+				});
+				builder.setNegativeButton("取消", null);
+				builder.show();
+				break;
+			case 3://删除当前子项
+				AlertDialog.Builder builder1 = new AlertDialog.Builder(DataItemListActivity.this);
+				
+				builder1.setTitle("确定要删除吗");
+				builder1.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DataItem dataItem3 = dataItems.get(from_id);
+						if(BaseUtils.is_wifi_active(DataItemListActivity.this)){	
+			        		DataItemDBHelper.delete_by_id(dataItem3.id);
+			        		try {
+			        			if(dataItem3.server_data_item_id>=0){
+			        				HttpApi.DataItem.remove_contact(dataItem3.server_data_item_id);
+			        			}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+			        		load_list();
+						 }
+						
+					}
+				});
+				builder1.setNegativeButton("取消", null);
+				builder1.show();
+				break;
+			default:
+				break;
+			}
+		}
+		
+	}	
 }

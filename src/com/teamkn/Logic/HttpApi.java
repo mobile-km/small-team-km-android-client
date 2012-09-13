@@ -82,6 +82,7 @@ public class HttpApi {
     public static final String 获取_data_list     =  "/api/data_lists";
     public static final String 创建_data_list     =  "/api/data_lists";
     public static final String 修改_data_list     =  "/api/data_lists/";
+    public static final String 搜索_data_list     =  "/api/data_lists/search_mine";
     
     // data_item
     public static final String 获取_data_item    =  "/api/data_lists/";
@@ -645,7 +646,8 @@ public class HttpApi {
            
  		   new TeamknPostRequest<Void>( 创建_data_list,
  	            new PostParamText("data_list[title]",dataList.title),
- 	            new PostParamText("data_list[kind]",dataList.kind)
+ 	            new PostParamText("data_list[kind]",dataList.kind),
+ 	            new PostParamText("data_list[public]",dataList.public_boolean)
  		   ) {
  	              @Override
  	              public Void on_success(String response_text) throws Exception {
@@ -688,6 +690,25 @@ public class HttpApi {
 						}
 			}.go();
     	}
+    	public static List<com.teamkn.model.DataList> search(String search_str) throws Exception{  
+    		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
+	   		 new TeamknGetRequest<Void>(搜索_data_list,
+		            new BasicNameValuePair("query", search_str)
+		            ){
+			          @Override
+			          public Void on_success(String response_text) throws Exception {
+			        	  JSONArray data_list_array = new JSONArray(response_text);
+		            	  for (int i = 0; i < data_list_array.length(); i++) {
+		            		  JSONObject json = data_list_array.getJSONObject(i);
+				              int server_id = json.getInt("id");
+				              com.teamkn.model.DataList dataList = DataListDBHelper.find_by_server_data_list_id(server_id);
+				              dataLists.add(dataList);
+		                  }  
+			              return null;
+			          }
+			        }.go();
+			return dataLists;
+       }
     }
     public static class DataItem{
     	public static void pull(final int data_list_id) throws Exception{  
@@ -857,7 +878,8 @@ public class HttpApi {
                 return null;
               }
         }.go();
-      }
+   }
+   	
     }
     
     public static class IntentException extends Exception {

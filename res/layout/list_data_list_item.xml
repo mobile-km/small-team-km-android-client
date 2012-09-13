@@ -41,6 +41,13 @@
 	       android:layout_alignParentRight="true"
 	       android:clickable="true"
 	   />
+	   <ImageView
+	       android:id="@+id/list_data_list_eye_iv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@android:drawable/ic_menu_view" 
+           android:layout_alignParentLeft="true"
+       />
     </RelativeLayout>
     <EditText
         android:id="@+id/update_data_list_et"

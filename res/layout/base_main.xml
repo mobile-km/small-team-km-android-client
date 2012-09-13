@@ -143,18 +143,21 @@
       android:gravity="center"
   >
       <Button
+           android:id="@+id/click_collection_button"
            android:onClick="click_collection_button"
            android:layout_width="80dp"
            android:layout_height="wrap_content"
            android:text="收集列表"
       />
       <Button
+          android:id="@+id/click_step_button"
            android:onClick="click_step_button"
            android:layout_width="80dp"
            android:layout_height="wrap_content"
            android:text="步骤列表"
       />
       <Button
+          android:id="@+id/click_all_button"
            android:onClick="click_all_button"
            android:layout_width="80dp"
            android:layout_height="wrap_content"
@@ -167,7 +170,7 @@
       android:layout_below="@+id/bar"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="50dp"
+      android:layout_marginBottom="40dp"
   >
       <ListView
           android:id="@+id/data_list"
@@ -176,20 +179,21 @@
           android:descendantFocusability="beforeDescendants"
       />
  </RelativeLayout>
- <RelativeLayout 
-     android:layout_gravity="bottom"
-     android:layout_alignParentBottom="true"
+
+ <RelativeLayout
      android:layout_width="fill_parent"
+     android:layout_height="40dp"
+     android:layout_alignParentBottom="true"
+     android:layout_gravity="bottom"
      android:background="@color/white"
-     android:gravity="center"
-     android:layout_height="50dp">
+     android:gravity="center" >
       
       <TextView
          android:text="私有"
          android:textColor="@color/black"
          android:gravity="center"
          android:layout_width="50dp"
-         android:layout_height="50dp"
+         android:layout_height="40dp"
          android:background="#789"
          android:id="@+id/public_data_list_tv"
      />
@@ -198,7 +202,7 @@
          android:layout_alignLeft="@+id/public_data_list_tv"
          android:onClick="click_add_data_list_iv"
          android:layout_width="50dp"
-         android:layout_height="50dp"
+         android:layout_height="40dp"
          android:background="#789"
          android:src="@android:drawable/ic_input_add"  
      />

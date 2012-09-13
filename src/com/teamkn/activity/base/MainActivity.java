@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -24,6 +26,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamkn.R;
+import com.teamkn.R.color;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.datalist.CreateDataListActivity;
@@ -94,7 +98,18 @@ public class MainActivity extends TeamknBaseActivity{
     EditText add_data_list_et;
     RelativeLayout show_add_data_list_rl;
     
+    /*
+     * 收集，步骤，所有
+     * */
+    LinearLayout top;
+    Button click_collection_button,click_step_button,click_all_button;
     TextView public_data_list_tv;
+    
+    /*
+     * 搜索
+     * */
+    ImageView data_list_search_ib;
+    EditText data_list_search_edit_et;
     
     
 	private TextView data_syn_textview;         // 同步更新时间
@@ -162,12 +177,21 @@ public class MainActivity extends TeamknBaseActivity{
         if(data_list_public!=null && data_list_type!=null){
         	RequestCode.data_list_public = data_list_public;
         	RequestCode.data_list_type = data_list_type;
+        	System.out.println(RequestCode.data_list_public + " : " + RequestCode.data_list_type);
         }
-        
-        public_data_list_tv = (TextView)findViewById(R.id.public_data_list_tv);
-        public_data_list_tv.setOnClickListener(click_public_tv);
-		//加载node_listview
+		load_UI();
+        //加载node_listview
 		load_list();
+	}
+	private void load_UI() {
+		public_data_list_tv = (TextView)findViewById(R.id.public_data_list_tv);
+        public_data_list_tv.setOnClickListener(click_public_tv);
+
+//        top = (LinearLayout)findViewById(R.id.top);
+//        click_collection_button = (Button) findViewById(R.id.click_collection_button);
+//        click_step_button = (Button) findViewById(R.id.click_step_button);
+//        click_all_button = (Button) findViewById(R.id.click_all_button);
+        
 	}
 	// 设置 创建新列表按钮事件
     private void bind_add_footer_view() {
@@ -255,9 +279,44 @@ public class MainActivity extends TeamknBaseActivity{
 		}.execute();    			
 		data_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				System.out.println(arg2 + " : " + arg3);
+			public void onItemClick(AdapterView<?> list_view,View list_item,int item_id,long position) {
+				System.out.println(item_id + " : " + position);
+				TextView info_tv = (TextView) list_item.findViewById(R.id.note_info_tv);
+				final DataList item = (DataList) info_tv.getTag(R.id.tag_note_uuid);
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				
+				builder.setTitle("请修改");
+				builder.setIcon(android.R.drawable.ic_dialog_info);
+				
+				final EditText view = new EditText(MainActivity.this);
+				view.setText(item.title);
+				builder.setView(view);
+				builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						final String add_data_list_et_str = view.getText().toString();
+	                    if(add_data_list_et_str!=null 
+	                    		&& !add_data_list_et_str.equals(null)
+	                    		&& !BaseUtils.is_str_blank(add_data_list_et_str)
+	                    		&& !add_data_list_et_str.equals(item.title)){
+	                    	if(BaseUtils.is_wifi_active(MainActivity.this)){	
+	                    		item.setTitle(add_data_list_et_str);
+	                    		DataListDBHelper.update(item);
+	                    		try {
+									HttpApi.DataList.update(DataListDBHelper.find(item.id));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+	                    		load_list();
+	    					}
+	                    	
+	                    }
+					}
+				});
+				builder.setNegativeButton("取消", null);
+				builder.show();
+				
 			}
 		});
     }	
@@ -393,6 +452,23 @@ public class MainActivity extends TeamknBaseActivity{
 	 public void click_all_button(View view){
 		 RequestCode.data_list_type  = RequestCode.ALL;
 		 load_list();
+	 }
+	 public void button_show_color(final String type){
+//		 Button click_collection_button,click_step_button,click_all_button;
+		 top.post(new Runnable() {
+			@Override
+			public void run() {
+				if(type.equals(RequestCode.ALL)){
+					click_all_button.setBackgroundColor(color.blue);
+					click_step_button.setBackgroundColor(color.aliceblue);
+					click_collection_button.setBackgroundColor(color.blue);
+				}else if(type.equals(RequestCode.STEP)){
+					
+				}else if(type.equals(RequestCode.COLLECTION)){
+					
+				}
+			}
+		});
 	 }
 	 public void base_main_click_public_data_list_tv(){
 			if(RequestCode.data_list_public .equals("true")){
