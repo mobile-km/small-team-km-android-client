@@ -107,7 +107,24 @@ public class DataListDBHelper extends BaseModelDBHelper {
     db.close();
     return datalist;
   }
-  
+  public static DataList find_by_title(String title){
+	  DataList datalist;
+    SQLiteDatabase db = get_read_db();
+    Cursor cursor = db.query(Constants.TABLE_DATA_LISTS, get_columns(),
+        Constants.TABLE_DATA_LISTS_TITLE + " = ?", 
+        new String[]{title},null, null, null);
+
+    boolean has_value = cursor.moveToFirst();
+    if(has_value){
+    	datalist = build_by_cursor(cursor);
+    }else{
+    	datalist = DataList.NIL_DATA_LIST;
+    }
+    
+    cursor.close();
+    db.close();
+    return datalist;
+  }
   public static DataList find_by_server_data_list_id(int server_data_list_id){
 	DataList datalist;
     SQLiteDatabase db = get_read_db();

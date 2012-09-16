@@ -45,6 +45,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
 		data_list_public_iv = (ImageView)findViewById(R.id.data_list_public_iv);
 		
+		create_data_list_msg_tv.setText("");
 		data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_lock));
 	}
 	
@@ -79,20 +80,28 @@ public class CreateDataListActivity extends TeamknBaseActivity{
          		&& !BaseUtils.is_str_blank(add_data_list_et_str)){
          	if(BaseUtils.is_wifi_active(CreateDataListActivity.this)){
 					try {
-						DataList dataList = new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
-						DataListDBHelper.update(dataList);
-						HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
+						
+						DataList dataList = DataListDBHelper.find_by_title(add_data_list_et_str);
+						if(dataList.id>0){
+							create_data_list_msg_tv.setText("列表名称已存在");
+							create_data_list_msg_tv.setSelected(true);
+						}else{
+							dataList= new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
+							DataListDBHelper.update(dataList);
+							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
+							
+							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
+				         	
+				         	intent.putExtra("data_list_public", RequestCode.data_list_public);
+				         	intent.putExtra("data_list_type", RequestCode.data_list_type);
+				         	startActivity(intent);
+				         	this.finish();
+						}
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 			}
-         	
-         	Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
-         	
-         	intent.putExtra("data_list_public", RequestCode.data_list_public);
-         	intent.putExtra("data_list_type", RequestCode.data_list_type);
-         	startActivity(intent);
-         	this.finish();
          }
 	}
 }

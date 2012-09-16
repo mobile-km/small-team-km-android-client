@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -108,7 +109,7 @@ public class MainActivity extends TeamknBaseActivity{
     /*
      * 搜索
      * */
-    ImageView data_list_search_ib;
+//    ImageButton data_list_search_ib;
     EditText data_list_search_edit_et;
     
     
@@ -184,9 +185,12 @@ public class MainActivity extends TeamknBaseActivity{
 		load_list();
 	}
 	private void load_UI() {
+//		data_list_search_ib = (ImageButton)findViewById(R.id.data_list_search_ib);
+		data_list_search_edit_et = (EditText)findViewById(R.id.data_list_search_edit_et);
+		
 		public_data_list_tv = (TextView)findViewById(R.id.public_data_list_tv);
         public_data_list_tv.setOnClickListener(click_public_tv);
-
+        
 //        top = (LinearLayout)findViewById(R.id.top);
 //        click_collection_button = (Button) findViewById(R.id.click_collection_button);
 //        click_step_button = (Button) findViewById(R.id.click_step_button);
@@ -435,7 +439,23 @@ public class MainActivity extends TeamknBaseActivity{
 					  }
 		        });
 	       }
-	  }		
+	  }
+	 public void click_search_ib(View view){
+		 String search_str = data_list_search_edit_et.getText().toString();
+		 if(!BaseUtils.is_str_blank(search_str)){
+			 if(BaseUtils.is_wifi_active(MainActivity.this)){
+				 try {
+					    datalists = HttpApi.DataList.search(search_str);
+						dataListAdapter = new DataListAdapter(MainActivity.this);
+						dataListAdapter.add_items(datalists);
+						data_list.setAdapter(dataListAdapter);	
+						dataListAdapter.notifyDataSetChanged();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			 }
+		 }
+	 }
 	 public void click_add_data_list_iv(View view){
 		 Intent intent = new Intent(MainActivity.this,CreateDataListActivity.class);
 		 startActivityForResult(intent, RequestCode.CREATE_DATA_LIST);
@@ -461,11 +481,15 @@ public class MainActivity extends TeamknBaseActivity{
 				if(type.equals(RequestCode.ALL)){
 					click_all_button.setBackgroundColor(color.blue);
 					click_step_button.setBackgroundColor(color.aliceblue);
-					click_collection_button.setBackgroundColor(color.blue);
+					click_collection_button.setBackgroundColor(color.aliceblue);
 				}else if(type.equals(RequestCode.STEP)){
-					
+					click_all_button.setBackgroundColor(color.aliceblue);
+					click_step_button.setBackgroundColor(color.blue);
+					click_collection_button.setBackgroundColor(color.aliceblue);
 				}else if(type.equals(RequestCode.COLLECTION)){
-					
+					click_all_button.setBackgroundColor(color.aliceblue);
+					click_step_button.setBackgroundColor(color.aliceblue);
+					click_collection_button.setBackgroundColor(color.blue);
 				}
 			}
 		});

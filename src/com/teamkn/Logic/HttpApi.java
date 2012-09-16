@@ -697,10 +697,11 @@ public class HttpApi {
 		            ){
 			          @Override
 			          public Void on_success(String response_text) throws Exception {
+			        	  System.out.println(response_text);
 			        	  JSONArray data_list_array = new JSONArray(response_text);
 		            	  for (int i = 0; i < data_list_array.length(); i++) {
-		            		  JSONObject json = data_list_array.getJSONObject(i);
-				              int server_id = json.getInt("id");
+//		            		  JSONObject json = data_list_array.getJSONObject(i);
+				              int server_id = data_list_array.getInt(i);
 				              com.teamkn.model.DataList dataList = DataListDBHelper.find_by_server_data_list_id(server_id);
 				              dataLists.add(dataList);
 		                  }  
