@@ -92,6 +92,51 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    db.close();
 	    return dataItem;
 	  }
+	  public static DataItem find(String title){
+		DataItem dataItem;
+	    SQLiteDatabase db = get_read_db();
+	    Cursor cursor = db.query(Constants.TABLE_DATA_ITEMS, get_columns(),
+	        Constants.TABLE_DATA_ITEMS_TITLE + " = ?", 
+	        new String[]{title+""},null, null, null);
+	
+	    boolean has_value = cursor.moveToFirst();
+	    if(has_value){
+	    	dataItem = build_by_cursor(cursor);
+	    }else{
+	    	dataItem = DataItem.NIL_DATA_ITEM;
+	    }
+	    System.out.println("   d  "  +  dataItem.id);
+	    cursor.close();
+	    db.close();
+	    return dataItem;
+	  }
+	  public static DataItem find_url(String url){
+			DataItem dataItem;
+		    SQLiteDatabase db = get_read_db();
+		    Cursor cursor = db.query(Constants.TABLE_DATA_ITEMS, get_columns(),
+		        Constants.TABLE_DATA_ITEMS_URL + " = ?", 
+		        new String[]{url+""},null, null, null);
+		
+		    boolean has_value = cursor.moveToFirst();
+		    if(has_value){
+		    	dataItem = build_by_cursor(cursor);
+		    }else{
+		    	dataItem = DataItem.NIL_DATA_ITEM;
+		    }
+		    System.out.println("   d  "  +  dataItem.id);
+		    cursor.close();
+		    db.close();
+		    return dataItem;
+	 }
+	  
+	  public static void delete(int id){
+	    SQLiteDatabase db = get_write_db();
+	    if(find(id).id>0){
+	    	db.delete(Constants.TABLE_DATA_ITEMS, Constants.KEY_ID + " = ?", 
+			        new String[]{id+""});
+	    }
+	    db.close();
+	  }
 	  public static void delete_by_server_id(int server_id){
 	    SQLiteDatabase db = get_read_db();
 	    if(find_by_server_id(server_id).id>0){

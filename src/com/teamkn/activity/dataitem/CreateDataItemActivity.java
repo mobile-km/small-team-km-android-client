@@ -23,6 +23,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 	EditText create_data_item_title_et,create_data_item_content_et;
 	Integer data_list_id;
 	DataList dataList;
+	TextView create_data_list_msg_tv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +39,9 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		
 		create_data_item_title_et = (EditText)findViewById(R.id.create_data_item_title_et);
 		create_data_item_content_et = (EditText)findViewById(R.id.create_data_item_content_et);
+		
+		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
+		create_data_list_msg_tv.setText("");
 	}
 	public void click_data_item_save_iv(View view){
 		String title_str = create_data_item_title_et.getText().toString();
@@ -46,11 +50,25 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		if(juast(title_str,content_str)){
          	if(BaseUtils.is_wifi_active(CreateDataItemActivity.this)){
 					try {
-						DataItem dataitem = 
-								new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
-						DataItemDBHelper.update(dataitem);
-						HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));
-					    
+						if(DataItemDBHelper.find(title_str).id>0){
+							create_data_list_msg_tv.setText("创建的题目不可重复");
+						}else{
+//							if()
+							DataItem dataitem = 
+									new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
+							DataItemDBHelper.update(dataitem);
+							String back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
+							if(back==null){
+								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
+					    		intent.putExtra("data_list_id", data_list_id);
+					    		intent.putExtra("create_data_item", true);
+					    		startActivity(intent);
+					         	this.finish();
+							}else{
+								create_data_list_msg_tv.setText(back);
+							}
+							
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -58,11 +76,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
          	
 //         	create_data_item_title_et.setText("");
 //         	create_data_item_content_et.setText("");
-         	Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
-    		intent.putExtra("data_list_id", data_list_id);
-    		intent.putExtra("create_data_item", true);
-    		startActivity(intent);
-         	this.finish();
+         	
          }	
 	}
 	public boolean juast(String title,String content){

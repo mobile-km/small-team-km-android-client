@@ -2,6 +2,8 @@ package com.teamkn.base.activity;
 
 import java.util.Stack;
 
+import com.teamkn.R;
+
 // 用于管理和回收activities的堆栈，单例模式
 public class ActivitiesStackSingleton {
     private static ActivitiesStackSingleton instance = new ActivitiesStackSingleton();
@@ -24,7 +26,7 @@ public class ActivitiesStackSingleton {
         for (int i = 0; i < size; i++) {
             TeamknBaseActivity activity = activities_stack.pop();
             activity.finish();
-        }
+        } 
     }
 
     // 从堆栈中移除一个实例

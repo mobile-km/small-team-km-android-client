@@ -703,6 +703,7 @@ public class HttpApi {
 //		            		  JSONObject json = data_list_array.getJSONObject(i);
 				              int server_id = data_list_array.getInt(i);
 				              com.teamkn.model.DataList dataList = DataListDBHelper.find_by_server_data_list_id(server_id);
+//				              System.out.println(dataList.toString());
 				              dataLists.add(dataList);
 		                  }  
 			              return null;
@@ -779,20 +780,20 @@ public class HttpApi {
     						}
     			}.go();
        	}
-   	public static void create(final com.teamkn.model.DataItem dataItem) throws Exception{
+   	public static String create(final com.teamkn.model.DataItem dataItem) throws Exception{
    		  String value = null;
    		  if(dataItem.kind.equals(DataItemDBHelper.Kind.URL)){
    			value = dataItem.url;
    		  }else{
    			value = dataItem.content;
    		  }
-		   new TeamknPostRequest<Void>( 创建_data_item + dataItem.data_list_id+ "/data_items",
+		   return new TeamknPostRequest<String>( 创建_data_item + dataItem.data_list_id+ "/data_items",
 	            new PostParamText("title",dataItem.title),
 	            new PostParamText("kind",dataItem.kind),
 	            new PostParamText("value",value)
 		   ) {
 	              @Override
-	              public Void on_success(String response_text) throws Exception {
+	              public String on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
 		                
@@ -812,6 +813,13 @@ public class HttpApi {
 		                DataItemDBHelper.update(data_item_server);
 					    return null;   	
 	              }
+	              public String on_unprocessable_entity(String responst_text) {
+	            	  if(!BaseUtils.is_str_blank(responst_text)){
+	            		  DataItemDBHelper.delete(dataItem.id);
+	            		  return responst_text;
+	            	  }
+					  return null; 
+	              };
 	     }.go();
       }
    	public static void create_image(final com.teamkn.model.DataItem dataItem,File image) throws Exception{

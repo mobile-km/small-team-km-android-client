@@ -67,13 +67,15 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         final ViewHolder view_holder = (ViewHolder) holder;
         view_holder.note_info_tv.setTag(R.id.tag_note_uuid, item);
         view_holder.list_note_title_tv_edit.setText(item.title);
-        view_holder.list_note_title_tv_go.setText(item.id+"");
+        view_holder.list_note_title_tv_go.setText(item.id+":"+item.server_data_list_id);
         view_holder.update_data_list_et.setText(item.title);
+        System.out.println(item.public_boolean);
 		if(item.public_boolean.equals("true")){
 			view_holder.list_data_list_eye_iv.setVisibility(View.VISIBLE);
 		}else if(item.public_boolean.equals("false")){
 			view_holder.list_data_list_eye_iv.setVisibility(View.GONE);
 		}
+        
     /*
 		view_holder.list_note_title_tv_edit.setOnClickListener(new OnClickListener() {
 			@Override
@@ -138,7 +140,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(activity,DataItemListActivity.class);
-				intent.putExtra("data_list_id",item.id);
+				intent.putExtra("data_list_id",item.server_data_list_id);
 				activity.startActivity(intent);
 			}
 		}); 

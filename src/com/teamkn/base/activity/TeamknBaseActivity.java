@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.AccountManagerActivity;
 import com.teamkn.activity.base.LoginActivity;
@@ -127,6 +128,8 @@ abstract public class TeamknBaseActivity extends Activity {
 								int which) {
 //							TeamknBaseActivity.this.finish();
 							ActivitiesStackSingleton.clear_activities_stack();
+							overridePendingTransition(R.anim.zoom_enter,
+									R.anim.zoom_exit);
 						}
 					})
 				.setNegativeButton("取消", null)

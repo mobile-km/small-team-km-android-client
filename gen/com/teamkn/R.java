@@ -19,6 +19,8 @@ public final class R {
         public static final int slide_in_right=0x7f040007;
         public static final int slide_out_left=0x7f040008;
         public static final int slide_out_right=0x7f040009;
+        public static final int zoom_enter=0x7f04000a;
+        public static final int zoom_exit=0x7f04000b;
     }
     public static final class array {
         public static final int upload_photo_quality_entry=0x7f060000;
