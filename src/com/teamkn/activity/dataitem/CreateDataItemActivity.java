@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.dataitem.DataItemListActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
@@ -24,6 +24,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 	Integer data_list_id;
 	DataList dataList;
 	TextView create_data_list_msg_tv;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		Intent intent = getIntent();
 		data_list_id = intent.getIntExtra("data_list_id", -1);
 		dataList = DataListDBHelper.find(data_list_id);
+		
 		load_UI();
 	}
 	private void load_UI() {
@@ -44,40 +46,57 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		create_data_list_msg_tv.setText("");
 	}
 	public void click_data_item_save_iv(View view){
-		String title_str = create_data_item_title_et.getText().toString();
-		String content_str = create_data_item_content_et.getText().toString();
+		final String title_str = create_data_item_title_et.getText().toString();
+		final String content_str = create_data_item_content_et.getText().toString();
 
 		if(juast(title_str,content_str)){
          	if(BaseUtils.is_wifi_active(CreateDataItemActivity.this)){
-					try {
-						if(DataItemDBHelper.find(title_str).id>0){
-							create_data_list_msg_tv.setText("创建的题目不可重复");
-						}else{
-//							if()
-							DataItem dataitem = 
-									new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
-							DataItemDBHelper.update(dataitem);
-							String back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
-							if(back==null){
+					
+					new TeamknAsyncTask<Void, Void, String>(CreateDataItemActivity.this,"创建中...") {
+
+						@Override
+						public String do_in_background(Void... params)
+								throws Exception {
+							String msg = null;
+							try {
+								System.out.println(DataItemDBHelper.find(title_str).id + " : " + DataItemDBHelper.find(title_str).title);
+								if(DataItemDBHelper.find(title_str).id>0){
+									create_data_list_msg_tv.setText("创建的题目不可重复");
+									msg = "创建的题目不可重复";
+								}else{
+									DataItem dataitem = 
+											new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
+									DataItemDBHelper.update(dataitem);
+									String back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
+									msg = back;
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							return msg;
+						}
+
+						@Override
+						public void on_success(String result) {
+							System.out.println("result createDataItemActivity " + result);
+							if(result==null){
 								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
 					    		intent.putExtra("data_list_id", data_list_id);
 					    		intent.putExtra("create_data_item", true);
 					    		startActivity(intent);
-					         	this.finish();
+					         	finish();
 							}else{
-								create_data_list_msg_tv.setText(back);
+								BaseUtils.toast(result);
 							}
-							
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					}.execute();
+					
+			}else{
+				BaseUtils.toast("无法连接到网络，请检查网络配置");
 			}
-         	
-//         	create_data_item_title_et.setText("");
-//         	create_data_item_content_et.setText("");
-         	
-         }	
+         }else{
+        	 BaseUtils.toast("标题 和 内容 不可以为空");
+         }
 	}
 	public boolean juast(String title,String content){
 		boolean title_bl = false;

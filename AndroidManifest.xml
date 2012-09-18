@@ -33,7 +33,8 @@
 	<activity android:name=".activity.base.RegisterActivity"></activity>
 	
 	<activity android:name=".activity.datalist.CreateDataListActivity" />
-	<activity android:name=".activity.dataitem.DataItemListActivity" />
+	<activity android:name=".activity.datalist.SearchDataActivity" />
+	<activity android:name=".activity.dataitem.DataItemListActivity"  android:windowSoftInputMode="adjustResize"/>
 	<activity android:name=".activity.dataitem.CreateDataItemActivity" />
 	
 	<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">

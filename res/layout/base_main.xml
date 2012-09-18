@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/body"
 >    
-    <!-- <RelativeLayout
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/head_bar"
         android:id="@+id/head"
@@ -17,35 +17,24 @@
             android:layout_height="40dp"
             android:contentDescription="@string/app_name"
         />
-        <Button
-            android:id="@+id/headbar_button_contacts"
-            android:background="@drawable/headbar_contacts"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:onClick="click_headbar_button_contacts"
+        <TextView
+            style="@style/head_bar_text_center"
+            android:id="@+id/main_user_name"
+            android:text="@string/main_user_name_default"
         />
-        
-         <Button
-            android:id="@+id/headbar_button_contacts"
-            android:background="@android:drawable/ic_input_add"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:onClick="click_go_edit_node_activity"
+        <ImageButton
+             android:src="@drawable/mi_data_list_add"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:background="@drawable/bg_button_head_bar"
+             android:onClick="click_add_data_list_iv"
         />
-        <ImageView
-            android:src="@android:drawable/ic_input_add"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="45dp"
-            android:layout_alignRight="@+id/headbar_button_contacts"
-            android:contentDescription="@string/app_name"
-            android:onClick="click_go_edit_node_activity"
-        />
-    </RelativeLayout> -->    
+    </RelativeLayout>    
     
     <RelativeLayout
+        android:layout_below="@+id/head"
+        android:visibility="gone"
         android:id="@+id/top"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -66,7 +55,7 @@
             android:layout_toRightOf="@+id/main_user_avatar"
             android:layout_marginLeft="10dp"
         >
-            <TextView 
+            <!-- <TextView 
                android:id="@+id/main_user_name"
                android:text="@string/main_user_name_default"
                android:layout_width="fill_parent"
@@ -75,7 +64,7 @@
                android:textSize="20dp"
                android:gravity="center_vertical"
                android:layout_marginBottom="20dp"
-            />
+            /> -->
             <!-- <TextView
 	           android:id="@+id/main_data_syn_text"
 	           android:layout_height="20dp"
@@ -88,17 +77,17 @@
                 android:layout_below="@+id/main_user_name"
                  android:layout_height="40dp"
                 android:layout_width="fill_parent">
+                <EditText
+                    android:id="@+id/data_list_search_edit_et"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"   
+                />
                 <ImageButton
                     android:id="@+id/data_list_search_ib"
                     android:onClick="click_search_ib"
                     android:src="@android:drawable/ic_search_category_default" 
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                />
-                <EditText
-                    android:id="@+id/data_list_search_edit_et"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" 
                 />
             </LinearLayout>
         </RelativeLayout>
@@ -144,7 +133,16 @@
       android:layout_width="fill_parent"
       android:orientation="horizontal"
       android:gravity="center"
+      android:layout_marginBottom="10dp"
+      android:layout_marginTop="10dp"
   >
+      <Button
+          android:id="@+id/click_all_button"
+           android:onClick="click_all_button"
+           android:layout_width="80dp"
+           android:layout_height="wrap_content"
+           android:text="所有"
+      />
       <Button
            android:id="@+id/click_collection_button"
            android:onClick="click_collection_button"
@@ -159,13 +157,13 @@
            android:layout_height="wrap_content"
            android:text="步骤列表"
       />
-      <Button
-          android:id="@+id/click_all_button"
-           android:onClick="click_all_button"
-           android:layout_width="80dp"
-           android:layout_height="wrap_content"
-           android:text="所有"
-      />
+      <ImageButton
+          android:id="@+id/data_list_search_ib"
+          android:onClick="click_search_ib"
+          android:src="@android:drawable/ic_search_category_default" 
+          android:layout_height="50dp"
+          android:layout_width="wrap_content"
+     />
   </LinearLayout>
     <!-- data_list -->
   <RelativeLayout
@@ -173,7 +171,6 @@
       android:layout_below="@+id/bar"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="40dp"
   >
       <ListView
           android:id="@+id/data_list"
@@ -185,6 +182,7 @@
 
  <RelativeLayout
      android:layout_width="fill_parent"
+     android:visibility="gone"
      android:layout_height="40dp"
      android:layout_alignParentBottom="true"
      android:layout_gravity="bottom"

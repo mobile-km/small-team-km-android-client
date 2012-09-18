@@ -45,8 +45,9 @@
 	       android:id="@+id/list_data_list_eye_iv"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:src="@android:drawable/ic_menu_view" 
+           android:src="@android:drawable/ic_lock_lock" 
            android:layout_alignParentLeft="true"
+           android:visibility="gone"
        />
     </RelativeLayout>
     <EditText

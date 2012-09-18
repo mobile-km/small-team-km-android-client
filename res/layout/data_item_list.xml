@@ -15,71 +15,76 @@
         />
         <TextView
                style="@style/head_bar_text_center"
-               android:text="子列表"
+               android:text="查看列表"
         />
-        <Button
-             android:text="新建子项"
-             style="@style/head_bar_button_right"
+        <ImageView
+             android:src="@drawable/mi_data_item_add"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
              android:onClick="on_create_data_item_click"
         />
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/top"
-        android:layout_below="@+id/head"
+        android:id="@+id/data_list_title_rl"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content" 
+        android:gravity="center"
+        android:background="@color/darkgrey"
+        android:layout_gravity="center"
         android:padding="5dp"
-        android:background="#fff"
+        android:layout_margin="10dp"
     >
-        <RelativeLayout
-            android:id="@+id/main_user_avatar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="#cccccc"
-        >
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="fill_parent"
+
+        <ImageView
+            android:id="@+id/data_list_image_iv_edit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/data_list_title_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/main_user_avatar"
-            android:layout_marginLeft="10dp"
-        >
-            <TextView 
-               android:id="@+id/main_user_name"
-               android:text="@string/main_user_name_default"
-               android:layout_width="fill_parent"
-               android:layout_height="30dp"
-               android:layout_alignParentTop="true"
-               android:textSize="20dp"
-               android:gravity="center_vertical"
-               android:layout_marginBottom="20dp"
-            />
-            <!-- <TextView
-               android:id="@+id/main_data_syn_text"
-               android:layout_height="20dp"
-               android:layout_width="fill_parent"
-               android:textSize="13dp"
-               android:text="同步更新时间显示在此"
-               android:layout_below="@+id/main_user_name"
-            /> -->
-            <LinearLayout 
-                android:layout_below="@+id/main_user_name"
-                 android:layout_height="40dp"
-                android:layout_width="fill_parent">
-                <ImageButton
-                    android:id="@+id/data_list_search_ib"
-                    android:src="@android:drawable/ic_search_category_default" 
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                />
-                <EditText
-                    android:id="@+id/data_list_search_edit_et"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" 
-                />
-            </LinearLayout>
-        </RelativeLayout>
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/data_list_image_iv_edit"
+            android:gravity="center"
+            android:hint="列表浏览-名称"
+            android:textSize="22dp" />
+        <EditText
+            android:id="@+id/data_list_title_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/data_list_image_iv_edit"
+            android:gravity="center"
+            android:visibility="gone"
+            style="?android:attr/textViewStyle"
+            android:hint="列表浏览-名称"/>
+
     </RelativeLayout>
+     <LinearLayout
+        android:id="@+id/list_no_data_show"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:gravity="center" 
+        android:orientation="vertical"
+        android:visibility="gone"
+    >
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_add"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="列表没有数据" 
+        />
+   </LinearLayout>
     <com.teamkn.activity.dataitem.ListViewInterceptor
 	    android:id="@+id/list"
 	    android:layout_width="fill_parent" 

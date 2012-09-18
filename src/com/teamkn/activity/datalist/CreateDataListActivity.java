@@ -3,6 +3,7 @@ package com.teamkn.activity.datalist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -29,7 +30,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
     }
 	EditText create_data_list_et;
 	TextView create_data_list_msg_tv;
-	ImageView data_list_public_iv;
+	CheckBox data_list_public_checkbox;
 	RadioButton radiobutton_COLLECTION,radiobutton_STEP;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +44,9 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		
 		create_data_list_et = (EditText)findViewById(R.id.create_data_list_et);
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
-		data_list_public_iv = (ImageView)findViewById(R.id.data_list_public_iv);
+		data_list_public_checkbox = (CheckBox)findViewById(R.id.data_list_public_checkbox);
 		
 		create_data_list_msg_tv.setText("");
-		data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_lock));
 	}
 	
 	RadioButton.OnClickListener radioButtonListener = new RadioButton.OnClickListener(){
@@ -64,13 +64,11 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 		 }
 		}
 	}; 	
-	public void click_data_list_public_iv(View view){
-		if(RequestCode.data_list_public .equals("false")){
+	public void data_list_public_checkbox(){
+		if(data_list_public_checkbox.isChecked()){
 			RequestCode.data_list_public = "true";
-			data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_lock));
 		}else{
 			RequestCode.data_list_public = "false";
-			data_list_public_iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_lock_idle_lock));
 		}
 	}
 	public void click_data_list_save_iv(View view){
@@ -80,15 +78,15 @@ public class CreateDataListActivity extends TeamknBaseActivity{
          		&& !BaseUtils.is_str_blank(add_data_list_et_str)){
          	if(BaseUtils.is_wifi_active(CreateDataListActivity.this)){
 					try {
-						
+						data_list_public_checkbox();
 						DataList dataList = DataListDBHelper.find_by_title(add_data_list_et_str);
 						if(dataList.id>0){
 							create_data_list_msg_tv.setText("列表名称已存在");
-							create_data_list_msg_tv.setSelected(true);
+							create_data_list_et.setSelected(true);
 						}else{
 							dataList= new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
 							DataListDBHelper.update(dataList);
-							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
+							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type).get(0));
 							
 							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
 				         	
@@ -102,6 +100,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 						e.printStackTrace();
 					}
 			}
+         }else{
+        	 create_data_list_msg_tv.setText("列表名称不可以为空");
          }
 	}
 }

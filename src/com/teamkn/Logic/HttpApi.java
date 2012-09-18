@@ -1,13 +1,32 @@
 package com.teamkn.Logic;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Context;
 
 import com.teamkn.activity.base.RegisterActivity;
-import com.teamkn.activity.chat.ChatActivity;
 import com.teamkn.activity.usermsg.UserMsgAvatarSetActivity;
 import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
 import com.teamkn.application.TeamknApplication;
-import com.teamkn.base.http.*;
+import com.teamkn.base.http.PostParamFile;
+import com.teamkn.base.http.PostParamText;
+import com.teamkn.base.http.TeamknDeleteRequest;
+import com.teamkn.base.http.TeamknGetRequest;
+import com.teamkn.base.http.TeamknHttpRequest;
+import com.teamkn.base.http.TeamknPostRequest;
+import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
@@ -21,22 +40,11 @@ import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.model.database.UserDBHelper;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HttpApi {
 
-    public static final String SITE = "http://192.168.1.38:9527";
+//    public static final String SITE = "http://192.168.1.38:9527";
+	public static final String SITE = "http://192.168.1.26:9527";
 //	public static final String SITE = "http://teamkn.mindpin.com";
 
     // 各种路径常量
@@ -639,7 +647,11 @@ public class HttpApi {
 	                  }  
 		              return null;
 		          }
+		          public Void on_unprocessable_entity(String responst_text) {
+					return null;
+			      };
 		        }.go();
+		        
         }
     	
     	public static void create(final com.teamkn.model.DataList dataList) throws Exception{
@@ -818,6 +830,7 @@ public class HttpApi {
 	            		  DataItemDBHelper.delete(dataItem.id);
 	            		  return responst_text;
 	            	  }
+	            	  System.out.println(responst_text);
 					  return null; 
 	              };
 	     }.go();

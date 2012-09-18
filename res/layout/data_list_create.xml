@@ -28,7 +28,6 @@
 		 <RadioGroup
 		     android:layout_width="fill_parent"
 		     android:layout_height="wrap_content"    
-		     android:gravity="center"
 		     android:orientation="horizontal" >
 			 <RadioButton    
 			    android:id="@+id/radiobutton_COLLECTION"
@@ -44,10 +43,23 @@
 			    android:text="步骤列表" />
 		 </RadioGroup>
     </TableRow>
+    <TableRow
+        android:layout_below="@+id/radio"
+        android:id="@+id/checkbox"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <CheckBox
+	          android:layout_gravity="center"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="分享给所有人"
+	          android:id="@+id/data_list_public_checkbox"
+         />
+    </TableRow>
     
     <EditText
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/radio"
+        android:layout_below="@+id/checkbox"
         android:id="@+id/create_data_list_et"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent" 
@@ -62,16 +74,6 @@
             android:layout_height="wrap_content"
             android:text="列表名称已存在" 
             android:layout_marginRight="20dp"
-        />
-        <ImageView
-            android:layout_alignRight="@+id/click_data_list_save_iv"
-            android:onClick="click_data_list_public_iv"
-            android:layout_gravity="center"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="50dp"
-            android:id="@+id/data_list_public_iv"
-            android:src="@android:drawable/ic_lock_lock" 
         />
         <ImageView
             android:id="@+id/click_data_list_save_iv"

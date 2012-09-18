@@ -1,7 +1,9 @@
 package com.teamkn.activity.dataitem;
 
+
 import com.teamkn.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
@@ -48,6 +50,7 @@ public class ListViewInterceptor extends ListView {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressLint({ "NewApi", "NewApi" })
 	public ListViewInterceptor(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub

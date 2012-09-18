@@ -61,21 +61,21 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
 }
-  public static List<DataList> all(String data_list_type,String data_list_public) throws Exception {
+  public static List<DataList> all(String data_list_type) throws Exception {
 	  SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
       Cursor cursor;
       if(data_list_type.equals("ALL")){
     	  cursor= db.query(Constants.TABLE_DATA_LISTS,
                   get_columns(),
-                   Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
-                  new String[]{data_list_public}, null, null,
+                   null, 
+                  null, null, null,
                   Constants.KEY_ID + " DESC");
       }else{
     	  cursor= db.query(Constants.TABLE_DATA_LISTS,
                   get_columns(),
-                  Constants.TABLE_DATA_LISTS_KIND + " = ?  AND " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
-                  new String[]{data_list_type,data_list_public}, null, null,
+                  Constants.TABLE_DATA_LISTS_KIND + " = ? ", 
+                  new String[]{data_list_type}, null, null,
                   Constants.KEY_ID + " DESC");
       }
       
