@@ -23,6 +23,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -106,7 +108,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				
-				System.out.println("aaaaaa : e " + data_list_title_et.hasFocus());
 				if(data_list_title_et.hasFocus()==false){
 					System.out.println("  data_list_title_et  no has focus" );
 				}else{
@@ -139,8 +140,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_title_et.setText("");
 		data_list_title_tv.setText(dataList.title);
 	}
-	private void data_list_title_update_api(String update_str){
-		 
+	private void data_list_title_update_api(String update_str){ 
 	}
 	private void data_list_title_edit_text(){
 		data_list_title_tv.setVisibility(View.GONE);
@@ -267,6 +267,19 @@ public class DataItemListActivity extends TeamknBaseActivity {
 									- visibleItemCount);
 							create_data_item = false;
 						}
+					}
+				});
+				tlv.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> list_view, View list_item,
+							int item_id, long position) {
+						TextView info_tv = (TextView) list_item
+								.findViewById(R.id.data_item_info_tv);
+						final DataItem item = (DataItem) info_tv
+								.getTag(R.id.tag_note_uuid);
+						Intent intent = new Intent(DataItemListActivity.this,CreateDataItemActivity.class);
+						intent.putExtra("data_item_id",item.id);
+						startActivity(intent);
 					}
 				});
 			}

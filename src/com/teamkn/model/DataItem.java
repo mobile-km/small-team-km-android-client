@@ -10,7 +10,7 @@ import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.base.BaseModel;
 public class DataItem extends BaseModel {
-	  public int id;	 
+	  public int id = -1;	 
 	  public String title;
 	  public String content;
 	  public String url;

@@ -865,12 +865,19 @@ public class HttpApi {
 	              }
 	     }.go();
     }
-   	public static void update(final com.teamkn.model.DataItem dataItem) throws Exception{
+   	public static String update(final com.teamkn.model.DataItem dataItem) throws Exception{
    		System.out.println("dataItem " + dataItem.toString());
-   		new TeamknPutRequest<Void>( 修改_data_item + dataItem.server_data_item_id,
-   				new PostParamText("title", dataItem.title)) {
+   		String value = null;
+ 		 if(dataItem.kind.equals(DataItemDBHelper.Kind.URL)){
+ 			value = dataItem.url;
+ 		 }else{
+ 			value = dataItem.content;
+ 		 }
+   		return new TeamknPutRequest<String>( 修改_data_item + dataItem.server_data_item_id,
+   				new PostParamText("title", dataItem.title),
+	            new PostParamText("value",value)) {
 						@Override
-						public Void on_success(String response_text)
+						public String on_success(String response_text)
 								throws Exception {
 							JSONObject json = new JSONObject(response_text);
 			                
@@ -890,6 +897,9 @@ public class HttpApi {
 			                DataItemDBHelper.update(data_item_server);
 							return null;
 						}
+						public String on_unprocessable_entity(String responst_text) {
+							return responst_text;
+					    };
 			}.go();
    	}
    	public static void remove_contact(final int server_data_item_id)  throws Exception {

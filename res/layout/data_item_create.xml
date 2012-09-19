@@ -10,10 +10,11 @@
         <Button
             style="@style/head_bar_button_go_back"
         />
-        <!-- <TextView
-	           style="@style/head_bar_text_center"
-	           android:text="新建列表"
-        /> -->
+        <TextView
+            android:id="@+id/show_page_title"
+           style="@style/head_bar_text_center"
+           android:text="新建列表"
+        />
         <!-- <Button
              android:text="@string/account_edit_button"
              style="@style/head_bar_button_right"
@@ -100,13 +101,13 @@
             android:id="@+id/data_list_public_iv"
             android:src="@android:drawable/ic_lock_lock" 
         /> -->
-        <ImageView
-            android:id="@+id/click_data_item_save_iv"
+        <ImageButton
+            android:id="@+id/click_data_item_save_ib"
             android:layout_alignParentRight="true"
             android:onClick="click_data_item_save_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_save"
+            android:src="@drawable/mi_save"
         />
     </RelativeLayout>
 </RelativeLayout>

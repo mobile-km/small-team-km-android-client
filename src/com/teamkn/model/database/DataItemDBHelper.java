@@ -29,7 +29,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
 		    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
 		    
-		    if(find(dataItem.id).id == 0){ 
+		    if(find(dataItem.id).id <= 0){ 
 		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
 		    	System.out.println("insert= " + dataItem.toString());
 		    }else{
@@ -92,12 +92,12 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    db.close();
 	    return dataItem;
 	  }
-	  public static DataItem find(String title){
+	  public static DataItem find(String title,int data_list_id){
 		DataItem dataItem;
 	    SQLiteDatabase db = get_read_db();
 	    Cursor cursor = db.query(Constants.TABLE_DATA_ITEMS, get_columns(),
-	        Constants.TABLE_DATA_ITEMS_TITLE + " = ?", 
-	        new String[]{title+""},null, null, null);
+	        Constants.TABLE_DATA_ITEMS_TITLE + " = ? AND " + Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " = ? " , 
+	        new String[]{title+"",data_list_id+""},null, null, null);
 	
 	    boolean has_value = cursor.moveToFirst();
 	    if(has_value){

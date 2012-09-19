@@ -233,6 +233,7 @@ public class MainActivity extends TeamknBaseActivity {
 					datalists = DataListDBHelper.all(RequestCode.data_list_type);
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
+					System.out.println("无法连接到网络，请检查网络配置");
 				}
 				return datalists;
 			}

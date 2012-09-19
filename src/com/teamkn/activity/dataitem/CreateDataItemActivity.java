@@ -18,29 +18,49 @@ import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 
 public class CreateDataItemActivity extends TeamknBaseActivity{
+	TextView show_page_title;
 	TextView data_list_title_tv;
 	ImageView click_data_item_save_iv;
 	EditText create_data_item_title_et,create_data_item_content_et;
-	Integer data_list_id;
-	DataList dataList;
-	TextView create_data_list_msg_tv;
 	
+	Integer data_list_id;
+	Integer data_item_id;
+	DataList dataList;
+	DataItem dataItem;
+	boolean is_update = false;
+	
+	TextView create_data_list_msg_tv;
+	String msg = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_create);
 		Intent intent = getIntent();
 		data_list_id = intent.getIntExtra("data_list_id", -1);
-		dataList = DataListDBHelper.find(data_list_id);
-		
+		data_item_id = intent.getIntExtra("data_item_id", -1);
+
 		load_UI();
 	}
 	private void load_UI() {
+		show_page_title = (TextView)findViewById(R.id.show_page_title);
 		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);
-		data_list_title_tv.setText(dataList.title);
-		
 		create_data_item_title_et = (EditText)findViewById(R.id.create_data_item_title_et);
 		create_data_item_content_et = (EditText)findViewById(R.id.create_data_item_content_et);
+		
+		if( data_list_id !=-1){
+			dataList = DataListDBHelper.find(data_list_id);
+			is_update = false;
+			show_page_title.setText("创建条目");
+			data_list_title_tv.setText(dataList.title);
+		}else{ 
+			dataItem = DataItemDBHelper.find(data_item_id);
+			dataList = DataListDBHelper.find(dataItem.data_list_id);
+			is_update = true;
+			show_page_title.setText("编辑条目");
+			data_list_title_tv.setText(dataList.title);
+			create_data_item_title_et.setText(dataItem.title);
+			create_data_item_content_et.setText(dataItem.content);
+		}
 		
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
 		create_data_list_msg_tv.setText("");
@@ -48,28 +68,45 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 	public void click_data_item_save_iv(View view){
 		final String title_str = create_data_item_title_et.getText().toString();
 		final String content_str = create_data_item_content_et.getText().toString();
-
+		
 		if(juast(title_str,content_str)){
          	if(BaseUtils.is_wifi_active(CreateDataItemActivity.this)){
-					
-					new TeamknAsyncTask<Void, Void, String>(CreateDataItemActivity.this,"创建中...") {
+         			String show_str;
+         			if(is_update){
+         				show_str = "修改中...";
+         			}else{
+         				show_str = "创建中...";
+         			}
+					new TeamknAsyncTask<Void, Void, String>(CreateDataItemActivity.this,show_str) {
 
 						@Override
 						public String do_in_background(Void... params)
 								throws Exception {
-							String msg = null;
+							
 							try {
-								System.out.println(DataItemDBHelper.find(title_str).id + " : " + DataItemDBHelper.find(title_str).title);
-								if(DataItemDBHelper.find(title_str).id>0){
-									create_data_list_msg_tv.setText("创建的题目不可重复");
-									msg = "创建的题目不可重复";
+								String back = "" ;
+								if(is_update){
+									dataItem.setTitle(title_str);
+									dataItem.setContent(content_str);	
+									if(DataItemDBHelper.find(title_str , dataItem.data_list_id).id>=0 && DataItemDBHelper.find(title_str , dataItem.data_list_id).id != dataItem.id){
+										msg = "题目不可重复";
+									}else{
+										DataItemDBHelper.update(dataItem);
+										back = HttpApi.DataItem.update(dataItem); 
+									}
 								}else{
-									DataItem dataitem = 
-											new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
-									DataItemDBHelper.update(dataitem);
-									String back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
-									msg = back;
+									if(DataItemDBHelper.find(title_str , data_list_id).id>=0){
+										msg = "创建的题目不可重复";
+									}else{
+										DataItem dataitem = 
+												new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
+										DataItemDBHelper.update(dataitem);
+										back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
+										msg = back;
+									}
 								}
+								
+								
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -78,19 +115,22 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 
 						@Override
 						public void on_success(String result) {
-							System.out.println("result createDataItemActivity " + result);
-							if(result==null){
+							System.out.println(is_update + " : " + msg + " : " + result);
+							if(BaseUtils.is_str_blank(msg)){
 								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
-					    		intent.putExtra("data_list_id", data_list_id);
-					    		intent.putExtra("create_data_item", true);
+					    		intent.putExtra("data_list_id", dataList.id);
+					    		if(is_update){
+					    			intent.putExtra("create_data_item", false);
+					    		}else{
+					    			intent.putExtra("create_data_item", true);
+					    		}
 					    		startActivity(intent);
 					         	finish();
 							}else{
-								BaseUtils.toast(result);
+								BaseUtils.toast(msg);
 							}
 						}
 					}.execute();
-					
 			}else{
 				BaseUtils.toast("无法连接到网络，请检查网络配置");
 			}
@@ -116,5 +156,4 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		}
 		return false;
 	}
-	
 }

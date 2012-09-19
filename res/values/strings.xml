@@ -14,7 +14,7 @@
     <string name="app_method_not_define_exception">功能方法未定义</string>
     <string name="app_intent_connection_exception">网络连接错误</string>
     <string name="app_authenticate_exception">用户身份验证错误</string>
-    <string name="app_unknown_exception">程序执行错误</string>
+    <string name="app_unknown_exception">服务端数据读取错误</string>
 
     <string name="app_data_syn_fail">数据同步失败</string>
 

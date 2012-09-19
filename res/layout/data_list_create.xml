@@ -75,13 +75,13 @@
             android:text="列表名称已存在" 
             android:layout_marginRight="20dp"
         />
-        <ImageView
-            android:id="@+id/click_data_list_save_iv"
+        <ImageButton
+            android:id="@+id/click_data_list_save_ib"
             android:layout_alignParentRight="true"
             android:onClick="click_data_list_save_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_save"
+            android:src="@drawable/mi_save"
         />
     </RelativeLayout>
 </RelativeLayout>

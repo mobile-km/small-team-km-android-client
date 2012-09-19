@@ -62,7 +62,11 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 		}else if(item.public_boolean.equals("false")){
 			view_holder.list_data_list_eye_iv.setVisibility(View.GONE);
 		}
-
+        if(item.kind.equals(MainActivity.RequestCode.STEP)){
+        	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.burlywood));
+        }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
+        	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.blueviolet));
+        }
         /*view_holder.list_note_title_tv_go.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {	

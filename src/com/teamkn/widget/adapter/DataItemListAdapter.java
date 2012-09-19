@@ -39,6 +39,8 @@ public class DataItemListAdapter extends ArrayAdapter<DataItem> {
 		ViewHolder view_holder = new ViewHolder();
 		view_holder.data_item_info_tv = (TextView) row
 				.findViewById(R.id.data_item_info_tv);
+		view_holder.data_item_info_tv.setTag(R.id.tag_note_uuid, dataItems.get(position));
+		
 		view_holder.data_item_title_tv = (TextView) row
 				.findViewById(R.id.data_item_title_tv);
 		view_holder.data_item_title_tv_go = (TextView) row
