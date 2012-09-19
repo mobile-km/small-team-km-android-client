@@ -81,7 +81,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 						data_list_public_checkbox();
 						DataList dataList = DataListDBHelper.find_by_title(add_data_list_et_str);
 						if(dataList.id>0){
-							create_data_list_msg_tv.setText("列表名称已存在");
+//							create_data_list_msg_tv.setText("列表名称已存在");
+							BaseUtils.toast("列表名称已存在");
 							create_data_list_et.setSelected(true);
 						}else{
 							dataList= new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
@@ -101,7 +102,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 					}
 			}
          }else{
-        	 create_data_list_msg_tv.setText("列表名称不可以为空");
+//        	 create_data_list_msg_tv.setText("列表名称不可以为空");
+        	 BaseUtils.toast("列表名称不可以为空");
          }
 	}
 }

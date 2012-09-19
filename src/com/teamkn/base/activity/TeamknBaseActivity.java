@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
@@ -37,10 +38,15 @@ abstract public class TeamknBaseActivity extends Activity {
 	    public final static int FROM_ALBUM = 1;
 	    public final static int FROM_CAMERA = 2;
 	}
+	ListView list_menu_view;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActivitiesStackSingleton.tidy_and_push_activity(this);
+		boolean is_menu = true;
+		if(is_menu){
+			list_menu_view = (ListView)findViewById(R.id.list_menu_view);
+		}
 	}
 	
 	@Override

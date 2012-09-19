@@ -49,7 +49,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
 		    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
 		    
-		    if(find_by_server_id(dataItem.server_data_item_id).id == 0){ 
+		    if(find_by_server_id(dataItem.server_data_item_id).id <= 0){ 
 		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
 		    }else{
 		    	db.update(Constants.TABLE_DATA_ITEMS, values, Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " = ? ", new String[]{dataItem.server_data_item_id+""});

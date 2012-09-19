@@ -126,13 +126,13 @@ public class MainActivity extends TeamknBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.horz_scroll_with_image_menu);
 		layout = (LinearLayout) findViewById(R.id.linearlayout_loading);
-
+         
 		teamkn_show_msg_tv = (TextView) findViewById(R.id.teamkn_show_msg_tv);
 
 		LayoutInflater inflater = LayoutInflater.from(this);
 		view_show = inflater.inflate(R.layout.base_main, null);
 		layout.addView(view_show);
-
+        
 		// data_syn_textview =
 		// (TextView)view_show.findViewById(R.id.main_data_syn_text);
 		// data_syn_progress_bar =

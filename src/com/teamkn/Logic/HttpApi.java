@@ -731,10 +731,10 @@ public class HttpApi {
 		          public Void on_success(String response_text) throws Exception {
 		        	  
 		        	  JSONArray data_list_array = new JSONArray(response_text);
-	                  System.out.println("data_item pull response_text " + response_text);
-	            	  for (int i = 0; i < data_list_array.length(); i++) {
+	                  System.out.println( data_list_array.length() + " data_item pull response_text " + response_text);
+	            	 
+	                  for (int i = 0; i < data_list_array.length(); i++) {
 			                JSONObject json = data_list_array.getJSONObject(i);
-			                
 			                int server_id = json.getInt("id");
 			                String title  = json.getString("title");
 			                String kind   = json.getString("kind");

@@ -23,7 +23,12 @@
 	            android:layout_height="wrap_content"
 	            android:text=""  
 	            android:textColor="#fff"
-	        />  
+	        />
+	        <ListView 
+	            android:layout_below="@+id/list_menu_view"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"    
+	        /> 
 	        <LinearLayout
 	            android:layout_below="@+id/teamkn_show_msg_tv"
 	            android:layout_width="wrap_content"
@@ -289,7 +294,6 @@
 	           android:textColor="#fff"
 	           android:textSize="20dp"
            /> 
-       </LinearLayout>
-            
+       </LinearLayout>  
     </LinearLayout>
 </FrameLayout>
