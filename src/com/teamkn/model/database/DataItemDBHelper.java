@@ -2,7 +2,6 @@ package com.teamkn.model.database;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import android.content.ContentValues;
 import android.database.Cursor;

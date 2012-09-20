@@ -1,8 +1,6 @@
 package com.teamkn.activity.dataitem;
 
 
-import com.teamkn.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,12 +11,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.teamkn.R;
 
 public class ListViewInterceptor extends ListView {
 
@@ -33,10 +32,10 @@ public class ListViewInterceptor extends ListView {
 								// coordinates in this view
 
 	private Rect mTempRect = new Rect();
-	private final int mTouchSlop;
-	private int mHeight;
-	private int mUpperBound;
-	private int mLowerBound;
+//	private final int mTouchSlop;
+//	private int mHeight;
+//	private int mUpperBound;
+//	private int mLowerBound;
 	private WindowManager mWindowManager;
 	private WindowManager.LayoutParams mWindowParams;
 	private int dragndropBackgroundColor = 0x00000000;
@@ -54,7 +53,7 @@ public class ListViewInterceptor extends ListView {
 	public ListViewInterceptor(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
-		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+//		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 	}
 
 	@Override
@@ -161,10 +160,10 @@ public class ListViewInterceptor extends ListView {
 					startDragging(bitmap, y);
 					mDragPos = itemnum;
 					mFirstDragPos = mDragPos;
-					mHeight = getHeight();
-					int touchSlop = mTouchSlop;
-					mUpperBound = Math.min(y - touchSlop, mHeight / 3);
-					mLowerBound = Math.max(y + touchSlop, mHeight * 2 / 3);
+//					mHeight = getHeight();
+//					int touchSlop = mTouchSlop;
+//					mUpperBound = Math.min(y - touchSlop, mHeight / 3);
+//					mLowerBound = Math.max(y + touchSlop, mHeight * 2 / 3);
 					return false;
 				}
 				mDragView = null;
@@ -239,14 +238,14 @@ public class ListViewInterceptor extends ListView {
 		return pos;
 	}
 
-	private void adjustScrollBounds(int y) {
+	/*private void adjustScrollBounds(int y) {
 		if (y >= mHeight / 3) {
 			mUpperBound = mHeight / 3;
 		}
 		if (y <= mHeight * 2 / 3) {
 			mLowerBound = mHeight * 2 / 3;
 		}
-	}
+	}*/
 
 	/*
 	 * Restore size and visibility for all listitems

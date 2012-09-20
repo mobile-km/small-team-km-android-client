@@ -20,7 +20,10 @@
         <TextView
             style="@style/head_bar_text_center"
             android:id="@+id/main_user_name"
+            android:layout_width="fill_parent"
             android:text="@string/main_user_name_default"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="60dp"
         />
         <ImageButton
              android:src="@drawable/mi_data_list_add"
@@ -139,36 +142,57 @@
       <Button
           android:id="@+id/click_all_button"
            android:onClick="click_all_button"
-           android:layout_width="80dp"
+           android:layout_width="100dp"
            android:layout_height="wrap_content"
            android:text="所有"
       />
       <Button
            android:id="@+id/click_collection_button"
            android:onClick="click_collection_button"
-           android:layout_width="80dp"
+           android:layout_width="100dp"
            android:layout_height="wrap_content"
            android:text="收集列表"
       />
       <Button
           android:id="@+id/click_step_button"
            android:onClick="click_step_button"
-           android:layout_width="80dp"
+           android:layout_width="100dp"
            android:layout_height="wrap_content"
            android:text="步骤列表"
       />
-      <ImageButton
+     <!--  <ImageButton
           android:id="@+id/data_list_search_ib"
           android:onClick="click_search_ib"
           android:src="@android:drawable/ic_search_category_default" 
           android:layout_height="50dp"
           android:layout_width="wrap_content"
-     />
+     /> -->
   </LinearLayout>
+  <RelativeLayout
+        android:id="@+id/search_rl"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">  
+         <EditText android:id="@+id/search_box"
+           android:layout_height="40dp"
+           android:layout_width="250dp"
+           android:hint="@string/search_prompt"
+        />
+        <ImageButton
+          android:id="@+id/search_submit"
+          android:layout_height="40dp"
+          android:layout_width="wrap_content"
+          android:layout_alignParentRight="true"
+          android:onClick="click_search_ib"
+          android:src="@android:drawable/ic_search_category_default" 
+        /> 
+    </RelativeLayout>
     <!-- data_list -->
   <RelativeLayout
       android:id="@+id/list"
-      android:layout_below="@+id/bar"
+      android:layout_below="@+id/search_rl"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
   >

@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
@@ -87,7 +84,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 						}else{
 							dataList= new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
 							DataListDBHelper.update(dataList);
-							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type).get(0));
+							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
 							
 							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
 				         	

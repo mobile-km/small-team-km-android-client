@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.teamkn.Logic.AccountManager;
 import com.teamkn.model.DataList;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
@@ -61,22 +62,39 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
 }
-  public static List<DataList> all(String data_list_type) throws Exception {
+  public static List<DataList> all(String data_list_type,String data_list_public) throws Exception {
 	  SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
       Cursor cursor;
       if(data_list_type.equals("ALL")){
-    	  cursor= db.query(Constants.TABLE_DATA_LISTS,
-                  get_columns(),
-                   null, 
-                  null, null, null,
-                  Constants.KEY_ID + " DESC");
+    	  if(data_list_public.equals("true")){
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
+                      new String[]{data_list_public}, null, null,
+                      Constants.KEY_ID + " DESC");
+    	  }else{
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
+                      new String[]{AccountManager.current_user().user_id+""}, null, null,
+                      Constants.KEY_ID + " DESC");
+    	  }
+    	  
       }else{
-    	  cursor= db.query(Constants.TABLE_DATA_LISTS,
-                  get_columns(),
-                  Constants.TABLE_DATA_LISTS_KIND + " = ? ", 
-                  new String[]{data_list_type}, null, null,
-                  Constants.KEY_ID + " DESC");
+    	  if(data_list_public.equals("true")){
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
+                      new String[]{data_list_type,data_list_public}, null, null,
+                      Constants.KEY_ID + " DESC");
+    	  }else{
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
+                      new String[]{data_list_type,AccountManager.current_user().user_id+""}, null, null,
+                      Constants.KEY_ID + " DESC");
+    	  }  
       }
       
 

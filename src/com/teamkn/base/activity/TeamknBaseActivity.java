@@ -1,19 +1,30 @@
 package com.teamkn.base.activity;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
@@ -21,16 +32,14 @@ import com.teamkn.activity.base.AccountManagerActivity;
 import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.TeamknSettingActivity;
-import com.teamkn.activity.chat.ChatListActivity;
-import com.teamkn.activity.contact.ContactsActivity;
 import com.teamkn.activity.note.EditNoteActivity;
-import com.teamkn.activity.note.SearchActivity;
 import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.database.NoteDBHelper;
+import com.teamkn.widget.adapter.MenuListAdapter;
 
 abstract public class TeamknBaseActivity extends Activity {
 	public class RequestCode{
@@ -38,17 +47,100 @@ abstract public class TeamknBaseActivity extends Activity {
 	    public final static int FROM_ALBUM = 1;
 	    public final static int FROM_CAMERA = 2;
 	}
+    MenuListAdapter adapter = null;
+	ArrayList<Map<String, Object>> list;
+	Map<String, Object> map = new HashMap<String, Object>();
 	ListView list_menu_view;
+	
+	ImageView menu_user_avater_iv;
+	TextView  menu_user_name_tv ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActivitiesStackSingleton.tidy_and_push_activity(this);
-		boolean is_menu = true;
-		if(is_menu){
-			list_menu_view = (ListView)findViewById(R.id.list_menu_view);
-		}
 	}
-	
+	private boolean just_menu_actvity(){
+		boolean is_menu = false;
+		System.out.println(" just_menu_activity : " +TeamknApplication.current_show_activity);
+		if( TeamknApplication.current_show_activity!=null 
+				&& TeamknApplication.current_show_activity
+      		  .equals("com.teamkn.activity.base.MainActivity")){
+			System.out.println("----------------------------------------");
+			return true;
+        }
+		if( TeamknApplication.current_show_activity!=null 
+				&& TeamknApplication.current_show_activity
+      		  .equals("com.teamkn.activity.base.TeamknSettingActivity")){
+			return true;
+        }
+		if( TeamknApplication.current_show_activity!=null 
+				&& TeamknApplication.current_show_activity
+      		  .equals("com.teamkn.activity.usermsg.UserMsgActivity")){
+			return true;
+        }
+		if( TeamknApplication.current_show_activity!=null 
+				&& TeamknApplication.current_show_activity
+      		  .equals("com.teamkn.activity.base.AccountManagerActivity")){
+			return true;
+        }
+		return is_menu;
+	}
+	private void load_list(){
+		menu_user_avater_iv = (ImageView)findViewById(R.id.menu_user_avater_iv);
+		menu_user_name_tv = (TextView)findViewById(R.id.menu_user_name_tv);
+		// 设置用户头像和名字
+		AccountUser user = current_user();
+		byte[] avatar = user.avatar;
+		String name = current_user().name;
+		if (avatar != null) {
+			Bitmap bitmap = BitmapFactory
+					.decodeStream(new ByteArrayInputStream(avatar));
+			Drawable drawable = new BitmapDrawable(bitmap);
+			menu_user_avater_iv.setBackgroundDrawable(drawable);
+		} else {
+			menu_user_avater_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+		}
+		menu_user_name_tv.setText(name);
+		
+		
+		list = ArrayListMenu.getData();
+		adapter = new MenuListAdapter(this);
+		adapter.add_items(list);
+		list_menu_view.setAdapter(adapter);
+		list_menu_view.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long position) {
+				switch (arg2) {
+				case 0:  // 公共列表
+					open_activity(MainActivity.class);
+					Intent intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
+					
+					break;
+				case 1: // 我的列表
+					open_activity(MainActivity.class);
+					break;
+				case 2: // 我的书签
+//					open_activity(UserMsgActivity.class);
+					break;
+				case 3:  // 设置选项
+					open_activity(TeamknSettingActivity.class);
+					break;
+				case 4:  //用户信息
+//					open_activity(UserMsgActivity.class);
+					break;
+				case 5: // 注销用户
+					open_activity(AccountManagerActivity.class);
+					break;
+				case 6: // 退出登录
+					click_exit_teamkn_activity();
+					break;
+				default:
+					break;
+				}
+			}
+		});
+	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -58,6 +150,11 @@ abstract public class TeamknBaseActivity extends Activity {
 	@Override
 	protected void onResume() {
 	  TeamknApplication.current_show_activity = this.getClass().getName();
+	  boolean is_menu = just_menu_actvity();
+		if(is_menu){
+			list_menu_view = (ListView)findViewById(R.id.list_menu_view);
+			load_list();
+		}
 	  super.onResume();
 	}
 	
@@ -104,25 +201,7 @@ abstract public class TeamknBaseActivity extends Activity {
 		ImageCache.load_cached_image(image_url, image_view);
 	}
 	
-	 public void click_go_note_activity(View view){
-		open_activity(MainActivity.class);
-	}
-	
-	 public void click_go_chatlist_activity(View view){
-		open_activity(ChatListActivity.class);
-	}
-	
-	 public void click_go_search_node_activity(View view){
-		open_activity(SearchActivity.class);
-	}
-	 public void click_go_contacts_activity(View view){
-		open_activity(ContactsActivity.class);
-	}
-	 public void click_go_setting_activity(View view){
-		open_activity(TeamknSettingActivity.class);
-	}
-
-	 public void click_exit_teamkn_activity(View view){
+	 public void click_exit_teamkn_activity(){
 //			AlertDialog.Builder builder = new AlertDialog.Builder(this); //这里只能用this，不能用appliction_context
 			new AlertDialog.Builder(this)
 	    	.setTitle("选择图片")

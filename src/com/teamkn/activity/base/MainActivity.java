@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -14,9 +15,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -24,12 +27,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamkn.R;
-import com.teamkn.R.color;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.dataitem.DataItemListActivity;
@@ -45,6 +49,7 @@ import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.service.SynNoteService.SynNoteBinder;
 import com.teamkn.widget.adapter.DataListAdapter;
+import com.teamkn.widget.adapter.GroupAdapter;
 
 public class MainActivity extends TeamknBaseActivity {
 
@@ -71,7 +76,7 @@ public class MainActivity extends TeamknBaseActivity {
 
 		public static String data_list_type = ALL;
 
-		public static String data_list_public = "true";
+		public static String data_list_public = "false";
 
 		static int account_page = 20;
 		static int now_page = 1;
@@ -92,12 +97,12 @@ public class MainActivity extends TeamknBaseActivity {
 	Button click_collection_button, click_step_button, click_all_button;
 	TextView public_data_list_tv;
 
-	/*
-	 * 搜索
-	 */
-	// ImageButton data_list_search_ib;
-	EditText data_list_search_edit_et;
-
+	PopupWindow popupWindow; 
+	private ListView lv_group;   
+    private View view; 
+    private List<String> groups; 
+    TextView user_name_tv;
+    
 	private TextView data_syn_textview; // 同步更新时间
 	private ProgressBar data_syn_progress_bar; // 同步更新进度条
 	private TextView progress_set_num; // 同步更新时间
@@ -126,41 +131,12 @@ public class MainActivity extends TeamknBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.horz_scroll_with_image_menu);
 		layout = (LinearLayout) findViewById(R.id.linearlayout_loading);
-         
-		teamkn_show_msg_tv = (TextView) findViewById(R.id.teamkn_show_msg_tv);
 
 		LayoutInflater inflater = LayoutInflater.from(this);
 		view_show = inflater.inflate(R.layout.base_main, null);
 		layout.addView(view_show);
         
-		// data_syn_textview =
-		// (TextView)view_show.findViewById(R.id.main_data_syn_text);
-		// data_syn_progress_bar =
-		// (ProgressBar)view_show.findViewById(R.id.main_data_syn_progress_bar);
-		// progress_set_num =
-		// (TextView)view_show.findViewById(R.id.progress_set_num);
-		// manual_syn_bn =
-		// (ImageView)view_show.findViewById(R.id.manual_syn_bn);
-		//
-		// // 注册更新服务
-		// Intent intent = new Intent(MainActivity.this,SynNoteService.class);
-		// bindService(intent, conn, Context.BIND_AUTO_CREATE);
-		//
-		// // 开始后台索引服务
-		// IndexService.start(this);
-		// IndexTimerTask.index_task(IndexTimerTask.SCHEDULE_INTERVAL);
-		//
-		// // 注册更新表情反馈服务
-		// startService(new Intent(MainActivity.this,FaceCommentService.class));
-		// SharedParam.saveParam(this, 0);
-		// FaceCommentService.context = this;
-		//
-		// // 启动刷新联系人状态服务
-		// startService(new
-		// Intent(MainActivity.this,RefreshContactStatusService.class));
-		// // 启动更新 对话串的服务
-		// startService(new Intent(MainActivity.this,SynChatService.class));
-
+		
 		Intent intent = getIntent();
 		String data_list_public = intent.getStringExtra("data_list_public");
 		String data_list_type = intent.getStringExtra("data_list_type");
@@ -170,26 +146,10 @@ public class MainActivity extends TeamknBaseActivity {
 			System.out.println(RequestCode.data_list_public + " : "
 					+ RequestCode.data_list_type);
 		}
-		load_UI();
 		// 加载node_listview
 		load_list();
 	}
 
-	private void load_UI() {
-		// data_list_search_ib =
-		// (ImageButton)findViewById(R.id.data_list_search_ib);
-		data_list_search_edit_et = (EditText) findViewById(R.id.data_list_search_edit_et);
-
-		public_data_list_tv = (TextView) findViewById(R.id.public_data_list_tv);
-		public_data_list_tv.setOnClickListener(click_public_tv);
-
-		// top = (LinearLayout)findViewById(R.id.top);
-		// click_collection_button = (Button)
-		// findViewById(R.id.click_collection_button);
-		// click_step_button = (Button) findViewById(R.id.click_step_button);
-		// click_all_button = (Button) findViewById(R.id.click_all_button);
-
-	}
 	@Override
 	protected void onResume() {
 		// 设置用户头像和名字
@@ -206,14 +166,27 @@ public class MainActivity extends TeamknBaseActivity {
 		} else {
 			rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
-		TextView user_name_tv = (TextView) view_show
+		user_name_tv= (TextView) view_show
 				.findViewById(R.id.main_user_name);
-		user_name_tv.setText(name);
+		user_name_tv.setText(name+"的列表");
+		user_name_tv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {	
+				showWindow(v);
+			}
+		});
 		super.onResume();
 	}
-
+    private void set_title(){
+    	if(RequestCode.data_list_public.equals("true")){
+    		user_name_tv.setText("公共列表");
+    	}else{
+    		user_name_tv.setText(current_user().name + "的列表");
+    	}
+    }
 	// 加载node_listview
 	private void load_list() {
+		set_title();
 		data_list = (ListView) layout.findViewById(R.id.data_list);
 		// bind_add_footer_view();
 		datalists = new ArrayList<DataList>();
@@ -230,7 +203,7 @@ public class MainActivity extends TeamknBaseActivity {
 //					datalists = DataListDBHelper.all(
 //							RequestCode.data_list_type,
 //							RequestCode.data_list_public);
-					datalists = DataListDBHelper.all(RequestCode.data_list_type);
+					datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
 					System.out.println("无法连接到网络，请检查网络配置");
@@ -252,7 +225,7 @@ public class MainActivity extends TeamknBaseActivity {
 					int item_id, long position) {
 				System.out.println(item_id + " : " + position);
 				TextView info_tv = (TextView) list_item
-						.findViewById(R.id.note_info_tv);
+						.findViewById(R.id.info_tv);
 				final DataList item = (DataList) info_tv
 						.getTag(R.id.tag_note_uuid);
 				Intent intent = new Intent(MainActivity.this,DataItemListActivity.class);
@@ -295,15 +268,6 @@ public class MainActivity extends TeamknBaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// // 解除 和 更新笔记服务的绑定
-		// unbindService(conn);
-		// // 关闭更新联系人状态服务
-		// stopService(new
-		// Intent(MainActivity.this,RefreshContactStatusService.class));
-		// // 关闭更新对话串的服务
-		// stopService(new Intent(MainActivity.this,SynChatService.class));
-		// IndexService.stop();
-		// stopService(new Intent(MainActivity.this,FaceCommentService.class));
 	}
 
 	public class SynUIBinder {
@@ -386,7 +350,13 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 
 	public void click_search_ib(View view) {
-		startActivity(new Intent(MainActivity.this,SearchDataActivity.class));
+		EditText search_box = (EditText)findViewById(R.id.search_box);
+		String search_str = search_box.getText().toString();
+		if(!BaseUtils.is_str_blank(search_str)){
+			Intent intent = new Intent(MainActivity.this,SearchDataActivity.class);
+			intent.putExtra("search_str", search_str);
+			startActivity(intent);
+		}
 	}
 
 	public void click_add_data_list_iv(View view) {
@@ -410,44 +380,67 @@ public class MainActivity extends TeamknBaseActivity {
 		RequestCode.data_list_type = RequestCode.ALL;
 		load_list();
 	}
-
-	public void button_show_color(final String type) {
-		// Button click_collection_button,click_step_button,click_all_button;
-		top.post(new Runnable() {
-			@Override
-			public void run() {
-				if (type.equals(RequestCode.ALL)) {
-					click_all_button.setBackgroundColor(color.blue);
-					click_step_button.setBackgroundColor(color.aliceblue);
-					click_collection_button.setBackgroundColor(color.aliceblue);
-				} else if (type.equals(RequestCode.STEP)) {
-					click_all_button.setBackgroundColor(color.aliceblue);
-					click_step_button.setBackgroundColor(color.blue);
-					click_collection_button.setBackgroundColor(color.aliceblue);
-				} else if (type.equals(RequestCode.COLLECTION)) {
-					click_all_button.setBackgroundColor(color.aliceblue);
-					click_step_button.setBackgroundColor(color.aliceblue);
-					click_collection_button.setBackgroundColor(color.blue);
+	private void showWindow(View parent) {  
+        if (popupWindow == null) {  
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
+  
+            view = layoutInflater.inflate(R.layout.group_list, null);  
+  
+            lv_group = (ListView) view.findViewById(R.id.lvGroup);  
+            // 加载数据  
+            groups = new ArrayList<String>();  
+            groups.add("全部");  
+            groups.add("我的列表");  
+            groups.add("公共列表");    
+  
+            GroupAdapter groupAdapter = new GroupAdapter(this); 
+            groupAdapter.add_items(groups);
+            lv_group.setAdapter(groupAdapter);  
+            // 创建一个PopuWidow对象  
+            popupWindow = new PopupWindow(view, 180, 218);  
+        }  
+  
+        // 使其聚集  
+        popupWindow.setFocusable(true);  
+        // 设置允许在外点击消失  
+        popupWindow.setOutsideTouchable(true);  
+  
+        // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景  
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());  
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);  
+        // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半  
+        int xPos = windowManager.getDefaultDisplay().getWidth() / 2  
+                - popupWindow.getWidth() / 2;  
+        Log.i("coder", "xPos:" + xPos);  
+  
+        popupWindow.showAsDropDown(parent, xPos-50, 0);  
+  
+        lv_group.setOnItemClickListener(new OnItemClickListener() {  
+  
+            @Override  
+            public void onItemClick(AdapterView<?> adapterView, View view,  
+                    int position, long id) {  
+  
+                Toast.makeText(MainActivity.this,groups.get(position), Toast.LENGTH_LONG).show();  
+                switch (position) {
+				case 0:
+					break;
+				case 1:
+					RequestCode.data_list_public = "false";
+					load_list();
+					break;
+				case 2:
+					RequestCode.data_list_public = "true";
+					load_list();
+					break;
+				default:
+					break;
 				}
-			}
-		});
-	}
+                if (popupWindow != null) {  
+                    popupWindow.dismiss();  
+                }  
+            }  
+        });  
+    }  
 
-	public void base_main_click_public_data_list_tv() {
-		if (RequestCode.data_list_public.equals("true")) {
-			public_data_list_tv.setText("公开");
-			RequestCode.data_list_public = "false";
-		} else {
-			public_data_list_tv.setText("私有");
-			RequestCode.data_list_public = "true";
-		}
-		load_list();
-	}
-
-	OnClickListener click_public_tv = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			base_main_click_public_data_list_tv();
-		}
-	};
 }

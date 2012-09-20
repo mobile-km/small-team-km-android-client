@@ -1,13 +1,13 @@
 package com.teamkn.base.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import com.teamkn.base.activity.TeamknBaseActivity;
-import com.teamkn.model.DataItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.teamkn.base.activity.TeamknBaseActivity;
 
 public abstract class TeamknBaseAdapter<M> extends BaseAdapter {
     public TeamknBaseActivity activity;
