@@ -11,6 +11,7 @@
             android:id="@+id/head"
             >
         <Button
+            android:id="@+id/go_back_button"
             style="@style/head_bar_button_go_back"
         />
         <TextView

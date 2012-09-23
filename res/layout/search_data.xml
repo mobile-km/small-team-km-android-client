@@ -13,15 +13,55 @@
     >
         <Button
             style="@style/head_bar_button_go_back"
+            android:background="@drawable/mi_menu_title"
+            android:text=""
+            android:layout_width="32dp"
+            android:padding="5dp"
         />
         <TextView
             style="@style/head_bar_text_center"
-            android:text="搜索列表"
+            android:id="@+id/main_user_name"
+            android:layout_width="fill_parent"
+            android:text="搜索公共列表"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="60dp"
         />
     </RelativeLayout>
+    <LinearLayout 
+      android:id="@+id/bar"
+      android:layout_below="@+id/head_bar"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:layout_marginBottom="10dp"
+      android:layout_marginTop="10dp"
+  >
+      <Button
+          android:id="@+id/click_all_button"
+           android:onClick="click_all_button"
+           android:layout_width="100dp"
+           android:layout_height="wrap_content"
+           android:text="所有"
+      />
+      <Button
+           android:id="@+id/click_collection_button"
+           android:onClick="click_collection_button"
+           android:layout_width="100dp"
+           android:layout_height="wrap_content"
+           android:text="收集列表"
+      />
+      <Button
+          android:id="@+id/click_step_button"
+           android:onClick="click_step_button"
+           android:layout_width="100dp"
+           android:layout_height="wrap_content"
+           android:text="步骤列表"
+      />
+  </LinearLayout>
     <RelativeLayout
         android:id="@+id/horizontal_wrapper"
-        android:layout_below="@+id/head_bar"
+        android:layout_below="@+id/bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">  
 	     <EditText android:id="@+id/search_box"

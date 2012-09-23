@@ -1,26 +1,17 @@
 package com.teamkn.widget.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
-import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
-import com.teamkn.model.database.DataListDBHelper;
 
 public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     Activity activity ;
@@ -45,13 +36,14 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.list_note_title_tv_edit    = (TextView)  view.findViewById(R.id.list_note_title_tv_edit);
         view_holder.list_note_title_tv_go    = (TextView)  view.findViewById(R.id.list_note_title_tv_go);
         view_holder.list_data_list_eye_tv = (TextView) view.findViewById(R.id.list_data_list_eye_tv);
-       
+        view_holder.list_type_tv = (TextView)view.findViewById(R.id.list_type_tv);
         //公共列表
         view_holder.show_is_yes_public_relativelayout = (RelativeLayout)view.findViewById(R.id.show_is_yes_public_relativelayout);
         view_holder.data_list_item_user_avatar_iv= (ImageView)view.findViewById(R.id.data_list_item_user_avatar_iv);
         view_holder.data_list_item_user_name_tv = (TextView)view.findViewById(R.id.data_list_item_user_name_tv);
         view_holder.list_title_tv_public = (TextView)view.findViewById(R.id.list_title_tv_public);
         view_holder.list_collect_tv_public = (TextView)view.findViewById(R.id.list_collect_tv_public);
+        view_holder.list_type_tv_public = (TextView)view.findViewById(R.id.list_type_tv_public);
         return view_holder;
     }
 
@@ -79,11 +71,18 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     			view_holder.list_data_list_eye_tv.setText("不分享");
     		}
             if(item.kind.equals(MainActivity.RequestCode.STEP)){
+            	view_holder.list_type_tv.setText("步骤");
             	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.burlywood));
             }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
+            	view_holder.list_type_tv.setText("收集");
             	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.blueviolet));
             }
         }else{
+        	if(item.kind.equals(MainActivity.RequestCode.STEP)){
+            	view_holder.list_type_tv_public.setText("步骤");
+            }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
+            	view_holder.list_type_tv_public.setText("收集");
+            }
         	view_holder.show_is_no_public_relativelayout.setVisibility(View.GONE);
         	view_holder.show_is_yes_public_relativelayout.setVisibility(View.VISIBLE);
             view_holder.list_title_tv_public.setText(item.title);
@@ -100,6 +99,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         TextView list_note_title_tv_edit;   
         TextView list_note_title_tv_go;
         TextView list_data_list_eye_tv;
+        TextView list_type_tv;
         
         
         // 公共列表子项显示
@@ -108,5 +108,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         TextView data_list_item_user_name_tv;
         TextView list_title_tv_public;
         TextView list_collect_tv_public;
+        TextView list_type_tv_public;
     }
 }

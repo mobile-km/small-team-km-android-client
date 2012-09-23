@@ -12,54 +12,64 @@
                android:layout_width="fill_parent"
                android:layout_height="wrap_content"
        />
-    <RelativeLayout 
+
+    <RelativeLayout
         android:id="@+id/show_is_no_public_relativelayout"
-        android:background="@color/gainsboro"
         android:layout_width="fill_parent"
-        android:padding="10dp"
         android:layout_height="wrap_content"
-    >
-	  
-	   <TextView
-	       android:id="@+id/list_note_title_tv_edit"
-	       style="@style/text"
-	       android:layout_width="fill_parent"
-	       android:layout_height="wrap_content"
-	       android:gravity="center_vertical"
-	       android:textColor="@color/black"
-	       android:text="title"
-	       android:paddingRight="80dp"
-	       android:textSize="20dp"
-	   />
-	   <TextView
-	       android:id="@+id/list_data_list_eye_tv"
-	       android:layout_marginTop="10dp"
-	       android:text="分享"
-	       android:textColor="@color/black"
-	       android:layout_width="wrap_content"
-	       android:layout_height="wrap_content"
-	       android:layout_below="@+id/list_note_title_tv_edit" 
-	   />
-	   <TextView
-	       android:id="@+id/list_note_title_tv_go"
-	       style="@style/text"
-	       android:layout_width="80dp"
-	       android:gravity="center"
-	       android:textColor="@color/black"
-	       android:text="id:s_id"
-	       android:padding="10dp"
-	       android:background="@color/burlywood"
-	       android:layout_alignParentRight="true"
-	       android:clickable="true"
-	   />
-	   <TextView
-           android:layout_alignParentRight="true"
-           android:text="收藏"
-           android:textColor="@color/black"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_below="@+id/list_note_title_tv_go" 
-       />
+        android:background="@color/gainsboro"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/list_note_title_tv_edit"
+            style="@style/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingRight="80dp"
+            android:text="title"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/list_data_list_eye_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/list_note_title_tv_edit"
+            android:layout_marginTop="10dp"
+            android:text="分享"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/list_note_title_tv_go"
+            style="@style/text"
+            android:layout_width="80dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/burlywood"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="id:s_id"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/list_collect_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/list_note_title_tv_go"
+            android:text="加书签"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/list_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/list_collect_tv"
+            android:layout_alignBottom="@+id/list_collect_tv"
+            android:layout_alignLeft="@+id/list_note_title_tv_go"
+            android:text="步骤"
+            android:textColor="@color/black" />
     </RelativeLayout>
 
     <RelativeLayout 
@@ -100,14 +110,25 @@
            android:padding="10dp"
        />
         <TextView
-            android:id="@+id/list_collect_tv_public"
+           android:id="@+id/list_collect_tv_public"
            android:layout_alignParentRight="true"
            android:layout_alignParentBottom="true"
            android:layout_marginTop="10dp"
-           android:text="收藏"
+           android:text="加书签"
            android:textColor="@color/black"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
        />
+
+        <TextView
+            android:id="@+id/list_type_tv_public"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+           android:layout_alignParentBottom="true"
+            android:layout_marginRight="50dp"
+            android:text="步骤"
+            android:textColor="@color/black" />
+
     </RelativeLayout>
 </RelativeLayout>

@@ -132,32 +132,36 @@
   <LinearLayout 
       android:id="@+id/bar"
       android:layout_below="@+id/top"
-      android:layout_height="wrap_content"
+      android:layout_height="40dp"
       android:layout_width="fill_parent"
       android:orientation="horizontal"
       android:gravity="center"
-      android:layout_marginBottom="10dp"
+      android:layout_marginBottom="5dp"
       android:layout_marginTop="10dp"
+      android:background="@color/lightsteelblue"
   >
       <Button
-          android:id="@+id/click_all_button"
+          android:id="@+id/click_all_tv"
            android:onClick="click_all_button"
            android:layout_width="100dp"
-           android:layout_height="wrap_content"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
            android:text="所有"
       />
       <Button
-           android:id="@+id/click_collection_button"
+           android:id="@+id/click_collection_tv"
            android:onClick="click_collection_button"
            android:layout_width="100dp"
-           android:layout_height="wrap_content"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
            android:text="收集列表"
       />
       <Button
-          android:id="@+id/click_step_button"
+          android:id="@+id/click_step_tv"
            android:onClick="click_step_button"
            android:layout_width="100dp"
-           android:layout_height="wrap_content"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
            android:text="步骤列表"
       />
      <!--  <ImageButton
@@ -168,11 +172,20 @@
           android:layout_width="wrap_content"
      /> -->
   </LinearLayout>
+  <ImageView
+       android:layout_below="@+id/bar"
+       android:id="@+id/cursor"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:scaleType="matrix"
+       android:src="@drawable/a" 
+       android:layout_marginBottom="5dp"
+  />
   <RelativeLayout
         android:id="@+id/search_rl"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_below="@+id/bar"
+        android:layout_below="@+id/cursor"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">  
          <EditText android:id="@+id/search_box"
@@ -202,34 +215,5 @@
           android:divider="#00000000"
           android:descendantFocusability="beforeDescendants"
       />
- </RelativeLayout>
-
- <RelativeLayout
-     android:layout_width="fill_parent"
-     android:visibility="gone"
-     android:layout_height="40dp"
-     android:layout_alignParentBottom="true"
-     android:layout_gravity="bottom"
-     android:background="@color/white"
-     android:gravity="center" >
-      
-      <TextView
-         android:text="私有"
-         android:textColor="@color/black"
-         android:gravity="center"
-         android:layout_width="50dp"
-         android:layout_height="40dp"
-         android:background="#789"
-         android:id="@+id/public_data_list_tv"
-     />
-     <ImageView
-         android:layout_marginLeft="80dp"
-         android:layout_alignLeft="@+id/public_data_list_tv"
-         android:onClick="click_add_data_list_iv"
-         android:layout_width="50dp"
-         android:layout_height="40dp"
-         android:background="#789"
-         android:src="@android:drawable/ic_input_add"  
-     />
  </RelativeLayout>
 </RelativeLayout>

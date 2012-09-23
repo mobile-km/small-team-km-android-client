@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +49,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	class RequestCode {
 		public final static int CREATE_DATA_ITEM = 0;
 	}
+	Button go_back_button;
 	/*
 	 * data_list title edit
 	 * */
@@ -76,7 +78,14 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		create_data_item = intent.getBooleanExtra("create_data_item", false);
 		Integer data_list_id = intent.getIntExtra("data_list_id", -1);
 		dataList = DataListDBHelper.find(data_list_id);
-
+		String data_list_public = intent.getStringExtra("data_list_public");
+		go_back_button = (Button)findViewById(R.id.go_back_button);
+		if(data_list_public.equals("true")){
+			go_back_button.setText("公共列表");
+		}else if(data_list_public.equals("false")){
+			go_back_button.setText(current_user().name);
+		}
+		
 		data_list_title_rl = (RelativeLayout)findViewById(R.id.data_list_title_rl);
 		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);
 		data_list_title_tv.setText(dataList.title);

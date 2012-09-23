@@ -11,15 +11,19 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -96,7 +100,16 @@ public class MainActivity extends TeamknBaseActivity {
 	LinearLayout top;
 	Button click_collection_button, click_step_button, click_all_button;
 	TextView public_data_list_tv;
-
+    /*
+     * cursor imageview 页卡头标
+     * */
+	private static ImageView cursor;// 动画图片
+	private static int offset = 0;// 动画图片偏移量
+	private static int currIndex = 0;// 当前页卡编号
+	private static int bmpW;// 动画图片宽度
+	/*
+     * popupwindow title public
+     * */
 	PopupWindow popupWindow; 
 	private ListView lv_group;   
     private View view; 
@@ -147,11 +160,27 @@ public class MainActivity extends TeamknBaseActivity {
 					+ RequestCode.data_list_type);
 		}
 		// 加载node_listview
+		InitImageView();
 		load_list();
 	}
-
+	/**
+	 * 初始化动画
+	 */
+	private void InitImageView() {
+		cursor = (ImageView) findViewById(R.id.cursor);
+		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.a)
+				.getWidth();// 获取图片宽度
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int screenW = dm.widthPixels;// 获取分辨率宽度
+		offset = (screenW / 3 - bmpW) / 2;// 计算偏移量
+		Matrix matrix = new Matrix();
+		matrix.postTranslate(offset, 0);
+		cursor.setImageMatrix(matrix);// 设置动画初始位置
+	}
 	@Override
 	protected void onResume() {
+		
 		// 设置用户头像和名字
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
@@ -176,6 +205,7 @@ public class MainActivity extends TeamknBaseActivity {
 			}
 		});
 		super.onResume();
+		set_title();
 	}
     private void set_title(){
     	if(RequestCode.data_list_public.equals("true")){
@@ -186,7 +216,7 @@ public class MainActivity extends TeamknBaseActivity {
     }
 	// 加载node_listview
 	private void load_list() {
-		set_title();
+		request_pageselected();
 		data_list = (ListView) layout.findViewById(R.id.data_list);
 		// bind_add_footer_view();
 		datalists = new ArrayList<DataList>();
@@ -230,6 +260,7 @@ public class MainActivity extends TeamknBaseActivity {
 						.getTag(R.id.tag_note_uuid);
 				Intent intent = new Intent(MainActivity.this,DataItemListActivity.class);
 				intent.putExtra("data_list_id",item.id);
+				intent.putExtra("data_list_public", RequestCode.data_list_public);
 				startActivity(intent);
 			}
 		});
@@ -355,6 +386,8 @@ public class MainActivity extends TeamknBaseActivity {
 		if(!BaseUtils.is_str_blank(search_str)){
 			Intent intent = new Intent(MainActivity.this,SearchDataActivity.class);
 			intent.putExtra("search_str", search_str);
+			intent.putExtra("data_list_type", RequestCode.data_list_type);
+			intent.putExtra("data_list_public", RequestCode.data_list_public);
 			startActivity(intent);
 		}
 	}
@@ -368,17 +401,34 @@ public class MainActivity extends TeamknBaseActivity {
 
 	public void click_collection_button(View view) {
 		RequestCode.data_list_type = RequestCode.COLLECTION;
+		System.out.println("1------------");
+		request_pageselected();
 		load_list();
 	}
 
 	public void click_step_button(View view) {
 		RequestCode.data_list_type = RequestCode.STEP;
+		System.out.println("2------------");
+		request_pageselected();
 		load_list();
 	}
 
 	public void click_all_button(View view) {
 		RequestCode.data_list_type = RequestCode.ALL;
+		System.out.println("3------------");
+		request_pageselected();
 		load_list();
+	}
+	private void request_pageselected(){
+		int index = 0;
+		if(RequestCode.data_list_type.equals(RequestCode.COLLECTION)){
+			index = 1 ;
+		}else if(RequestCode.data_list_type.equals(RequestCode.STEP)){
+			index = 2 ;
+		}else if(RequestCode.data_list_type.equals(RequestCode.ALL)) {
+			index = 0 ;
+		}
+		MyOnPageChangeListener.onPageSelected(index);
 	}
 	private void showWindow(View parent) {  
         if (popupWindow == null) {  
@@ -427,10 +477,12 @@ public class MainActivity extends TeamknBaseActivity {
 					break;
 				case 1:
 					RequestCode.data_list_public = "false";
+					set_title();
 					load_list();
 					break;
 				case 2:
 					RequestCode.data_list_public = "true";
+					set_title();
 					load_list();
 					break;
 				default:
@@ -443,4 +495,46 @@ public class MainActivity extends TeamknBaseActivity {
         });  
     }  
 
+	/**
+	 * 页卡切换监听
+	 */
+	static class MyOnPageChangeListener{
+		static int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
+		static int two = one * 2;// 页卡1 -> 页卡3 偏移量
+		public static void onPageSelected(int arg0) {
+			Animation animation = null;
+			switch (arg0) {
+			case 0:
+				if (currIndex == 1) {
+					animation = new TranslateAnimation(one, 0, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, 0, 0, 0);
+				}
+				break;
+			case 1:
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(offset, one, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, one, 0, 0);
+				}
+				break;
+			case 2:
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(offset, two, 0, 0);
+				} else if (currIndex == 1) {
+					animation = new TranslateAnimation(one, two, 0, 0);
+				}
+				break;
+			}
+			currIndex = arg0;
+			try {
+				animation.setFillAfter(true);// True:图片停在动画结束位置
+				animation.setDuration(300);
+				cursor.startAnimation(animation);
+			} catch (Exception e) {
+//				e.printStackTrace();
+			}
+			System.out.println("arg0  "  + arg0);
+		}
+	}
 }
