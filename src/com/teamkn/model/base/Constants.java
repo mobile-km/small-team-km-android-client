@@ -92,33 +92,15 @@ public class Constants {
     public static final String TABLE_DATA_ITEMS_DATA_LIST_ID = "data_list_id";
     public static final String TABLE_DATA_ITEMS_POSITION = "position";
     public static final String TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID = "server_data_item_id";
+  
     // watch
     public static final String TABLE_WATCH = "watch";
     public static final String TABLE_WATCH_USER_ID = "user_id";
     public static final String TABLE_WATCH_DATA_LIST_ID = "data_list_id";
+    
+    //data_list_readings
+    public static final String TABLE_DATA_LIST_READINGS = "data_list_readings";
+    public static final String TABLE_DATA_LIST_READINGS_DATA_LIST_ID = "data_list_id";
+    public static final String TABLE_DATA_LIST_READINGS_USER_ID = "user_id";
+    
 }
-/*
- *  users
- 2  integer :user_id
- 3  text :user_name
- 4  blob :user_avatar
- 5
- 6  data_lists
- 7  integer :user_id
- 8  text    :title
- 9  text    :kind  # COLLECTION STEP
-10  text    :public  # true false
-11  integer :server_data_list_id
-12
-13  data_items
-14  text :title
-15  text :content
-16  text :url
-17  text :kind  # URL TEXT IMAGE
-18  integer :data_list_id
-19  integer :position
-20
-21  watch
-22  integer :user_id
-23  integer :data_list_id
- * */

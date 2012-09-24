@@ -27,7 +27,21 @@ public class UserDBHelper extends BaseModelDBHelper {
     db.insert(Constants.TABLE_USERS, null, values);
     db.close();
   }
-  
+  public static void createOrUpdate(User user){
+	    SQLiteDatabase db = get_write_db();
+	    ContentValues values = new ContentValues();
+	    values.put(Constants.TABLE_USERS__USER_ID,user.user_id);
+	    values.put(Constants.TABLE_USERS__USER_NAME,user.user_name);
+	    values.put(Constants.TABLE_USERS__USER_AVATAR,user.user_avatar);
+	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_created_time);
+	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_updated_time);
+	    if(find_by_server_user_id(user.user_id).user_name==null || find_by_server_user_id(user.user_id).user_name.equals("")){
+	    	db.insert(Constants.TABLE_USERS, null, values);
+	    }else{
+	    	db.update(Constants.TABLE_USERS, values, Constants.TABLE_USERS__USER_ID + " = ? ", new String[]{user.user_id+""});
+	    }
+	    db.close();
+  }
   public static void create(int user_id,
       String user_name, String user_avatar_url, long server_created_time, long server_updated_time){
     byte[] user_avatar = null;

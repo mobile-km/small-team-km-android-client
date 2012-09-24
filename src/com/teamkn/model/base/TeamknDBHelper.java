@@ -105,7 +105,13 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.KEY_ID + " integer primary key autoincrement, " +
     		Constants.TABLE_WATCH_USER_ID + " integer , " + 
             Constants.TABLE_WATCH_DATA_LIST_ID + " integer );";
-
+    
+    private static final String create_data_list_readings = "create table "+
+            Constants.TABLE_DATA_LIST_READINGS + " ( " + 
+            Constants.KEY_ID + " integer primary key autoincrement, " +
+    		Constants.TABLE_DATA_LIST_READINGS_DATA_LIST_ID + " integer , " + 
+            Constants.TABLE_DATA_LIST_READINGS_USER_ID + " integer );";
+    
     public TeamknDBHelper(Context context, String name, CursorFactory factory,
                           int version) {
         super(context, name, factory, version);
@@ -128,6 +134,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL(create_data_lists);
         db.execSQL(create_data_items);
         db.execSQL(create_watch);
+        db.execSQL(create_data_list_readings);
         
 //        System.out.println("data_lists " +create_data_lists );
 //        System.out.println("create_data_items " + create_data_items);
@@ -151,6 +158,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists " + Constants.TABLE_DATA_LISTS);
         db.execSQL("drop table if exists " + Constants.TABLE_DATA_ITEMS);
         db.execSQL("drop table if exists " + Constants.TABLE_WATCH);
+        db.execSQL("drop table if exists " + Constants.TABLE_DATA_LIST_READINGS);
         
         onCreate(db);
     }
