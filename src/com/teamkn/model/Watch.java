@@ -4,9 +4,9 @@ public class Watch extends BaseModel {
 	  public int id;
 	  public int user_id;
 	  public int data_list_id;
-	  
+	public static Watch WATCH = new Watch();
 	public Watch() {
-		super();
+		 set_nil();
 	}
 
 	public Watch(int id, int user_id, int data_list_id) {

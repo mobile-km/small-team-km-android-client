@@ -36,6 +36,7 @@
 	<activity android:name=".activity.datalist.SearchDataActivity"  android:windowSoftInputMode="stateHidden"/>
 	<activity android:name=".activity.dataitem.DataItemListActivity"  android:windowSoftInputMode="adjustResize"/>
 	<activity android:name=".activity.dataitem.CreateDataItemActivity" />
+	<activity android:name=".activity.dataitem.DataItemStepHelpActivity"/>
 	
 	<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 	</activity>

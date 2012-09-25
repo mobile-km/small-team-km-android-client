@@ -17,7 +17,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	        public static final String IMAGE = "IMAGE";
 	        public static final String URL = "URL";
 	    }
-	  public static void update(DataItem dataItem){
+	  public static void update_by_id(DataItem dataItem){
 		    SQLiteDatabase db = get_write_db();  
 		    ContentValues values = new ContentValues();
 		    values.put(Constants.TABLE_DATA_ITEMS_TITLE,dataItem.title);
@@ -37,6 +37,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    }
 		    db.close();
 	  }
+	  
 	  public static void pull(DataItem dataItem){
 		    SQLiteDatabase db = get_write_db();  
 		    ContentValues values = new ContentValues();
@@ -67,11 +68,27 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	      while (cursor.moveToNext()) {
 	    	  DataItem datalist = build_by_cursor(cursor);
 	    	  dataItems.add(datalist);
-	          System.out.println(datalist.toString());
 	      }
 	      cursor.close();
 	      db.close();
 		return dataItems;
+	  }
+	  public static DataItem fist_data_item(int data_list_id) throws Exception {
+		  SQLiteDatabase db = get_read_db();
+	      List<DataItem> dataItems = new ArrayList<DataItem>();
+	      Cursor cursor= db.query(Constants.TABLE_DATA_ITEMS,
+	                      get_columns(),
+	                      Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " = ? ", 
+	                      new String[]{data_list_id+""}, null, null,
+	                      Constants.KEY_ID + " DESC");//asc或desc（即升级或降序）
+	
+	      while (cursor.moveToNext()) {
+	    	  DataItem datalist = build_by_cursor(cursor);
+	    	  dataItems.add(datalist);
+	      }
+	      cursor.close();
+	      db.close();
+		return dataItems.get(0);
 	  }
 	  public static DataItem find(int id){
 		  DataItem dataItem;

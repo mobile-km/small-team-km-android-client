@@ -2,6 +2,7 @@ package com.teamkn.Logic;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -30,21 +32,25 @@ import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.DataListReading;
 import com.teamkn.model.Note;
 import com.teamkn.model.User;
+import com.teamkn.model.Watch;
 import com.teamkn.model.database.AttitudesDBHelper;
 import com.teamkn.model.database.ChatDBHelper;
 import com.teamkn.model.database.ChatNodeDBHelper;
 import com.teamkn.model.database.ContactDBHelper;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
+import com.teamkn.model.database.DataListReadingDBHelper;
 import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.model.database.UserDBHelper;
+import com.teamkn.model.database.WatchDBHelper;
 
 public class HttpApi {
 
-//    public static final String SITE = "http://192.168.1.38:9527";
-	public static final String SITE = "http://192.168.1.26:9527";
+    public static final String SITE = "http://192.168.1.38:9527";
+//	public static final String SITE = "http://192.168.1.26:9527";
 //	public static final String SITE = "http://teamkn.mindpin.com";
 
     // 各种路径常量
@@ -91,10 +97,13 @@ public class HttpApi {
     public static final String 创建_data_list     =  "/api/data_lists";
     public static final String 修改_data_list     =  "/api/data_lists/";
     public static final String 搜索_data_list     =  "/api/data_lists/search_mine";
-    
+    public static final String 分享_data_list     =  "/api/data_lists/";
+    public static final String 公共_data_list     =  " /api/data_lists/public_timeline";
+    // watch_list
+    public static final String 查看收藏列表_watch_list    =  "/api/data_lists/watch_list";
+    public static final String 收藏_data_list_watch_list    =  "/api/data_lists/";
     // data_item
     public static final String 获取_data_item    =  "/api/data_lists/";
-//    /api/data_list/:data_list_id/data_items
     public static final String 创建_data_item    =  "/api/data_lists/";
     public static final String 修改_data_item    =  "/api/data_items/";
     public static final String 删除_data_item    =  "/api/data_items/";
@@ -623,6 +632,32 @@ public class HttpApi {
     }
     
     public static class DataList{
+    	private static com.teamkn.model.DataList getDataList(JSONObject json) throws JSONException, IOException{
+    		
+    		int server_data_list_id = json.getInt("id");
+            String title  = json.getString("title");
+            String kind   = json.getString("kind");
+            String public_boolean  = json.getString("public");
+            JSONObject user_json = json.getJSONObject("creator");
+            // --------------  
+            int server_user_id = user_json.getInt("id");
+            String user_name = user_json.getString("name");
+            String avatar_url = user_json.getString("avatar_url");
+            byte[] user_avatar = null;
+            if(avatar_url != null && !avatar_url.equals("")){
+            	InputStream is = HttpApi.download_image(avatar_url);
+            	user_avatar = IOUtils.toByteArray(is);
+            }
+            Long server_created_time  = user_json.getLong("server_created_time");
+            Long server_updated_time  = user_json.getLong("server_updated_time");
+            
+            
+            User user = new User(0, server_user_id, user_name, user_avatar, server_created_time, server_updated_time);
+            UserDBHelper.createOrUpdate(user);
+            com.teamkn.model.DataList dataList_server =
+            		new com.teamkn.model.DataList( UserDBHelper.find_by_server_user_id(server_user_id).id, title, kind, public_boolean,server_data_list_id);
+			return dataList_server;
+    	}
 		public static void pull(String kind,int page , int per_page) throws Exception{  
     		 new TeamknGetRequest<Void>(获取_data_list,
 	            new BasicNameValuePair("kind", kind),
@@ -635,14 +670,7 @@ public class HttpApi {
 	                  System.out.println("data_list pull response_text " + response_text);
 	            	  for (int i = 0; i < data_list_array.length(); i++) {
 			                JSONObject json = data_list_array.getJSONObject(i);
-			                int server_id = json.getInt("id");
-			                int creator_id  = json.getInt("creator_id");
-			                String title  = json.getString("title");
-			                String kind   = json.getString("kind");
-			                String public_boolean  = json.getString("public");
-			                
-			                com.teamkn.model.DataList dataList_server =
-			                		new com.teamkn.model.DataList( creator_id, title, kind, public_boolean,server_id);
+			                com.teamkn.model.DataList dataList_server =getDataList(json);		
 			                DataListDBHelper.pull(dataList_server);
 	                  }  
 		              return null;
@@ -665,16 +693,7 @@ public class HttpApi {
  	              public Void on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
-		                int server_id = json.getInt("id");
-		                int creator_id  = json.getInt("creator_id");
-		                String title  = json.getString("title");
-		                String kind   = json.getString("kind");
-		                String public_boolean  = json.getString("public");
-		                
-		                com.teamkn.model.DataList dataList_server =
-		                		new com.teamkn.model.DataList
-		                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
-		               
+		                com.teamkn.model.DataList dataList_server =getDataList(json);
 		                System.out.println("create server datalist :  " +dataList_server.toString());
 		                DataListDBHelper.update(dataList_server);
 					    return null;   	
@@ -688,15 +707,8 @@ public class HttpApi {
 						public Void on_success(String response_text)
 								throws Exception {
 							    JSONObject json = new JSONObject(response_text);
-				                int server_id = json.getInt("id");
-				                int creator_id  = json.getInt("creator_id");
-				                String title  = json.getString("title");
-				                String kind   = json.getString("kind");
-				                String public_boolean  = json.getString("public");
-				                com.teamkn.model.DataList dataList_server =
-				                		new com.teamkn.model.DataList
-				                		(dataList.id, creator_id, title, kind, public_boolean,server_id);
-				                System.out.println("update server  " + dataList_server.toString());
+							    com.teamkn.model.DataList dataList_server =getDataList(json);
+							    System.out.println("update server  " + dataList_server.toString());
 				                DataListDBHelper.update(dataList_server);
 							return null;
 						}
@@ -723,31 +735,112 @@ public class HttpApi {
 			        }.go();
 			return dataLists;
        }
+    	public static void share(final com.teamkn.model.DataList dataList) throws Exception{
+    		new TeamknPutRequest<Void>( 分享_data_list + dataList.server_data_list_id + "/share_setting",
+    				new PostParamText("share", dataList.public_boolean)) {
+						@Override
+						public Void on_success(String response_text)
+								throws Exception {
+							return null;
+						}
+			}.go();
+    	}
+    	
+    	public static List<com.teamkn.model.DataList> public_timeline(int page , int per_page) throws Exception{  
+   		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
+	   		 new TeamknGetRequest<Void>(公共_data_list,
+		            new BasicNameValuePair("page", page+""),
+		            new BasicNameValuePair("per_page", per_page+"")
+		            ){
+			          @Override
+			          public Void on_success(String response_text) throws Exception {
+			        	  System.out.println(response_text);
+			        	  JSONArray data_list_array = new JSONArray(response_text);
+			        	  for (int i = 0; i < data_list_array.length(); i++) {
+				                JSONObject json = data_list_array.getJSONObject(i);
+				                com.teamkn.model.DataList dataList_server =getDataList(json);		
+				                DataListDBHelper.pull(dataList_server);
+				                dataLists.add(dataList_server);
+		                  } 
+			              return null;
+			          }
+			        }.go();
+			return dataLists;
+      }
+    }
+    public static class WatchList{
+//    	收藏_data_list_watch_list
+    	public static List<com.teamkn.model.DataList> public_timeline(int page , int per_page) throws Exception{  
+      		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
+   	   		 new TeamknGetRequest<Void>(查看收藏列表_watch_list,
+   		            new BasicNameValuePair("page", page+""),
+   		            new BasicNameValuePair("per_page", per_page+"")
+   		            ){
+   			          @Override
+   			          public Void on_success(String response_text) throws Exception {
+   			        	  System.out.println(response_text);
+   			        	  JSONArray data_list_array = new JSONArray(response_text);
+   			        	  for (int i = 0; i < data_list_array.length(); i++) {
+   				                JSONObject json = data_list_array.getJSONObject(i);
+   				                com.teamkn.model.DataList dataList_server =DataList.getDataList(json);		
+   				                DataListDBHelper.pull(dataList_server);
+   				                
+   				                Watch watch = new Watch(-1, dataList_server.user_id, dataList_server.id);
+   				                WatchDBHelper.createOrUpdate(watch);
+   				                
+   				                dataLists.add(dataList_server);
+   		                  } 
+   			              return null;
+   			          }
+   			        }.go();
+   			return dataLists;
+         }
+    	public static void watch(final com.teamkn.model.DataList dataList,boolean watch) throws Exception{
+    		new TeamknPutRequest<Void>( 收藏_data_list_watch_list + dataList.server_data_list_id + "/watch_setting",
+    				new PostParamText("watch", watch+"")) {
+						@Override
+						public Void on_success(String response_text)
+								throws Exception {
+							return null;
+						}
+			}.go();
+    	}
     }
     public static class DataItem{
-    	public static void pull(final int data_list_id) throws Exception{  
-   		 new TeamknGetRequest<Void>(获取_data_item + data_list_id+ "/data_items"){
+    	private static com.teamkn.model.DataItem getDataItem(JSONObject json , int data_list_server_id) throws JSONException{
+    		 int server_id = json.getInt("id");
+             String title  = json.getString("title");
+             String kind   = json.getString("kind");
+             String content  = json.getString("content");
+             String url   = json.getString("url");
+             String image_url  = json.getString("image_url");
+             int position = json.getInt("position");
+             if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
+                 HttpApi.DataItem.pull_image(server_id+"", image_url);
+             }
+            int data_list_id = DataListDBHelper.find_by_server_data_list_id(data_list_server_id).id;
+            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_id, position, server_id);
+			return dataItem;
+    	}
+    	public static void pull(final int data_list_server_id) throws Exception{  
+   		 new TeamknGetRequest<Void>(获取_data_item + data_list_server_id+ "/data_items"){
 		          @Override
 		          public Void on_success(String response_text) throws Exception {
+		        	  System.out.println(" data_item pull response_text " + response_text);
+		        	  JSONObject data_list_json = new JSONObject(response_text);
+		        	  boolean read = data_list_json.getBoolean("read");
 		        	  
-		        	  JSONArray data_list_array = new JSONArray(response_text);
-	                  System.out.println( data_list_array.length() + " data_item pull response_text " + response_text);
-	            	 
+		        	  if(read){
+		        		  com.teamkn.model.DataList data_list = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
+		        		  DataListReading reading = new DataListReading(-1, data_list.id, data_list.user_id);
+		        		  DataListReadingDBHelper.createOrUpdate(reading);
+		        	  }
+		        	  
+		        	  System.out.println(" read  有什么用意  " + read);
+		        	  JSONArray data_list_array = data_list_json.getJSONArray("data_items");
 	                  for (int i = 0; i < data_list_array.length(); i++) {
 			                JSONObject json = data_list_array.getJSONObject(i);
-			                int server_id = json.getInt("id");
-			                String title  = json.getString("title");
-			                String kind   = json.getString("kind");
-			                String content  = json.getString("content");
-			                String url   = json.getString("url");
-			                String image_url  = json.getString("image_url");
-			                int position = json.getInt("position");
-			                
-			                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
-			                    HttpApi.DataItem.pull_image(server_id+"", image_url);
-			                }
-			                com.teamkn.model.DataItem data_item_server =
-			                		new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_id, position,server_id);
+			                com.teamkn.model.DataItem data_item_server = getDataItem(json,data_list_server_id);
 			                DataItemDBHelper.pull(data_item_server);
 	                  }  
 		              return null;
@@ -799,7 +892,8 @@ public class HttpApi {
    		  }else{
    			value = dataItem.content;
    		  }
-		   return new TeamknPostRequest<String>( 创建_data_item + dataItem.data_list_id+ "/data_items",
+   		  final com.teamkn.model.DataList dataList = DataListDBHelper.find(dataItem.data_list_id);
+		   return new TeamknPostRequest<String>( 创建_data_item + dataList.server_data_list_id+ "/data_items",
 	            new PostParamText("title",dataItem.title),
 	            new PostParamText("kind",dataItem.kind),
 	            new PostParamText("value",value)
@@ -808,21 +902,9 @@ public class HttpApi {
 	              public String on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
-		                
-		                int server_id = json.getInt("id");
-		                String title  = json.getString("title");
-		                String kind   = json.getString("kind");
-		                String content  = json.getString("content");
-		                String url   = json.getString("url");
-		                String image_url  = json.getString("image_url");
-		                int position = json.getInt("position");
-		                
-		                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
-		                    HttpApi.DataItem.pull_image(server_id+"", image_url);
-		                }
-		                com.teamkn.model.DataItem data_item_server =
-		                		new com.teamkn.model.DataItem(dataItem.id, title, content, url, kind, dataItem.data_list_id, position,server_id);
-		                DataItemDBHelper.update(data_item_server);
+		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataList.server_data_list_id);
+		                data_item_server.setId(dataItem.id);
+		                DataItemDBHelper.update_by_id(data_item_server);
 					    return null;   	
 	              }
 	              public String on_unprocessable_entity(String responst_text) {
@@ -846,21 +928,9 @@ public class HttpApi {
 	              public Void on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
-		                
-		                int server_id = json.getInt("id");
-		                String title  = json.getString("title");
-		                String kind   = json.getString("kind");
-		                String content  = json.getString("content");
-		                String url   = json.getString("url");
-		                String image_url  = json.getString("image_url");
-		                int position = json.getInt("position");
-		                
-		                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
-		                    HttpApi.DataItem.pull_image(server_id+"", image_url);
-		                }
-		                com.teamkn.model.DataItem data_item_server =
-		                		new com.teamkn.model.DataItem(-1, title, content, url, kind, dataItem.data_list_id, position,server_id);
-		                DataItemDBHelper.update(data_item_server);
+		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_item_id);
+		                data_item_server.setId(dataItem.id);
+		                DataItemDBHelper.update_by_id(data_item_server);
 					    return null;   	
 	              }
 	     }.go();
@@ -880,21 +950,9 @@ public class HttpApi {
 						public String on_success(String response_text)
 								throws Exception {
 							JSONObject json = new JSONObject(response_text);
-			                
-			                int server_id = json.getInt("id");
-			                String title  = json.getString("title");
-			                String kind   = json.getString("kind");
-			                String content  = json.getString("content");
-			                String url   = json.getString("url");
-			                String image_url  = json.getString("image_url");
-			                int position = json.getInt("position");
-			                
-			                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
-			                    HttpApi.DataItem.pull_image(server_id+"", image_url);
-			                }
-			                com.teamkn.model.DataItem data_item_server =
-			                		new com.teamkn.model.DataItem(dataItem.id, title, content, url, kind, dataItem.data_list_id, position,server_id);
-			                DataItemDBHelper.update(data_item_server);
+							com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_item_id);
+							data_item_server.setId(dataItem.id);
+							DataItemDBHelper.update_by_id(data_item_server);
 							return null;
 						}
 						public String on_unprocessable_entity(String responst_text) {

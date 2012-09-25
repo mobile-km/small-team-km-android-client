@@ -1,5 +1,7 @@
 package com.teamkn.activity.dataitem;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 	
 	Integer data_list_id;
 	Integer data_item_id;
+	String data_list_public;
 	DataList dataList;
 	DataItem dataItem;
 	boolean is_update = false;
@@ -38,6 +41,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		Intent intent = getIntent();
 		data_list_id = intent.getIntExtra("data_list_id", -1);
 		data_item_id = intent.getIntExtra("data_item_id", -1);
+		data_list_public = intent.getStringExtra("data_list_public");
 
 		load_UI();
 	}
@@ -91,7 +95,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 									if(DataItemDBHelper.find(title_str , dataItem.data_list_id).id>=0 && DataItemDBHelper.find(title_str , dataItem.data_list_id).id != dataItem.id){
 										msg = "题目不可重复";
 									}else{
-										DataItemDBHelper.update(dataItem);
+										DataItemDBHelper.update_by_id(dataItem);
 										back = HttpApi.DataItem.update(dataItem); 
 									}
 								}else{
@@ -100,13 +104,12 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 									}else{
 										DataItem dataitem = 
 												new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1);
-										DataItemDBHelper.update(dataitem);
-										back = HttpApi.DataItem.create(DataItemDBHelper.all(data_list_id).get(0));  
+										DataItemDBHelper.update_by_id(dataitem);
+										System.out.println("data_list_id = "+ data_list_id );
+										back = HttpApi.DataItem.create(DataItemDBHelper.fist_data_item(data_list_id));  
 										msg = back;
 									}
-								}
-								
-								
+								}	
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -119,6 +122,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 							if(BaseUtils.is_str_blank(msg)){
 								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
 					    		intent.putExtra("data_list_id", dataList.id);
+					    		intent.putExtra("data_list_public", data_list_public);
 					    		if(is_update){
 					    			intent.putExtra("create_data_item", false);
 					    		}else{

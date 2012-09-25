@@ -23,7 +23,6 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
-             android:onClick="on_create_data_item_click"
         />
     </RelativeLayout>
     <RelativeLayout
@@ -60,7 +59,7 @@
             android:layout_toLeftOf="@+id/data_list_image_iv_edit"
             android:gravity="center"
             android:layout_marginLeft="30dp"
-            android:hint="列表浏览-名称"
+            android:hint="蛋炒饭如何做"
             android:textSize="22dp" />
 
     </RelativeLayout>
@@ -84,14 +83,8 @@
             android:text="列表没有数据" 
         />
    </LinearLayout>
-    <com.teamkn.activity.dataitem.ListViewInterceptor
-	    android:id="@+id/list"
-	    android:layout_width="fill_parent" 
-	    android:layout_height="fill_parent"
-	    android:drawSelectorOnTop="false" 
-    />
-    <RelativeLayout
-       android:id="@+id/data_item_step_rl"
+
+   <RelativeLayout
        android:layout_marginTop="20dp"
        android:padding="10dp"
        android:background="@color/darkgrey"
@@ -114,6 +107,7 @@
            android:layout_alignBottom="@+id/data_item_step_tv"
            android:layout_marginLeft="16dp"
            android:layout_toRightOf="@+id/data_item_step_tv"
+           android:text="钓鱼岛是中国的固有领土"
            android:textSize="20dp" />
       
        <RelativeLayout 
@@ -136,4 +130,5 @@
 
        </RelativeLayout>
    </RelativeLayout>
+
 </LinearLayout>

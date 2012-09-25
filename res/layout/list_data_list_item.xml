@@ -53,22 +53,22 @@
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/list_collect_tv"
+            android:id="@+id/list_type_tv"
+            android:text="步骤"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/list_note_title_tv_go"
-            android:text="加书签"
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/list_type_tv"
+            android:id="@+id/list_collect_tv"
+            android:text="移除书签"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/list_collect_tv"
-            android:layout_alignBottom="@+id/list_collect_tv"
+            android:layout_alignBaseline="@+id/list_type_tv"
+            android:layout_alignBottom="@+id/list_type_tv"
             android:layout_alignLeft="@+id/list_note_title_tv_go"
-            android:text="步骤"
             android:textColor="@color/black" />
     </RelativeLayout>
 
@@ -77,6 +77,7 @@
         android:background="@color/gainsboro"
         android:layout_width="fill_parent"
         android:padding="10dp"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
        <RelativeLayout 
@@ -87,7 +88,7 @@
                android:id="@+id/data_list_item_user_avatar_iv"
                android:layout_width="fill_parent"
                android:layout_height="50dp"
-               android:src="@drawable/default_avatar" 
+               android:background="@drawable/default_avatar" 
            />
            <TextView
                android:id="@+id/data_list_item_user_name_tv"
@@ -110,24 +111,24 @@
            android:padding="10dp"
        />
         <TextView
-           android:id="@+id/list_collect_tv_public"
+           android:id="@+id/list_type_tv_public"
+           android:text="步骤"
            android:layout_alignParentRight="true"
            android:layout_alignParentBottom="true"
            android:layout_marginTop="10dp"
-           android:text="加书签"
            android:textColor="@color/black"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
        />
 
         <TextView
-            android:id="@+id/list_type_tv_public"
+            android:id="@+id/list_collect_tv_watch"
+            android:text="移除书签"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-           android:layout_alignParentBottom="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="50dp"
-            android:text="步骤"
             android:textColor="@color/black" />
 
     </RelativeLayout>
