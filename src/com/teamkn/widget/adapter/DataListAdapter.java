@@ -70,7 +70,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         final ViewHolder view_holder = (ViewHolder) holder;
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
         if((item.public_boolean.equals("false")
-        		|| item.user_id == AccountManager.current_user().user_id)
+        		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
         		&& MainActivity.RequestCode.data_list_public.equals("false")
         		){
         	

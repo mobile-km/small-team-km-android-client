@@ -49,9 +49,9 @@ import com.teamkn.model.database.WatchDBHelper;
 
 public class HttpApi {
 
-    public static final String SITE = "http://192.168.1.38:9527";
+//    public static final String SITE = "http://192.168.1.38:9527";
 //	public static final String SITE = "http://192.168.1.26:9527";
-//	public static final String SITE = "http://teamkn.mindpin.com";
+	public static final String SITE = "http://teamkn.mindpin.com";
 
     // 各种路径常量
     public static final String 用户注册 = "/signup_submit";
@@ -98,7 +98,7 @@ public class HttpApi {
     public static final String 修改_data_list     =  "/api/data_lists/";
     public static final String 搜索_data_list     =  "/api/data_lists/search_mine";
     public static final String 分享_data_list     =  "/api/data_lists/";
-    public static final String 公共_data_list     =  " /api/data_lists/public_timeline";
+    public static final String 公共_data_list     =  "/api/data_lists/public_timeline";
     // watch_list
     public static final String 查看收藏列表_watch_list    =  "/api/data_lists/watch_list";
     public static final String 收藏_data_list_watch_list    =  "/api/data_lists/";
@@ -633,7 +633,6 @@ public class HttpApi {
     
     public static class DataList{
     	private static com.teamkn.model.DataList getDataList(JSONObject json) throws JSONException, IOException{
-    		
     		int server_data_list_id = json.getInt("id");
             String title  = json.getString("title");
             String kind   = json.getString("kind");
@@ -656,7 +655,7 @@ public class HttpApi {
             UserDBHelper.createOrUpdate(user);
             com.teamkn.model.DataList dataList_server =
             		new com.teamkn.model.DataList( UserDBHelper.find_by_server_user_id(server_user_id).id, title, kind, public_boolean,server_data_list_id);
-			return dataList_server;
+            return dataList_server;
     	}
 		public static void pull(String kind,int page , int per_page) throws Exception{  
     		 new TeamknGetRequest<Void>(获取_data_list,
@@ -694,6 +693,8 @@ public class HttpApi {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
 		                com.teamkn.model.DataList dataList_server =getDataList(json);
+		                dataList_server.setId(dataList.id);
+		                System.out.println("create clint datalist :  " + dataList.toString());
 		                System.out.println("create server datalist :  " +dataList_server.toString());
 		                DataListDBHelper.update(dataList_server);
 					    return null;   	
@@ -704,8 +705,7 @@ public class HttpApi {
     		new TeamknPutRequest<Void>( 修改_data_list + dataList.server_data_list_id,
     				new PostParamText("title", dataList.title)) {
 						@Override
-						public Void on_success(String response_text)
-								throws Exception {
+						public Void on_success(String response_text)throws Exception {
 							    JSONObject json = new JSONObject(response_text);
 							    com.teamkn.model.DataList dataList_server =getDataList(json);
 							    System.out.println("update server  " + dataList_server.toString());
@@ -770,7 +770,7 @@ public class HttpApi {
     }
     public static class WatchList{
 //    	收藏_data_list_watch_list
-    	public static List<com.teamkn.model.DataList> public_timeline(int page , int per_page) throws Exception{  
+    	public static List<com.teamkn.model.DataList> watch_public_timeline(int page , int per_page) throws Exception{  
       		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
    	   		 new TeamknGetRequest<Void>(查看收藏列表_watch_list,
    		            new BasicNameValuePair("page", page+""),
@@ -778,18 +778,19 @@ public class HttpApi {
    		            ){
    			          @Override
    			          public Void on_success(String response_text) throws Exception {
-   			        	  System.out.println(response_text);
+   			        	  
    			        	  JSONArray data_list_array = new JSONArray(response_text);
+   			        	  System.out.println("watch_public_timeline  =  " + data_list_array.length());
    			        	  for (int i = 0; i < data_list_array.length(); i++) {
    				                JSONObject json = data_list_array.getJSONObject(i);
    				                com.teamkn.model.DataList dataList_server =DataList.getDataList(json);		
    				                DataListDBHelper.pull(dataList_server);
    				                
-   				                Watch watch = new Watch(-1, dataList_server.user_id, dataList_server.id);
+   				                Watch watch = new Watch(-1, dataList_server.user_id
+   				                , DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
    				                WatchDBHelper.createOrUpdate(watch);
-   				                
    				                dataLists.add(dataList_server);
-   		                  } 
+   		                  }
    			              return null;
    			          }
    			        }.go();
@@ -975,11 +976,9 @@ public class HttpApi {
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;
     }
-    
     public static class NetworkUnusableException extends Exception{
       private static final long serialVersionUID = 854703815488292561L;
     }
-    
     public static class ServerErrorException extends Exception{
       private static final long serialVersionUID = -3689174865045267291L;
     }

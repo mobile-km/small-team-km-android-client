@@ -1,21 +1,17 @@
 package com.teamkn.activity.datalist;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -23,26 +19,21 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.GroupAdapter;
 
 public class SearchDataActivity extends TeamknBaseActivity{
 	public static class RequestCode {
-
 		public final static String COLLECTION = "COLLECTION";
 		public final static String STEP = "STEP";
 		public final static String ALL = "ALL";
@@ -50,7 +41,6 @@ public class SearchDataActivity extends TeamknBaseActivity{
 		public static String data_list_type = ALL;
 
 		public static String data_list_public = "false";
-
 	}
 	/*
 	 * 
@@ -114,12 +104,11 @@ public class SearchDataActivity extends TeamknBaseActivity{
 				@Override
 				public List<DataList> do_in_background(Void... params) throws Exception {
 					datalists = new ArrayList<DataList>() ;
-					System.out.println("search_str  1" + search_str);
 					if(!BaseUtils.is_str_blank(search_str)){
 						if (BaseUtils.is_wifi_active(SearchDataActivity.this)) {
 							try {
 								datalists = HttpApi.DataList.search(search_str);
-								System.out.println("search_str  2 " + datalists.size());
+								System.out.println("search_str " + datalists.size());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -236,7 +225,7 @@ public class SearchDataActivity extends TeamknBaseActivity{
     }  
 	private void set_title(){
     	if(RequestCode.data_list_public.equals("true")){
-    		user_name_tv.setText("公共列表");
+    		user_name_tv.setText("公共列表的搜索结果");
     	}else{
     		user_name_tv.setText(current_user().name + "的列表");
     	}

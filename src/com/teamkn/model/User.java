@@ -24,7 +24,11 @@ public class User extends BaseModel {
     this.server_created_time = server_created_time;
     this.server_updated_time = server_updated_time;
   }
-
+ @Override
+	public String toString() {
+		return id + " : " + user_id + " : "
+				+ server_created_time + " : " + user_name + " : " + user_avatar + " : " + server_updated_time;
+	}
 public String getUser_name() {
 	return user_name;
 }

@@ -78,11 +78,11 @@ abstract public class TeamknBaseActivity extends Activity {
       		  .equals("com.teamkn.activity.usermsg.UserMsgActivity")){
 			return true;
         }
-		if( TeamknApplication.current_show_activity!=null 
-				&& TeamknApplication.current_show_activity
-      		  .equals("com.teamkn.activity.base.AccountManagerActivity")){
-			return true;
-        }
+//		if( TeamknApplication.current_show_activity!=null 
+//				&& TeamknApplication.current_show_activity
+//      		  .equals("com.teamkn.activity.base.AccountManagerActivity")){
+//			return true;
+//        }
 		return is_menu;
 	}
 	private void load_list(){

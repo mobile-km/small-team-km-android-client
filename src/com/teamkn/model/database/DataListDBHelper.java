@@ -8,25 +8,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.teamkn.Logic.AccountManager;
+import com.teamkn.activity.base.MainActivity;
 import com.teamkn.model.DataList;
+import com.teamkn.model.Watch;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class DataListDBHelper extends BaseModelDBHelper {
-  public static void create( int user_id, String title, String kind,
-			String public_boolean){
-    SQLiteDatabase db = get_write_db();
-    
-    ContentValues values = new ContentValues();
-    values.put(Constants.TABLE_DATA_LISTS_USER_ID,user_id);
-    values.put(Constants.TABLE_DATA_LISTS_TITLE,title);
-    values.put(Constants.TABLE_DATA_LISTS_KIND,kind);
-    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,public_boolean);
-    
-    db.insert(Constants.TABLE_DATA_LISTS, null, values);
-    db.close();
-  }
-  
   public static void update(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
 	    ContentValues values = new ContentValues();
@@ -36,7 +24,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    
-	    if(find(dataList.id).id == -1){ 
+	    if(find(dataList.id).id <=0){ 
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    	System.out.println("insert= " + dataList.toString());
 	    }else{
@@ -54,7 +42,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
 	    
 	    
-	    if(find_by_server_data_list_id(dataList.server_data_list_id).id == -1){ 
+	    if(find_by_server_data_list_id(dataList.server_data_list_id).id <= 0){ 
 	    	values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    }else{
@@ -77,7 +65,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
-                      new String[]{AccountManager.current_user().user_id+""}, null, null,
+                      new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.KEY_ID + " DESC");
     	  }
     	  
@@ -92,7 +80,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
-                      new String[]{data_list_type,AccountManager.current_user().user_id+""}, null, null,
+                      new String[]{data_list_type,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.KEY_ID + " DESC");
     	  }  
       }
@@ -124,6 +112,18 @@ public class DataListDBHelper extends BaseModelDBHelper {
     cursor.close();
     db.close();
     return datalist;
+  }
+  public static List<DataList> all_by_watch_lists(List<Watch> watchs,String data_list_type){
+      List<DataList> datalists = new ArrayList<DataList>();
+      for(Watch watch : watchs){
+    	  DataList dataList = find(watch.data_list_id);
+    	  if(dataList.kind.equals(data_list_type)){
+    		  datalists.add(dataList);
+    	  }else if(data_list_type.equals(MainActivity.RequestCode.ALL)){
+    		  datalists.add(dataList);
+    	  }
+      }
+	  return datalists;
   }
   public static DataList find_by_title(String title){
 	  DataList datalist;

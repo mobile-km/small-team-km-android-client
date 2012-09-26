@@ -15,5 +15,9 @@ public class Watch extends BaseModel {
 		this.user_id = user_id;
 		this.data_list_id = data_list_id;
 	}
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return id + " : " + user_id + " : " + data_list_id;
+	}
 }

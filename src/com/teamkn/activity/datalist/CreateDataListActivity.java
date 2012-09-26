@@ -15,6 +15,7 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataListDBHelper;
+import com.teamkn.model.database.UserDBHelper;
 
 public class CreateDataListActivity extends TeamknBaseActivity{
 	public static class RequestCode {
@@ -82,7 +83,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 							BaseUtils.toast("列表名称已存在");
 							create_data_list_et.setSelected(true);
 						}else{
-							dataList= new DataList(current_user().user_id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
+							dataList= new DataList(UserDBHelper.find_by_server_user_id(current_user().user_id).id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
 							DataListDBHelper.update(dataList);
 							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
 							
@@ -92,8 +93,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 				         	intent.putExtra("data_list_type", RequestCode.data_list_type);
 				         	startActivity(intent);
 				         	this.finish();
-						}
-						
+						}	
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

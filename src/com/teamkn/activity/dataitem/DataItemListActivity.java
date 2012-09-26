@@ -5,12 +5,15 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -48,6 +51,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	/*
 	 * data_list title edit
 	 * */
+	RelativeLayout data_list_title_rl;
 	TextView data_list_title_tv;
 	ImageView data_list_image_iv_edit;
 	ImageView data_list_image_iv_watch;
@@ -65,7 +69,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	TextView data_item_step_text_tv;
 	Button data_item_list_approach_button;
 	Button data_item_next_button;
-	
+	Button data_item_back_button;
 	
 	LinearLayout list_no_data_show ;
 	
@@ -103,15 +107,30 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			go_back_button.setText(current_user().name);
 		}
 		load_watch_UI();
+		data_list_title_rl=(RelativeLayout)findViewById(R.id.data_list_title_rl);
 		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);
 		data_list_title_tv.setText(dataList.title);
 		data_list_title_tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
 		data_list_title_tv.getPaint().setFakeBoldText(true);//加粗
 		data_list_image_iv_edit = (ImageView) findViewById(R.id.data_list_image_iv_edit);
+		data_list_image_iv_edit.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						data_list_title_rl.setBackgroundColor(getResources()
+								.getColor(R.color.lightgray));
+						break;
+					}
+				return false;
+			}
+		});
 		data_list_image_iv_edit.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				data_list_title_edit();
+				data_list_title_rl.setBackgroundColor(getResources().getColor(R.color.darkgrey));
 			}
 		});
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
@@ -124,7 +143,42 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_step_text_tv = (TextView)findViewById(R.id.data_item_step_text_tv);
 		data_item_list_approach_button = (Button)findViewById(R.id.data_item_list_approach_button);
 		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
-				
+		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);		
+	}
+	private void data_list_title_edit(){
+		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);
+		builder.setTitle("请修改");
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		final EditText view = new EditText(DataItemListActivity.this);
+		view.setText(dataList.title);
+		builder.setView(view);
+		builder.setNegativeButton("取消", null);
+		builder.setPositiveButton("确定", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				final String add_data_list_et_str = view.getText().toString();
+				if (add_data_list_et_str != null&& !add_data_list_et_str.equals(null)
+						&& !BaseUtils.is_str_blank(add_data_list_et_str)
+						&& !add_data_list_et_str.equals(dataList.title)) {
+						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+							dataList.setTitle(add_data_list_et_str);
+							DataListDBHelper.update(dataList);
+							try {
+								HttpApi.DataList .update(DataListDBHelper.find(dataList.id));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						data_list_title_tv.post(new Runnable() {
+							@Override
+							public void run() {
+							data_list_title_tv.setText(add_data_list_et_str);
+							}
+					    });
+				}
+			}
+		});
+		builder.show();
 	}
 	private void load_watch_UI(){
 		data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
@@ -243,9 +297,27 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				set_step_ui();
 			}
 		});
+		data_item_back_button.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				step_new--;
+				set_step_ui();
+			}
+		});
 	}
 	private void set_step_ui(){
 		if(step_new<=dataItems.size()-1){
+			data_item_step_tv.setVisibility(View.VISIBLE);
+			if(step_new<=1){
+				data_item_back_button.setVisibility(View.GONE);
+				data_item_list_approach_button.setVisibility(View.VISIBLE);
+			}else{
+				data_item_list_approach_button.setVisibility(View.GONE);
+				data_item_back_button.setVisibility(View.VISIBLE);
+			}
+			if(step_new==dataItems.size()-1){
+				data_item_next_button.setText("结束");
+			}
 			data_item_step_tv.setText((1+step_new)+"");
 			data_item_step_text_tv.setText(dataItems.get(step_new).content);
 		}else{
@@ -479,7 +551,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 									dataItems.remove(from_id);
 									load_list();
 								}
-
 							}
 						});
 				builder1.setNegativeButton("取消", null);

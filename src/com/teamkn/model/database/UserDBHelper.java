@@ -37,8 +37,10 @@ public class UserDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_updated_time);
 	    if(find_by_server_user_id(user.user_id).user_name==null || find_by_server_user_id(user.user_id).user_name.equals("")){
 	    	db.insert(Constants.TABLE_USERS, null, values);
+	    	System.out.println("insert " +user.toString() );
 	    }else{
 	    	db.update(Constants.TABLE_USERS, values, Constants.TABLE_USERS__USER_ID + " = ? ", new String[]{user.user_id+""});
+	    	System.out.println("update " +user.toString() );
 	    }
 	    db.close();
   }

@@ -64,6 +64,7 @@
             android:textSize="22dp" />
 
     </RelativeLayout>
+    
      <LinearLayout
         android:id="@+id/list_no_data_show"
         android:layout_width="fill_parent"
@@ -104,6 +105,7 @@
            android:layout_height="wrap_content"
            android:background="@drawable/mi_item_step"
            android:gravity="center"
+           android:visibility="gone"
            android:text="1"
            android:textColor="@color/blue" />
 
@@ -126,7 +128,14 @@
                android:layout_height="wrap_content"
                android:text="以清单模式查看" 
            />
-
+           <Button
+               android:id="@+id/data_item_back_button"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:visibility="gone"
+               android:text="上一步" 
+           />
            <Button
                android:id="@+id/data_item_next_button"
                android:layout_width="wrap_content"
