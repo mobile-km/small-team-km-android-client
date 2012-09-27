@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- 笔记列表 -->
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/body"
         >
@@ -27,6 +27,7 @@
         />
     </RelativeLayout>
     <RelativeLayout
+        android:layout_below="@+id/head"
         android:id="@+id/data_list_title_rl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
@@ -64,37 +65,19 @@
             android:textSize="22dp" />
 
     </RelativeLayout>
-    
-     <LinearLayout
-        android:id="@+id/list_no_data_show"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:gravity="center" 
-        android:orientation="vertical"
-        android:visibility="gone"
-    >
-        <ImageView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mi_show_ti"
-        />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="列表没有数据" 
-        />
-   </LinearLayout>
     <com.teamkn.activity.dataitem.ListViewInterceptor
+        android:layout_below="@+id/data_list_title_rl"
 	    android:id="@+id/list"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="fill_parent"
 	    android:drawSelectorOnTop="false" 
     />
     <RelativeLayout
+       android:layout_below="@+id/data_list_title_rl"
        android:id="@+id/data_item_step_rl"
        android:layout_marginTop="20dp"
        android:padding="10dp"
+       android:visibility="gone"
        android:background="@color/darkgrey"
        android:layout_width="fill_parent"
        android:layout_height="fill_parent" >
@@ -145,4 +128,34 @@
 
        </RelativeLayout>
    </RelativeLayout>
-</LinearLayout>
+   <Button
+       android:id="@+id/data_item_list_guide_button"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:visibility="gone"
+       android:text="以向导模式查看" 
+    />
+   <LinearLayout
+        android:layout_below="@+id/data_list_title_rl"
+        android:id="@+id/list_no_data_show"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:gravity="center" 
+        android:orientation="vertical"
+        android:visibility="gone"
+    >
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mi_show_ti"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="列表没有数据" 
+        />
+   </LinearLayout>
+</RelativeLayout>

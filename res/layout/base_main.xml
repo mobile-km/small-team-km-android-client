@@ -164,13 +164,6 @@
            android:background="@color/lightsteelblue"
            android:text="步骤列表"
       />
-     <!--  <ImageButton
-          android:id="@+id/data_list_search_ib"
-          android:onClick="click_search_ib"
-          android:src="@android:drawable/ic_search_category_default" 
-          android:layout_height="50dp"
-          android:layout_width="wrap_content"
-     /> -->
   </LinearLayout>
   <ImageView
        android:layout_below="@+id/bar"

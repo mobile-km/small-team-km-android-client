@@ -106,13 +106,15 @@ public abstract class TeamknAsyncTask<TParams, TProgress, TResult> {
 
         private void ___final() {
             on_final();
-            if (null != progress_dialog) {
-                progress_dialog.dismiss();
-            }
+            try {
+				if (null != progress_dialog) {
+				    progress_dialog.dismiss();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
         }
     }
-
-
     private TeamknBaseActivity progress_dialog_activity = null;
     private String progress_dialog_message = null;
     private TeamknProgressDialog progress_dialog = null;

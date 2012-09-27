@@ -126,8 +126,8 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
             }
             view_holder.list_title_tv_public.setText(item.title);
             
-            Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
-    		System.out.println("watch.id = " + watch.id);
+            Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
+    		System.out.println("watch.id = " + watch.toString() + " ｉｔｅｍ　：　" + item.toString());
     		if(watch.id<=0){
     			view_holder.list_collect_tv_watch.setVisibility(View.GONE);	
     		}else{
@@ -170,8 +170,8 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 				public Void do_in_background(Void... params)
 						throws Exception {
 					if (BaseUtils.is_wifi_active(activity)) {
-						Watch watch = new Watch(-1,item.user_id , item.id);
-						WatchDBHelper.createOrUpdate(watch);
+						Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
+						WatchDBHelper.delete(watch);
 						HttpApi.WatchList.watch(item, false);
 					}else{
 						BaseUtils.toast("无法连接到网络，请检查网络配置");
@@ -180,6 +180,9 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 				}
 				@Override
 				public void on_success(Void result) {
+					if(MainActivity.RequestCode.data_list_public.equals("watch")){
+						MainActivity.dataListAdapter.remove_item(item);
+					}
 					BaseUtils.toast("移除成功 ^_^");
 				}	
 			}.execute();

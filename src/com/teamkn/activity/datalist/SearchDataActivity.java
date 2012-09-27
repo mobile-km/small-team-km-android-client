@@ -5,22 +5,27 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
@@ -43,6 +48,13 @@ public class SearchDataActivity extends TeamknBaseActivity{
 		public static String data_list_public = "false";
 	}
 	/*
+     * cursor imageview 页卡头标
+     * */
+	private static ImageView cursor;// 动画图片
+	private static int offset = 0;// 动画图片偏移量
+	private static int currIndex = 0;// 当前页卡编号
+	private static int bmpW;// 动画图片宽度
+	/*
 	 * 
 	 * */
 	PopupWindow popupWindow; 
@@ -54,12 +66,15 @@ public class SearchDataActivity extends TeamknBaseActivity{
 	ListView search_result_list;
 	LinearLayout list_no_data_show;
 	DataListAdapter dataListAdapter ;	
+	List<DataList> search_datalists;
 	List<DataList> datalists;
 	String search_box_str;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_data);
+		// 加载node_listview
+		InitImageView();
 		
 		search_result_list = (ListView)findViewById(R.id.search_result_list);
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
@@ -72,18 +87,36 @@ public class SearchDataActivity extends TeamknBaseActivity{
 				search_list(search_box_str);
 			}
 		});   
+        
         Intent intent = getIntent();
 		String search_str = intent.getStringExtra("search_str");
 		String search_type = intent.getStringExtra("data_list_type");
 		String search_public = intent.getStringExtra("data_list_public");
+		
+		if(!BaseUtils.is_str_blank(search_type) 
+				&& !BaseUtils.is_str_blank(search_public)){
+			RequestCode.data_list_public = search_public;
+			RequestCode.data_list_type = search_type;
+		}
 		if(!BaseUtils.is_str_blank(search_str)){
 			search_box_str = search_str;
 			search_list(search_str);
 		}
-		if(!BaseUtils.is_str_blank(search_type) && !BaseUtils.is_str_blank(search_public)){
-			RequestCode.data_list_public = search_public;
-			RequestCode.data_list_type = search_type;
-		}
+	}
+	/**
+	 * 初始化动画
+	 */
+	private void InitImageView() {
+		cursor = (ImageView) findViewById(R.id.cursor);
+		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.a)
+				.getWidth();// 获取图片宽度
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int screenW = dm.widthPixels;// 获取分辨率宽度
+		offset = (screenW / 3 - bmpW) / 2;// 计算偏移量
+		Matrix matrix = new Matrix();
+		matrix.postTranslate(offset, 0);
+		cursor.setImageMatrix(matrix);// 设置动画初始位置
 	}
 	@Override
 	protected void onResume() {
@@ -103,61 +136,79 @@ public class SearchDataActivity extends TeamknBaseActivity{
 			new TeamknAsyncTask<Void, Void, List<DataList>>(SearchDataActivity.this,"正在搜索") {
 				@Override
 				public List<DataList> do_in_background(Void... params) throws Exception {
-					datalists = new ArrayList<DataList>() ;
+					search_datalists = new ArrayList<DataList>();
 					if(!BaseUtils.is_str_blank(search_str)){
 						if (BaseUtils.is_wifi_active(SearchDataActivity.this)) {
 							try {
-								datalists = HttpApi.DataList.search(search_str);
+								search_datalists = HttpApi.DataList.search(search_str);
 								System.out.println("search_str " + datalists.size());
-							} catch (Exception e) {
+							}catch (Exception e){
 								e.printStackTrace();
 							}
 					    }else{
 							BaseUtils.toast("无法连接到网络，请检查网络配置");
 						}
 					}
-					
 					return datalists;
 				}
 				@Override
 				public void on_success(List<DataList> datalists) {
-					dataListAdapter = new DataListAdapter(SearchDataActivity.this);
-					dataListAdapter.add_items(datalists);
-					search_result_list.setAdapter(dataListAdapter);
-					dataListAdapter.notifyDataSetChanged();
-					if(datalists.size()==0){
-						list_no_data_show.setVisibility(View.VISIBLE);
-					}else{
-						list_no_data_show.setVisibility(View.GONE);
-					}
+					load_list();
 				}
-			}.execute()	;
-			search_result_list.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> list_view, View list_item,
-						int item_id, long position) {
-					System.out.println(item_id + " : " + position);
-					TextView info_tv = (TextView) list_item
-							.findViewById(R.id.note_info_tv);
-					final DataList item = (DataList) info_tv
-							.getTag(R.id.tag_note_uuid);
-					Intent intent = new Intent(SearchDataActivity.this,DataItemListActivity.class);
-					intent.putExtra("data_list_id",item.id);
-					startActivity(intent);
-				}
-		  });
+			}.execute();	
 	}
+	public List<DataList> screen_data_list(List<DataList> search_datalists,String data_list_type){
+		List<DataList> screen_datalist = new ArrayList<DataList>() ;
+		for(DataList dataList : search_datalists){
+			if(data_list_type.equals(RequestCode.ALL)){
+				screen_datalist.add(dataList);
+			}else if(data_list_type.equals(dataList.kind)){
+				screen_datalist.add(dataList);
+			}
+		}
+		return screen_datalist;
+	}
+	
+	public void load_list(){
+		datalists = screen_data_list(search_datalists,RequestCode.data_list_type) ;
+		
+		request_pageselected();
+		dataListAdapter = new DataListAdapter(SearchDataActivity.this);
+		dataListAdapter.add_items(datalists);
+		search_result_list.setAdapter(dataListAdapter);
+		dataListAdapter.notifyDataSetChanged();
+		if(datalists.size()==0){
+			list_no_data_show.setVisibility(View.VISIBLE);
+		}else{
+			list_no_data_show.setVisibility(View.GONE);
+		}
+		search_result_list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> list_view, View list_item,
+					int item_id, long position) {
+				System.out.println(item_id + " : " + position);
+				TextView info_tv = (TextView) list_item
+						.findViewById(R.id.note_info_tv);
+				final DataList item = (DataList) info_tv
+						.getTag(R.id.tag_note_uuid);
+				Intent intent = new Intent(SearchDataActivity.this,DataItemListActivity.class);
+				intent.putExtra("data_list_id",item.id);
+				startActivity(intent);
+			}
+	  });
+	}
+	
 	public void click_collection_button(View view) {
 		RequestCode.data_list_type = RequestCode.COLLECTION;
-		search_list(search_box_str);
+		load_list();
 	}
 	public void click_step_button(View view) {
 		RequestCode.data_list_type = RequestCode.STEP;
-		search_list(search_box_str);
+		load_list();
 	}
 	public void click_all_button(View view) {
 		RequestCode.data_list_type = RequestCode.ALL;
-		search_list(search_box_str);
+		load_list();
 	}
 	private void showWindow(View parent) {  
         if (popupWindow == null) {  
@@ -170,7 +221,8 @@ public class SearchDataActivity extends TeamknBaseActivity{
             groups = new ArrayList<String>();  
             groups.add("全部");  
             groups.add("我的列表");  
-            groups.add("公共列表");    
+            groups.add("公共列表");
+            groups.add("我的书签");
   
             GroupAdapter groupAdapter = new GroupAdapter(this); 
             groupAdapter.add_items(groups);
@@ -195,12 +247,9 @@ public class SearchDataActivity extends TeamknBaseActivity{
         popupWindow.showAsDropDown(parent, xPos-50, 0);  
   
         lv_group.setOnItemClickListener(new OnItemClickListener() {  
-  
             @Override  
             public void onItemClick(AdapterView<?> adapterView, View view,  
-                    int position, long id) {  
-  
-                Toast.makeText(SearchDataActivity.this,groups.get(position), Toast.LENGTH_LONG).show();  
+                    int position, long id) {   
                 switch (position) {
 				case 0:
 					break;
@@ -214,6 +263,10 @@ public class SearchDataActivity extends TeamknBaseActivity{
 					set_title();
 					search_list(search_box_str);
 					break;
+				case 3:
+					RequestCode.data_list_public = "watch";
+					set_title();
+					search_list(search_box_str);
 				default:
 					break;
 				}
@@ -226,8 +279,62 @@ public class SearchDataActivity extends TeamknBaseActivity{
 	private void set_title(){
     	if(RequestCode.data_list_public.equals("true")){
     		user_name_tv.setText("公共列表的搜索结果");
-    	}else{
-    		user_name_tv.setText(current_user().name + "的列表");
+    	}else if(RequestCode.data_list_public.equals("false")){
+    		user_name_tv.setText(current_user().name + "的列表搜索结果");
+    	}else if(RequestCode.data_list_public.equals("watch")){
+    		user_name_tv.setText("书签列表搜索结果");
     	}
     }
+	private void request_pageselected(){
+		int index = 0;
+		if(RequestCode.data_list_type.equals(RequestCode.COLLECTION)){
+			index = 1 ;
+		}else if(RequestCode.data_list_type.equals(RequestCode.STEP)){
+			index = 2 ;
+		}else if(RequestCode.data_list_type.equals(RequestCode.ALL)) {
+			index = 0 ;
+		}
+		MyOnPageChangeListener.onPageSelected(index);
+	}
+	/**
+	 * 页卡切换监听
+	 */
+	static class MyOnPageChangeListener{
+		static int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
+		static int two = one * 2;// 页卡1 -> 页卡3 偏移量
+		public static void onPageSelected(int arg0) {
+			Animation animation = null;
+			switch (arg0) {
+			case 0:
+				if (currIndex == 1) {
+					animation = new TranslateAnimation(one, 0, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, 0, 0, 0);
+				}
+				break;
+			case 1:
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(offset, one, 0, 0);
+				} else if (currIndex == 2) {
+					animation = new TranslateAnimation(two, one, 0, 0);
+				}
+				break;
+			case 2:
+				if (currIndex == 0) {
+					animation = new TranslateAnimation(offset, two, 0, 0);
+				} else if (currIndex == 1) {
+					animation = new TranslateAnimation(one, two, 0, 0);
+				}
+				break;
+			}
+			currIndex = arg0;
+			try {
+				animation.setFillAfter(true);// True:图片停在动画结束位置
+				animation.setDuration(300);
+				cursor.startAnimation(animation);
+			} catch (Exception e) {
+//				e.printStackTrace();
+			}
+		}
+	}
 }

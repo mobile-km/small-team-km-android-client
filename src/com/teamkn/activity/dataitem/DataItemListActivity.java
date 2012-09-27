@@ -40,6 +40,7 @@ import com.teamkn.model.Watch;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.DataListReadingDBHelper;
+import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
 import com.teamkn.widget.adapter.DataItemListAdapter;
 
@@ -71,6 +72,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	Button data_item_next_button;
 	Button data_item_back_button;
 	
+	Button data_item_list_guide_button;
 	LinearLayout list_no_data_show ;
 	
 	DataList dataList ;
@@ -79,6 +81,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	String data_list_type;
 	boolean show_step;
     int step_new = 0;
+    
+    boolean is_curretn_user_data_list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,10 +92,17 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		Integer data_list_id = intent.getIntExtra("data_list_id", -1);
 		dataList = DataListDBHelper.find(data_list_id);
 		data_list_public = intent.getStringExtra("data_list_public");
-
+		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+			is_curretn_user_data_list  = true;
+		}else{
+			is_curretn_user_data_list  = false;
+		}
+		
 		load_UI();
 //		load_list();
-		if(data_list_public.equals("true") && dataList.kind.equals(MainActivity.RequestCode.STEP)){
+		if((data_list_public.equals("true") 
+				|| data_list_public.equals("watch") )
+				&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
 			show_step = true;
 		}else{
 			show_step = false;
@@ -113,26 +124,32 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_title_tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
 		data_list_title_tv.getPaint().setFakeBoldText(true);//加粗
 		data_list_image_iv_edit = (ImageView) findViewById(R.id.data_list_image_iv_edit);
-		data_list_image_iv_edit.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-						data_list_title_rl.setBackgroundColor(getResources()
-								.getColor(R.color.lightgray));
-						break;
-					}
-				return false;
-			}
-		});
-		data_list_image_iv_edit.setOnClickListener(new android.view.View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				data_list_title_edit();
-				data_list_title_rl.setBackgroundColor(getResources().getColor(R.color.darkgrey));
-			}
-		});
+		if(is_curretn_user_data_list){
+			data_list_image_iv_edit.setVisibility(View.VISIBLE);
+			data_list_image_iv_edit.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN)
+						switch (event.getAction()) {
+						case MotionEvent.ACTION_DOWN:
+							data_list_title_rl.setBackgroundColor(getResources()
+									.getColor(R.color.lightgray));
+							break;
+						}
+					return false;
+				}
+			});
+			data_list_image_iv_edit.setOnClickListener(new android.view.View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					data_list_title_edit();
+					data_list_title_rl.setBackgroundColor(getResources().getColor(R.color.darkgrey));
+				}
+			});
+		}else{
+			data_list_image_iv_edit.setVisibility(View.GONE);
+		}
+		
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
 		
 		// data_item list 列表
@@ -143,7 +160,20 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_step_text_tv = (TextView)findViewById(R.id.data_item_step_text_tv);
 		data_item_list_approach_button = (Button)findViewById(R.id.data_item_list_approach_button);
 		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
-		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);		
+		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);	
+		
+		data_item_list_guide_button = (Button)findViewById(R.id.data_item_list_guide_button);
+		data_item_list_guide_button.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				data_item_list_guide_button.setVisibility(View.GONE);
+				
+				tlv.setVisibility(View.GONE);
+				data_item_step_rl.setVisibility(View.VISIBLE);
+				data_item_next_button.setText("下一步");
+				load_step();
+			}
+		});
 	}
 	private void data_list_title_edit(){
 		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);
@@ -161,10 +191,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 						&& !BaseUtils.is_str_blank(add_data_list_et_str)
 						&& !add_data_list_et_str.equals(dataList.title)) {
 						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+							MainActivity.dataListAdapter.remove_item(dataList);
 							dataList.setTitle(add_data_list_et_str);
 							DataListDBHelper.update(dataList);
 							try {
-								HttpApi.DataList .update(DataListDBHelper.find(dataList.id));
+								MainActivity.dataListAdapter.add_item(HttpApi.DataList .update(DataListDBHelper.find(dataList.id)));
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -182,7 +213,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	private void load_watch_UI(){
 		data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
-		final Watch watch = WatchDBHelper.find(new Watch(-1,current_user().user_id , dataList.id));
+		Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
 		System.out.println("watch.id = " + watch.id);
 		if(dataList.public_boolean.equals("true")){
 			if(watch.id<=0){
@@ -197,6 +228,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_image_iv_watch.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
 				if(watch.id<=0){
 					watch_data_list(true);
 					data_list_image_iv_watch.setAlpha(50);
@@ -212,7 +244,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-					Watch watch = new Watch(-1,current_user().user_id , dataList.id);
+				    Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
 					if(watch_boolean){
 						WatchDBHelper.createOrUpdate(watch);
 					}else{
@@ -262,13 +294,24 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public void on_success(final List<DataItem> dataItems) {	
 				if(dataItems.size()==0){
+					tlv.setVisibility(View.GONE);
+					data_item_step_rl.setVisibility(View.GONE);
+					data_item_list_guide_button.setVisibility(View.GONE);
 					list_no_data_show.setVisibility(View.VISIBLE);
 				}else{
 					list_no_data_show.setVisibility(View.GONE);
 					if(show_step){
 						load_step();
+						data_item_list_guide_button.setVisibility(View.GONE);
 					}else{
 						load_list();
+						if((data_list_public.equals("true")
+								|| data_list_public.equals("watch")) 
+								&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
+							data_item_list_guide_button.setVisibility(View.VISIBLE);
+						}else{	
+							data_item_list_guide_button.setVisibility(View.GONE);
+						}
 					}
 				}
 			}
@@ -319,14 +362,23 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				data_item_next_button.setText("结束");
 			}
 			data_item_step_tv.setText((1+step_new)+"");
-			data_item_step_text_tv.setText(dataItems.get(step_new).content);
+			data_item_step_text_tv.setText(dataItems.get(step_new).title);
 		}else{
 			show_step = false;
 			load_step_or_list(show_step);
 			load_list();
+			step_new = 0;
 		}
 	}
 	private void load_list() {
+		if((data_list_public.equals("true")
+				|| data_list_public.equals("watch")) 
+				&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+				&& dataItems.size()>0){
+			data_item_list_guide_button.setVisibility(View.VISIBLE);
+		}else{	
+			data_item_list_guide_button.setVisibility(View.GONE);
+		}
 		dataItemListAdapter = new DataItemListAdapter(
 				DataItemListActivity.this,
 				R.layout.list_data_item_list_item, dataItems);
@@ -334,9 +386,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		tlv.setDropListener(onDrop);
 		tlv.getAdapter();
 		dataItemListAdapter.notifyDataSetChanged();	
-		set_list_listener();
+		
+		set_list_listener(is_curretn_user_data_list);
 	}
-    private void set_list_listener(){
+    private boolean set_list_listener(boolean is_curretn_user_data_list){
+    	if(!is_curretn_user_data_list){
+    		return is_curretn_user_data_list;
+    	}
     	tlv.setOnScrollListener(new OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view,
@@ -392,6 +448,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				return false;
 			}
 		});
+		return is_curretn_user_data_list;
     }
 	private ListViewInterceptor.DropListener onDrop = new ListViewInterceptor.DropListener() {
 		@Override

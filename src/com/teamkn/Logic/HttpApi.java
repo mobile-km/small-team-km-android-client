@@ -701,16 +701,17 @@ public class HttpApi {
  	              }
  	     }.go();
        }
-    	public static void update(final com.teamkn.model.DataList dataList) throws Exception{
-    		new TeamknPutRequest<Void>( 修改_data_list + dataList.server_data_list_id,
+    	public static com.teamkn.model.DataList update(final com.teamkn.model.DataList dataList) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>( 修改_data_list + dataList.server_data_list_id,
     				new PostParamText("title", dataList.title)) {
 						@Override
-						public Void on_success(String response_text)throws Exception {
+						public com.teamkn.model.DataList on_success(String response_text)throws Exception {
 							    JSONObject json = new JSONObject(response_text);
 							    com.teamkn.model.DataList dataList_server =getDataList(json);
+							    dataList_server.setId(dataList.id);
 							    System.out.println("update server  " + dataList_server.toString());
 				                DataListDBHelper.update(dataList_server);
-							return null;
+							return dataList_server;
 						}
 			}.go();
     	}
@@ -724,10 +725,8 @@ public class HttpApi {
 			        	  System.out.println(response_text);
 			        	  JSONArray data_list_array = new JSONArray(response_text);
 		            	  for (int i = 0; i < data_list_array.length(); i++) {
-//		            		  JSONObject json = data_list_array.getJSONObject(i);
 				              int server_id = data_list_array.getInt(i);
 				              com.teamkn.model.DataList dataList = DataListDBHelper.find_by_server_data_list_id(server_id);
-//				              System.out.println(dataList.toString());
 				              dataLists.add(dataList);
 		                  }  
 			              return null;
@@ -786,7 +785,7 @@ public class HttpApi {
    				                com.teamkn.model.DataList dataList_server =DataList.getDataList(json);		
    				                DataListDBHelper.pull(dataList_server);
    				                
-   				                Watch watch = new Watch(-1, dataList_server.user_id
+   				                Watch watch = new Watch(-1, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id
    				                , DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
    				                WatchDBHelper.createOrUpdate(watch);
    				                dataLists.add(dataList_server);
@@ -797,6 +796,7 @@ public class HttpApi {
    			return dataLists;
          }
     	public static void watch(final com.teamkn.model.DataList dataList,boolean watch) throws Exception{
+    		System.out.println(watch + "   watch server " + dataList.toString());
     		new TeamknPutRequest<Void>( 收藏_data_list_watch_list + dataList.server_data_list_id + "/watch_setting",
     				new PostParamText("watch", watch+"")) {
 						@Override

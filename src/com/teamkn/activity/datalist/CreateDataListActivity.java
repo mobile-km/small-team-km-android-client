@@ -84,8 +84,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 							create_data_list_et.setSelected(true);
 						}else{
 							dataList= new DataList(UserDBHelper.find_by_server_user_id(current_user().user_id).id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
-							DataListDBHelper.update(dataList);
-							HttpApi.DataList.create(DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public).get(0));
+							DataList datalist = DataListDBHelper.update(dataList);
+							HttpApi.DataList.create(datalist);
 							
 							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
 				         	

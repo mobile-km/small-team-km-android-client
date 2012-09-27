@@ -15,7 +15,7 @@ import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
 public class DataListDBHelper extends BaseModelDBHelper {
-  public static void update(DataList dataList){
+  public static DataList update(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
 	    ContentValues values = new ContentValues();
 	    values.put(Constants.TABLE_DATA_LISTS_USER_ID,dataList.user_id);
@@ -26,12 +26,30 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    
 	    if(find(dataList.id).id <=0){ 
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    	dataList = pull_last_data();
 	    	System.out.println("insert= " + dataList.toString());
 	    }else{
 	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.KEY_ID + " = ? ", new String[]{dataList.id+""});
 	    	System.out.println("update= " + dataList.toString());
 	    }
 	    db.close();
+	    
+		return dataList;
+  }
+  public static DataList pull_last_data(){
+	  DataList datalist;
+	  SQLiteDatabase db = get_write_db();
+	  String sql = "select top 1 * from " + Constants.TABLE_DATA_LISTS + " DESC " + Constants.KEY_ID;
+	    Cursor cursor = db.rawQuery(sql,null);
+	    boolean has_value = cursor.moveToFirst();
+	    if(has_value){
+	    	datalist = build_by_cursor(cursor);
+	    }else{
+	    	datalist = DataList.NIL_DATA_LIST;
+	    }
+	    cursor.close();
+	    db.close();
+	    return datalist;
   }
   public static void pull(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
@@ -84,8 +102,6 @@ public class DataListDBHelper extends BaseModelDBHelper {
                       Constants.KEY_ID + " DESC");
     	  }  
       }
-      
-
       while (cursor.moveToNext()) {
     	  DataList datalist = build_by_cursor(cursor);
           datalists.add(datalist);

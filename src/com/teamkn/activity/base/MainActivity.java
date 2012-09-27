@@ -35,10 +35,8 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
-import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
 import com.teamkn.activity.dataitem.DataItemListActivity;
@@ -91,9 +89,8 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	// node_listView_show 数据
 	ListView data_list;
-	DataListAdapter dataListAdapter;
+	public static DataListAdapter dataListAdapter;
 	List<DataList> datalists;
-	List<DataList> public_timeline_data_lists;
 	/*
 	 * 收集，步骤，所有
 	 */
@@ -160,16 +157,8 @@ public class MainActivity extends TeamknBaseActivity {
 			RequestCode.data_list_type = data_list_type;
 			System.out.println(RequestCode.data_list_public + " : "
 					+ RequestCode.data_list_type);
-			if(data_list_public.equals("true")){
-				load_data_list_public_timeline();
-			}else if(data_list_public.equals("false")){
-				load_data_list();
-			}else if(data_list_public.equals("watch")){
-				load_data_list_watch();
-			}
-		}else{
-			load_data_list();
 		}	
+		load_data_list_or_watch(RequestCode.data_list_public);
 	}
 	/**
 	 * 初始化动画
@@ -223,58 +212,24 @@ public class MainActivity extends TeamknBaseActivity {
     		user_name_tv.setText(current_user().name + "的列表");
     	}
     }
-    private void load_data_list(){
-    	datalists = new ArrayList<DataList>();
+    private void load_data_list_or_watch(String watch_or_public){
     	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
 			@Override
 			public List<DataList> do_in_background(Void... params)
 					throws Exception {
 				// datalists = NoteDBHelper.all(true);
 				if (BaseUtils.is_wifi_active(MainActivity.this)) {
-					HttpApi.DataList.pull(RequestCode.data_list_type,RequestCode.now_page, 100);
+					if(RequestCode.data_list_public.equals("true")){
+						HttpApi.DataList.public_timeline(RequestCode.now_page, 100);
+					}else if(RequestCode.data_list_public.equals("false")){
+						HttpApi.DataList.pull(RequestCode.data_list_type,RequestCode.now_page, 100);
+					}else if(RequestCode.data_list_public.equals("watch")){
+						HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
+					}	
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
 				}
-				return datalists;
-			}
-			@Override
-			public void on_success(List<DataList> datalists) {
-				load_list();
-			}
-		}.execute();
-    }
-    private void load_data_list_public_timeline(){
-    	public_timeline_data_lists = new ArrayList<DataList>();
-    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
-			@Override
-			public List<DataList> do_in_background(Void... params)
-					throws Exception {
-				// datalists = NoteDBHelper.all(true);
-				if (BaseUtils.is_wifi_active(MainActivity.this)) {
-					public_timeline_data_lists = HttpApi.DataList.public_timeline(RequestCode.now_page, 100);
-				}else{
-					BaseUtils.toast("无法连接到网络，请检查网络配置");
-				}
-				return datalists;
-			}
-			@Override
-			public void on_success(List<DataList> datalists) {
-				load_list();
-			}
-		}.execute();
-    }
-    private void load_data_list_watch(){
-    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
-			@Override
-			public List<DataList> do_in_background(Void... params)
-					throws Exception {
-				// datalists = NoteDBHelper.all(true);
-				if (BaseUtils.is_wifi_active(MainActivity.this)) {
-					HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
-				}else{
-					BaseUtils.toast("无法连接到网络，请检查网络配置");
-				}
-				return datalists;
+				return null;
 			}
 			@Override
 			public void on_success(List<DataList> datalists) {
@@ -354,7 +309,6 @@ public class MainActivity extends TeamknBaseActivity {
 	public class SynUIBinder {
 		public void set_max_num(int max_num) {
 			final int num = max_num;
-			// System.out.println("set_max_num   " + max_num);
 			data_syn_progress_bar.post(new Runnable() {
 				@Override
 				public void run() {
@@ -364,7 +318,6 @@ public class MainActivity extends TeamknBaseActivity {
 		}
 
 		public void set_start_syn() {
-			// System.out.println("set_start_syn");
 			data_syn_textview.post(new Runnable() {
 				@Override
 				public void run() {
@@ -377,7 +330,6 @@ public class MainActivity extends TeamknBaseActivity {
 
 		public void set_progress(int progress) {
 			final int num = progress;
-			// System.out.println("set_progress  " + progress);
 			data_syn_progress_bar.post(new Runnable() {
 				@Override
 				public void run() {
@@ -391,7 +343,6 @@ public class MainActivity extends TeamknBaseActivity {
 		}
 
 		public void set_syn_success() {
-			// System.out.println("syn_success");
 			data_syn_textview.post(new Runnable() {
 				@Override
 				public void run() {
@@ -414,7 +365,6 @@ public class MainActivity extends TeamknBaseActivity {
 		}
 
 		public void set_syn_fail() {
-			// System.out.println("syn_fail");
 			TeamknPreferences.touch_last_syn_fail_client_time();
 			data_syn_textview.post(new Runnable() {
 				@Override
@@ -451,22 +401,16 @@ public class MainActivity extends TeamknBaseActivity {
 
 	public void click_collection_button(View view) {
 		RequestCode.data_list_type = RequestCode.COLLECTION;
-		System.out.println("1------------");
-		request_pageselected();
 		load_list();
 	}
 
 	public void click_step_button(View view) {
 		RequestCode.data_list_type = RequestCode.STEP;
-		System.out.println("2------------");
-		request_pageselected();
 		load_list();
 	}
 
 	public void click_all_button(View view) {
 		RequestCode.data_list_type = RequestCode.ALL;
-		System.out.println("3------------");
-		request_pageselected();
 		load_list();
 	}
 	private void request_pageselected(){
@@ -534,12 +478,12 @@ public class MainActivity extends TeamknBaseActivity {
 				case 2:
 					RequestCode.data_list_public = "true";
 					set_title();
-					load_data_list_public_timeline();
+					load_data_list_or_watch(RequestCode.data_list_public);
 					break;
 				case 3:
 					RequestCode.data_list_public = "watch";
 					set_title();
-					load_data_list_watch();
+					load_data_list_or_watch(RequestCode.data_list_public);
 					break;
 				default:
 					break;
@@ -589,7 +533,6 @@ public class MainActivity extends TeamknBaseActivity {
 			} catch (Exception e) {
 //				e.printStackTrace();
 			}
-			System.out.println("arg0  "  + arg0);
 		}
 	}
 }

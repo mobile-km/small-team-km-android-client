@@ -113,21 +113,22 @@ abstract public class TeamknBaseActivity extends Activity {
 					long position) {
 				switch (arg2) {
 				case 0:  // 公共列表
-//					open_activity(MainActivity.class);
 					Intent public_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
 					public_intent.putExtra("data_list_public", "true");
 					public_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
 					startActivity(public_intent);
 					break;
 				case 1: // 我的列表
-//					open_activity(MainActivity.class);
 					Intent my_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
 					my_intent.putExtra("data_list_public", "false");
 					my_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
 					startActivity(my_intent);
 					break;
 				case 2: // 我的书签
-//					open_activity(UserMsgActivity.class);
+					Intent watch_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
+					watch_intent.putExtra("data_list_public", "watch");
+					watch_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+					startActivity(watch_intent);
 					break;
 				case 3:  // 设置选项
 					open_activity(TeamknSettingActivity.class);
