@@ -63,6 +63,7 @@ public class SearchDataActivity extends TeamknBaseActivity{
     private List<String> groups; 
     TextView user_name_tv;
 	
+    EditText search_box;
 	ListView search_result_list;
 	LinearLayout list_no_data_show;
 	DataListAdapter dataListAdapter ;	
@@ -78,11 +79,12 @@ public class SearchDataActivity extends TeamknBaseActivity{
 		
 		search_result_list = (ListView)findViewById(R.id.search_result_list);
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
+		search_box  = (EditText) findViewById(R.id.search_box);
         ImageButton   search_submit = (ImageButton)findViewById(R.id.search_submit);
         search_submit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EditText search_box    = (EditText) findViewById(R.id.search_box);
+				
 				search_box_str = search_box.getText().toString();
 				search_list(search_box_str);
 			}
@@ -97,6 +99,7 @@ public class SearchDataActivity extends TeamknBaseActivity{
 				&& !BaseUtils.is_str_blank(search_public)){
 			RequestCode.data_list_public = search_public;
 			RequestCode.data_list_type = search_type;
+			System.out.println(RequestCode.data_list_public+  "  :  " + RequestCode.data_list_type);
 		}
 		if(!BaseUtils.is_str_blank(search_str)){
 			search_box_str = search_str;
@@ -138,10 +141,16 @@ public class SearchDataActivity extends TeamknBaseActivity{
 				public List<DataList> do_in_background(Void... params) throws Exception {
 					search_datalists = new ArrayList<DataList>();
 					if(!BaseUtils.is_str_blank(search_str)){
+//						search_box.setText(search_str);
 						if (BaseUtils.is_wifi_active(SearchDataActivity.this)) {
 							try {
-								search_datalists = HttpApi.DataList.search(search_str);
-								System.out.println("search_str " + datalists.size());
+								if(RequestCode.data_list_public.equals("true")){
+									search_datalists = HttpApi.DataList.search_public_timeline(search_str);
+								}else if(RequestCode.data_list_public.equals("false")){
+									search_datalists = HttpApi.DataList.search_mine(search_str);
+								}else if(RequestCode.data_list_public.equals("watch")){
+									search_datalists = HttpApi.DataList.search_mine_watch(search_str);
+								}
 							}catch (Exception e){
 								e.printStackTrace();
 							}
@@ -168,10 +177,8 @@ public class SearchDataActivity extends TeamknBaseActivity{
 		}
 		return screen_datalist;
 	}
-	
 	public void load_list(){
 		datalists = screen_data_list(search_datalists,RequestCode.data_list_type) ;
-		
 		request_pageselected();
 		dataListAdapter = new DataListAdapter(SearchDataActivity.this);
 		dataListAdapter.add_items(datalists);

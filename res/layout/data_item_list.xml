@@ -19,6 +19,7 @@
                android:text="查看列表"
         />
         <ImageView
+             android:id="@+id/data_item_add_iv"
              android:src="@drawable/mi_data_item_add"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
@@ -26,45 +27,38 @@
              android:onClick="on_create_data_item_click"
         />
     </RelativeLayout>
+
     <RelativeLayout
-        android:layout_below="@+id/head"
         android:id="@+id/data_list_title_rl"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:gravity="center"
-        android:background="@color/darkgrey"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head"
         android:layout_gravity="center"
-        android:padding="5dp"
         android:layout_margin="10dp"
-    >
-        <ImageView
-            android:id="@+id/data_list_image_iv_watch"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/mi_item_eye" />
-        
-        <ImageView
-            android:id="@+id/data_list_image_iv_edit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:src="@android:drawable/ic_menu_edit" />
+        android:background="@color/darkgrey"
+        android:gravity="center"
+        android:padding="5dp" >
 
         <TextView
             android:id="@+id/data_list_title_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/data_list_image_iv_edit"
-            android:gravity="center"
-            android:layout_marginLeft="30dp"
             android:hint="列表浏览-名称"
+            android:gravity="center"
+            android:layout_marginRight="30dp"
             android:textSize="22dp" />
 
+        <ImageView
+            android:id="@+id/data_list_image_iv_edit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/data_list_title_tv"
+            android:src="@android:drawable/ic_menu_edit" />
+
     </RelativeLayout>
+
     <com.teamkn.activity.dataitem.ListViewInterceptor
         android:layout_below="@+id/data_list_title_rl"
 	    android:id="@+id/list"
@@ -72,62 +66,87 @@
 	    android:layout_height="fill_parent"
 	    android:drawSelectorOnTop="false" 
     />
+    
     <RelativeLayout
-       android:layout_below="@+id/data_list_title_rl"
-       android:id="@+id/data_item_step_rl"
-       android:layout_marginTop="20dp"
-       android:padding="10dp"
-       android:visibility="gone"
-       android:background="@color/darkgrey"
-       android:layout_width="fill_parent"
-       android:layout_height="fill_parent" >
+        android:id="@+id/data_item_step_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/data_list_title_rl"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/darkgrey" >
 
-       <TextView
-           android:id="@+id/data_item_step_tv"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:background="@drawable/mi_item_step"
-           android:gravity="center"
-           android:visibility="gone"
-           android:text="1"
-           android:textColor="@color/blue" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/data_item_step_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mi_item_step"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/blue"
+            android:visibility="gone" />
 
-       <TextView
-           android:id="@+id/data_item_step_text_tv"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_alignBottom="@+id/data_item_step_tv"
-           android:layout_marginLeft="16dp"
-           android:layout_toRightOf="@+id/data_item_step_tv"
-           android:textSize="20dp" />
-      
-       <RelativeLayout 
-           android:layout_alignParentBottom="true"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content">
-           <Button
-               android:id="@+id/data_item_list_approach_button"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="以清单模式查看" 
-           />
-           <Button
-               android:id="@+id/data_item_back_button"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="10dp"
-               android:visibility="gone"
-               android:text="上一步" 
-           />
-           <Button
-               android:id="@+id/data_item_next_button"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignParentRight="true"
-               android:text="下一步" />
+        <TextView
+            android:id="@+id/data_item_step_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/data_item_step_tv"
+            android:textSize="20dp" />
 
-       </RelativeLayout>
-   </RelativeLayout>
+        <TextView
+            android:id="@+id/data_item_step_content_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/data_item_step_text_tv"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/data_item_step_tv"
+            android:textSize="20dp" />
+
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/data_item_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="上一步" />
+
+                <Button
+                    android:id="@+id/data_item_next_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="下一步" />
+                <RelativeLayout
+                android:layout_below="@+id/data_item_next_button"
+                android:layout_width="fill_parent"
+                android:gravity="center_vertical"
+                android:background="#fff"
+                android:layout_height="50dp">
+
+                <Button
+                    android:id="@+id/data_item_list_approach_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="以清单模式查看" />
+
+                <Button
+                    android:id="@+id/data_list_image_iv_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="加书签" />
+            </RelativeLayout>
+            </RelativeLayout>
+    </RelativeLayout>
    <Button
        android:id="@+id/data_item_list_guide_button"
        android:layout_width="wrap_content"

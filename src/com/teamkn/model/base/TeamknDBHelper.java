@@ -87,7 +87,9 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_DATA_LISTS_TITLE + " text , " + 
     		Constants.TABLE_DATA_LISTS_KIND + " text , "+
     		Constants.TABLE_DATA_LISTS_PUBLIC + " text , "+
-            Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " integer );";
+            Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " integer ,"+
+            Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME + " integer ,"+
+            Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " integer );";
     
     private static final String create_data_items = "create table "+
             Constants.TABLE_DATA_ITEMS + " ( " + 
@@ -136,7 +138,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
         db.execSQL(create_watch);
         db.execSQL(create_data_list_readings);
         
-//        System.out.println("data_lists " +create_data_lists );
+        System.out.println("data_lists " +create_data_lists );
 //        System.out.println("create_data_items " + create_data_items);
 //        System.out.println("watch " + create_watch);
         

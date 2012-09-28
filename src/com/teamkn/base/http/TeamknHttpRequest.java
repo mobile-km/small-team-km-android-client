@@ -57,11 +57,16 @@ public abstract class TeamknHttpRequest<TResult> {
                 throw new AuthenticateException(); //抛出未登录异常，会被 TeamknRunnable 接到并处理
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
             	return on_unprocessable_entity(responst_text);
+            case HttpStatus.SC_FORBIDDEN:
+            	return on_permission_denied(responst_text);
             default:
                 throw new ResponseNot200Exception();    //不是 200 也不是 401 只能认为是出错了。会被 TeamknRunnable 接到并处理
         }
     }
     public TResult on_unprocessable_entity(String responst_text) {
+		return null;
+	}
+    public TResult on_permission_denied(String responst_text) {
 		return null;
 	}
 

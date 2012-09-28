@@ -7,7 +7,9 @@ public class DataList extends BaseModel {
 	  public String title;
 	  public String kind;
 	  public String public_boolean;
-	  public int server_data_list_id=-1;	  
+	  public int server_data_list_id=-1;	
+	  public long server_created_time;
+	  public long server_updated_time;
 	
 	
     public int getId() {
@@ -52,12 +54,40 @@ public class DataList extends BaseModel {
 	public static void setNIL_DATA_LIST(DataList nIL_DATA_LIST) {
 		NIL_DATA_LIST = nIL_DATA_LIST;
 	}
+	
+	public long getServer_created_time() {
+		return server_created_time;
+	}
+	public void setServer_created_time(long server_created_time) {
+		this.server_created_time = server_created_time;
+	}
+	public long getServer_updated_time() {
+		return server_updated_time;
+	}
+	public void setServer_updated_time(long server_updated_time) {
+		this.server_updated_time = server_updated_time;
+	}
+
 	public static DataList NIL_DATA_LIST = new DataList();
 	public DataList() {
 		super();
 	}
+      
+	public DataList(int user_id, String title, String kind,
+			String public_boolean, int server_data_list_id,
+			long server_created_time, long server_updated_time) {
+		super();
+		this.user_id = user_id;
+		this.title = title;
+		this.kind = kind;
+		this.public_boolean = public_boolean;
+		this.server_data_list_id = server_data_list_id;
+		this.server_created_time = server_created_time;
+		this.server_updated_time = server_updated_time;
+	}
 	public DataList(int id, int user_id, String title, String kind,
-			String public_boolean, int server_data_list_id) {
+			String public_boolean, int server_data_list_id,
+			long server_created_time, long server_updated_time) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -65,18 +95,14 @@ public class DataList extends BaseModel {
 		this.kind = kind;
 		this.public_boolean = public_boolean;
 		this.server_data_list_id = server_data_list_id;
+		this.server_created_time = server_created_time;
+		this.server_updated_time = server_updated_time;
 	}
-	public DataList(int user_id, String title, String kind,
-			String public_boolean, int server_data_list_id) {
-		super();
-		this.user_id = user_id;
-		this.title = title;
-		this.kind = kind;
-		this.public_boolean = public_boolean;
-		this.server_data_list_id = server_data_list_id;
-	}  
+	
 	@Override
 	public String toString() {
-		return id+" : "+user_id+" : "+title+" : "+kind+" : "+ public_boolean+" : "+server_data_list_id;
+		return id+" : "+user_id+" : "+title+" : "
+	+kind+" : "+ public_boolean+" : "+server_data_list_id + " : "
+	+server_created_time + " : " + server_updated_time;
 	}
 }

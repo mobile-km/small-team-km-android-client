@@ -55,7 +55,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	RelativeLayout data_list_title_rl;
 	TextView data_list_title_tv;
 	ImageView data_list_image_iv_edit;
-	ImageView data_list_image_iv_watch;
+	Button data_list_image_iv_watch;
     /*
      * data_item  list 列表 
      * */
@@ -68,6 +68,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	RelativeLayout data_item_step_rl;
 	TextView data_item_step_tv;
 	TextView data_item_step_text_tv;
+	TextView data_item_step_content_text_tv;
 	Button data_item_list_approach_button;
 	Button data_item_next_button;
 	Button data_item_back_button;
@@ -123,8 +124,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_title_tv.setText(dataList.title);
 		data_list_title_tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
 		data_list_title_tv.getPaint().setFakeBoldText(true);//加粗
+		ImageView data_item_add_iv = (ImageView)findViewById(R.id.data_item_add_iv);
 		data_list_image_iv_edit = (ImageView) findViewById(R.id.data_list_image_iv_edit);
 		if(is_curretn_user_data_list){
+			data_item_add_iv.setVisibility(View.VISIBLE);
 			data_list_image_iv_edit.setVisibility(View.VISIBLE);
 			data_list_image_iv_edit.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -148,6 +151,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			});
 		}else{
 			data_list_image_iv_edit.setVisibility(View.GONE);
+			data_item_add_iv.setVisibility(View.GONE);
 		}
 		
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
@@ -158,6 +162,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_step_rl = (RelativeLayout)findViewById(R.id.data_item_step_rl);
 		data_item_step_tv = (TextView)findViewById(R.id.data_item_step_tv);
 		data_item_step_text_tv = (TextView)findViewById(R.id.data_item_step_text_tv);
+		data_item_step_content_text_tv = (TextView)findViewById(R.id.data_item_step_content_text_tv);
 		data_item_list_approach_button = (Button)findViewById(R.id.data_item_list_approach_button);
 		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
 		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);	
@@ -212,14 +217,14 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		builder.show();
 	}
 	private void load_watch_UI(){
-		data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
+		data_list_image_iv_watch = (Button)findViewById(R.id.data_list_image_iv_watch);
 		Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
 		System.out.println("watch.id = " + watch.id);
 		if(dataList.public_boolean.equals("true")){
 			if(watch.id<=0){
-				data_list_image_iv_watch.setAlpha(100);	
+				data_list_image_iv_watch.setText("加书签");	
 			}else{
-				data_list_image_iv_watch.setAlpha(50);
+				data_list_image_iv_watch.setText("移除书签");	
 			}
 		}else{
 			data_list_image_iv_watch.setVisibility(View.GONE);
@@ -229,12 +234,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public void onClick(View v) {
 				Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
+				System.out.println(watch.toString());
 				if(watch.id<=0){
 					watch_data_list(true);
-					data_list_image_iv_watch.setAlpha(50);
+					data_list_image_iv_watch.setText("移除书签");	
 				}else{
 					watch_data_list(false);
-					data_list_image_iv_watch.setAlpha(100);
+					data_list_image_iv_watch.setText("加书签");	
 				}
 			}
 		});
@@ -244,11 +250,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-				    Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
+					Watch watch_update = new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id);
 					if(watch_boolean){
-						WatchDBHelper.createOrUpdate(watch);
+						WatchDBHelper.createOrUpdate(watch_update);
 					}else{
-						WatchDBHelper.delete(watch);
+						WatchDBHelper.delete(watch_update);
 					}
 					HttpApi.WatchList.watch(dataList, watch_boolean);
 				}else{
@@ -351,11 +357,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	private void set_step_ui(){
 		if(step_new<=dataItems.size()-1){
 			data_item_step_tv.setVisibility(View.VISIBLE);
-			if(step_new<=1){
+			if(step_new<=0){
 				data_item_back_button.setVisibility(View.GONE);
 				data_item_list_approach_button.setVisibility(View.VISIBLE);
 			}else{
-				data_item_list_approach_button.setVisibility(View.GONE);
 				data_item_back_button.setVisibility(View.VISIBLE);
 			}
 			if(step_new==dataItems.size()-1){
@@ -363,6 +368,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 			data_item_step_tv.setText((1+step_new)+"");
 			data_item_step_text_tv.setText(dataItems.get(step_new).title);
+			data_item_step_content_text_tv.setText(dataItems.get(step_new).content);
 		}else{
 			show_step = false;
 			load_step_or_list(show_step);

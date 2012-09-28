@@ -17,13 +17,7 @@ import com.teamkn.model.base.Constants;
 public class DataListDBHelper extends BaseModelDBHelper {
   public static DataList update(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
-	    ContentValues values = new ContentValues();
-	    values.put(Constants.TABLE_DATA_LISTS_USER_ID,dataList.user_id);
-	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
-	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
-	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
-	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
-	    
+	    ContentValues values = get_contentvalues(dataList);
 	    if(find(dataList.id).id <=0){ 
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    	dataList = pull_last_data();
@@ -33,13 +27,13 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    	System.out.println("update= " + dataList.toString());
 	    }
 	    db.close();
-	    
 		return dataList;
   }
   public static DataList pull_last_data(){
 	  DataList datalist;
 	  SQLiteDatabase db = get_write_db();
-	  String sql = "select top 1 * from " + Constants.TABLE_DATA_LISTS + " DESC " + Constants.KEY_ID;
+//	  select from users order by uid desc limit 1
+	  String sql = "select * from " + Constants.TABLE_DATA_LISTS  + " order by "+ Constants.KEY_ID + " DESC limit 1 " ;
 	    Cursor cursor = db.rawQuery(sql,null);
 	    boolean has_value = cursor.moveToFirst();
 	    if(has_value){
@@ -53,18 +47,13 @@ public class DataListDBHelper extends BaseModelDBHelper {
   }
   public static void pull(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
-	    ContentValues values = new ContentValues();
-	    values.put(Constants.TABLE_DATA_LISTS_USER_ID,dataList.user_id);
-	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
-	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
-	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
-	    
-	    
+	    ContentValues values = get_contentvalues(dataList);
 	    if(find_by_server_data_list_id(dataList.server_data_list_id).id <= 0){ 
-	    	values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    	System.out.println("insert " + dataList.toString());
 	    }else{
 	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	        System.out.println("update " + dataList.toString());
 	    }
 	    db.close();
 }
@@ -78,13 +67,13 @@ public class DataListDBHelper extends BaseModelDBHelper {
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
                       new String[]{data_list_public}, null, null,
-                      Constants.KEY_ID + " DESC");
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
                       new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
-                      Constants.KEY_ID + " DESC");
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }
     	  
       }else{
@@ -93,13 +82,13 @@ public class DataListDBHelper extends BaseModelDBHelper {
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
                       new String[]{data_list_type,data_list_public}, null, null,
-                      Constants.KEY_ID + " DESC");
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
                       Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
                       new String[]{data_list_type,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
-                      Constants.KEY_ID + " DESC");
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }  
       }
       while (cursor.moveToNext()) {
@@ -199,7 +188,9 @@ public class DataListDBHelper extends BaseModelDBHelper {
     String kind = cursor.getString(3);
     String public_boolean = cursor.getString(4);
     int server_data_list_id = cursor.getInt(5);
-    return new DataList(id,user_id,title,kind,public_boolean,server_data_list_id);
+    long server_created_time = cursor.getLong(6);
+    long server_updated_time = cursor.getLong(7);
+    return new DataList(id,user_id,title,kind,public_boolean,server_data_list_id,server_created_time,server_updated_time);
   }
 
   private static String[] get_columns() {
@@ -209,7 +200,20 @@ public class DataListDBHelper extends BaseModelDBHelper {
         Constants.TABLE_DATA_LISTS_TITLE,
         Constants.TABLE_DATA_LISTS_KIND,
         Constants.TABLE_DATA_LISTS_PUBLIC,
-        Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID
+        Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,
+        Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,
+        Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME
     };
+  }
+  private static ContentValues get_contentvalues(DataList dataList){
+		ContentValues values = new ContentValues();
+		values.put(Constants.TABLE_DATA_LISTS_USER_ID,dataList.user_id);
+	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
+	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
+	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
+	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
+	    values.put(Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,dataList.server_created_time);
+	    values.put(Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME,dataList.server_updated_time);
+		return values;
   }
 }

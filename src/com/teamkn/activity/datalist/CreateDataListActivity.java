@@ -83,12 +83,15 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 							BaseUtils.toast("列表名称已存在");
 							create_data_list_et.setSelected(true);
 						}else{
-							dataList= new DataList(UserDBHelper.find_by_server_user_id(current_user().user_id).id , add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,-1);
+							long current_seconds = System.currentTimeMillis();
+							dataList= new DataList(UserDBHelper.find_by_server_user_id(current_user().user_id).id ,
+									add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,
+									-1,current_seconds,current_seconds);
 							DataList datalist = DataListDBHelper.update(dataList);
 							HttpApi.DataList.create(datalist);
 							
 							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
-				         	
+
 				         	intent.putExtra("data_list_public", RequestCode.data_list_public);
 				         	intent.putExtra("data_list_type", RequestCode.data_list_type);
 				         	startActivity(intent);

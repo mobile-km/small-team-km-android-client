@@ -81,6 +81,8 @@ public class Constants {
     public static final String TABLE_DATA_LISTS_KIND = "kind";
     public static final String TABLE_DATA_LISTS_PUBLIC = "public";
     public static final String TABLE_DATA_LISTS_SERVER_DATA_LIST_ID = "server_data_list_id";
+    public static final String TABLE_DATA_LISTS_SERVER_CREATED_TIME = "server_created_time";
+    public static final String TABLE_DATA_LISTS_SERVER_UPDATED_TIME = "server_updated_time";
     
     
     // data_items
