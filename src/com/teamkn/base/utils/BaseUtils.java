@@ -72,18 +72,38 @@ public class BaseUtils {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            
             if (info != null) {
                 for (int i = 0; i < info.length; i++) {
+//                	info[i].getType()
                     if (info[i].getTypeName().equals("WIFI")
                             && info[i].isConnected()) {
                         return true;
                     }
+                    if(info[i].getTypeName().equals("GPRS")
+                            && info[i].isConnected()){
+                    	 return true;
+                    }
                 }
-            }
+                if(connectivity.getActiveNetworkInfo().isAvailable()){
+                	return true;
+                }
+            }    
         }
         return false;
     }
-
+    
+//   　如果拟开发一个网络应用的程序，首先考虑是否接入网络，在Android手机中判断是否联网可以通过 ConnectivityManager 类
+//    的isAvailable()方法判断，首先获取网络通讯类的实例
+//    ConnectivityManager cwjManager=
+//    (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+//   ，使用cwjManager.getActiveNetworkInfo().isAvailable(); 
+//   来返回是否有效，如果为True则表示当前Android手机已经联网，可能是WiFi或GPRS、HSDPA等等，
+//   具体的可以通过 ConnectivityManager 类的getActiveNetworkInfo() 方法判断详细的接入方式，
+//   需要注意的是有关调用需要加入 这个权限，android开发网提醒大家在真机上Market和Browser程序都使用了这个方法
+//   ，来判断是否继续，同时在一些网络超时的时候也可以检查下网络连接是否存在，以免浪费手机上的电力资源。
+    
+    
     // [1,2,3,4] -> "1,2,3,4"
     public static String integer_list_to_string(List<Integer> ids) {
         String res = "";

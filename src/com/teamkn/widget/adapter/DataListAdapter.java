@@ -17,6 +17,7 @@ import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.base.task.TeamknAsyncTask;
@@ -51,13 +52,13 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.list_note_title_tv_go    = (TextView)  view.findViewById(R.id.list_note_title_tv_go);
         view_holder.list_data_list_eye_tv = (TextView) view.findViewById(R.id.list_data_list_eye_tv);
         view_holder.list_type_tv = (TextView)view.findViewById(R.id.list_type_tv);
-        view_holder.list_collect_tv = (TextView)view.findViewById(R.id.list_collect_tv);
+        view_holder.list_collect_tv = (ImageView)view.findViewById(R.id.list_collect_tv);
         //公共列表
         view_holder.show_is_yes_public_relativelayout = (RelativeLayout)view.findViewById(R.id.show_is_yes_public_relativelayout);
         view_holder.data_list_item_user_avatar_iv= (ImageView)view.findViewById(R.id.data_list_item_user_avatar_iv);
         view_holder.data_list_item_user_name_tv = (TextView)view.findViewById(R.id.data_list_item_user_name_tv);
         view_holder.list_title_tv_public = (TextView)view.findViewById(R.id.list_title_tv_public);
-        view_holder.list_collect_tv_watch = (TextView)view.findViewById(R.id.list_collect_tv_watch);
+        view_holder.list_collect_tv_watch = (ImageView)view.findViewById(R.id.list_collect_tv_watch);
         view_holder.list_type_tv_public = (TextView)view.findViewById(R.id.list_type_tv_public);
         return view_holder;
     }
@@ -93,17 +94,23 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
             	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.blueviolet));
             }
             
-            Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
+            final Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
     		if(item.public_boolean.equals("true") && watch.id>0){
-    			view_holder.list_collect_tv.setVisibility(View.VISIBLE);	
+    			view_holder.list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
     		}else{
-    			view_holder.list_collect_tv.setVisibility(View.GONE);	
+    			view_holder.list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
     		}
     		view_holder.list_collect_tv.setOnClickListener(new OnClickListener() {	
 				@Override
 				public void onClick(View v) {
-					view_holder.onClick(item);
-					view_holder.list_collect_tv.setVisibility(View.GONE);
+					boolean go_watch ;
+					Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
+					if(item.public_boolean.equals("true") && watch.id>0){
+						go_watch = false;
+		    		}else{
+		    			go_watch = true;
+		    		}
+					view_holder.onClick(item,go_watch);
 				}
 			});
         }else{
@@ -126,18 +133,29 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
             }
             view_holder.list_title_tv_public.setText(item.title);
             
-            Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
+            final Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
     		System.out.println("watch.id = " + watch.toString() + " ｉｔｅｍ　：　" + item.toString());
     		if(watch.id<=0){
-    			view_holder.list_collect_tv_watch.setVisibility(View.GONE);	
+    			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
     		}else{
-    			view_holder.list_collect_tv_watch.setVisibility(View.VISIBLE);	
+    			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
     		}
             view_holder.list_collect_tv_watch.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {	
-					view_holder.onClick(item);
-					view_holder.list_collect_tv_watch.setVisibility(View.GONE);
+					boolean go_watch ;
+					Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
+					
+					if(MainActivity.RequestCode.data_list_public.equals("watch")){
+						MainActivity.dataListAdapter.remove_item(item);
+						MainActivity.dataListAdapter.notifyDataSetChanged();
+					}
+					if(watch.id<=0){
+						go_watch = true;	
+		    		}else{
+		    			go_watch = false;
+		    		}
+					view_holder.onClick(item,go_watch);
 				}
 			});
         }
@@ -153,39 +171,58 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         TextView list_note_title_tv_go;
         TextView list_data_list_eye_tv;
         TextView list_type_tv;
-        TextView list_collect_tv;
-        
-        
+        ImageView list_collect_tv;
         // 公共列表子项显示
         RelativeLayout show_is_yes_public_relativelayout;
         ImageView data_list_item_user_avatar_iv;
         TextView data_list_item_user_name_tv;
         TextView list_title_tv_public;
-        TextView list_collect_tv_watch;
+        ImageView list_collect_tv_watch;
         TextView list_type_tv_public;
         
-        public void onClick(final DataList item) {
-			new TeamknAsyncTask<Void, Void, Void>() {
-				@Override
-				public Void do_in_background(Void... params)
-						throws Exception {
-					if (BaseUtils.is_wifi_active(activity)) {
-						Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
-						WatchDBHelper.delete(watch);
-						HttpApi.WatchList.watch(item, false);
-					}else{
-						BaseUtils.toast("无法连接到网络，请检查网络配置");
+        public void onClick(final DataList item,final boolean go_watch) {
+        	final Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
+			final Watch fand_watch = WatchDBHelper.find(watch);
+			if (BaseUtils.is_wifi_active(activity)) {
+				new TeamknAsyncTask<Void, Void, Boolean>() {
+					@Override
+					public Boolean do_in_background(Void... params)
+							throws Exception {
+						boolean rsult=false;
+						if(fand_watch.id<=0){
+							rsult = true;
+							WatchDBHelper.createOrUpdate(watch);
+							HttpApi.WatchList.watch(item, rsult);
+						}else{
+							rsult = false;
+							WatchDBHelper.delete(watch);
+							HttpApi.WatchList.watch(item, rsult);
+						}
+						return rsult;
 					}
-					return null;
-				}
-				@Override
-				public void on_success(Void result) {
-					if(MainActivity.RequestCode.data_list_public.equals("watch")){
-						MainActivity.dataListAdapter.remove_item(item);
-					}
-					BaseUtils.toast("移除成功 ^_^");
-				}	
-			}.execute();
+					@Override
+					public void on_success(Boolean result) {
+						list_collect_tv_watch.setVisibility(View.VISIBLE);
+						list_collect_tv.setVisibility(View.VISIBLE);
+						if(go_watch){
+			    			list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+						}else{
+							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+							list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+						}
+						String msg;
+						if(result==true){
+							msg = "添加成功 ^_^";
+						}else{
+							msg = "移除成功 ^_^";
+						}
+						BaseUtils.toast(msg);
+					}	
+				}.execute();
+			}else{
+				BaseUtils.toast("无法连接到网络，请检查网络配置");
+			}
 		}
     }
 }

@@ -24,7 +24,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
         
         public static String data_list_type = COLLECTION;
         
-        public static String data_list_public = "true";
+        public static String data_list_public = "false";
     }
 	EditText create_data_list_et;
 	TextView create_data_list_msg_tv;
@@ -64,7 +64,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 	}; 	
 	public void data_list_public_checkbox(){
 		if(data_list_public_checkbox.isChecked()){
-			RequestCode.data_list_public = "true";
+//			RequestCode.data_list_public = "true";
+			RequestCode.data_list_public = "false";
 		}else{
 			RequestCode.data_list_public = "false";
 		}

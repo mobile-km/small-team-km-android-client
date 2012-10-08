@@ -43,7 +43,7 @@ import com.teamkn.widget.adapter.MenuListAdapter;
 
 abstract public class TeamknBaseActivity extends Activity {
 	public class RequestCode{
-	    public final static int NEW_TEXT = 9;
+	    public final static int NEW_TEXT = 3;
 	    public final static int FROM_ALBUM = 1;
 	    public final static int FROM_CAMERA = 2;
 	}

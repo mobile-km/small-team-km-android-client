@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/list_item"  
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"     
     android:id="@+id/list_data_list_item_rl"
-    android:descendantFocusability="beforeDescendants"
->
-     <TextView
-               android:id="@+id/info_tv"
-               android:visibility="gone"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-       />
+    style="@style/list_item"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    android:descendantFocusability="beforeDescendants" >
 
+    <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:id="@+id/show_is_no_public_relativelayout"
         android:layout_width="fill_parent"
@@ -32,15 +31,6 @@
             android:textSize="20dp" />
 
         <TextView
-            android:id="@+id/list_data_list_eye_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/list_note_title_tv_edit"
-            android:layout_marginTop="10dp"
-            android:text="分享"
-            android:textColor="@color/black" />
-
-        <TextView
             android:id="@+id/list_note_title_tv_go"
             style="@style/text"
             android:layout_width="80dp"
@@ -50,86 +40,93 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="id:s_id"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/list_collect_tv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/mi_collect_no" />
 
         <TextView
             android:id="@+id/list_type_tv"
-            android:text="步骤"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/list_note_title_tv_go"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/list_collect_tv"
-            android:text="移除书签"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/list_type_tv"
-            android:layout_alignBottom="@+id/list_type_tv"
-            android:layout_alignLeft="@+id/list_note_title_tv_go"
-            android:textColor="@color/black" />
-    </RelativeLayout>
-
-    <RelativeLayout 
-        android:id="@+id/show_is_yes_public_relativelayout"
-        android:background="@color/gainsboro"
-        android:layout_width="fill_parent"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
-
-       <RelativeLayout 
-           android:layout_width="50dp"
-           android:layout_height="wrap_content"
-       >
-           <ImageView
-               android:id="@+id/data_list_item_user_avatar_iv"
-               android:layout_width="fill_parent"
-               android:layout_height="50dp"
-               android:background="@drawable/default_avatar" 
-           />
-           <TextView
-               android:id="@+id/data_list_item_user_name_tv"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/data_list_item_user_avatar_iv"
-               android:text="小强" 
-           />
-       </RelativeLayout>
-       <TextView
-           android:id="@+id/list_title_tv_public"
-           style="@style/text"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:gravity="center_vertical"
-           android:textColor="@color/black"
-           android:text="@string/app_name"
-           android:textSize="20dp"
-           android:layout_marginLeft="50dp"
-           android:padding="10dp"
-       />
-        <TextView
-           android:id="@+id/list_type_tv_public"
-           android:text="步骤"
-           android:layout_alignParentRight="true"
-           android:layout_alignParentBottom="true"
-           android:layout_marginTop="10dp"
-           android:textColor="@color/black"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-       />
-
-        <TextView
-            android:id="@+id/list_collect_tv_watch"
-            android:text="移除书签"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="50dp"
+            android:layout_alignParentRight="true"
+            android:text="步骤"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/list_data_list_eye_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="分享"
             android:textColor="@color/black" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/show_is_yes_public_relativelayout"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gainsboro"
+        android:padding="10dp" >
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/data_list_item_user_avatar_iv"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/default_avatar" />
+
+            <TextView
+                android:id="@+id/data_list_item_user_name_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/data_list_item_user_avatar_iv"
+                android:text="小强" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/list_title_tv_public"
+            style="@style/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@string/app_name"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/list_type_tv_public"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:text="步骤"
+            android:textColor="@color/black" />
+         <ImageView
+	        android:id="@+id/list_collect_tv_watch"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignTop="@+id/show_is_no_public_relativelayout"
+	        android:background="@drawable/mi_collect_no"
+	        android:text="移除书签"
+	        android:textColor="@color/black" />
+    </RelativeLayout>
+
 </RelativeLayout>

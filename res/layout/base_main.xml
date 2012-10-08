@@ -21,9 +21,11 @@
             style="@style/head_bar_text_center"
             android:id="@+id/main_user_name"
             android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:text="@string/main_user_name_default"
             android:layout_marginLeft="50dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="80dp"
+            android:background="@drawable/selector"
         />
         <ImageButton
              android:src="@drawable/mi_data_list_add"

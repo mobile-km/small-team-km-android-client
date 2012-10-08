@@ -14,10 +14,6 @@
             android:id="@+id/go_back_button"
             style="@style/head_bar_button_go_back"
         />
-        <TextView
-               style="@style/head_bar_text_center"
-               android:text="查看列表"
-        />
         <ImageView
              android:id="@+id/data_item_add_iv"
              android:src="@drawable/mi_data_item_add"
@@ -26,6 +22,17 @@
              android:layout_alignParentRight="true"
              android:onClick="on_create_data_item_click"
         />
+
+        <TextView
+            android:id="@+id/data_list_user_name_tv"
+            style="@style/head_bar_text"
+            android:layout_alignBaseline="@+id/go_back_button"
+            android:layout_alignBottom="@+id/go_back_button"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@+id/go_back_button"
+            android:gravity="center_vertical"
+            android:text="查看列表" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -68,6 +75,7 @@
     />
     
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/data_item_step_rl"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -75,6 +83,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
         android:background="@color/darkgrey" >
 
         <TextView
@@ -124,30 +133,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="下一步" />
-                <RelativeLayout
-                android:layout_below="@+id/data_item_next_button"
-                android:layout_width="fill_parent"
-                android:gravity="center_vertical"
-                android:background="#fff"
-                android:layout_height="50dp">
-
-                <Button
-                    android:id="@+id/data_item_list_approach_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="以清单模式查看" />
-
-                <Button
-                    android:id="@+id/data_list_image_iv_watch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="加书签" />
-            </RelativeLayout>
+                    android:text="下一步" /> 
             </RelativeLayout>
     </RelativeLayout>
-   <Button
+   <!-- <Button
        android:id="@+id/data_item_list_guide_button"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
@@ -155,7 +144,32 @@
        android:layout_centerHorizontal="true"
        android:visibility="gone"
        android:text="以向导模式查看" 
-    />
+    /> -->
+   <RelativeLayout
+       android:visibility="gone"
+       android:id="@+id/data_item_watch_rl"
+       android:layout_below="@+id/data_item_next_button"
+       android:layout_width="fill_parent"
+       android:gravity="center_vertical"
+       android:layout_alignParentBottom="true"
+       android:layout_marginLeft="10dp"
+       android:layout_marginRight="10dp"
+       android:layout_height="50dp">
+
+       <Button
+           android:id="@+id/data_item_list_approach_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="以清单模式查看" />
+
+       <ImageView
+           android:id="@+id/data_list_image_iv_watch"
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:layout_alignParentRight="true"
+           android:background="@drawable/mi_collect_no"
+           android:text="加书签" />
+   </RelativeLayout>
    <LinearLayout
         android:layout_below="@+id/data_list_title_rl"
         android:id="@+id/list_no_data_show"

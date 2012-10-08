@@ -213,29 +213,29 @@ public class MainActivity extends TeamknBaseActivity {
     	}
     }
     private void load_data_list_or_watch(String watch_or_public){
-    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
-			@Override
-			public List<DataList> do_in_background(Void... params)
-					throws Exception {
-				// datalists = NoteDBHelper.all(true);
-				if (BaseUtils.is_wifi_active(MainActivity.this)) {
-					if(RequestCode.data_list_public.equals("true")){
-						HttpApi.DataList.public_timeline(RequestCode.now_page, 100);
-					}else if(RequestCode.data_list_public.equals("false")){
-						HttpApi.DataList.pull(RequestCode.data_list_type,RequestCode.now_page, 100);
-					}else if(RequestCode.data_list_public.equals("watch")){
-						HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
-					}	
-				}else{
-					BaseUtils.toast("无法连接到网络，请检查网络配置");
+    	if (BaseUtils.is_wifi_active(MainActivity.this)) {
+	    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
+				@Override
+				public List<DataList> do_in_background(Void... params)
+						throws Exception {
+					    // datalists = NoteDBHelper.all(true);
+						if(RequestCode.data_list_public.equals("true")){
+							HttpApi.DataList.public_timeline(RequestCode.now_page, 100);
+						}else if(RequestCode.data_list_public.equals("false")){
+							HttpApi.DataList.pull(RequestCode.data_list_type,RequestCode.now_page, 100);
+						}else if(RequestCode.data_list_public.equals("watch")){
+							HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
+						}	
+					return null;
 				}
-				return null;
-			}
-			@Override
-			public void on_success(List<DataList> datalists) {
-				load_list();
-			}
-		}.execute();
+				@Override
+				public void on_success(List<DataList> datalists) {
+					load_list();
+				}
+			}.execute();
+    	}else{
+			BaseUtils.toast("无法连接到网络，请检查网络配置");
+		}
     }
 	// 加载node_listview
 	private void load_list() {
@@ -266,7 +266,8 @@ public class MainActivity extends TeamknBaseActivity {
 				Intent intent = new Intent(MainActivity.this,DataItemListActivity.class);
 				intent.putExtra("data_list_id",item.id);
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
-				startActivity(intent);
+//				startActivity(intent);
+				startActivityForResult(intent, RequestCode.SHOW_BACK);
 			}
 		});
 	}
@@ -274,17 +275,25 @@ public class MainActivity extends TeamknBaseActivity {
 	// 处理其他activity界面的回调 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode != Activity.RESULT_OK) {
+		System.out.println(requestCode+ " : " + resultCode );
+		if (resultCode == Activity.RESULT_OK) {
 			return;
 		}
+		
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_LIST:
 			load_list();
 			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
 					+ RequestCode.CREATE_DATA_LIST);
 			break;
+		case RequestCode.SHOW_BACK:
+//			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
+//					+ RequestCode.SHOW_BACK);
+			if(DataItemListActivity.update_title ==true){
+				load_list();
+			}
 		}
+//		super.onActivityResult(requestCode, resultCode, data);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -433,7 +442,7 @@ public class MainActivity extends TeamknBaseActivity {
             lv_group = (ListView) view.findViewById(R.id.lvGroup);  
             // 加载数据  
             groups = new ArrayList<String>();  
-            groups.add("全部");  
+//            groups.add("全部");  
             groups.add("我的列表");  
             groups.add("公共列表");  
             groups.add("我的书签");
@@ -442,7 +451,7 @@ public class MainActivity extends TeamknBaseActivity {
             groupAdapter.add_items(groups);
             lv_group.setAdapter(groupAdapter);  
             // 创建一个PopuWidow对象  
-            popupWindow = new PopupWindow(view, 180, 218);  
+            popupWindow = new PopupWindow(view, 200, 240);  
         }  
   
         // 使其聚集  
@@ -467,20 +476,20 @@ public class MainActivity extends TeamknBaseActivity {
                     int position, long id) {  
   
                 switch (position) {
+//				case 0:
+//					break;
 				case 0:
-					break;
-				case 1:
 					RequestCode.data_list_public = "false";
 					set_title();
 //					load_data_list();
 					load_list();
 					break;
-				case 2:
+				case 1:
 					RequestCode.data_list_public = "true";
 					set_title();
 					load_data_list_or_watch(RequestCode.data_list_public);
 					break;
-				case 3:
+				case 2:
 					RequestCode.data_list_public = "watch";
 					set_title();
 					load_data_list_or_watch(RequestCode.data_list_public);

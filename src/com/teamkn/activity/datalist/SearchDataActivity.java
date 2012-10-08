@@ -3,6 +3,7 @@ package com.teamkn.activity.datalist;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
@@ -39,6 +41,8 @@ import com.teamkn.widget.adapter.GroupAdapter;
 
 public class SearchDataActivity extends TeamknBaseActivity{
 	public static class RequestCode {
+		public final static int SHOW_BACK = 9;
+		
 		public final static String COLLECTION = "COLLECTION";
 		public final static String STEP = "STEP";
 		public final static String ALL = "ALL";
@@ -195,16 +199,32 @@ public class SearchDataActivity extends TeamknBaseActivity{
 					int item_id, long position) {
 				System.out.println(item_id + " : " + position);
 				TextView info_tv = (TextView) list_item
-						.findViewById(R.id.note_info_tv);
+						.findViewById(R.id.info_tv);
 				final DataList item = (DataList) info_tv
 						.getTag(R.id.tag_note_uuid);
 				Intent intent = new Intent(SearchDataActivity.this,DataItemListActivity.class);
 				intent.putExtra("data_list_id",item.id);
-				startActivity(intent);
+				intent.putExtra("data_list_public", RequestCode.data_list_public);
+//				startActivity(intent);
+				startActivityForResult(intent, RequestCode.SHOW_BACK);
 			}
 	  });
 	}
-	
+	// 处理其他activity界面的回调 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		System.out.println(requestCode+ " : " + resultCode );
+		if (resultCode == Activity.RESULT_OK) {
+			return;
+		}
+		switch (requestCode) {
+		case RequestCode.SHOW_BACK:
+			if(DataItemListActivity.update_title ==true){
+				load_list();
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 	public void click_collection_button(View view) {
 		RequestCode.data_list_type = RequestCode.COLLECTION;
 		load_list();
@@ -226,7 +246,6 @@ public class SearchDataActivity extends TeamknBaseActivity{
             lv_group = (ListView) view.findViewById(R.id.lvGroup);  
             // 加载数据  
             groups = new ArrayList<String>();  
-            groups.add("全部");  
             groups.add("我的列表");  
             groups.add("公共列表");
             groups.add("我的书签");
@@ -258,19 +277,19 @@ public class SearchDataActivity extends TeamknBaseActivity{
             public void onItemClick(AdapterView<?> adapterView, View view,  
                     int position, long id) {   
                 switch (position) {
+//				case 0:
+//					break;
 				case 0:
-					break;
-				case 1:
 					RequestCode.data_list_public = "false";
 					set_title();
 					search_list(search_box_str);
 					break;
-				case 2:
+				case 1:
 					RequestCode.data_list_public = "true";
 					set_title();
 					search_list(search_box_str);
 					break;
-				case 3:
+				case 2:
 					RequestCode.data_list_public = "watch";
 					set_title();
 					search_list(search_box_str);

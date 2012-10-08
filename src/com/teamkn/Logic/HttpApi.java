@@ -711,7 +711,9 @@ public class HttpApi {
        }
     	public static com.teamkn.model.DataList update(final com.teamkn.model.DataList dataList) throws Exception{
     		return new TeamknPutRequest<com.teamkn.model.DataList>( 修改_data_list + dataList.server_data_list_id,
-    				new PostParamText("title", dataList.title)) {
+    				new PostParamText("title", dataList.title)
+//    				,new PostParamText("public",dataList.public_boolean)
+    		        ) {
 						@Override
 						public com.teamkn.model.DataList on_success(String response_text)throws Exception {
 							    JSONObject json = new JSONObject(response_text);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/dialog"
+    android:orientation="vertical" >
+    <EditText
+        android:id="@+id/data_list_title_et"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:inputType="none"
+        android:hint="修改标题的内容在此" 
+    />
+    <CheckBox
+        android:id="@+id/data_list_public_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分享给所有人"
+    />
+</LinearLayout>

@@ -54,10 +54,15 @@
 		     android:gravity="center"
 		 />
     </TableRow>
-    
-    <EditText
-        android:layout_marginTop="10dp"
+    <ScrollView 
         android:layout_below="@+id/radio"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+             <EditText
+        android:layout_marginTop="10dp"
         android:id="@+id/create_data_item_title_et"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent" 
@@ -110,4 +115,6 @@
             android:src="@drawable/mi_save"
         />
     </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
