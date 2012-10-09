@@ -17,4 +17,8 @@ public class DataListReading extends BaseModel  {
 		this.data_list_id = data_list_id;
 		this.user_id = user_id;
 	}
+	@Override
+	public String toString() {
+		return id + " :　" + data_list_id + " : " + user_id;
+	}
 }

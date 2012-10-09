@@ -1,7 +1,5 @@
 package com.teamkn.activity.dataitem;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -97,6 +95,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 									}else{
 										DataItemDBHelper.update_by_id(dataItem);
 										back = HttpApi.DataItem.update(dataItem); 
+										DataItemListActivity.update_title = true;
 									}
 								}else{
 									if(DataItemDBHelper.find(title_str , data_list_id).id>=0){
@@ -125,6 +124,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 					    		intent.putExtra("data_list_public", data_list_public);
 					    		if(is_update){
 					    			intent.putExtra("create_data_item", false);
+					    			intent.putExtra("is_update", true);
 					    		}else{
 					    			intent.putExtra("create_data_item", true);
 					    		}

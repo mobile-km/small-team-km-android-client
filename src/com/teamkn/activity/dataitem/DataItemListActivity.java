@@ -45,7 +45,6 @@ import com.teamkn.model.database.DataListReadingDBHelper;
 import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
 import com.teamkn.widget.adapter.DataItemListAdapter;
-
 public class DataItemListActivity extends TeamknBaseActivity {
 	public static boolean update_title =false; //判断data_list 列表的数据是否有修改
 	static class RequestCode {
@@ -82,13 +81,14 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	LinearLayout list_no_data_show ;  // 没有数据时显示
 	
 	DataList dataList ;
+	DataList load_dataList;
 	boolean create_data_item;  //创建data_item
 	//获取数据，用来传递
 	String data_list_public;
 	String data_list_type;
 	//是否显示show_step
 	boolean show_step;
-	
+	boolean is_reading; // 判断step列表是否度过
     int step_new = 0;  //显示step的步骤，默认是0
     
     boolean is_curretn_user_data_list; // 是否是当前用户的data_list
@@ -97,11 +97,12 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_list);
-		update_title = false;
 		Intent intent = getIntent();
 		create_data_item = intent.getBooleanExtra("create_data_item", false);
 		Integer data_list_id = intent.getIntExtra("data_list_id", -1);
+		update_title = intent.getBooleanExtra("is_update", false);
 		dataList = DataListDBHelper.find(data_list_id);
+		load_dataList = dataList;
 		data_list_public = intent.getStringExtra("data_list_public");
 		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
 			is_curretn_user_data_list  = true;
@@ -221,26 +222,38 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					public_boolean = "false";
 				}
 				if (add_data_list_et_str != null&& !add_data_list_et_str.equals(null)
-						&& !BaseUtils.is_str_blank(add_data_list_et_str)
-						&& !add_data_list_et_str.equals(dataList.title)) {
+						&& !BaseUtils.is_str_blank(add_data_list_et_str)) {
 						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-							update_title = true;
-							MainActivity.dataListAdapter.remove_item(dataList);
-							dataList.setTitle(add_data_list_et_str);
-							dataList.setPublic_boolean(public_boolean);
-							DataListDBHelper.update(dataList);
-							try {
-								MainActivity.dataListAdapter.add_item(HttpApi.DataList .update(DataListDBHelper.find(dataList.id)));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+							new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,"正在处理") {
+								@Override
+								public Void do_in_background(Void... params)
+										throws Exception {
+//									MainActivity.dataListAdapter.remove_item(dataList);
+									dataList.setTitle(add_data_list_et_str);
+									dataList.setPublic_boolean(public_boolean);	
+									DataListDBHelper.update(dataList);
+									try {
+										HttpApi.DataList .update(DataListDBHelper.find(dataList.id));
+//										MainActivity.dataListAdapter.add_item();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									return null;
+								}
+								@Override
+								public void on_success(Void result) {
+									update_title = true;
+									data_list_title_tv.post(new Runnable() {
+										@Override
+										public void run() {
+										data_list_title_tv.setText(add_data_list_et_str);
+										}
+								    });
+								}
+							}.execute();
+						}else{
+							BaseUtils.toast("无法连接网络");
 						}
-						data_list_title_tv.post(new Runnable() {
-							@Override
-							public void run() {
-							data_list_title_tv.setText(add_data_list_et_str);
-							}
-					    });
 				}
 			}
 		});
@@ -250,16 +263,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
 		Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
 		System.out.println("watch.id = " + watch.id);
-		if(dataList.public_boolean.equals("true")){
-			if(watch.id<=0){
-				data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
-			}else{	
-				data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
-			}
-		}else{
-			data_list_image_iv_watch.setVisibility(View.GONE);
+		if(watch.id<=0){
+			data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
+		}else{	
+			data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
 		}
-		
 		data_list_image_iv_watch.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -329,7 +337,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
 
-					HttpApi.DataItem.pull(dataList.server_data_list_id);
+					is_reading = HttpApi.DataItem.pull(dataList.server_data_list_id);
 					dataItems = DataItemDBHelper.all(dataList.id);
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
@@ -338,6 +346,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 			@Override
 			public void on_success(final List<DataItem> dataItems) {
+				if(!is_reading){
+					update_title = true;
+				}
 				data_item_watch_rl.setVisibility(View.VISIBLE);
 				if(dataItems.size()==0){
 					tlv.setVisibility(View.GONE);
@@ -348,9 +359,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					load_step_or_list(show_step);
 					list_no_data_show.setVisibility(View.GONE);
 					if(show_step){
-						load_step();
 						data_item_list_approach_button.setVisibility(View.VISIBLE);
 						data_item_list_approach_button.setText("以清单模式查看");
+						load_step();
 					}else{
 						load_list();
 						if((data_list_public.equals("true")
@@ -368,7 +379,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	private void load_step(){
 		DataListReading reading =DataListReadingDBHelper.find(new DataListReading(-1, dataList.id, dataList.user_id)); 
-		if(reading.id>0 || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+		System.out.println(is_reading + "  load_step reading = " + reading.toString());
+		if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
 			data_item_list_approach_button.setVisibility(View.VISIBLE);
 			data_item_list_approach_button.setOnClickListener(new android.view.View.OnClickListener() {
 				@Override
@@ -382,6 +394,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}else{
 			data_item_list_approach_button.setVisibility(View.GONE);
 		}
+//		data_item_list_approach_button.setVisibility(View.GONE);
 		set_step_ui();
 		data_item_next_button.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
@@ -403,7 +416,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			data_item_step_tv.setVisibility(View.VISIBLE);
 			if(step_new<=0){
 				data_item_back_button.setVisibility(View.GONE);
-				data_item_list_approach_button.setVisibility(View.VISIBLE);
+
+//				data_item_list_approach_button.setVisibility(View.VISIBLE);
 			}else{
 				data_item_back_button.setVisibility(View.VISIBLE);
 			}
@@ -431,6 +445,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				@Override
 				public void onClick(View v) {
 					data_item_list_approach_button.setText("以清单模式查看");
+					data_item_next_button.setText("下一步");
+					if(step_new==dataItems.size()-1){
+						data_item_next_button.setText("结束");
+					}
 					show_step = true;
 					load_step_or_list(show_step);
 					load_step();
@@ -488,6 +506,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				intent.putExtra("data_item_id",item.id);
 				intent.putExtra("data_list_public",data_list_public);
 				startActivity(intent);
+				update_title = true;
 			}
 		});
 		tlv.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -554,6 +573,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			public Void do_in_background(Void... params) throws Exception {
 				try {
 					if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+//						MainActivity.dataListAdapter.remove_item(load_dataList);
+						System.out.println("insert_into load  = " +dataList.toString());
+						System.out.println("insert_into update = " +DataListDBHelper.find(dataList.id).toString());
+//						MainActivity.dataListAdapter.remove_item(dataList);
 						HttpApi.DataItem.order(from_server, to_server);
 					}
 				} catch (Exception e) {
@@ -561,9 +584,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}
 				return null;
 			}
-
 			@Override
 			public void on_success(Void result) {
+				update_title = true;	
 			}
 		}.execute();
 	}
@@ -626,17 +649,30 @@ public class DataItemListActivity extends TeamknBaseActivity {
 										&& !add_data_list_et_str
 												.equals(dataItem2.title)) {
 									if (BaseUtils
-											.is_wifi_active(DataItemListActivity.this)) {
-										dataItem2
-												.setTitle(add_data_list_et_str);
-										DataItemDBHelper.update_by_id(dataItem2);
-										try {
-											HttpApi.DataItem.update(DataItemDBHelper
-													.find(dataItem2.id));
-										} catch (Exception e) {
-											e.printStackTrace();
-										}
-										load_data_item_list(show_step);
+											.is_wifi_active(DataItemListActivity.this)) {				
+										new TeamknAsyncTask<Void, Void, Void>() {
+											@Override
+											public Void do_in_background(
+													Void... params)
+													throws Exception {
+												dataItem2.setTitle(add_data_list_et_str);
+												DataItemDBHelper.update_by_id(dataItem2);
+												try {
+													HttpApi.DataItem.update(DataItemDBHelper
+															.find(dataItem2.id));
+												} catch (Exception e) {
+													e.printStackTrace();
+												}
+												return null;
+											}
+											@Override
+											public void on_success(Void result) {
+												update_title = true;
+												load_data_item_list(show_step);
+											}
+										}.execute();
+									}else{
+										BaseUtils.toast("无法连接网络");
 									}
 								}
 							}
@@ -654,20 +690,36 @@ public class DataItemListActivity extends TeamknBaseActivity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								DataItem dataItem3 = dataItems.get(from_id);
+								final DataItem dataItem3 = dataItems.get(from_id);
 								if (BaseUtils
 										.is_wifi_active(DataItemListActivity.this)) {
-									DataItemDBHelper.delete_by_id(dataItem3.id);
-									try {
-										if (dataItem3.server_data_item_id >= 0) {
-											HttpApi.DataItem
-													.remove_contact(dataItem3.server_data_item_id);
+									new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,"正在处理") {
+										@Override
+										public Void do_in_background(
+												Void... params)
+												throws Exception {
+											DataItemDBHelper.delete_by_id(dataItem3.id);
+											try {
+												if (dataItem3.server_data_item_id >= 0) {
+													HttpApi.DataItem
+															.remove_contact(dataItem3.server_data_item_id);
+													update_title = true;
+												}
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+											return null;
 										}
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-									dataItems.remove(from_id);
-									load_list();
+										@Override
+										public void on_success(Void result) {
+											dataItems.remove(from_id);
+											load_list();
+										}
+									}.execute();
+									
+									
+								}else{
+									BaseUtils.toast("无法连接网络");
 								}
 							}
 						});
@@ -681,7 +733,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	// 钩子，自行重载
 	public void on_go_back() {
-//		System.out.println("++++++++++++++++++  on_go_back()");
 		setResult(MainActivity.RequestCode.SHOW_BACK,new Intent(DataItemListActivity.this,MainActivity.class));
 	};
 }

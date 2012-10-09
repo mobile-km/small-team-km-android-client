@@ -30,10 +30,10 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    
 		    if(find(dataItem.id).id <= 0){ 
 		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
-		    	System.out.println("insert= " + dataItem.toString());
+		    	System.out.println("insert dataItem= " + dataItem.toString());
 		    }else{
 		    	db.update(Constants.TABLE_DATA_ITEMS, values, Constants.KEY_ID + " = ? ", new String[]{dataItem.id+""});
-		    	System.out.println("update= " + dataItem.toString());
+		    	System.out.println("update dataItem= " + dataItem.toString());
 		    }
 		    db.close();
 	  }

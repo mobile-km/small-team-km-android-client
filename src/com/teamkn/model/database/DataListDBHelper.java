@@ -21,10 +21,10 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    if(find(dataList.id).id <=0){ 
 	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
 	    	dataList = pull_last_data();
-	    	System.out.println("insert= " + dataList.toString());
+	    	System.out.println("insert dataList= " + dataList.toString());
 	    }else{
 	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.KEY_ID + " = ? ", new String[]{dataList.id+""});
-	    	System.out.println("update= " + dataList.toString());
+	    	System.out.println("update dataList= " + dataList.toString());
 	    }
 	    db.close();
 		return dataList;

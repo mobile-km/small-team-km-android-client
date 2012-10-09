@@ -14,8 +14,10 @@ public class DataListReadingDBHelper extends BaseModelDBHelper {
 		ContentValues values = get_contentvalues(reading);
 		if(find(reading).id <=0){
 			db.insert(Constants.TABLE_DATA_LIST_READINGS, null, values);
+			System.out.println("insert reading " + reading.toString());
 		}else{
 			db.update(Constants.TABLE_DATA_LIST_READINGS, values, Constants.KEY_ID + " = ? ", new String[]{find(reading).id+""});
+			System.out.println("update reading " + reading.toString());
 		}
 		db.close();
 	}

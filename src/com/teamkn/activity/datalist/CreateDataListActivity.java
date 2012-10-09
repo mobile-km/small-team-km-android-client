@@ -64,8 +64,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 	}; 	
 	public void data_list_public_checkbox(){
 		if(data_list_public_checkbox.isChecked()){
-//			RequestCode.data_list_public = "true";
-			RequestCode.data_list_public = "false";
+			RequestCode.data_list_public = "true";
+//			RequestCode.data_list_public = "false";
 		}else{
 			RequestCode.data_list_public = "false";
 		}

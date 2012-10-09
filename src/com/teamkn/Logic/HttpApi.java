@@ -712,7 +712,7 @@ public class HttpApi {
     	public static com.teamkn.model.DataList update(final com.teamkn.model.DataList dataList) throws Exception{
     		return new TeamknPutRequest<com.teamkn.model.DataList>( 修改_data_list + dataList.server_data_list_id,
     				new PostParamText("title", dataList.title)
-//    				,new PostParamText("public",dataList.public_boolean)
+    				,new PostParamText("public",dataList.public_boolean)
     		        ) {
 						@Override
 						public com.teamkn.model.DataList on_success(String response_text)throws Exception {
@@ -868,23 +868,27 @@ public class HttpApi {
              if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
                  HttpApi.DataItem.pull_image(server_id+"", image_url);
              }
-            int data_list_id = DataListDBHelper.find_by_server_data_list_id(data_list_server_id).id;
-            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_id, position, server_id);
+             JSONObject json_data_list = json.getJSONObject("data_list");
+             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
+             com.teamkn.model.DataList dataList = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
+             dataList.setServer_updated_time(data_list_server_updated_time);
+             DataListDBHelper.update(dataList);
+             
+            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, dataList.id, position, server_id);
 			return dataItem;
     	}
-    	public static void pull(final int data_list_server_id) throws Exception{  
-   		 new TeamknGetRequest<Void>(获取_data_item + data_list_server_id+ "/data_items"){
+    	public static boolean pull(final int data_list_server_id) throws Exception{  
+   		 	return new TeamknGetRequest<Boolean>(获取_data_item + data_list_server_id+ "/data_items"){
 		          @Override
-		          public Void on_success(String response_text) throws Exception {
+		          public Boolean on_success(String response_text) throws Exception {
 		        	  System.out.println(" data_item pull response_text " + response_text);
 		        	  JSONObject data_list_json = new JSONObject(response_text);
 		        	  boolean read = data_list_json.getBoolean("read");
-		        	  if(read){
-		        		  com.teamkn.model.DataList data_list = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
-		        		  DataListReading reading = new DataListReading(-1, data_list.id, data_list.user_id);
-		        		  DataListReadingDBHelper.createOrUpdate(reading);
-		        	  }
 		        	  
+	        		  com.teamkn.model.DataList data_list = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
+	        		  DataListReading reading = new DataListReading(-1, data_list.id, data_list.user_id);
+	        		  DataListReadingDBHelper.createOrUpdate(reading);
+	        	
 		        	  System.out.println(" read  有什么用意  " + read);
 		        	  JSONArray data_list_array = data_list_json.getJSONArray("data_items");
 	                  for (int i = 0; i < data_list_array.length(); i++) {
@@ -892,7 +896,7 @@ public class HttpApi {
 			                com.teamkn.model.DataItem data_item_server = getDataItem(json,data_list_server_id);
 			                DataItemDBHelper.pull(data_item_server);
 	                  }  
-		              return null;
+		              return read;
 		          }
 		        }.go();
         }
@@ -913,14 +917,15 @@ public class HttpApi {
                 e.printStackTrace();
             }
         }
-    	public static void order(int from,int to) throws Exception{
+    	public static void order(final int from,int to) throws Exception{
        		System.out.println("dataItem order " + from + " : " + to);
        		new TeamknPutRequest<Void>( 排序_data_item + from + "/order",
        				new PostParamText("insert_at", to+"")) {
     						@Override
     						public Void on_success(String response_text)
     								throws Exception {
-    							JSONArray data_list_array = new JSONArray(response_text);
+    							  JSONObject json_result = new JSONObject(response_text);
+    							  JSONArray data_list_array = json_result.getJSONArray("order");
     			                  System.out.println("data_item order response_text " + response_text);
     			            	  for (int i = 0; i < data_list_array.length(); i++) {
     					                JSONObject json = data_list_array.getJSONObject(i);
@@ -929,7 +934,14 @@ public class HttpApi {
     					                int position = json.getInt("position");
     					                
     					                DataItemDBHelper.update_position(server_id,position);
-    			                  }  
+    			                  } 
+    			            	  JSONObject data_list_time = json_result.getJSONObject("data_list");
+    			            	  long data_list_server_updated_time = data_list_time.getLong("server_updated_time");
+    			            	  com.teamkn.model.DataList dataList = DataListDBHelper.find(DataItemDBHelper.find_by_server_id(from).data_list_id);
+    			            	  
+    			            	  dataList.setServer_updated_time(data_list_server_updated_time);
+
+    			            	  DataListDBHelper.update(dataList);
     							return null;
     						}
     			}.go();
@@ -984,7 +996,7 @@ public class HttpApi {
 	              public Void on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
 		                JSONObject json = new JSONObject(response_text);
-		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_item_id);
+		                com.teamkn.model.DataItem data_item_server = getDataItem(json,DataListDBHelper.find(dataItem.id).server_data_list_id);
 		                data_item_server.setId(dataItem.id);
 		                DataItemDBHelper.update_by_id(data_item_server);
 					    return null;   	
@@ -1006,7 +1018,7 @@ public class HttpApi {
 						public String on_success(String response_text)
 								throws Exception {
 							JSONObject json = new JSONObject(response_text);
-							com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_item_id);
+							com.teamkn.model.DataItem data_item_server = getDataItem(json,DataListDBHelper.find(dataItem.id).server_data_list_id);
 							data_item_server.setId(dataItem.id);
 							DataItemDBHelper.update_by_id(data_item_server);
 							return null;
@@ -1021,6 +1033,12 @@ public class HttpApi {
               @Override
               public Void on_success(String response_text) throws Exception {
             	DataItemDBHelper.delete_by_server_id(server_data_item_id);
+            	JSONObject data_list_time = new JSONObject(response_text);
+          	    long data_list_server_updated_time = data_list_time.getLong("data_list_time");
+          	    com.teamkn.model.DataList dataList = 
+          	    		DataListDBHelper.find(DataItemDBHelper.find_by_server_id(server_data_item_id).data_list_id);
+          	    dataList.setServer_updated_time(data_list_server_updated_time);
+          	    DataListDBHelper.update(dataList);
                 return null;
               }
         }.go();

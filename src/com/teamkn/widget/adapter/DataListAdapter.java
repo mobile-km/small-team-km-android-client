@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -23,8 +24,10 @@ import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
+import com.teamkn.model.DataListReading;
 import com.teamkn.model.User;
 import com.teamkn.model.Watch;
+import com.teamkn.model.database.DataListReadingDBHelper;
 import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
 
@@ -67,8 +70,12 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     public void fill_with_data(BaseViewHolder holder,
                                final DataList item,
                                int position) {
-    	
-        final ViewHolder view_holder = (ViewHolder) holder;
+    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, item.user_id));
+        boolean isReading = true;
+        if(dataListReading.id<=0){
+        	isReading = false;
+        }
+    	final ViewHolder view_holder = (ViewHolder) holder;
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
         if((item.public_boolean.equals("false")
         		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
@@ -158,13 +165,20 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 					view_holder.onClick(item,go_watch);
 				}
 			});
+            if(!isReading){
+            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
+            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
+            	tp.setFakeBoldText(true);
+            }else{
+            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.gainsboro));
+            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
+            	tp.setFakeBoldText(false);
+            }
         }
     }
     
     private class ViewHolder implements BaseViewHolder {
-    	
     	TextView info_tv;
-    	
     	// 个人列表子项显示
     	RelativeLayout show_is_no_public_relativelayout;
         TextView list_note_title_tv_edit;   

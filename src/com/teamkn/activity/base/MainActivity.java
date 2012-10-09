@@ -267,6 +267,7 @@ public class MainActivity extends TeamknBaseActivity {
 				intent.putExtra("data_list_id",item.id);
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
 //				startActivity(intent);
+				System.out.println("mainactivity setonclick  = " +item.toString());
 				startActivityForResult(intent, RequestCode.SHOW_BACK);
 			}
 		});
@@ -293,7 +294,6 @@ public class MainActivity extends TeamknBaseActivity {
 				load_list();
 			}
 		}
-//		super.onActivityResult(requestCode, resultCode, data);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
