@@ -112,15 +112,20 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		
 		load_UI();
 //		load_list();
-		if((data_list_public.equals("true") 
-				|| data_list_public.equals("watch") ||UserDBHelper.find(dataList.user_id).user_id == current_user().user_id)
-				&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
-			show_step = true;
-		}else{
-			show_step = false;
-		}
+		DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
+		
+//		if((data_list_public.equals("true") 
+//				|| data_list_public.equals("watch") 
+//				|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+//			)&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+//			 && reading.id<=0){
+//			show_step = true;
+//		}else{
+//			show_step = false;
+//		}
+		System.out.println("show_step = " + show_step + " : " + reading.toString());
 //		load_step_or_list(show_step);
-		load_data_item_list(show_step);
+		load_data_item_list();
 	}
 	private void load_UI(){
 		data_list_user_name_tv = (TextView)findViewById(R.id.data_list_user_name_tv);
@@ -329,7 +334,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			tlv.setVisibility(View.VISIBLE);
 		}
 	}
-	private void load_data_item_list(final boolean show_step){
+	private void load_data_item_list(){
 		dataItems = new ArrayList<DataItem>();
 		new TeamknAsyncTask<Void, Void, List<DataItem>>(DataItemListActivity.this,"内容加载中") {
 			@Override
@@ -349,6 +354,17 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				if(!is_reading){
 					update_title = true;
 				}
+				DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
+				if((data_list_public.equals("true") 
+						|| data_list_public.equals("watch") 
+						|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+					)&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+					 && (reading.id<=0 || is_reading==false )){
+					show_step = true;
+				}else{
+					show_step = false;
+				}
+				
 				data_item_watch_rl.setVisibility(View.VISIBLE);
 				if(dataItems.size()==0){
 					tlv.setVisibility(View.GONE);
@@ -359,7 +375,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					load_step_or_list(show_step);
 					list_no_data_show.setVisibility(View.GONE);
 					if(show_step){
-						data_item_list_approach_button.setVisibility(View.VISIBLE);
+						if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+							data_item_list_approach_button.setVisibility(View.VISIBLE);
+						}else{
+							data_item_list_approach_button.setVisibility(View.GONE);
+						}
 						data_item_list_approach_button.setText("以清单模式查看");
 						load_step();
 					}else{
@@ -380,21 +400,16 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	private void load_step(){
 		DataListReading reading =DataListReadingDBHelper.find(new DataListReading(-1, dataList.id, dataList.user_id)); 
 		System.out.println(is_reading + "  load_step reading = " + reading.toString());
-		if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
-			data_item_list_approach_button.setVisibility(View.VISIBLE);
-			data_item_list_approach_button.setOnClickListener(new android.view.View.OnClickListener() {
+		data_item_list_approach_button.setOnClickListener(new android.view.View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					data_item_list_approach_button.setVisibility(View.GONE);
 					data_item_list_approach_button.setText("以向导模式查看");
 					show_step = false;
 					load_step_or_list(show_step);
 					load_list();
 				}
-			});
-		}else{
-			data_item_list_approach_button.setVisibility(View.GONE);
-		}
-//		data_item_list_approach_button.setVisibility(View.GONE);
+		});
 		set_step_ui();
 		data_item_next_button.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
@@ -416,8 +431,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			data_item_step_tv.setVisibility(View.VISIBLE);
 			if(step_new<=0){
 				data_item_back_button.setVisibility(View.GONE);
-
-//				data_item_list_approach_button.setVisibility(View.VISIBLE);
 			}else{
 				data_item_back_button.setVisibility(View.VISIBLE);
 			}
@@ -559,7 +572,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_ITEM:
-			load_data_item_list(show_step);
+			load_data_item_list();
 			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
 					+ RequestCode.CREATE_DATA_ITEM);
 			break;
@@ -668,7 +681,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 											@Override
 											public void on_success(Void result) {
 												update_title = true;
-												load_data_item_list(show_step);
+												load_data_item_list();
 											}
 										}.execute();
 									}else{

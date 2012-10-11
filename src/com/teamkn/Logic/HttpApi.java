@@ -884,9 +884,9 @@ public class HttpApi {
 		        	  System.out.println(" data_item pull response_text " + response_text);
 		        	  JSONObject data_list_json = new JSONObject(response_text);
 		        	  boolean read = data_list_json.getBoolean("read");
-		        	  
+
 	        		  com.teamkn.model.DataList data_list = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
-	        		  DataListReading reading = new DataListReading(-1, data_list.id, data_list.user_id);
+	        		  DataListReading reading = new DataListReading(-1, data_list.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id);
 	        		  DataListReadingDBHelper.createOrUpdate(reading);
 	        	
 		        	  System.out.println(" read  有什么用意  " + read);
@@ -984,7 +984,7 @@ public class HttpApi {
 					return responst_text;
 	              };
 	     }.go();
-      }
+    }
    	public static void create_image(final com.teamkn.model.DataItem dataItem,File image) throws Exception{
  		  
 		   new TeamknPostRequest<Void>( 创建_data_item + dataItem.data_list_id+ "/data_items",

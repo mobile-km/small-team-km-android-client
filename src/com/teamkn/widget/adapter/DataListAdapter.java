@@ -70,8 +70,9 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     public void fill_with_data(BaseViewHolder holder,
                                final DataList item,
                                int position) {
-    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, item.user_id));
-        boolean isReading = true;
+//    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, item.user_id));
+    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id));
+    	boolean isReading = true;
         if(dataListReading.id<=0){
         	isReading = false;
         }
@@ -218,10 +219,10 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 					public void on_success(Boolean result) {
 						list_collect_tv_watch.setVisibility(View.VISIBLE);
 						list_collect_tv.setVisibility(View.VISIBLE);
-						if(go_watch){
+						if(go_watch && !MainActivity.RequestCode.data_list_public.equals("watch")){
 			    			list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
 							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-						}else{
+						}else if(!MainActivity.RequestCode.data_list_public.equals("watch")){
 							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
 							list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
 						}
