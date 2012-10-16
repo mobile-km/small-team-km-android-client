@@ -15,4 +15,14 @@ public class SharedParam {
 		SharedPreferences sp = context.getSharedPreferences("last_syn_attitudes_updated_time", Activity.MODE_PRIVATE);
 		return sp.getInt("last_syn_attitudes_updated_time", 0);
 	}
+	
+	public static void savePauseParam(Context context,boolean isPause){
+		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.MODE_PRIVATE);
+		sp.edit().putBoolean("isPause_reset", isPause);
+	}
+	
+	public static boolean getPauseParam(Context context){
+		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.MODE_PRIVATE);
+		return sp.getBoolean("isPause_reset", false);
+	}
 }

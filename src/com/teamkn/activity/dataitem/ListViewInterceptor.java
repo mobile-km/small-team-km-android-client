@@ -1,6 +1,4 @@
 package com.teamkn.activity.dataitem;
-
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -41,7 +39,8 @@ public class ListViewInterceptor extends ListView {
 	private int dragndropBackgroundColor = 0x00000000;
 	private Bitmap mDragBitmap;
 	private int mItemHeightHalf = 32;
-	private int mItemHeightNormal = 64;
+//	private int mItemHeightNormal = 64;
+	private int mItemHeightNormal = 94;
 	private int mItemHeightExpanded = 128;
 
 	public ListViewInterceptor(Context context, AttributeSet attrs) {
@@ -285,6 +284,12 @@ public class ListViewInterceptor extends ListView {
 	 * screen, only expand the item below the current insertpoint.
 	 */
 	private void doExpansion() {
+		int[] screen = DataItemListActivity.screen;
+		if(screen[0] == 320){
+			mItemHeightNormal = 64;
+		}else if(screen[0] == 480){
+			mItemHeightNormal = 94;
+		}
 		int childnum = mDragPos - getFirstVisiblePosition();
 		if (mDragPos > mFirstDragPos) {
 			childnum++;

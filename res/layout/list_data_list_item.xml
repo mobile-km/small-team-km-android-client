@@ -50,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/mi_collect_no" />
-
+        
         <TextView
             android:id="@+id/list_type_tv"
             android:layout_width="wrap_content"
@@ -61,9 +61,11 @@
             android:textColor="@color/black" />
 
         <TextView
+            android:layout_below="@+id/list_note_title_tv_edit"
             android:id="@+id/list_data_list_eye_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:text="分享"

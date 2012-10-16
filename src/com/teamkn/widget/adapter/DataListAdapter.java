@@ -75,8 +75,11 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     	boolean isReading = true;
         if(dataListReading.id<=0){
         	isReading = false;
-        }
+        } 
     	final ViewHolder view_holder = (ViewHolder) holder;
+    	view_holder.list_collect_tv_watch.setVisibility(View.GONE);
+    	view_holder.list_collect_tv.setVisibility(View.GONE);
+    	
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
         if((item.public_boolean.equals("false")
         		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)

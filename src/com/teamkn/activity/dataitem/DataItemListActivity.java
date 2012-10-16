@@ -11,6 +11,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.dataitem.pull.DataItemPullListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -78,6 +80,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	
 //	Button data_item_list_guide_button;
 	RelativeLayout data_item_watch_rl; //加书签的rl
+	ImageView data_item_push_iv;
 	LinearLayout list_no_data_show ;  // 没有数据时显示
 	
 	DataList dataList ;
@@ -93,6 +96,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
     
     boolean is_curretn_user_data_list; // 是否是当前用户的data_list
     String public_boolean = "true";//修改中用到
+    
+    public static int[] screen = new int[2];
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,6 +131,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		System.out.println("show_step = " + show_step + " : " + reading.toString());
 //		load_step_or_list(show_step);
 		load_data_item_list();
+		DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screen[0] = dm.widthPixels;
+        screen[1] = dm.heightPixels;
 	}
 	private void load_UI(){
 		data_list_user_name_tv = (TextView)findViewById(R.id.data_list_user_name_tv);
@@ -186,7 +195,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
 		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);	
 		
-//		data_item_list_guide_button = (Button)findViewById(R.id.data_item_list_guide_button);
+		data_item_push_iv = (ImageView)findViewById(R.id.data_item_push_iv);
+		load_push_iv();
+		//		data_item_list_guide_button = (Button)findViewById(R.id.data_item_list_guide_button);
 //		data_item_list_guide_button.setOnClickListener(new android.view.View.OnClickListener() {
 //			@Override
 //			public void onClick(View v) {
@@ -198,6 +209,16 @@ public class DataItemListActivity extends TeamknBaseActivity {
 //				load_step();
 //			}
 //		});
+	}
+	private void load_push_iv(){
+		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
+				intent.putExtra("data_list_id", dataList.id);
+				startActivity(intent);
+			}
+		});
 	}
 	private void data_list_title_edit(){
 		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);

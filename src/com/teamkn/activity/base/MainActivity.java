@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
+import com.teamkn.activity.base.slidingmenu.ScrollLayout;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.activity.datalist.SearchDataActivity;
@@ -47,6 +50,7 @@ import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
+import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.model.Watch;
@@ -147,7 +151,7 @@ public class MainActivity extends TeamknBaseActivity {
 		layout.addView(view_show);
         
 		// 加载node_listview
-		InitImageView();
+		InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
 		Intent intent = getIntent();
 		
 		String data_list_public = intent.getStringExtra("data_list_public");
@@ -158,7 +162,13 @@ public class MainActivity extends TeamknBaseActivity {
 			System.out.println(RequestCode.data_list_public + " : "
 					+ RequestCode.data_list_type);
 		}	
-		load_data_list_or_watch(RequestCode.data_list_public);
+		
+		if(SharedParam.getPauseParam(this)){
+			load_list();
+		}else{
+			load_data_list_or_watch(RequestCode.data_list_public);
+		}
+		SharedParam.savePauseParam(this, false);
 	}
 	/**
 	 * 初始化动画
@@ -194,14 +204,16 @@ public class MainActivity extends TeamknBaseActivity {
 		user_name_tv= (TextView) view_show
 				.findViewById(R.id.main_user_name);
 		user_name_tv.setText(name+"的列表");
-		user_name_tv.setOnClickListener(new OnClickListener() {
+		LinearLayout user_name_rl = (LinearLayout)findViewById(R.id.main_user_name_rl);
+		user_name_rl.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {	
 				showWindow(v);
 			}
 		});
-		super.onResume();
 		set_title();
+		super.onResume();
+//		onCreate(null);
 	}
     private void set_title(){
     	if(RequestCode.data_list_public.equals("true")){
@@ -284,12 +296,12 @@ public class MainActivity extends TeamknBaseActivity {
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_LIST:
 			load_list();
-			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
-					+ RequestCode.CREATE_DATA_LIST);
+//			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
+//					+ RequestCode.CREATE_DATA_LIST);
 			break;
 		case RequestCode.SHOW_BACK:
-//			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
-//					+ RequestCode.SHOW_BACK);
+//			BaseUtils.toast(DataItemListActivity.update_title + "  RequestCode.CREATE_DATA_ITEM    "
+//			+ RequestCode.SHOW_BACK);	
 			if(DataItemListActivity.update_title ==true){
 				load_list();
 			}
@@ -433,8 +445,10 @@ public class MainActivity extends TeamknBaseActivity {
 		}
 		MyOnPageChangeListener.onPageSelected(index);
 	}
-	private void showWindow(View parent) {  
-        if (popupWindow == null) {  
+	private void showWindow(View parent) { 
+		final ImageView main_user_name_iv = (ImageView)findViewById(R.id.main_user_name_iv);
+		main_user_name_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.arrow_up_float));
+		if (popupWindow == null) {  
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
   
             view = layoutInflater.inflate(R.layout.group_list, null);  
@@ -458,7 +472,18 @@ public class MainActivity extends TeamknBaseActivity {
         popupWindow.setFocusable(true);  
         // 设置允许在外点击消失  
         popupWindow.setOutsideTouchable(true);  
-  
+//        popupWindow.set
+        popupWindow.setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss() {
+//				System.out.println(popupWindow.);
+				if(popupWindow == null){
+					System.out.println("popupWindow  null");
+				}else{
+					System.out.println("popupWindow  yes  " + popupWindow );
+				}
+			}
+		});
         // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景  
         popupWindow.setBackgroundDrawable(new BitmapDrawable());  
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);  
@@ -496,12 +521,15 @@ public class MainActivity extends TeamknBaseActivity {
 					break;
 				default:
 					break;
-				}
+				}  
                 if (popupWindow != null) {  
                     popupWindow.dismiss();  
-                }  
+                    popupWindow = null;
+                    main_user_name_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.arrow_down_float));
+                }
             }  
-        });  
+        }); 
+        
     }  
 	/**
 	 * 页卡切换监听
@@ -544,4 +572,14 @@ public class MainActivity extends TeamknBaseActivity {
 			}
 		}
 	}
+	@Override
+	protected void onPause() {
+//		this.finish();
+//		Intent intent = new Intent(this,MainActivity.class);
+//		intent.putExtra("data_list_public", RequestCode.data_list_public);
+//		intent.putExtra("data_list_type", RequestCode.data_list_type);
+//		SharedParam.savePauseParam(this, true);
+//		startActivity(intent);
+		super.onPause();
+	}	
 }

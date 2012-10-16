@@ -17,16 +17,32 @@
             android:layout_height="40dp"
             android:contentDescription="@string/app_name"
         />
-        <TextView
-            style="@style/head_bar_text_center"
-            android:id="@+id/main_user_name"
+        <LinearLayout 
+            android:id="@+id/main_user_name_rl"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/main_user_name_default"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="80dp"
             android:background="@drawable/selector"
-        />
+            style="@style/head_bar_text_center"
+        >
+	       <TextView
+	           android:id="@+id/main_user_name"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:text="@string/main_user_name_default"
+	           android:textColor="@color/white"
+	           android:gravity="center_vertical"
+	       />
+	       <ImageView
+	           android:id="@+id/main_user_name_iv"
+	           android:layout_marginLeft="10dp"
+	           android:layout_width="20dp"
+	           android:layout_height="20dp"
+	           android:background="@android:drawable/arrow_down_float" 
+	       />
+   
+        </LinearLayout>
         <ImageButton
              android:src="@drawable/mi_data_list_add"
              android:layout_width="wrap_content"

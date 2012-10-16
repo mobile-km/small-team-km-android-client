@@ -20,7 +20,7 @@ import android.widget.Scroller;
  */
 public class ScrollLayout extends ViewGroup {
 
-	private Scroller mScroller;
+	public static Scroller mScroller;
 	private VelocityTracker mVelocityTracker;
 	
 	int countMIX=0;
@@ -64,10 +64,17 @@ public class ScrollLayout extends ViewGroup {
 			for (int i=0; i<childCount; i++) {
 				final View childView = getChildAt(i);
 				if (childView.getVisibility() != View.GONE) {
-					final int childWidth = childView.getMeasuredWidth();
-					childView.layout(childLeft, 0, 
-							childLeft+childWidth, childView.getMeasuredHeight());
-					childLeft += childWidth;
+					if(i==0){
+						final int childWidth = childView.getMeasuredWidth();
+						childView.layout(childLeft, 0, 
+								childLeft+childWidth, childView.getMeasuredHeight());
+						childLeft += childWidth;
+					}else{
+						final int childWidth = childView.getMeasuredWidth();
+						childView.layout(childLeft, 0, 
+								childLeft+childWidth, childView.getMeasuredHeight());
+						childLeft += childWidth;
+					}	
 				}
 			}
 		}
@@ -125,18 +132,22 @@ public class ScrollLayout extends ViewGroup {
     		if(whichScreen == 0 && mCurScreen ==1){
     			mScroller.startScroll(getScrollX(), 0, 
         				delta + 40, 0, Math.abs(delta)*2);
+    			System.out.println("else = " +  getScrollX() + " : "
+        				+ delta + 40 +" : " + Math.abs(delta)*2 + " : "+ whichScreen);
     		}else if(whichScreen == 0 && mCurScreen == 0){
 //    			mScroller.startScroll(getScrollX(), 0, 
 //        				delta + 40, 0, Math.abs(delta)*2);
     		}else{
     			mScroller.startScroll(getScrollX(), 0, 
         				delta, 0, Math.abs(delta)*2);
+    			System.out.println("else = " +  getScrollX() + " : " 
+        				+ delta +" : " + Math.abs(delta)*2 + " : "+ whichScreen);
     		}
     		mCurScreen = whichScreen;
     		invalidate();		// Redraw the layout
     	}
     }
-    
+
     public void setToScreen(int whichScreen) {
     	whichScreen = Math.max(0, Math.min(whichScreen, getChildCount()-1));
     	mCurScreen = whichScreen;

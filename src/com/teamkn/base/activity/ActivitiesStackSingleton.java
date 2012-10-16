@@ -63,7 +63,6 @@ public class ActivitiesStackSingleton {
             }
         }
         activities_stack.push(new_activity);
-
         // System.out.println("处理后：activities堆栈包含"+ activities_stack.size()
         // +"个实例");
     }

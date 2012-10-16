@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/list_item"    
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="beforeDescendants"
+    android:background="@color/burlywood"
+><!-- android:clickable="true" -->
+       <TextView
+          android:id="@+id/info_tv"
+          android:visibility="gone"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+       />
+       <ImageView
+           android:id="@+id/user_avatar_iv"
+           android:layout_width="50dp"
+           android:layout_height="40dp"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentTop="true"
+           android:gravity="center"
+           android:background="@drawable/default_avatar"
+       />
+       <TextView
+           android:id="@+id/user_name_tv"
+           style="@style/text"
+           android:layout_width="wrap_content"
+           android:layout_toRightOf="@+id/user_avatar_iv"
+           android:gravity="center"
+           android:padding="10dp"
+           android:text="@string/app_name"
+           android:textColor="@color/black" />
+
+       <TextView
+           android:id="@+id/data_item_title_tv"
+           style="@style/text"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentTop="true"
+           android:layout_toRightOf="@+id/user_name_tv"
+           android:gravity="center"
+           android:padding="10dp"
+           android:text="@string/app_name"
+           android:textColor="@color/black" />   
+</RelativeLayout>

@@ -159,6 +159,6 @@
 <color name="gainsboro">#dcdcdc</color><!--淡灰色 -->
 
 <color name="title">#222222</color>
-<color name="title_click_pressed">#111111</color>
-<color name="title_click_focused">#111111</color>
+<color name="title_click_pressed">#000000</color>
+<color name="title_click_focused">#000000</color>
 </resources>

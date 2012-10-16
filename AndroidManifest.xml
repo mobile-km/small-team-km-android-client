@@ -39,6 +39,10 @@
 	<activity android:name=".activity.dataitem.CreateDataItemActivity" />
 	<activity android:name=".activity.dataitem.DataItemStepHelpActivity"/>
 	
+	<activity android:name=".activity.dataitem.pull.DataItemPullListActivity"></activity>
+	<activity android:name=".activity.dataitem.pull.DataItemPullUpdateActivity"></activity>
+	<activity android:name=".activity.dataitem.pull.DataItemTermWiseUpdateActivity"></activity>
+    
 	<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
 	</activity>
 	<activity android:name=".activity.note.ShowNodeActivity" android:windowSoftInputMode="adjustResize">

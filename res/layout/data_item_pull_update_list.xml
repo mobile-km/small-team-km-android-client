@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 笔记列表 -->
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/body"
+        >
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            android:id="@+id/head"
+            >
+        <Button
+            android:id="@+id/go_back_button"
+            style="@style/head_bar_button_go_back"
+        />
+
+        <TextView
+            android:id="@+id/data_list_user_name_tv"
+            style="@style/head_bar_text"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:layout_height="fill_parent"
+            android:text="修改建议处理" />
+
+    </RelativeLayout>
+
+    <LinearLayout 
+      android:id="@+id/bar"
+      android:layout_below="@+id/head"
+      android:layout_height="40dp"
+      android:layout_width="fill_parent"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:layout_marginTop="10dp"
+      android:background="@color/lightsteelblue"
+    >
+      <Button
+          android:id="@+id/data_item_old_button"
+           android:onClick="click_old_button"
+           android:layout_width="wrap_content"
+           android:layout_height="fill_parent"
+           android:background="@color/darkgrey"
+           android:text="预览原始列表"
+           android:layout_marginRight="-5dp"
+           android:paddingRight="10dp"
+           android:paddingLeft="5dp"
+      />
+      <Button
+          android:paddingLeft="10dp"
+          android:paddingRight="5dp"
+          android:layout_marginLeft="-5dp"
+          android:id="@+id/data_item_new_button"
+           android:onClick="click_new_button"
+           android:layout_width="wrap_content"
+           android:layout_height="fill_parent"
+           android:background="@color/gainsboro"
+           android:text="预览最终列表"
+      />
+     </LinearLayout>
+    
+      <RelativeLayout
+        android:layout_below="@+id/bar"
+        android:id="@+id/data_list_title_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@color/darkgrey"
+        android:gravity="center"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/data_list_title_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:hint="列表浏览-名称"
+            android:gravity="center"
+            android:textSize="22dp" />
+    </RelativeLayout>
+    
+    <ListView
+        android:layout_below="@+id/data_list_title_rl"
+        android:id="@+id/list"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+    />
+
+   <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="50dp"
+       android:layout_alignParentBottom="true"
+       android:layout_marginLeft="10dp"
+       android:layout_marginRight="10dp"
+       android:gravity="center_vertical" >
+
+       <Button
+           android:onClick="click_accept_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="全部接受" />
+       <Button
+           android:onClick="click_refuse_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:text="全部忽略" />
+
+       <Button
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentTop="true"
+           android:layout_centerHorizontal="true"
+           android:onClick="click_termwise_button"
+           android:text="逐项处理" />
+
+   </RelativeLayout>
+</RelativeLayout>

@@ -166,9 +166,10 @@ abstract public class TeamknBaseActivity extends Activity {
 	}
 	
 	@Override
-	protected void onPause() {
+	protected void onPause() {	
 	  TeamknApplication.current_show_activity = null;
 	  System.out.println("teamknbaseactivity on pause"  + this.getClass().getName());
+//	  this.finish();
 	  super.onPause();
 	}
 	

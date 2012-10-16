@@ -147,7 +147,6 @@
        android:text="以向导模式查看" 
     /> -->
    <RelativeLayout
-       android:visibility="gone"
        android:id="@+id/data_item_watch_rl"
        android:layout_below="@+id/data_item_next_button"
        android:layout_width="fill_parent"
@@ -163,7 +162,6 @@
            android:layout_height="wrap_content"
            android:visibility="gone"
            android:text="以清单模式查看" />
-
        <ImageView
            android:id="@+id/data_list_image_iv_watch"
            android:layout_width="40dp"
@@ -171,6 +169,16 @@
            android:layout_alignParentRight="true"
            android:background="@drawable/mi_collect_no"
            android:text="加书签" />
+
+       <ImageView
+           android:id="@+id/data_item_push_iv"
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:layout_centerVertical="true"
+           android:layout_marginRight="14dp"
+           android:layout_toLeftOf="@+id/data_list_image_iv_watch"
+           android:background="@drawable/mi_push" />
+
    </RelativeLayout>
    <LinearLayout
         android:layout_below="@+id/data_list_title_rl"
