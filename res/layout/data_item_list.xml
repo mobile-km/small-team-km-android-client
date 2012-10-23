@@ -177,7 +177,7 @@
            android:layout_centerVertical="true"
            android:layout_marginRight="14dp"
            android:layout_toLeftOf="@+id/data_list_image_iv_watch"
-           android:background="@drawable/mi_push" />
+           android:background="@drawable/mi_fork_no" />
 
    </RelativeLayout>
    <LinearLayout

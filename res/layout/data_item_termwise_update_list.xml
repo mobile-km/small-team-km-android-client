@@ -78,7 +78,6 @@
 
        <ProgressBar  
 		    android:id="@+id/progressBar"
-		    android:onClick="click_progressBar" 
 		    android:layout_width="fill_parent"
             android:layout_height="wrap_content"  
             android:layout_alignParentBottom="true"

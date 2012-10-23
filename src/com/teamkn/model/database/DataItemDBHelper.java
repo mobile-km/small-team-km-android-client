@@ -27,7 +27,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    values.put(Constants.TABLE_DATA_ITEMS_DATA_LIST_ID,dataItem.data_list_id);
 		    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
 		    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
-		    
+		    values.put(Constants.TABLE_DATA_ITEMS_SEED,dataItem.seed);
 		    if(find(dataItem.id).id <= 0){ 
 		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
 		    	System.out.println("insert dataItem= " + dataItem.toString());
@@ -37,7 +37,26 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    }
 		    db.close();
 	  }
-	  
+	  public static void update_by_server_id(DataItem dataItem){
+		    SQLiteDatabase db = get_write_db();  
+		    ContentValues values = new ContentValues();
+		    values.put(Constants.TABLE_DATA_ITEMS_TITLE,dataItem.title);
+		    values.put(Constants.TABLE_DATA_ITEMS_CONTENT,dataItem.content);
+		    values.put(Constants.TABLE_DATA_ITEMS_URL,dataItem.url);
+		    values.put(Constants.TABLE_DATA_ITEMS_KIND,dataItem.kind);
+		    values.put(Constants.TABLE_DATA_ITEMS_DATA_LIST_ID,dataItem.data_list_id);
+		    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
+		    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
+		    values.put(Constants.TABLE_DATA_ITEMS_SEED,dataItem.seed);
+		    if(find_by_server_id(dataItem.server_data_item_id).id <= 0){ 
+		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
+		    	System.out.println("insert dataItem= " + dataItem.toString());
+		    }else{
+		    	db.update(Constants.TABLE_DATA_ITEMS, values, Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " = ? ", new String[]{dataItem.server_data_item_id+""});
+		    	System.out.println("update dataItem= " + dataItem.toString());
+		    }
+		    db.close();
+	  }
 	  public static void pull(DataItem dataItem){
 		    SQLiteDatabase db = get_write_db();  
 		    ContentValues values = new ContentValues();
@@ -48,11 +67,13 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    values.put(Constants.TABLE_DATA_ITEMS_DATA_LIST_ID,dataItem.data_list_id);
 		    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
 		    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
-		    
+		    values.put(Constants.TABLE_DATA_ITEMS_SEED,dataItem.seed);
 		    if(find_by_server_id(dataItem.server_data_item_id).id <= 0){ 
 		    	db.insert(Constants.TABLE_DATA_ITEMS, null, values);
+		    	System.out.println("pull insert " + dataItem.toString());
 		    }else{
 		    	db.update(Constants.TABLE_DATA_ITEMS, values, Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " = ? ", new String[]{dataItem.server_data_item_id+""});
+		    	System.out.println("pull insert " + dataItem.toString());
 		    }
 		    db.close();
 	  }
@@ -144,7 +165,12 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 		    db.close();
 		    return dataItem;
 	 }
-	  
+	  public static void delete_by_data_list_id(int data_list_id){
+		    SQLiteDatabase db = get_write_db();
+		    db.delete(Constants.TABLE_DATA_ITEMS, Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " = ?", 
+				        new String[]{data_list_id+""});
+		    db.close();
+	  }
 	  public static void delete(int id){
 	    SQLiteDatabase db = get_write_db();
 	    if(find(id).id>0){
@@ -154,7 +180,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    db.close();
 	  }
 	  public static void delete_by_server_id(int server_id){
-	    SQLiteDatabase db = get_read_db();
+	    SQLiteDatabase db = get_write_db();
 	    if(find_by_server_id(server_id).id>0){
 	    	db.delete(Constants.TABLE_DATA_ITEMS,
 	    	        Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " = ?", 
@@ -162,6 +188,13 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
 	  }
+	  public static void delete_by_seed(String seed){
+		    SQLiteDatabase db = get_write_db();
+		    db.delete(Constants.TABLE_DATA_ITEMS,
+		    	        Constants.TABLE_DATA_ITEMS_SEED + " = ?", 
+		    	        new String[]{seed});
+		    db.close();
+		  }
   	  public static void delete_by_id(int id){
 		    SQLiteDatabase db = get_write_db();
 		    if(find(id).id>0){
@@ -209,7 +242,8 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    int data_list_id = cursor.getInt(5);
 	    int position = cursor.getInt(6);
 	    int server_data_item_id = cursor.getInt(7);
-	    return new DataItem(id, title, content, url, kind, data_list_id, position,server_data_item_id);
+	    String seed = cursor.getString(8);
+	    return new DataItem(id, title, content, url, kind, data_list_id, position,server_data_item_id,seed);
 	  }
   
 	  private static String[] get_columns() {
@@ -221,7 +255,8 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	        Constants.TABLE_DATA_ITEMS_KIND,
 	        Constants.TABLE_DATA_ITEMS_DATA_LIST_ID,
 	        Constants.TABLE_DATA_ITEMS_POSITION,
-	        Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID
+	        Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,
+	        Constants.TABLE_DATA_ITEMS_SEED
 	    };
 	  }
 	public static void update_position(int server_id, int position) {
@@ -238,7 +273,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_ITEMS_DATA_LIST_ID,dataItem.data_list_id);
 	    values.put(Constants.TABLE_DATA_ITEMS_POSITION,dataItem.position);
 	    values.put(Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID,dataItem.server_data_item_id);
-	    
+	    values.put(Constants.TABLE_DATA_ITEMS_SEED,dataItem.seed);
 	    if(dataItem.id>0){
 	    	db.update(Constants.TABLE_DATA_ITEMS, values, Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " = ?", new String[]{dataItem.server_data_item_id+""});
 	    }

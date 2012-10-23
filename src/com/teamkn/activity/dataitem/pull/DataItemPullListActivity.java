@@ -12,13 +12,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teamkn.R;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
+import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
+import com.teamkn.model.User;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemPullAdapter;
@@ -26,7 +29,7 @@ import com.teamkn.widget.adapter.DataItemPullAdapter;
 public class DataItemPullListActivity extends TeamknBaseActivity{
 	DataList dataList;
 	ListView pull_listview;
-	
+	List<User> userList;
 	public static class RequestCode {
 		public final static int CREATE_DATA_LIST = 0;
 	}
@@ -43,22 +46,38 @@ public class DataItemPullListActivity extends TeamknBaseActivity{
 		TextView data_list_title_tv = (TextView) findViewById(R.id.data_list_title_tv);
 		data_list_title_tv.setText(dataList.title);
 		pull_listview = (ListView)findViewById(R.id.pull_listview);
-		load_listview();
+		
+		api_load_list();
+	}
+	private void api_load_list(){
+		new TeamknAsyncTask<Void, Void, List<User>>(DataItemPullListActivity.this,"正在加载中") {
+			@Override
+			public List<User> do_in_background(Void... params) throws Exception {
+				userList = HttpApi.WatchList.commit_meta_list(dataList);
+				return userList;
+			}
+			@Override
+			public void on_success(List<User> result) {
+				if(userList!=null && userList.size()>0){
+					load_listview();
+				}
+			}
+		}.execute();
 	}
 	private void load_listview() {
 		try {
-			List<DataList> itemList = DataListDBHelper.all("ALL","true");
 			DataItemPullAdapter adapter = new DataItemPullAdapter(this);
-			adapter.add_items(itemList);
+			adapter.add_items(userList);
 			pull_listview.setAdapter(adapter);
 			pull_listview.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> list_view, View list_item,
 						int item_id, long position) {
 					TextView info_tv = (TextView) list_item.findViewById(R.id.info_tv);
-					DataList item = (DataList) info_tv.getTag(R.id.tag_note_uuid);
+					User item = (User) info_tv.getTag(R.id.tag_note_uuid);
 					Intent intent = new Intent(DataItemPullListActivity.this,DataItemPullUpdateActivity.class);
-					intent.putExtra("data_list_id",item.id);
+					intent.putExtra("data_list_id",dataList.id);
+					intent.putExtra("committer_id",item.user_id);
 
 					System.out.println("mainactivity setonclick  = " +item.toString());
 					startActivityForResult(intent, RequestCode.CREATE_DATA_LIST);

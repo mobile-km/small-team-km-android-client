@@ -18,6 +18,13 @@ public class DataItem extends BaseModel {
 	  public int data_list_id;
 	  public int position;	 
 	  public int server_data_item_id;
+	  public String seed;
+	  
+	  //添加的外链帮助字段
+	  int next_commits_count;
+	  String operation;
+	  boolean conflict;
+	  
 	  public static DataItem NIL_DATA_ITEM = new DataItem();
 	  
 	  
@@ -75,11 +82,39 @@ public class DataItem extends BaseModel {
 	public static void setNIL_DATA_ITEM(DataItem nIL_DATA_ITEM) {
 		NIL_DATA_ITEM = nIL_DATA_ITEM;
 	}
+	
+	public String getSeed() {
+		return seed;
+	}
+	public void setSeed(String seed) {
+		this.seed = seed;
+	}
+	
+	
+	public int getNext_commits_count() {
+		return next_commits_count;
+	}
+	public void setNext_commits_count(int next_commits_count) {
+		this.next_commits_count = next_commits_count;
+	}
+	public String getOperation() {
+		return operation;
+	}
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+	public boolean isConflict() {
+		return conflict;
+	}
+	public void setConflict(boolean conflict) {
+		this.conflict = conflict;
+	}
 	public DataItem() {
 		super();
 	}
 	public DataItem(int id, String title, String content, String url,
-			String kind, int data_list_id, int position, int server_data_item_id) {
+			String kind, int data_list_id, int position,
+			int server_data_item_id, String seed) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -89,9 +124,8 @@ public class DataItem extends BaseModel {
 		this.data_list_id = data_list_id;
 		this.position = position;
 		this.server_data_item_id = server_data_item_id;
+		this.seed = seed;
 	}
-
-
 	public static File data_item_image_file(String uuid) {
         File dir = new File(FileDirs.TEAMKN_DATA_ITEM_DIR, uuid);
         if (!dir.exists()) {
@@ -123,7 +157,7 @@ public class DataItem extends BaseModel {
 		String to = id + " : " +  title + " : " 
 	+  content + " : " +  url + " : " +  kind 
 	+ " : " +  data_list_id + " : " +  position 
-	+ " : " +  server_data_item_id;
+	+ " : " +  server_data_item_id + " : " + seed;
 		
 		return to;
 	}

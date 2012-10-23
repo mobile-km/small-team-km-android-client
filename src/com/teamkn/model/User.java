@@ -10,7 +10,9 @@ public class User extends BaseModel {
   public String user_name;
   public byte[] user_avatar;
   public long server_updated_time;
-
+  
+  public int count;
+  
   private User() {
       set_nil();
   }
@@ -44,6 +46,12 @@ public byte[] getUser_avatar() {
 public void setUser_avatar(byte[] user_avatar) {
 	this.user_avatar = user_avatar;
 }
-  
-  
+
+public int getCount() {
+	return count;
+}
+
+public void setCount(int count) {
+	this.count = count;
+}
 }

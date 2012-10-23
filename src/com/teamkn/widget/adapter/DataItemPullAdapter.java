@@ -20,7 +20,7 @@ import com.teamkn.model.User;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.UserDBHelper;
 
-public class DataItemPullAdapter extends TeamknBaseAdapter<DataList> {
+public class DataItemPullAdapter extends TeamknBaseAdapter<User> {
     public DataItemPullAdapter(TeamknBaseActivity activity) {
         super(activity);
     }
@@ -42,22 +42,20 @@ public class DataItemPullAdapter extends TeamknBaseAdapter<DataList> {
 
     @Override
     public void fill_with_data(BaseViewHolder holder,
-                               final DataList item,
+                               final User item,
                                int position) {
         ViewHolder view_holder = (ViewHolder) holder;
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
         
-        User user = UserDBHelper.find(item.user_id);
-        System.out.println(user.toString());
-        view_holder.user_name_tv.setText(user.user_name);
-    	if (user.user_avatar!=null) {
-    		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+        view_holder.user_name_tv.setText(item.user_name);
+    	if (item.user_avatar!=null) {
+    		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(item.user_avatar));
         	Drawable drawable = new BitmapDrawable(bitmap);
     		view_holder.user_avatar_iv.setBackgroundDrawable(drawable);
         } else {
         	view_holder.user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
         }
-        view_holder.data_item_title_tv.setText(item.title);
+        view_holder.data_item_title_tv.setText(item.count + "项修改建议");
     }
     
     private class ViewHolder implements BaseViewHolder {

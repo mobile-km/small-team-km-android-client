@@ -130,16 +130,22 @@ abstract public class TeamknBaseActivity extends Activity {
 					watch_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
 					startActivity(watch_intent);
 					break;
-				case 3:  // 设置选项
+				case 3:  // 列表协作
+					Intent fork_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
+					fork_intent.putExtra("data_list_public", "fork");
+					fork_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+					startActivity(fork_intent);
+					break;
+				case 4:  // 设置选项
 					open_activity(TeamknSettingActivity.class);
 					break;
-				case 4:  //用户信息
+				case 5:  //用户信息
 //					open_activity(UserMsgActivity.class);
 					break;
-				case 5: // 注销用户
+				case 6: // 注销用户
 					open_activity(AccountManagerActivity.class);
 					break;
-				case 6: // 退出登录
+				case 7: // 退出登录
 					click_exit_teamkn_activity();
 					break;
 				default:

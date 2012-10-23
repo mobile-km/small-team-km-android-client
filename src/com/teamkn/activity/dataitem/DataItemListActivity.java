@@ -48,6 +48,7 @@ import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
 import com.teamkn.widget.adapter.DataItemListAdapter;
 public class DataItemListActivity extends TeamknBaseActivity {
+	public static boolean is_fork = false;//判断是否是在推送
 	public static boolean update_title =false; //判断data_list 列表的数据是否有修改
 	static class RequestCode {
 	    final static int CREATE_DATA_ITEM = 0; 
@@ -211,14 +212,99 @@ public class DataItemListActivity extends TeamknBaseActivity {
 //		});
 	}
 	private void load_push_iv(){
+		is_fork = false;
+		boolean forked_from_id = DataListDBHelper.just_fored(dataList.server_data_list_id);
+		if((data_list_public.equals("true")||data_list_public.equals("watch")) 
+				&& !is_curretn_user_data_list 
+				&& !forked_from_id){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+		}else if((data_list_public.equals("true")||data_list_public.equals("watch")) 
+				&& !is_curretn_user_data_list  && forked_from_id){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_fork_yes));
+			data_item_push_iv.setClickable(false);
+		}else if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.sym_action_chat));
+		}else{
+			data_item_push_iv.setVisibility(View.GONE);
+		}
 		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
-				intent.putExtra("data_list_id", dataList.id);
-				startActivity(intent);
+//				Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
+//				intent.putExtra("data_list_id", dataList.id);
+//				startActivity(intent);
+				if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
+					Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
+					intent.putExtra("data_list_id", dataList.id);
+					startActivity(intent);
+				}else{
+					fork_data_list();
+				}
+				
 			}
 		});
+	}
+	private void fork_data_list(){
+//		DataList dataList = 
+		if(BaseUtils.is_wifi_active(DataItemListActivity.this)){
+			new TeamknAsyncTask<Void, Void, DataList>(DataItemListActivity.this,"正在加载") {
+				@Override
+				public DataList do_in_background(Void... params) throws Exception {
+					DataList dataList = HttpApi.DataList.fork(load_dataList);
+					
+					HttpApi.DataItem.pull(dataList.server_data_list_id);
+					
+					return dataList;
+				}
+				@Override
+				public void on_success(DataList result) {
+					if(result!=null){
+						is_fork = true;
+						dataList = result;
+						load_data_item_list();
+						try {
+							dataItems = DataItemDBHelper.all(dataList.id);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_fork_yes));
+						data_item_push_iv.setClickable(false);
+						if(dataItems.size()==0){
+							tlv.setVisibility(View.GONE);
+							data_item_step_rl.setVisibility(View.GONE);
+							data_item_list_approach_button.setVisibility(View.GONE);
+							list_no_data_show.setVisibility(View.VISIBLE);
+						}else{
+							load_step_or_list(show_step);
+							list_no_data_show.setVisibility(View.GONE);
+							if(show_step){
+								if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+									data_item_list_approach_button.setVisibility(View.VISIBLE);
+								}else{
+									data_item_list_approach_button.setVisibility(View.GONE);
+								}
+								data_item_list_approach_button.setText("以清单模式查看");
+								load_step();
+							}else{
+								load_list();
+								if((data_list_public.equals("true")
+										|| data_list_public.equals("watch") || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id) 
+										&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
+									data_item_list_approach_button.setVisibility(View.VISIBLE);
+									data_item_list_approach_button.setText("以向导模式查看");
+								}else{	
+									data_item_list_approach_button.setVisibility(View.GONE);
+								}
+							}
+						}
+					}
+				}
+			}.execute();
+		}else{
+			BaseUtils.toast("无法连接网络");
+		}
 	}
 	private void data_list_title_edit(){
 		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);
@@ -362,7 +448,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			public List<DataItem> do_in_background(Void... params)
 					throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-
 					is_reading = HttpApi.DataItem.pull(dataList.server_data_list_id);
 					dataItems = DataItemDBHelper.all(dataList.id);
 				}else{

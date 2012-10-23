@@ -46,45 +46,49 @@ public class DataItemTermWiseUpdateAdapter extends TeamknBaseAdapter<DataItem>{
 		final ViewHolder view_holder = (ViewHolder)holder;
 		view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
 		
-		view_holder.data_item_update_iv.setVisibility(View.VISIBLE);
-		if(item.id <2 ){ //增加
-			view_holder.data_item_title_tv.setText(item.title);
-			view_holder.data_item_update_iv.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mi_add));
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.green));
-		}else if(item.id < 4 && item.id >=2){ // 删除
-			view_holder.data_item_title_tv.setText(item.title);
-			view_holder.data_item_update_iv.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mi_cut));
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.red));
-		}else if(item.id <23 && item.id >=4){  // 修改
-			AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.1f);
-	    	alphaAnimation.setDuration(2000);
-	    	alphaAnimation.setFillEnabled(true);
-//	    	alphaAnimation.setFillBefore(true);
-	    	view_holder.data_item_title_tv.startAnimation(alphaAnimation);
-	    	alphaAnimation.setAnimationListener(new AnimationListener() {
-				@Override
-				public void onAnimationStart(Animation animation) {	
-					view_holder.data_item_title_tv.setText("修改之前。。。。。。。");
-				}
-				@Override
-				public void onAnimationRepeat(Animation animation) {
-				}
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					view_holder.data_item_title_tv.setText(item.title);
-				}
-			});
-			view_holder.data_item_update_iv.setVisibility(View.GONE);
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gray));
-		}else if(item.id <25 && item.id >=23){  // 移动
-			view_holder.data_item_title_tv.setText(item.title);
-			view_holder.data_item_update_iv.setVisibility(View.GONE);
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+		if(item.getOperation()!=null){
+			view_holder.data_item_update_iv.setVisibility(View.VISIBLE);
+			if(item.getOperation().equals(DataItemTermWiseUpdateActivity.RequestCode.CREATE) ){ //增加
+				view_holder.data_item_title_tv.setText(item.title);
+				view_holder.data_item_update_iv.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mi_add));
+				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.green));
+			}else if(item.getOperation().equals(DataItemTermWiseUpdateActivity.RequestCode.REMOVE) ){ // 删除
+				view_holder.data_item_title_tv.setText(item.title);
+				view_holder.data_item_update_iv.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mi_cut));
+				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.red));
+			}else if(item.getOperation().equals(DataItemTermWiseUpdateActivity.RequestCode.UPDATE) ){  // 修改
+//				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.1f);
+//		    	alphaAnimation.setDuration(2000);
+//		    	alphaAnimation.setFillEnabled(true);
+////		    	alphaAnimation.setFillBefore(true);
+//		    	view_holder.data_item_title_tv.startAnimation(alphaAnimation);
+//		    	alphaAnimation.setAnimationListener(new AnimationListener() {
+//					@Override
+//					public void onAnimationStart(Animation animation) {	
+//						view_holder.data_item_title_tv.setText("修改之前。。。。。。。");
+//					}
+//					@Override
+//					public void onAnimationRepeat(Animation animation) {
+//					}
+//					@Override
+//					public void onAnimationEnd(Animation animation) {
+						view_holder.data_item_title_tv.setText(item.title);
+//					}
+//				});
+				view_holder.data_item_update_iv.setVisibility(View.GONE);
+				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gray));
+			}
+			else {  // 移动
+				view_holder.data_item_title_tv.setText(item.title);
+				view_holder.data_item_update_iv.setVisibility(View.GONE);
+				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+			}
 		}else{  //正常
 			view_holder.data_item_title_tv.setText(item.title);
 			view_holder.data_item_update_iv.setVisibility(View.GONE);
 			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gainsboro));
 		}
+		
    }
    
    private class ViewHolder implements BaseViewHolder {

@@ -27,6 +27,7 @@ import com.teamkn.model.DataList;
 import com.teamkn.model.DataListReading;
 import com.teamkn.model.User;
 import com.teamkn.model.Watch;
+import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.model.database.DataListReadingDBHelper;
 import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
@@ -53,9 +54,9 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         view_holder.show_is_no_public_relativelayout = (RelativeLayout) view.findViewById(R.id.show_is_no_public_relativelayout);
         view_holder.list_note_title_tv_edit    = (TextView)  view.findViewById(R.id.list_note_title_tv_edit);
         view_holder.list_note_title_tv_go    = (TextView)  view.findViewById(R.id.list_note_title_tv_go);
-        view_holder.list_data_list_eye_tv = (TextView) view.findViewById(R.id.list_data_list_eye_tv);
+        view_holder.list_data_list_eye_tv = (TextView) view.findViewById(R.id.mi_list_data_list_eye_tv);
         view_holder.list_type_tv = (TextView)view.findViewById(R.id.list_type_tv);
-        view_holder.list_collect_tv = (ImageView)view.findViewById(R.id.list_collect_tv);
+        view_holder.data_list_forked_iv = (ImageView)view.findViewById(R.id.data_list_forked_iv);
         //公共列表
         view_holder.show_is_yes_public_relativelayout = (RelativeLayout)view.findViewById(R.id.show_is_yes_public_relativelayout);
         view_holder.data_list_item_user_avatar_iv= (ImageView)view.findViewById(R.id.data_list_item_user_avatar_iv);
@@ -78,7 +79,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         } 
     	final ViewHolder view_holder = (ViewHolder) holder;
     	view_holder.list_collect_tv_watch.setVisibility(View.GONE);
-    	view_holder.list_collect_tv.setVisibility(View.GONE);
+    	view_holder.data_list_forked_iv.setVisibility(View.GONE);
     	
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
         if((item.public_boolean.equals("false")
@@ -105,25 +106,13 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
             	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.blueviolet));
             }
             
-            final Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
-    		if(item.public_boolean.equals("true") && watch.id>0){
-    			view_holder.list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+    		if(item.has_commits.equals("true")){
+    			view_holder.data_list_forked_iv.setVisibility(View.VISIBLE);
+    			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
     		}else{
-    			view_holder.list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+    			view_holder.data_list_forked_iv.setVisibility(View.GONE);
+    			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
     		}
-    		view_holder.list_collect_tv.setOnClickListener(new OnClickListener() {	
-				@Override
-				public void onClick(View v) {
-					boolean go_watch ;
-					Watch watch = WatchDBHelper.find(new Watch(-1,item.user_id , item.id));
-					if(item.public_boolean.equals("true") && watch.id>0){
-						go_watch = false;
-		    		}else{
-		    			go_watch = true;
-		    		}
-					view_holder.onClick(item,go_watch);
-				}
-			});
         }else{
         	if(item.kind.equals(MainActivity.RequestCode.STEP)){
             	view_holder.list_type_tv_public.setText("步骤");
@@ -133,15 +122,33 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         	view_holder.show_is_no_public_relativelayout.setVisibility(View.GONE);
         	view_holder.show_is_yes_public_relativelayout.setVisibility(View.VISIBLE);
         	
-        	User user = UserDBHelper.find(item.user_id);
-        	view_holder.data_list_item_user_name_tv.setText(user.user_name);
-        	if (user.user_avatar!=null) {
-        		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
-            	Drawable drawable = new BitmapDrawable(bitmap);
-        		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
-            } else {
-            	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-            }
+        	
+        	
+        	if(MainActivity.RequestCode.data_list_public.equals("fork")){
+        		DataList forked_data_list = DataListDBHelper.find_by_server_data_list_id(item.forked_from_id);
+        		
+        		
+        		User user = UserDBHelper.find(forked_data_list.user_id);
+        		view_holder.data_list_item_user_name_tv.setText(user.user_name);
+            	if(user.user_avatar!=null) {
+            		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+                	Drawable drawable = new BitmapDrawable(bitmap);
+            		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
+                } else {
+                	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+                }
+        	}else{
+        		User user = UserDBHelper.find(item.user_id);
+        		view_holder.data_list_item_user_name_tv.setText(user.user_name);
+            	if (user.user_avatar!=null) {
+            		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+                	Drawable drawable = new BitmapDrawable(bitmap);
+            		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
+                } else {
+                	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+                }
+        	}
+        	
             view_holder.list_title_tv_public.setText(item.title);
             
             final Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
@@ -189,7 +196,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         TextView list_note_title_tv_go;
         TextView list_data_list_eye_tv;
         TextView list_type_tv;
-        ImageView list_collect_tv;
+        ImageView data_list_forked_iv;
         // 公共列表子项显示
         RelativeLayout show_is_yes_public_relativelayout;
         ImageView data_list_item_user_avatar_iv;
@@ -221,13 +228,13 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 					@Override
 					public void on_success(Boolean result) {
 						list_collect_tv_watch.setVisibility(View.VISIBLE);
-						list_collect_tv.setVisibility(View.VISIBLE);
+						data_list_forked_iv.setVisibility(View.VISIBLE);
 						if(go_watch && !MainActivity.RequestCode.data_list_public.equals("watch")){
-			    			list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
 							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
 						}else if(!MainActivity.RequestCode.data_list_public.equals("watch")){
 							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-							list_collect_tv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
 						}
 						String msg;
 						if(result==true){

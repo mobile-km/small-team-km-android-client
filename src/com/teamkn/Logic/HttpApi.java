@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -32,6 +34,8 @@ import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.DataItem;
+import com.teamkn.model.DataList;
 import com.teamkn.model.DataListReading;
 import com.teamkn.model.Note;
 import com.teamkn.model.User;
@@ -101,6 +105,24 @@ public class HttpApi {
     public static final String 公共_data_list     =  "/api/data_lists/public_timeline";
     public static final String 搜索公共_data_list   =  "/api/data_lists/search_public_timeline";
     public static final String 搜索个人书签_data_list =  "/api/data_lists/search_mine_watch";
+    public static final String 迁出一个_data_list = "/api/data_lists/";
+    public static final String 迁出的data_list列表 = "/api/data_lists/forked_list";
+   
+    // 查看一个 data_list 的被推送的列表，每个列表项包括 推送作者和修改数量GET /api/data_lists/:id/commit_meta_list
+    public static final String 查看data_list被推送的列表 = "/api/data_lists/";
+    //列表差异处理界面，origin 列表和 forked 列表内容
+    public static final String 列表差异处理界面 = "/api/data_lists/";
+    //一个 data_list 中，接受某个推送作者的全部修改
+    public static final String 接受全部修改 = "/api/data_lists/";
+    //一个 data_list 中，拒绝某个推送作者的全部修改
+    public static final String 拒绝全部修改 = "/api/data_lists/";
+	//	在逐条处理中，获取 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+    public static final String 获取data_list推送内容 = "/api/data_lists/";
+	//	在逐条处理中，接受 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+    public static final String 接受data_list推送内容 = "/api/data_lists/";
+	//	在逐条处理中，拒绝 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+    public static final String 拒绝data_list推送内容 = "/api/data_lists/";
+    
     // watch_list
     public static final String 查看收藏列表_watch_list    =  "/api/data_lists/watch_list";
     public static final String 收藏_data_list_watch_list    =  "/api/data_lists/";
@@ -639,6 +661,17 @@ public class HttpApi {
             String title  = json.getString("title");
             String kind   = json.getString("kind");
             String public_boolean  = json.getString("public");
+            String has_commits = "false";
+            
+            if(json.getString("has_commits")!=null && json.getString("has_commits").equals("true")){
+            	has_commits = "true";
+            }
+            String forked_from_id_ob = json.getString("forked_from_id");
+            int forked_from_id = -1;
+            System.out.println(forked_from_id_ob + " :  " + json.getString("has_commits"));
+            if(!forked_from_id_ob.equals(null) && forked_from_id_ob!=null && !forked_from_id_ob.equals("null")){
+            	forked_from_id = Integer.parseInt(forked_from_id_ob);
+            }
             JSONObject user_json = json.getJSONObject("creator");
             // --------------  
             int server_user_id = user_json.getInt("id");
@@ -660,8 +693,8 @@ public class HttpApi {
             com.teamkn.model.DataList dataList_server =
             		new com.teamkn.model.DataList
             		( UserDBHelper.find_by_server_user_id(server_user_id).id, 
-            				title, kind, public_boolean,server_data_list_id,
-            				data_list_server_created_time,data_list_server_updated_time);
+            				title, kind, public_boolean,has_commits,server_data_list_id,
+            				data_list_server_created_time,data_list_server_updated_time,forked_from_id);
             return dataList_server;
     	}
 		public static void pull(String kind,int page , int per_page) throws Exception{  
@@ -815,9 +848,47 @@ public class HttpApi {
 			        }.go();
 			return dataLists;
       }
+    	//迁出一个data_list
+    	public static com.teamkn.model.DataList fork(final com.teamkn.model.DataList dataList) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>( 迁出一个_data_list + dataList.server_data_list_id + "/fork",
+    				new PostParamText("any_params", 1+"")) {
+				@Override
+				public com.teamkn.model.DataList on_success(String response_text) throws Exception {
+					JSONObject json = new JSONObject(response_text);
+				    com.teamkn.model.DataList dataList_server =getDataList(json);
+				    System.out.println("fork datalist " + dataList_server.toString());
+				    DataListDBHelper.pull(dataList_server);
+				    dataList_server.setId(DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
+					return dataList_server;
+				}
+			}.go();
+    	}
+//    	迁出的data_list列表
+    	public static List<com.teamkn.model.DataList> forked_list(int page , int per_page) throws Exception{  
+      		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
+   	   		 new TeamknGetRequest<Void>(迁出的data_list列表,
+   		            new BasicNameValuePair("page", page+""),
+   		            new BasicNameValuePair("per_page", per_page+"")
+   		            ){
+   			          @Override
+   			          public Void on_success(String response_text) throws Exception {
+   			        	  System.out.println(response_text);
+   			        	  JSONArray data_list_array = new JSONArray(response_text);
+   			        	  for (int i = 0; i < data_list_array.length(); i++) {
+   				                JSONObject json = data_list_array.getJSONObject(i);
+   				                com.teamkn.model.DataList dataList_server =getDataList(json);		
+   				                DataListDBHelper.pull(dataList_server);
+   				                dataList_server.setId(DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
+   				                dataLists.add(dataList_server);
+   		                  } 
+   			              return null;
+   			          }
+   			        }.go();
+   			return dataLists;
+         }
     }
     public static class WatchList{
-//    	收藏_data_list_watch_list
+    	//收藏_data_list_watch_list
     	public static List<com.teamkn.model.DataList> watch_public_timeline(int page , int per_page) throws Exception{  
       		 final List<com.teamkn.model.DataList> dataLists = new ArrayList<com.teamkn.model.DataList>(); 
    	   		 new TeamknGetRequest<Void>(查看收藏列表_watch_list,
@@ -855,6 +926,189 @@ public class HttpApi {
 						}
 			}.go();
     	}
+    	///api/data_lists/:id/commit_meta_list
+    	public static List<User> commit_meta_list(com.teamkn.model.DataList dataList) throws Exception{
+    		return new TeamknGetRequest<List<User>>(查看data_list被推送的列表 + dataList.server_data_list_id + "/commit_meta_list"
+    				, new BasicNameValuePair("nil", "nil")) {
+				@Override
+				public List<User> on_success(String response_text)
+						throws Exception {
+					System.out.println("commit_meta_list = "+ response_text);
+					List<User> list = new ArrayList<User>();
+					JSONArray commit_meta_list = new JSONArray(response_text);
+					for (int i = 0; i < commit_meta_list.length(); i++) {
+		                JSONObject json = commit_meta_list.getJSONObject(i); 
+		                int count = json.getInt("count");
+		                JSONObject origin = json.getJSONObject("committer");
+		                int user_id = origin.getInt("id");
+		                String user_name = origin.getString("name");
+		                String avatar_url = origin.getString("avatar_url");
+		                byte[] user_avatar = null;
+		                if(avatar_url != null && !avatar_url.equals("")){
+			                  InputStream is = HttpApi.download_image(avatar_url);
+			                  user_avatar = IOUtils.toByteArray(is);
+			            }
+		                long server_created_time = origin.getLong("server_created_time");
+		                long server_updated_time = origin.getLong("server_updated_time");
+		                
+		                User user = new User(-1, user_id, user_name, user_avatar, server_created_time, server_updated_time);
+		                UserDBHelper.createOrUpdate(user);
+		                user.setCount(count);
+		                list.add(user);
+	                }
+					return list;
+				}
+			}.go();
+    	}
+    	//列表差异处理界面，origin 列表和 forked 列表内容   列表差异处理界面
+    	public static Map<Object, Object> diff(final int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknGetRequest<Map<Object,Object>>(列表差异处理界面 + server_data_list_id + "/diff",
+					new BasicNameValuePair("committer_id", committer_id+"")) {
+						@Override
+						public Map<Object, Object> on_success(String response_text) throws Exception {
+							Map<Object, Object> map = new HashMap<Object, Object>();
+							System.out.println("diff = "+ response_text);
+							JSONObject json = new JSONObject(response_text); 
+							
+							JSONObject origin = json.getJSONObject("origin");
+							JSONObject data_list_json_origin = origin.getJSONObject("data_list");
+							com.teamkn.model.DataList dataList_origin = DataList.getDataList(data_list_json_origin);
+							
+							map.put("dataList_origin", dataList_origin);
+							
+							JSONArray data_items_origin = origin.getJSONArray("data_items");
+							List<com.teamkn.model.DataItem> dataItems_origin = new ArrayList<com.teamkn.model.DataItem>();
+							for(int i = 0 ; i<data_items_origin.length();i++){
+								JSONObject item_json = data_items_origin.getJSONObject(i);
+								com.teamkn.model.DataItem dataItem = DataItem.getDataItem(item_json, server_data_list_id);
+								dataItems_origin.add(dataItem);
+							}
+							map.put("data_items_origin", dataItems_origin);
+							
+							JSONObject forked  = json.getJSONObject("forked");
+							JSONObject data_list_json_forked = forked.getJSONObject("data_list");
+							com.teamkn.model.DataList dataList_forked = DataList.getDataList(data_list_json_forked);
+							map.put("dataList_forked", dataList_forked);
+							JSONArray data_items_forked = forked.getJSONArray("data_items");
+							List<com.teamkn.model.DataItem> dataItems_forked = new ArrayList<com.teamkn.model.DataItem>();
+							for(int i = 0 ; i<data_items_forked.length();i++){
+								JSONObject item_json = data_items_forked.getJSONObject(i);
+								com.teamkn.model.DataItem dataItem = DataItem.getDataItem(item_json, server_data_list_id);
+								dataItems_forked.add(dataItem);
+								System.out.println("dataItem " + dataItem.position);
+							}
+							map.put("dataItems_forked", dataItems_forked);
+							return map;
+						}
+			}.go();
+    	}
+//    	一个 data_list 中，接受某个推送作者的全部修改 [编辑]
+//    			PUT /api/data_lists/:id/accept_commits
+    	public static com.teamkn.model.DataList accept_commits( int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>(接受全部修改 + server_data_list_id + "/accept_commits"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataList on_success(String response_text) throws Exception {
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataList dataList = DataList.getDataList(jsonObject);
+					return dataList;
+				}
+			}.go();
+    	}
+//    	一个 data_list 中，拒绝某个推送作者的全部修改 [编辑]
+    	public static com.teamkn.model.DataList reject_commits( int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>(拒绝全部修改 + server_data_list_id + "/reject_commits"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataList on_success(String response_text) throws Exception {
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataList dataList = DataList.getDataList(jsonObject);
+					return dataList;
+				}
+			}.go();
+    	}
+//    	在逐条处理中，获取 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+//    			GET /api/data_lists/:id/next_commits
+    	public static com.teamkn.model.DataItem next_commits(  final int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknGetRequest<com.teamkn.model.DataItem>(获取data_list推送内容 + server_data_list_id + "/next_commit"
+    				,new BasicNameValuePair("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataItem on_success(
+						String response_text) throws Exception {
+					JSONObject json = new JSONObject(response_text);
+					System.out.println("next_commits =  " + response_text);
+					return getDataItem_forked(json,server_data_list_id);
+				}
+			}.go();
+    	}
+//    	在逐条处理中，接受 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+//    			PUT /api/data_lists/:id/accept_next_commit
+    	public static com.teamkn.model.DataItem accept_next_commit( final int server_data_list_id,int committer_id,final com.teamkn.model.DataItem last_dataItem) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataItem>(接受data_list推送内容 + server_data_list_id + "/accept_next_commit"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataItem on_success(String response_text) throws Exception {
+					System.out.println(response_text);
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataItem dataItem = getDataItem_forked(jsonObject,server_data_list_id);					
+					JSONObject data_item = jsonObject.getJSONObject("data_item");
+		    		int server_id = data_item.getInt("server_id");
+		    		int position = data_item.getInt("position");
+		    		dataItem.setPosition(position);
+					last_dataItem.setServer_data_item_id(server_id);
+					if(dataItem.seed!=null && !last_dataItem.getOperation().equals("REMOVE")){
+						System.out.println("seed != null =  " + dataItem.toString());
+						DataItemDBHelper.update_by_server_id(last_dataItem);
+					}
+					return dataItem;
+				}
+			}.go();
+    	}
+//    	在逐条处理中，拒绝 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
+//    			PUT /api/data_lists/:id/reject_next_commit
+    	public static com.teamkn.model.DataItem reject_next_commit( final int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataItem>(拒绝data_list推送内容 + server_data_list_id + "/accept_next_commit"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataItem on_success(String response_text) throws Exception {
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataItem dataItem = getDataItem_forked(jsonObject,server_data_list_id);
+					return dataItem;
+				}
+			}.go();
+    	}
+    	public static com.teamkn.model.DataItem getDataItem_forked(JSONObject jsonObject,int server_data_list_id) throws JSONException{
+//    		int server_id = -1;
+
+    		int next_commits_count = jsonObject.getInt("next_commits_count");
+    		
+    		JSONObject json = jsonObject.getJSONObject("next_commit");
+    		
+    		com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(); ;
+//    		String json_seed = json.getString("seed");
+    		if( !json.isNull("seed")){
+    			String title  = json.getString("title");
+//        		String title = "有时候没有 title";
+                String kind   = json.getString("kind");
+                String content  = json.getString("content");
+                String url   = json.getString("url");
+                String image_url  = json.getString("image_url");
+                String seed = json.getString("seed");
+                if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
+                    HttpApi.DataItem.pull_image(server_data_list_id+"", image_url);
+                }
+                String operation = json.getString("operation");
+    			
+    			boolean conflict = json.getBoolean("conflict");
+    			
+    			dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, DataListDBHelper.find_by_server_data_list_id(server_data_list_id).id, -1, -1,seed); 
+    			
+    			dataItem.setOperation(operation);
+    			dataItem.setConflict(conflict);
+    		}
+    		dataItem.setNext_commits_count(next_commits_count);
+			return dataItem;
+    	}
     }
     public static class DataItem{
     	private static com.teamkn.model.DataItem getDataItem(JSONObject json , int data_list_server_id) throws JSONException{
@@ -864,6 +1118,7 @@ public class HttpApi {
              String content  = json.getString("content");
              String url   = json.getString("url");
              String image_url  = json.getString("image_url");
+             String seed = json.getString("seed");
              int position = json.getInt("position");
              if (kind.equals(DataItemDBHelper.Kind.IMAGE)) {
                  HttpApi.DataItem.pull_image(server_id+"", image_url);
@@ -874,7 +1129,7 @@ public class HttpApi {
              dataList.setServer_updated_time(data_list_server_updated_time);
              DataListDBHelper.update(dataList);
              
-            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, dataList.id, position, server_id);
+            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, dataList.id, position, server_id,seed);
 			return dataItem;
     	}
     	public static boolean pull(final int data_list_server_id) throws Exception{  
@@ -895,8 +1150,50 @@ public class HttpApi {
 			                JSONObject json = data_list_array.getJSONObject(i);
 			                com.teamkn.model.DataItem data_item_server = getDataItem(json,data_list_server_id);
 			                DataItemDBHelper.pull(data_item_server);
+			                       
 	                  }  
+	                  JSONObject forked_from = data_list_json.getJSONObject("forked_from");
+	                  if( !forked_from.isNull("create") ){
+	                	  JSONObject create = forked_from.getJSONObject("create");
+	                	  int user_id = create.getInt("id");
+	                	  String user_name = create.getString("name");
+	                	  String avatar_url = create.getString("avatar_url");
+	                	  byte[] user_avatar = null;
+	                	  if(avatar_url!=null){
+	                      	InputStream is = HttpApi.download_image(avatar_url);
+	                      	user_avatar = IOUtils.toByteArray(is);
+	                	  }
+	                	  long server_created_time = create.getLong("server_created_time");
+	                	  long server_updated_time = create.getLong("server_updated_time");
+//	                	  User user = new User(-1, user_id, user_name, user_avatar, server_created_time, server_updated_time);
+	                	  UserDBHelper.create(user_id, user_name, user_avatar, server_created_time, server_updated_time);
+	                  }
 		              return read;
+		          }
+		        }.go();
+        }
+    	public static List<com.teamkn.model.DataItem> fork_list(final int data_list_server_id) throws Exception{  
+   		 	return new TeamknGetRequest<List<com.teamkn.model.DataItem>>(获取_data_item + data_list_server_id+ "/data_items"){
+		          @Override
+		          public List<com.teamkn.model.DataItem> on_success(String response_text) throws Exception {
+		        	  System.out.println(" data_item pull response_text " + response_text);
+		        	  JSONObject data_list_json = new JSONObject(response_text);
+		        	  boolean read = data_list_json.getBoolean("read");
+
+	        		  com.teamkn.model.DataList data_list = DataListDBHelper.find_by_server_data_list_id(data_list_server_id);
+	        		  DataListReading reading = new DataListReading(-1, data_list.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id);
+	        		  DataListReadingDBHelper.createOrUpdate(reading);
+	        	
+		        	  System.out.println(" read  有什么用意  " + read);
+		        	  JSONArray data_list_array = data_list_json.getJSONArray("data_items");
+		        	  
+		        	  List<com.teamkn.model.DataItem> list = new ArrayList<com.teamkn.model.DataItem>();
+	                  for (int i = 0; i < data_list_array.length(); i++) {
+			                JSONObject json = data_list_array.getJSONObject(i);
+			                com.teamkn.model.DataItem data_item_server = getDataItem(json,data_list_server_id);
+			                list.add(data_item_server);
+	                  }  
+		              return list;
 		          }
 		        }.go();
         }

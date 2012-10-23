@@ -39,17 +39,17 @@ public class DataItemPullUpdateAdapter extends TeamknBaseAdapter<DataItem>{
 		ViewHolder view_holder = (ViewHolder)holder;
 		view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
 		view_holder.data_item_title_tv.setText(item.title);
-		if(item.id < 2){ //增加
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.green));
-		}else if(item.id < 4){ // 删除
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.red));
-		}else if(item.id < 6){  // 修改
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gray));
-		}else if(item.id < 8){  // 移动
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.yellow));
-		}else{  //正常
-			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gainsboro));
-		}
+//		if(item.id < 2){ //增加
+//			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.green));
+//		}else if(item.id < 4){ // 删除
+//			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.red));
+//		}else if(item.id < 6){  // 修改
+//			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gray));
+//		}else if(item.id < 8){  // 移动
+//			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+//		}else{  //正常
+//			view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gainsboro));
+//		}
 	}
    private class ViewHolder implements BaseViewHolder {
     	TextView info_tv;

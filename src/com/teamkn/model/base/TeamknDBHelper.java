@@ -87,9 +87,11 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_DATA_LISTS_TITLE + " text , " + 
     		Constants.TABLE_DATA_LISTS_KIND + " text , "+
     		Constants.TABLE_DATA_LISTS_PUBLIC + " text , "+
+    		Constants.TABLE_DATA_LISTS_HAS_COMMITS + " text , "+ ///  has_commits
             Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " integer ,"+
             Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME + " integer ,"+
-            Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " integer );";
+            Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " integer ,"+
+            Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " integer);";
     
     private static final String create_data_items = "create table "+
             Constants.TABLE_DATA_ITEMS + " ( " + 
@@ -100,7 +102,8 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     		Constants.TABLE_DATA_ITEMS_KIND + " text , "+
     		Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " integer, "+
             Constants.TABLE_DATA_ITEMS_POSITION + " integer ,"+
-    		Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " integer );";
+    		Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " integer,"+
+    		Constants.TABLE_DATA_ITEMS_SEED + " text);";
     
     private static final String create_watch = "create table "+
             Constants.TABLE_WATCH + " ( " + 

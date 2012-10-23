@@ -222,9 +222,12 @@ public class MainActivity extends TeamknBaseActivity {
     		user_name_tv.setText("我的书签");
     	}else if(RequestCode.data_list_public.equals("false")){
     		user_name_tv.setText(current_user().name + "的列表");
+    	}else if(RequestCode.data_list_public.equals("fork")){
+    		user_name_tv.setText("协作列表");
     	}
     }
     private void load_data_list_or_watch(String watch_or_public){
+    	
     	if (BaseUtils.is_wifi_active(MainActivity.this)) {
 	    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
 				@Override
@@ -237,7 +240,9 @@ public class MainActivity extends TeamknBaseActivity {
 							HttpApi.DataList.pull(RequestCode.data_list_type,RequestCode.now_page, 100);
 						}else if(RequestCode.data_list_public.equals("watch")){
 							HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
-						}	
+						}else if(RequestCode.data_list_public.equals("fork")){
+							datalists = HttpApi.DataList.forked_list(RequestCode.now_page, 100);
+						}
 					return null;
 				}
 				@Override
@@ -258,6 +263,8 @@ public class MainActivity extends TeamknBaseActivity {
 			if(RequestCode.data_list_public.equals("watch")){
 				List<Watch> watchs = WatchDBHelper.all_by_user_id(UserDBHelper.find_by_server_user_id(current_user().user_id).id);
 				datalists = DataListDBHelper.all_by_watch_lists(watchs,RequestCode.data_list_type);
+			}else if(RequestCode.data_list_public.equals("fork")){	
+				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 			}else{
 				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 			}
@@ -460,6 +467,7 @@ public class MainActivity extends TeamknBaseActivity {
             groups.add("我的列表");  
             groups.add("公共列表");  
             groups.add("我的书签");
+            groups.add("列表协作");
   
             GroupAdapter groupAdapter = new GroupAdapter(this); 
             groupAdapter.add_items(groups);
@@ -516,6 +524,11 @@ public class MainActivity extends TeamknBaseActivity {
 					break;
 				case 2:
 					RequestCode.data_list_public = "watch";
+					set_title();
+					load_data_list_or_watch(RequestCode.data_list_public);
+					break;
+				case 3:
+					RequestCode.data_list_public = "fork";
 					set_title();
 					load_data_list_or_watch(RequestCode.data_list_public);
 					break;

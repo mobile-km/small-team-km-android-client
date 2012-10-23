@@ -29,6 +29,21 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    db.close();
 		return dataList;
   }
+  public static DataList update_by_server_id(DataList dataList){
+	    SQLiteDatabase db = get_write_db();  
+	    ContentValues values = get_contentvalues(dataList);
+	    if(find_by_server_data_list_id(dataList.server_data_list_id).id <=0){ 
+	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    	dataList = pull_last_data();
+	    	System.out.println("insert dataList= " + dataList.toString());
+	    }else{
+	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	    	System.out.println("update dataList= " + dataList.toString());
+	    }
+	    db.close();
+		return dataList;
+  }
+  
   public static DataList pull_last_data(){
 	  DataList datalist;
 	  SQLiteDatabase db = get_write_db();
@@ -65,14 +80,21 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  if(data_list_public.equals("true")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
-                      new String[]{data_list_public}, null, null,
+                      Constants.TABLE_DATA_LISTS_PUBLIC + " = ? AND " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " = ?", 
+                      new String[]{data_list_public,-1+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
+    	  }else if(data_list_public.equals("fork")){
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > ? AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?", 
+                      new String[]{0+"",UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
-                      new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_USER_ID + " = ? AND " 
+                      + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " = ?", 
+                      new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+"",-1+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }
     	  
@@ -80,14 +102,20 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  if(data_list_public.equals("true")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? ", 
-                      new String[]{data_list_type,data_list_public}, null, null,
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_PUBLIC + " = ? AND " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " = ?", 
+                      new String[]{data_list_type,data_list_public,-1+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
+    	  }else if(data_list_public.equals("fork")){
+    		  cursor= db.query(Constants.TABLE_DATA_LISTS,
+                      get_columns(),
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > ? AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?",
+                      new String[]{data_list_type,data_list_public,0+"",UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_USER_ID + " = ? ", 
-                      new String[]{data_list_type,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_USER_ID + " = ? AND " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " = ?", 
+                      new String[]{data_list_type,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+"",-1+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }  
       }
@@ -118,6 +146,20 @@ public class DataListDBHelper extends BaseModelDBHelper {
     db.close();
     return datalist;
   }
+  
+  public static boolean just_fored(int fored_from_id){
+      SQLiteDatabase db = get_read_db();
+      Cursor cursor = db.query(Constants.TABLE_DATA_LISTS, get_columns(),
+    		  Constants.TABLE_DATA_LISTS_USER_ID + " = ? AND " 
+      + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " = ?", 
+        new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+"",fored_from_id+""},null, null, null);
+
+     boolean has_value = cursor.moveToFirst();
+     cursor.close();
+     db.close();
+     return has_value;
+  }
+  
   public static List<DataList> all_by_watch_lists(List<Watch> watchs,String data_list_type){
       List<DataList> datalists = new ArrayList<DataList>();
       for(Watch watch : watchs){
@@ -187,10 +229,12 @@ public class DataListDBHelper extends BaseModelDBHelper {
     String title = cursor.getString(2);
     String kind = cursor.getString(3);
     String public_boolean = cursor.getString(4);
-    int server_data_list_id = cursor.getInt(5);
-    long server_created_time = cursor.getLong(6);
-    long server_updated_time = cursor.getLong(7);
-    return new DataList(id,user_id,title,kind,public_boolean,server_data_list_id,server_created_time,server_updated_time);
+    String has_commits = cursor.getString(5);
+    int server_data_list_id = cursor.getInt(6);
+    long server_created_time = cursor.getLong(7);
+    long server_updated_time = cursor.getLong(8);
+    int forked_from_id = cursor.getInt(9);
+    return new DataList(id,user_id,title,kind,public_boolean,has_commits,server_data_list_id,server_created_time,server_updated_time,forked_from_id);
   }
 
   private static String[] get_columns() {
@@ -200,9 +244,11 @@ public class DataListDBHelper extends BaseModelDBHelper {
         Constants.TABLE_DATA_LISTS_TITLE,
         Constants.TABLE_DATA_LISTS_KIND,
         Constants.TABLE_DATA_LISTS_PUBLIC,
+        Constants.TABLE_DATA_LISTS_HAS_COMMITS,
         Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,
         Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,
-        Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME
+        Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME,
+        Constants.TABLE_DATA_LISTS_FORKED_FROM_ID
     };
   }
   private static ContentValues get_contentvalues(DataList dataList){
@@ -211,9 +257,11 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_TITLE,dataList.title);
 	    values.put(Constants.TABLE_DATA_LISTS_KIND,dataList.kind);
 	    values.put(Constants.TABLE_DATA_LISTS_PUBLIC,dataList.public_boolean);
+	    values.put(Constants.TABLE_DATA_LISTS_HAS_COMMITS,dataList.has_commits);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,dataList.server_data_list_id);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,dataList.server_created_time);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME,dataList.server_updated_time);
+	    values.put(Constants.TABLE_DATA_LISTS_FORKED_FROM_ID,dataList.forked_from_id);
 		return values;
   }
 }
