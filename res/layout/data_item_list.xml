@@ -26,10 +26,10 @@
         <TextView
             android:id="@+id/data_list_user_name_tv"
             style="@style/head_bar_text"
-            android:layout_alignBaseline="@+id/go_back_button"
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_alignBottom="@+id/go_back_button"
-            android:layout_marginLeft="25dp"
-            android:layout_toRightOf="@+id/go_back_button"
+            android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
             android:text="查看列表" />
 
@@ -137,15 +137,6 @@
                     android:text="下一步" /> 
             </RelativeLayout>
     </RelativeLayout>
-   <!-- <Button
-       android:id="@+id/data_item_list_guide_button"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentBottom="true"
-       android:layout_centerHorizontal="true"
-       android:visibility="gone"
-       android:text="以向导模式查看" 
-    /> -->
    <RelativeLayout
        android:id="@+id/data_item_watch_rl"
        android:layout_below="@+id/data_item_next_button"
@@ -177,7 +168,17 @@
            android:layout_centerVertical="true"
            android:layout_marginRight="14dp"
            android:layout_toLeftOf="@+id/data_list_image_iv_watch"
-           android:background="@drawable/mi_fork_no" />
+           android:background="@drawable/mi_fork_no"
+           android:visibility="gone" />
+
+       <TextView
+           android:id="@+id/data_item_original_user_name"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBottom="@+id/data_item_push_iv"
+           android:layout_toLeftOf="@+id/data_item_push_iv"
+           android:visibility="gone"
+           android:text="用户名" />
 
    </RelativeLayout>
    <LinearLayout

@@ -3,6 +3,7 @@ package com.teamkn.activity.dataitem.pull;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,9 @@ import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemPullUpdateAdapter;
 
 public class DataItemPullUpdateActivity extends TeamknBaseActivity{
+	public static class RequestCode{
+		public final static int BACK = 0;
+	}
 	Button data_item_old_button;
 	Button data_item_new_button;
 	TextView data_list_title_tv;
@@ -144,8 +148,23 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 		intent.putExtra("server_dataList_origin_id", dataList_origin.server_data_list_id);
 		intent.putExtra("committer_id",committer_id);
 		intent.putExtra("seeds", getDataItems_forked_Seeds());
-		startActivity(intent);
-	}	
+//		startActivity(intent);
+		startActivityForResult(intent, RequestCode.BACK);
+	}
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		super.startActivityForResult(intent, requestCode);
+		if(requestCode == Activity.RESULT_OK){
+			return;
+		}
+		switch (requestCode) {
+		case RequestCode.BACK:
+			load_UI();
+			break;
+		default:
+			break;
+		}
+	}
 	private String[] getDataItems_forked_Seeds(){
 		String[] seeds = new String[dataItems_forked.size()];
 		for(int i = 0 ; i < dataItems_forked.size() ;i ++){

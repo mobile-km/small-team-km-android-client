@@ -57,8 +57,11 @@ public class DataItemListAdapter extends ArrayAdapter<DataItem> {
 		view_holder.data_item_title_tv_go.setText(dataItems.get(position).id
 				+ "");
 		view_holder.data_item_title_iv_frush = (ImageView)row.findViewById(R.id.data_item_title_iv_frush);
+		
+//		System.out.println("DataItemListActivity.is_fork " + DataItemListActivity.is_fork + " dataItems " + dataItems.get(position).toString());
 		if(UserDBHelper.find(DataListDBHelper.find(dataItems.get(position).data_list_id).user_id).user_id == AccountManager.current_user().user_id
 				|| DataItemListActivity.is_fork){
+			
 			view_holder.data_item_title_iv_frush.setVisibility(View.VISIBLE);
 		}else{
 			view_holder.data_item_title_iv_frush.setVisibility(View.GONE);

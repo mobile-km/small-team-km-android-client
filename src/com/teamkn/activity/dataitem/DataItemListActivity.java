@@ -40,6 +40,7 @@ import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.DataListReading;
+import com.teamkn.model.User;
 import com.teamkn.model.Watch;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
@@ -55,6 +56,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	Button go_back_button;  //返回的按钮
 	TextView data_list_user_name_tv;
+	ImageView data_item_add_iv;
 	/*
 	 * data_list title edit
 	 * */
@@ -81,6 +83,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	
 //	Button data_item_list_guide_button;
 	RelativeLayout data_item_watch_rl; //加书签的rl
+	TextView data_item_original_user_name;//原始的作者名
+	
 	ImageView data_item_push_iv;
 	LinearLayout list_no_data_show ;  // 没有数据时显示
 	
@@ -153,7 +157,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_title_tv.setText(dataList.title);
 		data_list_title_tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
 		data_list_title_tv.getPaint().setFakeBoldText(true);//加粗
-		ImageView data_item_add_iv = (ImageView)findViewById(R.id.data_item_add_iv);
+		data_item_add_iv = (ImageView)findViewById(R.id.data_item_add_iv);
 		data_list_image_iv_edit = (ImageView) findViewById(R.id.data_list_image_iv_edit);
 		if(is_curretn_user_data_list){
 			data_item_add_iv.setVisibility(View.VISIBLE);
@@ -195,6 +199,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_list_approach_button = (Button)findViewById(R.id.data_item_list_approach_button);
 		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
 		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);	
+		
+		data_item_original_user_name = (TextView)findViewById(R.id.data_item_original_user_name);
 		
 		data_item_push_iv = (ImageView)findViewById(R.id.data_item_push_iv);
 		load_push_iv();
@@ -239,10 +245,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
 					intent.putExtra("data_list_id", dataList.id);
 					startActivity(intent);
+//					startActivityForResult(intent, requestCode);
 				}else{
 					fork_data_list();
-				}
-				
+				}				
 			}
 		});
 	}
@@ -260,6 +266,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}
 				@Override
 				public void on_success(DataList result) {
+					System.out.println("");
 					if(result!=null){
 						is_fork = true;
 						dataList = result;
@@ -279,6 +286,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 						}else{
 							load_step_or_list(show_step);
 							list_no_data_show.setVisibility(View.GONE);
+							data_item_add_iv.setVisibility(View.VISIBLE);
 							if(show_step){
 								if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
 									data_item_list_approach_button.setVisibility(View.VISIBLE);
@@ -288,6 +296,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 								data_item_list_approach_button.setText("以清单模式查看");
 								load_step();
 							}else{
+								// data_item list 列表
+								tlv = (ListViewInterceptor) findViewById(R.id.list);
+								is_curretn_user_data_list = true;
 								load_list();
 								if((data_list_public.equals("true")
 										|| data_list_public.equals("watch") || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id) 
@@ -460,6 +471,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				if(!is_reading){
 					update_title = true;
 				}
+				//判断是否是 要显示 步骤列表
 				DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
 				if((data_list_public.equals("true") 
 						|| data_list_public.equals("watch") 
@@ -470,8 +482,21 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}else{
 					show_step = false;
 				}
+				//判断是否 是 协作列表 显示原始用户名
+				if(data_list_public.equals("fork")){
+					data_item_original_user_name.setVisibility(View.VISIBLE);
+					DataList forked = DataListDBHelper.find_by_server_data_list_id(dataList.forked_from_id);
+					User user = UserDBHelper.find(forked.user_id);
+					System.out.println("datalist toString " + dataList.toString());
+					System.out.println("fork show user name  " + user.toString());
+					data_item_original_user_name.setText("从<font  color=blue>"
+					+user.user_name+"</font>的列表迁出");			
+				}else{
+					data_item_original_user_name.setVisibility(View.GONE);
+				}
 				
 				data_item_watch_rl.setVisibility(View.VISIBLE);
+				//判断列表是否有数据
 				if(dataItems.size()==0){
 					tlv.setVisibility(View.GONE);
 					data_item_step_rl.setVisibility(View.GONE);
@@ -480,6 +505,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}else{
 					load_step_or_list(show_step);
 					list_no_data_show.setVisibility(View.GONE);
+					//判断是以那种列表展示形式 列出数据
 					if(show_step){
 						if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
 							data_item_list_approach_button.setVisibility(View.VISIBLE);

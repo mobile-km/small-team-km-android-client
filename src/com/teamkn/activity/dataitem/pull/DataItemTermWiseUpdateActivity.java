@@ -168,6 +168,9 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		progressBar.setProgress(next_commits_count);
 		if(next_commits_count==0){
 			this.finish();
+			Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+			intent.putExtra("data_list_id", dataList_origin.id);
+			startActivity(intent);
 		}
 	}
 	public void click_accept_button(View view){
