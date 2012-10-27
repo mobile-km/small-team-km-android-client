@@ -34,8 +34,6 @@ import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.SharedParam;
 import com.teamkn.model.AccountUser;
-import com.teamkn.model.DataItem;
-import com.teamkn.model.DataList;
 import com.teamkn.model.DataListReading;
 import com.teamkn.model.Note;
 import com.teamkn.model.User;
@@ -643,7 +641,7 @@ public class HttpApi {
            
               if( TeamknApplication.current_show_activity!=null && TeamknApplication.current_show_activity
             		  .equals("com.teamkn.activity.chat.ChatActivity")){
-            	  com.teamkn.model.ChatNode chat_node = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id);
+//            	  com.teamkn.model.ChatNode chat_node = ChatNodeDBHelper.find_by_server_chat_node_id(server_chat_node_id);
 //            	  ChatActivity.add_chat_node_item(chat_node);
               }
             }
@@ -1033,8 +1031,7 @@ public class HttpApi {
     		return new TeamknGetRequest<com.teamkn.model.DataItem>(获取data_list推送内容 + server_data_list_id + "/next_commit"
     				,new BasicNameValuePair("committer_id", committer_id+"")) {
 				@Override
-				public com.teamkn.model.DataItem on_success(
-						String response_text) throws Exception {
+				public com.teamkn.model.DataItem on_success(String response_text) throws Exception {
 					JSONObject json = new JSONObject(response_text);
 					System.out.println("next_commits =  " + response_text);
 					return getDataItem_forked(json,server_data_list_id);
@@ -1048,17 +1045,19 @@ public class HttpApi {
     				,new PostParamText("committer_id", committer_id+"")) {
 				@Override
 				public com.teamkn.model.DataItem on_success(String response_text) throws Exception {
-					System.out.println(response_text);
+					System.out.println("accept_next_commit:"+response_text);
 					JSONObject jsonObject = new JSONObject(response_text);
 					com.teamkn.model.DataItem dataItem = getDataItem_forked(jsonObject,server_data_list_id);					
 					JSONObject data_item = jsonObject.getJSONObject("data_item");
 		    		int server_id = data_item.getInt("server_id");
 		    		int position = data_item.getInt("position");
-		    		dataItem.setPosition(position);
+		    		last_dataItem.setPosition(position);
 					last_dataItem.setServer_data_item_id(server_id);
 					if(dataItem.seed!=null && !last_dataItem.getOperation().equals("REMOVE")){
 						System.out.println("seed != null =  " + dataItem.toString());
 						DataItemDBHelper.update_by_server_id(last_dataItem);
+					}else if(last_dataItem.getOperation().equals("REMOVE")){
+						DataItemDBHelper.delete_by_seed(last_dataItem.seed);
 					}
 					return dataItem;
 				}

@@ -11,6 +11,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +54,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	public static boolean update_title =false; //判断data_list 列表的数据是否有修改
 	static class RequestCode {
 	    final static int CREATE_DATA_ITEM = 0; 
+	    final static int BACK = 9;
 	}
 	Button go_back_button;  //返回的按钮
 	TextView data_list_user_name_tv;
@@ -114,7 +116,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		dataList = DataListDBHelper.find(data_list_id);
 		load_dataList = dataList;
 		data_list_public = intent.getStringExtra("data_list_public");
-		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id || data_list_public.equals("fork")){
 			is_curretn_user_data_list  = true;
 		}else{
 			is_curretn_user_data_list  = false;
@@ -204,18 +206,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		
 		data_item_push_iv = (ImageView)findViewById(R.id.data_item_push_iv);
 		load_push_iv();
-		//		data_item_list_guide_button = (Button)findViewById(R.id.data_item_list_guide_button);
-//		data_item_list_guide_button.setOnClickListener(new android.view.View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				data_item_list_guide_button.setVisibility(View.GONE);
-//				
-//				tlv.setVisibility(View.GONE);
-//				data_item_step_rl.setVisibility(View.VISIBLE);
-//				data_item_next_button.setText("下一步");
-//				load_step();
-//			}
-//		});
 	}
 	private void load_push_iv(){
 		is_fork = false;
@@ -238,22 +228,18 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
-//				intent.putExtra("data_list_id", dataList.id);
-//				startActivity(intent);
 				if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
 					Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
 					intent.putExtra("data_list_id", dataList.id);
-					startActivity(intent);
-//					startActivityForResult(intent, requestCode);
+//					startActivity(intent);
+					startActivityForResult(intent, RequestCode.BACK);
 				}else{
 					fork_data_list();
 				}				
 			}
 		});
-	}
+	}		
 	private void fork_data_list(){
-//		DataList dataList = 
 		if(BaseUtils.is_wifi_active(DataItemListActivity.this)){
 			new TeamknAsyncTask<Void, Void, DataList>(DataItemListActivity.this,"正在加载") {
 				@Override
@@ -471,6 +457,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				if(!is_reading){
 					update_title = true;
 				}
+				load_push_iv();
 				//判断是否是 要显示 步骤列表
 				DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
 				if((data_list_public.equals("true") 
@@ -489,8 +476,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					User user = UserDBHelper.find(forked.user_id);
 					System.out.println("datalist toString " + dataList.toString());
 					System.out.println("fork show user name  " + user.toString());
-					data_item_original_user_name.setText("从<font  color=blue>"
-					+user.user_name+"</font>的列表迁出");			
+					data_item_original_user_name.setText(Html.fromHtml("从<font  color=blue>"
+					+user.user_name+"</font>的列表迁出"));			
 				}else{
 					data_item_original_user_name.setVisibility(View.GONE);
 				}
@@ -650,7 +637,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				Intent intent = new Intent(DataItemListActivity.this,CreateDataItemActivity.class);
 				intent.putExtra("data_item_id",item.id);
 				intent.putExtra("data_list_public",data_list_public);
-				startActivity(intent);
+				startActivityForResult(intent,RequestCode.BACK);
 				update_title = true;
 			}
 		});
@@ -699,17 +686,27 @@ public class DataItemListActivity extends TeamknBaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
 			return;
 		}
+		
+		
+		
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_ITEM:
 			load_data_item_list();
-			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
-					+ RequestCode.CREATE_DATA_ITEM);
+			break;
+		case RequestCode.BACK:
+			dataList = DataListDBHelper.find(dataList.id);
+			load_UI();
+			load_data_item_list();
+			
+			if(dataList.has_commits.equals("false")){
+				update_title = true;
+			}
 			break;
 		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void insert_into(final int from_server, final int to_server) {
@@ -861,8 +858,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 											load_list();
 										}
 									}.execute();
-									
-									
 								}else{
 									BaseUtils.toast("无法连接网络");
 								}

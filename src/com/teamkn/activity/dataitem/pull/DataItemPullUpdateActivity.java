@@ -61,6 +61,7 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
     private void api_load_list(){
     	if(BaseUtils.is_wifi_active(this)){
     		new TeamknAsyncTask<Void, Void, Void>(DataItemPullUpdateActivity.this,"正在加载中") {
+				@SuppressWarnings("unchecked")
 				@Override
 				public Void do_in_background(Void... params) throws Exception {
 					System.out.println(dataList.server_data_list_id +"  :  "+ committer_id);
@@ -152,8 +153,8 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 		startActivityForResult(intent, RequestCode.BACK);
 	}
 	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		super.startActivityForResult(intent, requestCode);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == Activity.RESULT_OK){
 			return;
 		}

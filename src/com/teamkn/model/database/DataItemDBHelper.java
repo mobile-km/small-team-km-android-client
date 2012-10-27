@@ -89,6 +89,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	      while (cursor.moveToNext()) {
 	    	  DataItem datalist = build_by_cursor(cursor);
 	    	  dataItems.add(datalist);
+	    	  System.out.println("all  =  "+datalist.toString());
 	      }
 	      cursor.close();
 	      db.close();
@@ -129,6 +130,25 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    db.close();
 	    return dataItem;
 	  }
+	  public static DataItem find_by_seed(String seed){
+			DataItem dataItem;
+		    SQLiteDatabase db = get_read_db();
+		    Cursor cursor = db.query(Constants.TABLE_DATA_ITEMS, get_columns(),
+		        Constants.TABLE_DATA_ITEMS_SEED + " = ? ", 
+		        new String[]{seed},null, null, null);
+		
+		    boolean has_value = cursor.moveToFirst();
+		    if(has_value){
+		    	dataItem = build_by_cursor(cursor);
+		    }else{
+		    	dataItem = DataItem.NIL_DATA_ITEM;
+		    }
+		    System.out.println("   d  "  +  dataItem.id);
+		    cursor.close();
+		    db.close();
+		    return dataItem;
+		  }
+	  
 	  public static DataItem find(String title,int data_list_id){
 		DataItem dataItem;
 	    SQLiteDatabase db = get_read_db();

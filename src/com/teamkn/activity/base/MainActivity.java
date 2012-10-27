@@ -19,7 +19,6 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -41,7 +40,6 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.Logic.TeamknPreferences;
-import com.teamkn.activity.base.slidingmenu.ScrollLayout;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.activity.datalist.SearchDataActivity;
@@ -515,7 +513,8 @@ public class MainActivity extends TeamknBaseActivity {
 					RequestCode.data_list_public = "false";
 					set_title();
 //					load_data_list();
-					load_list();
+//					load_list();
+					load_data_list_or_watch(RequestCode.data_list_public);
 					break;
 				case 1:
 					RequestCode.data_list_public = "true";

@@ -13,16 +13,11 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.MainActivity.RequestCode;
-import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.User;
-import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemPullAdapter;
 
@@ -60,6 +55,9 @@ public class DataItemPullListActivity extends TeamknBaseActivity{
 			public void on_success(List<User> result) {
 				if(userList!=null && userList.size()>0){
 					load_listview();
+				}else{
+					BaseUtils.toast("处理完成");
+					DataItemPullListActivity.this.finish();
 				}
 			}
 		}.execute();
@@ -95,9 +93,7 @@ public class DataItemPullListActivity extends TeamknBaseActivity{
 		}
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_LIST:
-//			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
-//					+ RequestCode.CREATE_DATA_LIST);
-//			load_listview();
+			api_load_list();
 			break;
 		}
 	}

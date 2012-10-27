@@ -14,6 +14,7 @@ import com.teamkn.activity.dataitem.pull.DataItemTermWiseUpdateActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.DataItem;
+import com.teamkn.model.database.DataItemDBHelper;
 
 public class DataItemTermWiseUpdateAdapter extends TeamknBaseAdapter<DataItem>{
 	Context context;
@@ -57,24 +58,7 @@ public class DataItemTermWiseUpdateAdapter extends TeamknBaseAdapter<DataItem>{
 				view_holder.data_item_update_iv.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mi_cut));
 				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.red));
 			}else if(item.getOperation().equals(DataItemTermWiseUpdateActivity.RequestCode.UPDATE) ){  // 修改
-//				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.1f);
-//		    	alphaAnimation.setDuration(2000);
-//		    	alphaAnimation.setFillEnabled(true);
-////		    	alphaAnimation.setFillBefore(true);
-//		    	view_holder.data_item_title_tv.startAnimation(alphaAnimation);
-//		    	alphaAnimation.setAnimationListener(new AnimationListener() {
-//					@Override
-//					public void onAnimationStart(Animation animation) {	
-//						view_holder.data_item_title_tv.setText("修改之前。。。。。。。");
-//					}
-//					@Override
-//					public void onAnimationRepeat(Animation animation) {
-//					}
-//					@Override
-//					public void onAnimationEnd(Animation animation) {
-						view_holder.data_item_title_tv.setText(item.title);
-//					}
-//				});
+				view_holder.data_item_title_tv.setText(item.title);
 				view_holder.data_item_update_iv.setVisibility(View.GONE);
 				view_holder.data_item_rl.setBackgroundColor(context.getResources().getColor(R.color.gray));
 			}

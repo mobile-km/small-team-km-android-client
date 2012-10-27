@@ -6,6 +6,9 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +44,8 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	DataList dataList_origin;
 	
 	List<DataItem> dataItems;
+	List<DataItem> recordItems;
+	
 	public static DataItem dataItem;
 	int committer_id;
 	
@@ -100,48 +105,51 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 			BaseUtils.toast("无法连接网络");
 		}
 	}
-	private List<DataItem> updateOrInsert_dataItem(DataItem dataItem){
+	private List<DataItem> updateOrInsert_dataItem(DataItem data_Item){
+		recordItems = dataItems;
 		List<DataItem> new_dataItems = new ArrayList<DataItem>();
-		if(dataItem.getOperation().equals(RequestCode.CREATE)){		
-		}
 		//dataItems.add(dataItem);
 		// 修改
 		for(int i = 0 ; i < dataItems.size() ; i++){
-			if(dataItem.seed.equals(dataItems.get(i).seed)){
+			if(data_Item.seed.equals(dataItems.get(i).seed)){
 				
-				System.out.println(" update or remove " + dataItem.toString());
-				if(dataItem.getOperation().equals(RequestCode.REMOVE)){
+				System.out.println(" update or remove " + data_Item.toString());
+				if(data_Item.getOperation().equals(RequestCode.REMOVE)){
 					DataItem dataItem2 = dataItems.get(i);
 					dataItem2.setOperation(RequestCode.REMOVE);
-					DataItemDBHelper.delete_by_seed(dataItems.get(i).seed);
 					new_dataItems.add(dataItem2);
-				}else{
-					new_dataItems.add(dataItem);
-				}
-				
+				}else if(data_Item.getOperation().equals(RequestCode.UPDATE)){
+					new_dataItems.add(data_Item);
+				}	
 			}else{
-				System.out.println(" no change " + dataItem.toString());
 				new_dataItems.add(dataItems.get(i));
 			}
 		}
-		if(dataItem.getOperation().equals(RequestCode.CREATE)){
-			System.out.println(" create " + dataItem.toString());
-			new_dataItems.add(insert_data_item(dataItem), dataItem);
-//			new_dataItems.add(dataItem);
-			
+		if(data_Item.getOperation().equals(RequestCode.CREATE)){
+			System.out.println(" create " + data_Item.toString());
+			new_dataItems.add(insert_data_item(data_Item, new_dataItems), data_Item );
 		}
+//		for(DataItem item : dataItems){
+//			System.out.println("item : " + item.toString());
+//		}
+//		
+//		System.out.println("data_Item : "+ data_Item.toString());
+//		System.out.println("dataItem : " + dataItem.toString());
+		
 		dataItems = new_dataItems;
 		return dataItems;
 	}
 	
-	private int insert_data_item(DataItem item){
+	private int insert_data_item(DataItem item,List<DataItem> new_dataItems){
 		int result = 0 ;
 		for(int i = 0 ;i < seeds.length ;i ++){
 			if(seeds[i] .equals(item.seed)){
-				String before_seed = seeds[i-1];
-				for(int j = 0 ; j < dataItems.size() ; j++){
-					if(dataItems.get(j).seed.equals(before_seed)){
-						result = j+1;
+				if(i!=0){
+					String before_seed = seeds[i-1];
+					for(int j = 0 ; j < new_dataItems.size() ; j++){
+						if(new_dataItems.get(j).seed.equals(before_seed)){
+							return result = j+1;
+						}
 					}
 				}
 			}
@@ -149,11 +157,40 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		return result;
 	}
 	
-	private void load_list_view() {
-		adapter = new DataItemTermWiseUpdateAdapter(this);
+	private void load_list_view() {	
 		try {
-			adapter.add_items(dataItems);
-			list_view.setAdapter(adapter);
+//			recordItems;
+			if(dataItem.getOperation().equals(RequestCode.UPDATE)){
+				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.1f);
+		    	alphaAnimation.setDuration(2000);
+		    	alphaAnimation.setFillEnabled(true);
+//		    	alphaAnimation.setFillBefore(true);
+		    	list_view.startAnimation(alphaAnimation);
+		    	alphaAnimation.setAnimationListener(new AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {	
+						adapter = new DataItemTermWiseUpdateAdapter(DataItemTermWiseUpdateActivity.this);
+						adapter.add_items(recordItems);
+						list_view.setAdapter(adapter);
+						adapter.notifyDataSetChanged();
+					}
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+					}
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						adapter = new DataItemTermWiseUpdateAdapter(DataItemTermWiseUpdateActivity.this);
+						adapter.add_items(dataItems);
+						list_view.setAdapter(adapter);
+						adapter.notifyDataSetChanged();
+					}
+				});	
+			}else{
+				adapter = new DataItemTermWiseUpdateAdapter(DataItemTermWiseUpdateActivity.this);
+				adapter.add_items(dataItems);
+				list_view.setAdapter(adapter);
+				adapter.notifyDataSetChanged();
+			}
 //			adapter.
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,11 +202,12 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 			is_first = false;
 			progressBar.setMax(next_commits_count);
 		}
-		progressBar.setProgress(next_commits_count);
+		progressBar.setProgress(count_forked-next_commits_count);
 		if(next_commits_count==0){
-			this.finish();
+//			this.finish();
 			Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
 			intent.putExtra("data_list_id", dataList_origin.id);
+			intent.putExtra("data_list_public", "fork");
 			startActivity(intent);
 		}
 	}
