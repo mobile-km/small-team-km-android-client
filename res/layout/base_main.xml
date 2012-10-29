@@ -222,6 +222,7 @@
   >
       <ListView
           android:id="@+id/data_list"
+          android:paddingTop="5dp"
           style="@style/no_padding_body"
           android:divider="#00000000"
           android:descendantFocusability="beforeDescendants"

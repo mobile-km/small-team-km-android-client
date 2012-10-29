@@ -176,15 +176,16 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
 					view_holder.onClick(item,go_watch);
 				}
 			});
-            if(!isReading){
-            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
-            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
-            	tp.setFakeBoldText(true);
-            }else{
+//            if(!isReading){
+//            if(false){
+//            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
+//            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
+//            	tp.setFakeBoldText(true);
+//            }else{
             	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.gainsboro));
             	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
             	tp.setFakeBoldText(false);
-            }
+//            }
         }
     }
     

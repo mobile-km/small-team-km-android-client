@@ -16,12 +16,13 @@ import com.teamkn.model.base.Constants;
 
 public class UserDBHelper extends BaseModelDBHelper {
   public static void create(int user_id,
-      String user_name, byte[] user_avatar, long server_created_time, long server_updated_time){
+      String user_name, byte[] user_avatar, String avatar_url , long server_created_time, long server_updated_time){
     SQLiteDatabase db = get_write_db();
     ContentValues values = new ContentValues();
     values.put(Constants.TABLE_USERS__USER_ID,user_id);
     values.put(Constants.TABLE_USERS__USER_NAME,user_name);
     values.put(Constants.TABLE_USERS__USER_AVATAR,user_avatar);
+    values.put(Constants.TABLE_USERS__AVATAR_URL,avatar_url);
     values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_created_time);
     values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,server_updated_time);
     db.insert(Constants.TABLE_USERS, null, values);
@@ -33,6 +34,7 @@ public class UserDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_USERS__USER_ID,user.user_id);
 	    values.put(Constants.TABLE_USERS__USER_NAME,user.user_name);
 	    values.put(Constants.TABLE_USERS__USER_AVATAR,user.user_avatar);
+	    values.put(Constants.TABLE_USERS__AVATAR_URL,user.avatar_url);
 	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_created_time);
 	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_updated_time);
 	    if(find_by_server_user_id(user.user_id).user_name==null || find_by_server_user_id(user.user_id).user_name.equals("")){
@@ -55,8 +57,7 @@ public class UserDBHelper extends BaseModelDBHelper {
         e.printStackTrace();
       }
     }
-    
-    create(user_id,user_name,user_avatar,server_created_time,server_updated_time);
+    create(user_id,user_name,user_avatar,user_avatar_url,server_created_time,server_updated_time);
   }
   public static void updateAccount(int user_id , String user_name,String user_avatar_url){
 	  SQLiteDatabase db = get_write_db();  
@@ -75,6 +76,7 @@ public class UserDBHelper extends BaseModelDBHelper {
 	    ContentValues values = new ContentValues();
 	    values.put(Constants.TABLE_USERS__USER_NAME,user.user_name);
 	    values.put(Constants.TABLE_USERS__USER_AVATAR,user.user_avatar);
+	    values.put(Constants.TABLE_USERS__AVATAR_URL,user.avatar_url);
 	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_created_time);
 	    values.put(Constants.TABLE_USERS__SERVER_CREATED_TIME,user.server_updated_time);
 	    
@@ -154,9 +156,10 @@ public class UserDBHelper extends BaseModelDBHelper {
     int user_id = cursor.getInt(1);
     String user_name = cursor.getString(2);
     byte[] user_avatar = cursor.getBlob(3);
-    long server_created_time = cursor.getLong(4);
-    long server_updated_time = cursor.getLong(5);
-    return new User(id,user_id,user_name,user_avatar,server_created_time,server_updated_time);
+    String avatar_url = cursor.getString(4);
+    long server_created_time = cursor.getLong(5);
+    long server_updated_time = cursor.getLong(6);
+    return new User(id,user_id,user_name,user_avatar,avatar_url,server_created_time,server_updated_time);
   }
 
   private static String[] get_columns() {
@@ -165,6 +168,7 @@ public class UserDBHelper extends BaseModelDBHelper {
         Constants.TABLE_USERS__USER_ID,
         Constants.TABLE_USERS__USER_NAME,
         Constants.TABLE_USERS__USER_AVATAR,
+        Constants.TABLE_USERS__AVATAR_URL,
         Constants.TABLE_USERS__SERVER_CREATED_TIME,
         Constants.TABLE_USERS__SERVER_UPDATED_TIME
     };

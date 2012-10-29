@@ -50,8 +50,9 @@ import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.model.database.WatchDBHelper;
 import com.teamkn.widget.adapter.DataItemListAdapter;
 public class DataItemListActivity extends TeamknBaseActivity {
-	public static boolean is_fork = false;//判断是否是在推送
+//	public static boolean is_fork = false;//判断是否是在推送
 	public static boolean update_title =false; //判断data_list 列表的数据是否有修改
+	public static boolean is_back = false;
 	static class RequestCode {
 	    final static int CREATE_DATA_ITEM = 0; 
 	    final static int BACK = 9;
@@ -84,7 +85,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	Button data_item_back_button;
 	
 //	Button data_item_list_guide_button;
-	RelativeLayout data_item_watch_rl; //加书签的rl
 	TextView data_item_original_user_name;//原始的作者名
 	
 	ImageView data_item_push_iv;
@@ -109,61 +109,68 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_list);
+		//获取intent中的传递的值
 		Intent intent = getIntent();
-		create_data_item = intent.getBooleanExtra("create_data_item", false);
-		Integer data_list_id = intent.getIntExtra("data_list_id", -1);
-		update_title = intent.getBooleanExtra("is_update", false);
+		create_data_item = intent.getBooleanExtra("create_data_item", false);//是否是创建dataItem返回
+		Integer data_list_id = intent.getIntExtra("data_list_id", -1);//返回dataList的本地id
+		data_list_public = intent.getStringExtra("data_list_public");//返回dataList的中公开，自己私有，协作列表中的一个
+		update_title = intent.getBooleanExtra("is_update", false);//返回dataList的的title是否修改
+		is_back = false; //默认没有返回
 		dataList = DataListDBHelper.find(data_list_id);
-		load_dataList = dataList;
-		data_list_public = intent.getStringExtra("data_list_public");
+		load_dataList = dataList; //记载进入界面时dataList
+		
+		//判断是否是当前用户的列表 或者 是协作列表
 		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id || data_list_public.equals("fork")){
 			is_curretn_user_data_list  = true;
 		}else{
 			is_curretn_user_data_list  = false;
-		}
-		
+		}	
+		//加载ui元素以及数据
 		load_UI();
-//		load_list();
-		DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
-		
-//		if((data_list_public.equals("true") 
-//				|| data_list_public.equals("watch") 
-//				|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-//			)&& dataList.kind.equals(MainActivity.RequestCode.STEP)
-//			 && reading.id<=0){
-//			show_step = true;
-//		}else{
-//			show_step = false;
-//		}
-		System.out.println("show_step = " + show_step + " : " + reading.toString());
-//		load_step_or_list(show_step);
 		load_data_item_list();
+		//用于控制不同分辨率的问题 item 的高度控制
 		DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         screen[0] = dm.widthPixels;
         screen[1] = dm.heightPixels;
 	}
 	private void load_UI(){
-		data_list_user_name_tv = (TextView)findViewById(R.id.data_list_user_name_tv);
-		data_list_user_name_tv.setText(UserDBHelper.find(dataList.user_id).user_name+"的列表");
+		//top的中间显示当前是谁的列表
+		data_list_user_name_tv = (TextView)findViewById(R.id.data_list_user_name_tv); 
+		String user_name_sub = UserDBHelper.find(dataList.user_id).user_name;
+		if(user_name_sub.length()>7){
+			user_name_sub = user_name_sub.substring(0, 7) + "..";
+		}
+		data_list_user_name_tv.setText(user_name_sub+"的列表");
+		//控制显示返回按钮的显示分为公共和自己
 		go_back_button = (Button)findViewById(R.id.go_back_button);
 		if(data_list_public.equals("true")){
-			go_back_button.setText("公共列表");
+			go_back_button.setText("公共");
 		}else if(data_list_public.equals("false")){
 //			go_back_button.setText(current_user().name);
-			go_back_button.setText("我的列表");
+			go_back_button.setText("返回");
+		}else if(data_list_public.equals("fork")){
+			go_back_button.setText("协作");
+		}else if(data_list_public.equals("watch")){
+			go_back_button.setText("书签");
 		}
+		//加载收藏的按钮的显示以及触发
 		load_watch_UI();
-		data_list_title_rl=(RelativeLayout)findViewById(R.id.data_list_title_rl);
-		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);
+		//title
+		data_list_title_rl=(RelativeLayout)findViewById(R.id.data_list_title_rl);//dataList的title文本RelativeLayout
+		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);//dataList的title文本TextView
 		data_list_title_tv.setText(dataList.title);
 		data_list_title_tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
 		data_list_title_tv.getPaint().setFakeBoldText(true);//加粗
+		//加载创建按钮
 		data_item_add_iv = (ImageView)findViewById(R.id.data_item_add_iv);
+		//加载编辑title按钮
 		data_list_image_iv_edit = (ImageView) findViewById(R.id.data_list_image_iv_edit);
+		//如果是当前用户 如果是则显示增加按钮和编辑title按钮 否则 不显示
 		if(is_curretn_user_data_list){
 			data_item_add_iv.setVisibility(View.VISIBLE);
 			data_list_image_iv_edit.setVisibility(View.VISIBLE);
+			//点击title触发背景颜色变化
 			data_list_image_iv_edit.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -177,6 +184,10 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					return false;
 				}
 			});
+			if (data_list_public.equals("fork")) {
+				data_list_image_iv_edit.setVisibility(View.GONE);
+			}
+			//点击title触发事件
 			data_list_image_iv_edit.setOnClickListener(new android.view.View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -188,114 +199,170 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			data_list_image_iv_edit.setVisibility(View.GONE);
 			data_item_add_iv.setVisibility(View.GONE);
 		}
-		
+		// 列表没有数据的LinearLayout
 		list_no_data_show = (LinearLayout)findViewById(R.id.list_no_data_show);
-		data_item_watch_rl = (RelativeLayout)findViewById(R.id.data_item_watch_rl);
+		// 列表显示的方式 分为 步骤 和 列表 两种方法显示
 		// data_item list 列表
 		tlv = (ListViewInterceptor) findViewById(R.id.list);
 		// data_item  step 列表
 		data_item_step_rl = (RelativeLayout)findViewById(R.id.data_item_step_rl);
-		data_item_step_tv = (TextView)findViewById(R.id.data_item_step_tv);
-		data_item_step_text_tv = (TextView)findViewById(R.id.data_item_step_text_tv);
-		data_item_step_content_text_tv = (TextView)findViewById(R.id.data_item_step_content_text_tv);
+		data_item_step_tv = (TextView)findViewById(R.id.data_item_step_tv);//步骤显示的步骤text
+		data_item_step_text_tv = (TextView)findViewById(R.id.data_item_step_text_tv);//步骤显示的步骤title
+		data_item_step_content_text_tv = (TextView)findViewById(R.id.data_item_step_content_text_tv);//步骤显示的步骤内容
+		//步骤显示的以清单模式查看
 		data_item_list_approach_button = (Button)findViewById(R.id.data_item_list_approach_button);
-		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); 
-		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);	
-		
+		data_item_next_button = (Button)findViewById(R.id.data_item_next_button); //下一步按钮
+		data_item_back_button = (Button)findViewById(R.id.data_item_back_button);//上一步按钮
+		//在协作列表时 显示原有者的名字
 		data_item_original_user_name = (TextView)findViewById(R.id.data_item_original_user_name);
-		
+		// 加载推送的按钮
 		data_item_push_iv = (ImageView)findViewById(R.id.data_item_push_iv);
-		load_push_iv();
-	}
-	private void load_push_iv(){
-		is_fork = false;
-		boolean forked_from_id = DataListDBHelper.just_fored(dataList.server_data_list_id);
-		if((data_list_public.equals("true")||data_list_public.equals("watch")) 
-				&& !is_curretn_user_data_list 
-				&& !forked_from_id){
-			data_item_push_iv.setVisibility(View.VISIBLE);
-		}else if((data_list_public.equals("true")||data_list_public.equals("watch")) 
-				&& !is_curretn_user_data_list  && forked_from_id){
-			data_item_push_iv.setVisibility(View.VISIBLE);
-			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_fork_yes));
-			data_item_push_iv.setClickable(false);
-		}else if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
-			data_item_push_iv.setVisibility(View.VISIBLE);
-			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.sym_action_chat));
-		}else{
-			data_item_push_iv.setVisibility(View.GONE);
-		}
+		data_item_push_iv.setVisibility(View.GONE);
 		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//if是 当前用户，并且被推送了   显示处理推送按钮的处理事件
 				if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
 					Intent intent = new Intent(DataItemListActivity.this,DataItemPullListActivity.class);
 					intent.putExtra("data_list_id", dataList.id);
-//					startActivity(intent);
 					startActivityForResult(intent, RequestCode.BACK);
 				}else{
+					//推送操作
 					fork_data_list();
 				}				
 			}
 		});
+	}
+	//加载收藏的按钮的显示以及触发
+		private void load_watch_UI(){
+			data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
+			//判断当前列表是否被收藏以及界面图片显示
+			Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
+			if(watch.id<=0){
+				data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
+			}else{	
+				data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
+			}
+			data_list_image_iv_watch.setOnClickListener(new android.view.View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
+					//判断是添加收藏还是移除收藏
+					if(watch.id<=0){
+						watch_data_list(true);
+					}else{
+						watch_data_list(false);
+					}
+					//在页面界面有变化时就可以当做修改过界面（title）
+					update_title=true;
+				}
+			});
+		}
+		//添加收藏 或者 移除收藏
+		private void watch_data_list(final boolean watch_boolean){
+			String msg = "";
+			if(watch_boolean){
+				msg = "正添加书签";
+			}else{
+				msg = "正移除书签";
+			}
+			new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,msg) {
+				@Override
+				public Void do_in_background(Void... params) throws Exception {
+					if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+						Watch watch_update = new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id);
+						if(watch_boolean){
+							WatchDBHelper.createOrUpdate(watch_update);
+						}else{
+							WatchDBHelper.delete(watch_update);
+						}
+						HttpApi.WatchList.watch(dataList, watch_boolean);
+					}else{
+						BaseUtils.toast("无法连接到网络，请检查网络配置");
+					}
+					return null;
+				}
+				@Override
+				public void on_success(Void result) {
+					//请求成功后，图片变化显示
+					if(watch_boolean){
+						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
+					}else{	
+						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
+					}
+					if(watch_boolean){
+						BaseUtils.toast("成功加入书签 ^_^");
+					}else{
+						BaseUtils.toast("移除书签成功 ^_^");
+					}
+				}	
+			}.execute();
+	}
+	// 加载推送的按钮
+	private void load_push_iv(){
+//		is_fork = false;
+		//判断是否有推送者
+		boolean forked_from_id = DataListDBHelper.just_fored(dataList.server_data_list_id);
+		//在公共列表中 不是当前的用户 没有被推送的list 显示推送按钮
+		if((data_list_public.equals("true")||data_list_public.equals("watch")) 
+				&& !is_curretn_user_data_list 
+				&& !forked_from_id){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+			System.out.println("1");
+		//在公共列表中 不是当前的用户  被推送的list  显示已经推送按钮
+		}else if((data_list_public.equals("true")||data_list_public.equals("watch")) 
+				&& !is_curretn_user_data_list  && forked_from_id){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_fork_yes));
+//			data_item_push_iv.post(new Thread)
+			data_item_push_iv.setClickable(false);
+			data_item_push_iv.setFocusable(false);
+			System.out.println("2");
+		//当前用户，并且被推送了   显示处理推送按钮
+		}else if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
+			data_item_push_iv.setVisibility(View.VISIBLE);
+			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.sym_action_chat));
+			System.out.println("3");
+		}else{
+//			data_item_push_iv.setVisibility(View.GONE);
+			data_item_push_iv.setClickable(false);
+			data_item_push_iv.setFocusable(false);
+			System.out.println("4");
+		}	
 	}		
+	//推送操作
 	private void fork_data_list(){
 		if(BaseUtils.is_wifi_active(DataItemListActivity.this)){
 			new TeamknAsyncTask<Void, Void, DataList>(DataItemListActivity.this,"正在加载") {
 				@Override
 				public DataList do_in_background(Void... params) throws Exception {
 					DataList dataList = HttpApi.DataList.fork(load_dataList);
-					
-					HttpApi.DataItem.pull(dataList.server_data_list_id);
-					
+					HttpApi.DataItem.pull(dataList);
 					return dataList;
 				}
 				@Override
 				public void on_success(DataList result) {
-					System.out.println("");
 					if(result!=null){
-						is_fork = true;
-						dataList = result;
-						load_data_item_list();
-						try {
-							dataItems = DataItemDBHelper.all(dataList.id);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						data_item_push_iv.setVisibility(View.VISIBLE);
 						data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_fork_yes));
 						data_item_push_iv.setClickable(false);
-						if(dataItems.size()==0){
-							tlv.setVisibility(View.GONE);
-							data_item_step_rl.setVisibility(View.GONE);
-							data_item_list_approach_button.setVisibility(View.GONE);
-							list_no_data_show.setVisibility(View.VISIBLE);
+						data_item_push_iv.setFocusable(false);
+						
+						MainActivity.RequestCode.data_list_public = "fork";
+						data_list_public = MainActivity.RequestCode.data_list_public;//返回dataList的中公开，自己私有，协作列表中的一个
+						dataList = result;
+						load_dataList = dataList; //记载进入界面时dataList
+						
+						//判断是否是当前用户的列表 或者 是协作列表
+						if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id || data_list_public.equals("fork")){
+							is_curretn_user_data_list  = true;
 						}else{
-							load_step_or_list(show_step);
-							list_no_data_show.setVisibility(View.GONE);
-							data_item_add_iv.setVisibility(View.VISIBLE);
-							if(show_step){
-								if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
-									data_item_list_approach_button.setVisibility(View.VISIBLE);
-								}else{
-									data_item_list_approach_button.setVisibility(View.GONE);
-								}
-								data_item_list_approach_button.setText("以清单模式查看");
-								load_step();
-							}else{
-								// data_item list 列表
-								tlv = (ListViewInterceptor) findViewById(R.id.list);
-								is_curretn_user_data_list = true;
-								load_list();
-								if((data_list_public.equals("true")
-										|| data_list_public.equals("watch") || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id) 
-										&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
-									data_item_list_approach_button.setVisibility(View.VISIBLE);
-									data_item_list_approach_button.setText("以向导模式查看");
-								}else{	
-									data_item_list_approach_button.setVisibility(View.GONE);
-								}
-							}
-						}
+							is_curretn_user_data_list  = false;
+						}	
+						//加载ui元素以及数据
+						load_UI();
+						load_data_item_list();	
+						update_title = true;
 					}
 				}
 			}.execute();
@@ -303,6 +370,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			BaseUtils.toast("无法连接网络");
 		}
 	}
+	//点击title触发事件
 	private void data_list_title_edit(){
 		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);
 		builder.setTitle("请修改");
@@ -368,67 +436,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		});
 		builder.show();
 	}
-	private void load_watch_UI(){
-		data_list_image_iv_watch = (ImageView)findViewById(R.id.data_list_image_iv_watch);
-		Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
-		System.out.println("watch.id = " + watch.id);
-		if(watch.id<=0){
-			data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
-		}else{	
-			data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
-		}
-		data_list_image_iv_watch.setOnClickListener(new android.view.View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id));
-				System.out.println(watch.toString());
-				if(watch.id<=0){
-					watch_data_list(true);
-				}else{
-					watch_data_list(false);
-				}
-				update_title=true;
-			}
-		});
-	}
-	private void watch_data_list(final boolean watch_boolean){
-		String msg = "";
-		if(watch_boolean){
-			msg = "正添加书签";
-		}else{
-			msg = "正移除书签";
-		}
-		new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,msg) {
-			@Override
-			public Void do_in_background(Void... params) throws Exception {
-				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-					Watch watch_update = new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id);
-					if(watch_boolean){
-						WatchDBHelper.createOrUpdate(watch_update);
-					}else{
-						WatchDBHelper.delete(watch_update);
-					}
-					HttpApi.WatchList.watch(dataList, watch_boolean);
-				}else{
-					BaseUtils.toast("无法连接到网络，请检查网络配置");
-				}
-				return null;
-			}
-			@Override
-			public void on_success(Void result) {
-				if(watch_boolean){
-					data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_yes));
-				}else{	
-					data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.mi_collect_no));
-				}
-				if(watch_boolean){
-					BaseUtils.toast("成功加入书签 ^_^");
-				}else{
-					BaseUtils.toast("移除书签成功 ^_^");
-				}
-			}	
-		}.execute();
-	}
+	//隐藏的是步骤还是列表
 	private void load_step_or_list(boolean show_step){
 		if(show_step){
 			data_item_step_rl.setVisibility(View.VISIBLE);
@@ -445,7 +453,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			public List<DataItem> do_in_background(Void... params)
 					throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-					is_reading = HttpApi.DataItem.pull(dataList.server_data_list_id);
+					is_reading = HttpApi.DataItem.pull(dataList);
 					dataItems = DataItemDBHelper.all(dataList.id);
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
@@ -454,10 +462,17 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 			@Override
 			public void on_success(final List<DataItem> dataItems) {
+
+				dataList = DataListDBHelper.find_by_server_data_list_id(dataList.server_data_list_id);
+				System.out.println("dataList="+dataList.toString());
+
+				if(dataList.has_commits.equals("false") && is_back==true ){
+					update_title = true;
+				}
 				if(!is_reading){
 					update_title = true;
 				}
-				load_push_iv();
+				
 				//判断是否是 要显示 步骤列表
 				DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
 				if((data_list_public.equals("true") 
@@ -481,8 +496,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}else{
 					data_item_original_user_name.setVisibility(View.GONE);
 				}
-				
-				data_item_watch_rl.setVisibility(View.VISIBLE);
 				//判断列表是否有数据
 				if(dataItems.size()==0){
 					tlv.setVisibility(View.GONE);
@@ -492,7 +505,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}else{
 					load_step_or_list(show_step);
 					list_no_data_show.setVisibility(View.GONE);
-					//判断是以那种列表展示形式 列出数据
+					//判断是以那种列表展示形式 列出数据a
 					if(show_step){
 						if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
 							data_item_list_approach_button.setVisibility(View.VISIBLE);
@@ -513,6 +526,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 						}
 					}
 				}
+				load_push_iv();
 			}
 		}.execute();
 	}
@@ -690,21 +704,15 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		if (resultCode == Activity.RESULT_OK) {
 			return;
 		}
-		
-		
-		
+
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_ITEM:
 			load_data_item_list();
 			break;
 		case RequestCode.BACK:
-			dataList = DataListDBHelper.find(dataList.id);
 			load_UI();
+			is_back = true;
 			load_data_item_list();
-			
-			if(dataList.has_commits.equals("false")){
-				update_title = true;
-			}
 			break;
 		}
 	}
@@ -824,8 +832,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				break;
 			case 3:// 删除当前子项
 				AlertDialog.Builder builder1 = new AlertDialog.Builder(
-						DataItemListActivity.this);
-
+						DataItemListActivity.this);				
 				builder1.setTitle("确定要删除吗");
 				builder1.setPositiveButton("确定",
 						new AlertDialog.OnClickListener() {

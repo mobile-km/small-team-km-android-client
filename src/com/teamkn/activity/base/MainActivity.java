@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -18,14 +22,19 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -211,7 +220,6 @@ public class MainActivity extends TeamknBaseActivity {
 		});
 		set_title();
 		super.onResume();
-//		onCreate(null);
 	}
     private void set_title(){
     	if(RequestCode.data_list_public.equals("true")){
@@ -219,19 +227,21 @@ public class MainActivity extends TeamknBaseActivity {
     	}else if(RequestCode.data_list_public.equals("watch")){
     		user_name_tv.setText("我的书签");
     	}else if(RequestCode.data_list_public.equals("false")){
-    		user_name_tv.setText(current_user().name + "的列表");
+    		String user_name_sub = current_user().name;
+    		if(user_name_sub.length()>14){
+    			user_name_sub = user_name_sub.substring(0, 14) + "..";
+    		}
+    		user_name_tv.setText(user_name_sub + "的列表");
     	}else if(RequestCode.data_list_public.equals("fork")){
-    		user_name_tv.setText("协作列表");
+    		user_name_tv.setText("列表协作");
     	}
     }
     private void load_data_list_or_watch(String watch_or_public){
-    	
     	if (BaseUtils.is_wifi_active(MainActivity.this)) {
 	    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
 				@Override
 				public List<DataList> do_in_background(Void... params)
 						throws Exception {
-					    // datalists = NoteDBHelper.all(true);
 						if(RequestCode.data_list_public.equals("true")){
 							HttpApi.DataList.public_timeline(RequestCode.now_page, 100);
 						}else if(RequestCode.data_list_public.equals("false")){
@@ -256,6 +266,7 @@ public class MainActivity extends TeamknBaseActivity {
 	private void load_list() {
 		request_pageselected();
 		data_list = (ListView) layout.findViewById(R.id.data_list);
+		
 		dataListAdapter = new DataListAdapter(MainActivity.this);
 		try {
 			if(RequestCode.data_list_public.equals("watch")){
@@ -272,24 +283,23 @@ public class MainActivity extends TeamknBaseActivity {
 		dataListAdapter.add_items(datalists);
 		data_list.setAdapter(dataListAdapter);
 		dataListAdapter.notifyDataSetChanged();
-		
+		//注册上下文菜单
+	    registerForContextMenu(data_list);
+	    
 		data_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> list_view, View list_item,
 					int item_id, long position) {
-				System.out.println(item_id + " : " + position);
 				TextView info_tv = (TextView) list_item.findViewById(R.id.info_tv);
 				DataList item = (DataList) info_tv.getTag(R.id.tag_note_uuid);
 				Intent intent = new Intent(MainActivity.this,DataItemListActivity.class);
 				intent.putExtra("data_list_id",item.id);
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
-//				startActivity(intent);
 				System.out.println("mainactivity setonclick  = " +item.toString());
 				startActivityForResult(intent, RequestCode.SHOW_BACK);
 			}
 		});
 	}
-
 	// 处理其他activity界面的回调 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,17 +307,14 @@ public class MainActivity extends TeamknBaseActivity {
 		if (resultCode == Activity.RESULT_OK) {
 			return;
 		}
-		
 		switch (requestCode) {
 		case RequestCode.CREATE_DATA_LIST:
 			load_list();
-//			BaseUtils.toast("RequestCode.CREATE_DATA_ITEM    "
-//					+ RequestCode.CREATE_DATA_LIST);
 			break;
 		case RequestCode.SHOW_BACK:
-//			BaseUtils.toast(DataItemListActivity.update_title + "  RequestCode.CREATE_DATA_ITEM    "
-//			+ RequestCode.SHOW_BACK);	
+			System.out.println("DataItemListActivity.update_title " + DataItemListActivity.update_title);
 			if(DataItemListActivity.update_title ==true){
+				set_title();
 				load_list();
 			}
 		}
@@ -471,9 +478,8 @@ public class MainActivity extends TeamknBaseActivity {
             groupAdapter.add_items(groups);
             lv_group.setAdapter(groupAdapter);  
             // 创建一个PopuWidow对象  
-            popupWindow = new PopupWindow(view, 200, 240);  
-        }  
-  
+            popupWindow = new PopupWindow(view, 200, 300);  
+        }    
         // 使其聚集  
         popupWindow.setFocusable(true);  
         // 设置允许在外点击消失  
@@ -498,7 +504,7 @@ public class MainActivity extends TeamknBaseActivity {
                 - popupWindow.getWidth() / 2;  
         Log.i("coder", "xPos:" + xPos);  
   
-        popupWindow.showAsDropDown(parent, xPos-50, 0);  
+        popupWindow.showAsDropDown(parent, xPos-60, 0);  
   
         lv_group.setOnItemClickListener(new OnItemClickListener() {  
   
@@ -584,6 +590,69 @@ public class MainActivity extends TeamknBaseActivity {
 			}
 		}
 	}
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+		if(info.id!=-1){
+			menu.setHeaderTitle("弹出菜单");
+			menu.add(1,1,1,"查看");
+			final Integer id = (int) info.id;
+			if(datalists.get(id).user_id == UserDBHelper.find_by_server_user_id(current_user().user_id).id){
+				menu.add(1,2,2,"删除");
+			}
+//			menu.add(groupId, itemId, order, title)
+		}
+	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		case 1:
+			break;
+		case 2:
+			System.out.println(info.id);
+			final Integer id = (int) info.id;
+			System.out.println("onContextItemSelected = "+datalists.get(id).toString());
+			AlertDialog.Builder builder = new Builder(MainActivity.this);
+			builder.setTitle("确定要删除吗？");
+			builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new AlertDialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					remove_data_list(datalists.get(id),id);
+				}
+			});
+			builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), null);
+			builder.show();
+			break;
+		default:
+			break;
+		}
+		return super.onContextItemSelected(item);
+	}
+    private void remove_data_list(final DataList dataList,final int data_list_id){
+    	if(BaseUtils.is_wifi_active(this)){
+    		new TeamknAsyncTask<Void, Void, Boolean>(MainActivity.this,getResources().getString(R.string.now_deleting)) {
+				@Override
+				public Boolean do_in_background(Void... params)
+						throws Exception {
+					HttpApi.DataList.remove(dataList);
+					return true;
+				}
+				@Override
+				public void on_success(Boolean result) {
+					datalists.remove(data_list_id);
+					DataListDBHelper.remove_by_server_id(dataList);
+					dataListAdapter.remove_item(dataList);
+					dataListAdapter.notifyDataSetChanged();
+					BaseUtils.toast("删除成功");
+				}
+			}.execute();
+    	}else{
+    		BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+    	}
+    }
 	@Override
 	protected void onPause() {
 //		this.finish();

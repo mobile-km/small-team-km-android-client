@@ -122,7 +122,7 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 						throws Exception {
 					DataList api_dataList = null;
 					if(do_accept){
-						api_dataList=HttpApi.WatchList.accept_commits(dataList.server_data_list_id, committer_id);
+						api_dataList=HttpApi.WatchList.accept_commits(dataList.server_data_list_id, committer_id);	
 						DataItemDBHelper.delete_by_data_list_id(dataList.id);
 					}else{
 						api_dataList=HttpApi.WatchList.reject_commits(dataList.server_data_list_id, committer_id);
@@ -149,7 +149,6 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 		intent.putExtra("server_dataList_origin_id", dataList_origin.server_data_list_id);
 		intent.putExtra("committer_id",committer_id);
 		intent.putExtra("seeds", getDataItems_forked_Seeds());
-//		startActivity(intent);
 		startActivityForResult(intent, RequestCode.BACK);
 	}
 	@Override

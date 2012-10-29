@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,7 +37,9 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		
 	}
 	TextView data_list_title_tv;
+	
 	ListView list_view;
+	Button accept_button;
 	ProgressBar progressBar;
 	
 	String[] seeds;
@@ -64,6 +67,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		dataList_origin = DataListDBHelper.find_by_server_data_list_id(dataList_origin_id);
 		
 		committer_id = intent.getIntExtra("committer_id", -1);
+		is_first = true;
 		load_UI();
 	}
 	private void load_UI() {
@@ -71,6 +75,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		data_list_title_tv.setText(dataList_origin.title);
 		list_view = (ListView)findViewById(R.id.list_view);
 		api_load_list(RequestCode.GET);
+		accept_button = (Button)findViewById(R.id.accept_button);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		progressBar.setProgress(0);
 	}
@@ -95,8 +100,13 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 				@Override
 				public void on_success(DataItem result) {
 					set_progressBar(result.getNext_commits_count());
-					if(result.getTitle()!=null && result.getTitle()!=""){
+					if(result.getTitle()!=null && result.getTitle()!="" && !result.isConflict()){
+						accept_button.setClickable(true);
 						updateOrInsert_dataItem(result);
+						load_list_view();
+					}else if( result.isConflict()){
+						accept_button.setClickable(false);
+						accept_button.setBackgroundColor(getResources().getColor(R.color.antiquewhite));
 						load_list_view();
 					}
 				}
@@ -160,10 +170,11 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	private void load_list_view() {	
 		try {
 //			recordItems;
-			if(dataItem.getOperation().equals(RequestCode.UPDATE)){
+			if(dataItem.getOperation().equals(RequestCode.UPDATE) && dataItem.isConflict()!=true){
 				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.1f);
 		    	alphaAnimation.setDuration(2000);
 		    	alphaAnimation.setFillEnabled(true);
+//		    	alphaAnimation.setRepeatCount(3000);
 //		    	alphaAnimation.setFillBefore(true);
 		    	list_view.startAnimation(alphaAnimation);
 		    	alphaAnimation.setAnimationListener(new AnimationListener() {

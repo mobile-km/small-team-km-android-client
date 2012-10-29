@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.teamkn.model.DataItem;
+import com.teamkn.model.DataList;
 import com.teamkn.model.base.BaseModelDBHelper;
 import com.teamkn.model.base.Constants;
 
@@ -299,4 +300,20 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
 	}
+	public static void remove_old(List<DataItem> requestList,DataList dataList) throws Exception{
+		List<DataItem> oldList = all(dataList.id);
+		for(DataItem oldItem : oldList){
+			boolean has = false;
+			for(DataItem requstItem : requestList){
+				if(oldItem.server_data_item_id==requstItem.server_data_item_id){
+					has = true;
+					break;
+				}
+			}
+			if(!has){
+				delete(oldItem.id);
+			}
+		}
+	}
+	
 }

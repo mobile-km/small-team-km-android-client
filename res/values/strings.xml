@@ -78,7 +78,7 @@
     <string name="save_note_bn">保存</string>
     <string name="saving">正在保存...</string>
 
-
+    <string name="is_wifi_active_msg">无法连接网络</string>
     <!-- 显示照片页面 -->
     <string name="show_capture_image_back">返回</string>
     <!-- 选择收集册页面 -->
@@ -100,7 +100,8 @@
     <!-- 搜索联系人页面 -->
     <string name="search_contact_page_header">搜索联系人</string>
     <string name="search_contact">搜索</string>
-
+    
+    
     <!-- view.getTag(key,value) 中的 key -->
     <!-- 笔记列表项的 tag key -->
     <item type="id" name="tag_note_uuid"></item>

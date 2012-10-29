@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.Watch;
 import com.teamkn.model.base.BaseModelDBHelper;
@@ -26,6 +27,12 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.KEY_ID + " = ? ", new String[]{dataList.id+""});
 	    	System.out.println("update dataList= " + dataList.toString());
 	    }
+	    db.close();
+		return dataList;
+  }
+  public static DataList remove_by_server_id(DataList dataList){
+	    SQLiteDatabase db = get_write_db();  
+	    db.delete(Constants.TABLE_DATA_LISTS,Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
 	    db.close();
 		return dataList;
   }
@@ -264,4 +271,19 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_FORKED_FROM_ID,dataList.forked_from_id);
 		return values;
   }
+  public static void remove_old(List<DataList> requestList,String data_list_type,String data_list_public) throws Exception{
+		List<DataList> oldList = all(data_list_type,data_list_public);
+		for(DataList oldItem : oldList){
+			boolean has = false;
+			for(DataList requstItem : requestList){
+				if(oldItem.server_data_list_id==requstItem.server_data_list_id){
+					has = true;
+					break;
+				}
+			}
+			if(!has){
+				remove_by_server_id(oldItem);
+			}
+		}
+	}
 }

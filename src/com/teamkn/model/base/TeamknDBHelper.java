@@ -70,6 +70,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_USERS__USER_ID + " integer not null, " +
             Constants.TABLE_USERS__USER_NAME + " text not null, " +
             Constants.TABLE_USERS__USER_AVATAR + " blob, " + 
+            Constants.TABLE_USERS__AVATAR_URL + " text, " +
             Constants.TABLE_USERS__SERVER_CREATED_TIME + " long, " +
             Constants.TABLE_USERS__SERVER_UPDATED_TIME + " long);";
     

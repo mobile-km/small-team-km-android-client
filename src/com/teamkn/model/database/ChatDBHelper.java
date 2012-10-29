@@ -76,14 +76,14 @@ public class ChatDBHelper extends BaseModelDBHelper {
     int current_user_id = current_user.user_id;
     
     if(!UserDBHelper.is_exists(current_user_id)){
-      UserDBHelper.create(current_user.user_id, current_user.name, current_user.avatar, 0, 0);
+      UserDBHelper.create(current_user.user_id, current_user.name, current_user.avatar,current_user.avatar_url, 0, 0);
     }
     
     for(int server_user_id : server_user_id_list){
       if(!UserDBHelper.is_exists(server_user_id)){
         Contact contact = ContactDBHelper.find(current_user_id, server_user_id);
         UserDBHelper.create(contact.contact_user_id, contact.contact_user_name, 
-            contact.contact_user_avatar, contact.server_created_time, contact.server_updated_time);
+            contact.contact_user_avatar,null, contact.server_created_time, contact.server_updated_time);
       }
     }
     

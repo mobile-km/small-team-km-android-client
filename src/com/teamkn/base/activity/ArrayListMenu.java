@@ -28,7 +28,7 @@ public class ArrayListMenu {
 		list.add(map);
 		
 		map = new HashMap<String, Object>();
-		map.put("title", "列表协作");
+		map.put("title", "协作列表");
 		map.put("img", R.drawable.mi_fork_yes);
 		
 		list.add(map);
