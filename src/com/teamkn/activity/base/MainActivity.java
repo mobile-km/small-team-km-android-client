@@ -26,6 +26,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -36,6 +37,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -296,9 +298,38 @@ public class MainActivity extends TeamknBaseActivity {
 				intent.putExtra("data_list_id",item.id);
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
 				System.out.println("mainactivity setonclick  = " +item.toString());
-				startActivityForResult(intent, RequestCode.SHOW_BACK);
+				
+				boolean is_delete = false ;
+				if(RequestCode.data_list_public.equals("fork")){
+					is_delete = DataListDBHelper
+							.is_delete(HttpApi.DataList.deletForkList, item);
+				}else if(RequestCode.data_list_public.equals("watch")){
+					is_delete = DataListDBHelper
+							.is_delete(HttpApi.WatchList.deletWatchList, item);
+				}
+				if(is_delete){
+					showDialog(item);
+				}else{
+					startActivityForResult(intent, RequestCode.SHOW_BACK);
+				}
 			}
 		});
+	}
+	private void showDialog(final DataList dataList){
+		AlertDialog.Builder builder = new Builder(MainActivity.this);
+		builder.setTitle("请修改");
+		builder.setMessage("列表已经被原作者删除，是否删除该记录？");
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+		builder.setNegativeButton("取消", null);
+		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				DataListDBHelper.remove_by_server_id(dataList);
+				dataListAdapter.remove_item(dataList);
+				dataListAdapter.notifyDataSetChanged();
+			}
+		});
+		builder.show();
 	}
 	// 处理其他activity界面的回调 有要改进的地方 如 记忆从别的地方回来，还要回到上次加载的地方
 	@Override

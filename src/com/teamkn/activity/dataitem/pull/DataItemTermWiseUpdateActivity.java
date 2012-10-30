@@ -1,14 +1,21 @@
 package com.teamkn.activity.dataitem.pull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -23,6 +30,7 @@ import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
+import com.teamkn.pinyin4j.PinyinComparator;
 import com.teamkn.widget.adapter.DataItemTermWiseUpdateAdapter;
 
 public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
@@ -30,6 +38,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		public final static String CREATE = "CREATE";
 		public final static String UPDATE = "UPDATE";
 		public final static String REMOVE = "REMOVE";
+		public final static String ORDER = "ORDER";
 		
 		public final static String GET = "GET";
 		public final static String ACCEPT = "ACCEPT";
@@ -117,60 +126,117 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	}
 	private List<DataItem> updateOrInsert_dataItem(DataItem data_Item){
 		recordItems = dataItems;
-		List<DataItem> new_dataItems = new ArrayList<DataItem>();
-		//dataItems.add(dataItem);
-		// 修改
-		for(int i = 0 ; i < dataItems.size() ; i++){
-			if(data_Item.seed.equals(dataItems.get(i).seed)){
-				
-				System.out.println(" update or remove " + data_Item.toString());
-				if(data_Item.getOperation().equals(RequestCode.REMOVE)){
-					DataItem dataItem2 = dataItems.get(i);
-					dataItem2.setOperation(RequestCode.REMOVE);
-					new_dataItems.add(dataItem2);
-				}else if(data_Item.getOperation().equals(RequestCode.UPDATE)){
-					new_dataItems.add(data_Item);
-				}	
-			}else{
-				new_dataItems.add(dataItems.get(i));
-			}
-		}
+		//创建
 		if(data_Item.getOperation().equals(RequestCode.CREATE)){
 			System.out.println(" create " + data_Item.toString());
-			new_dataItems.add(insert_data_item(data_Item, new_dataItems), data_Item );
+			dataItems.add(data_Item);	
+		//移动
+		}else if(data_Item.getOperation().equals(RequestCode.ORDER)){
+			System.out.println(" order " + data_Item.toString());
+			for (int i = 0; i < dataItems.size(); i++) {
+				System.out.println("item : " + dataItems.get(i).toString());
+			}
+			dataItems = getDataItem(dataItems,data_Item);
+		}else{
+			List<DataItem> new_dataItems = new ArrayList<DataItem>();
+			// 修改  删除
+			for(int i = 0 ; i < dataItems.size() ; i++){
+				if(data_Item.seed.equals(dataItems.get(i).seed)){
+					System.out.println(" update or remove " + data_Item.toString());
+					if(data_Item.getOperation().equals(RequestCode.REMOVE)){
+						DataItem dataItem2 = dataItems.get(i);
+						dataItem2.setOperation(RequestCode.REMOVE);
+						new_dataItems.add(dataItem2);
+					}else if(data_Item.getOperation().equals(RequestCode.UPDATE)){
+						new_dataItems.add(data_Item);
+					}	
+				}else{
+					new_dataItems.add(dataItems.get(i));
+				}
+			}
+			dataItems = new_dataItems;
 		}
-//		for(DataItem item : dataItems){
-//			System.out.println("item : " + item.toString());
-//		}
-//		
-//		System.out.println("data_Item : "+ data_Item.toString());
-//		System.out.println("dataItem : " + dataItem.toString());
-		
-		dataItems = new_dataItems;
 		return dataItems;
 	}
 	
-	private int insert_data_item(DataItem item,List<DataItem> new_dataItems){
-		int result = 0 ;
-		for(int i = 0 ;i < seeds.length ;i ++){
-			if(seeds[i] .equals(item.seed)){
-				if(i!=0){
-					String before_seed = seeds[i-1];
-					for(int j = 0 ; j < new_dataItems.size() ; j++){
-						if(new_dataItems.get(j).seed.equals(before_seed)){
-							return result = j+1;
+	private void system(String[] names){
+		for(String item : names){
+			System.out.print(item + " : ");
+		}
+		System.out.println("order");
+	}
+	
+	private List<DataItem> getDataItem(List<DataItem> new_dataItems ,DataItem data_Item){
+		
+		List<DataItem> new_item = new ArrayList<DataItem>();
+		boolean position_equal = false;
+		boolean equal_fully = false;
+		for(DataItem item : new_dataItems){
+			if(item.position.equals(data_Item.position)){
+				position_equal = true;
+				if(item.seed.equals(data_Item.seed)){
+					new_item.add(data_Item);
+					equal_fully = true;
+				}else{
+					new_item.add(item);
+					new_item.add(data_Item);
+				}
+			}else{
+				new_item.add(item);
+			}
+		}
+		if(equal_fully){
+			accept_button.setClickable(false);
+			accept_button.setBackgroundColor(getResources().getColor(R.color.antiquewhite));	
+		}
+		
+		if(position_equal == false){
+			List<DataItem> new_item_order = new ArrayList<DataItem>();
+			dataItems.add(data_Item);
+			String[] names = new String[dataItems.size()];
+			for(int i = 0 ;i<dataItems.size();i++){
+				names[i] = dataItems.get(i).position;
+			}
+			system(names);
+			//排序(实现了中英文混排)
+//			Arrays.sort(names, new PinyinComparator());
+			for(int i=names.length-1; i>=0; i--) {
+				for(int j=0; j<i; j++) {
+				    if(names[j].compareTo(names[j+1]) < 0) {
+				    	String temp = names[j];
+				    	names[j] = names[j+1];
+				    	names[j+1] = temp;
+				    }
+				}
+			}
+			system(names);
+			
+			for(int i = 0 ; i<dataItems.size() ; i++){
+				for(int j = 0;j<names.length ; j ++){
+					if(dataItems.get(i).position.equals(names[j])){
+						boolean has = false;
+						for(DataItem item : new_item_order){
+							if(item.toString().equals(dataItems.get(i).toString())){
+								has = true;
+							}
 						}
+						if(!has){
+							new_item_order.add(dataItems.get(i));
+						}	
 					}
 				}
 			}
-		}
-		return result;
+			new_item = new_item_order;
+			System.out.println(new_item.size());
+		}	
+		return new_item;
 	}
 	
 	private void load_list_view() {	
 		try {
 //			recordItems;
-			if(dataItem.getOperation().equals(RequestCode.UPDATE) && dataItem.isConflict()!=true){
+			if((dataItem.getOperation().equals(RequestCode.UPDATE)) 
+					&& dataItem.isConflict()!=true){
 				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.1f);
 		    	alphaAnimation.setDuration(2000);
 		    	alphaAnimation.setFillEnabled(true);

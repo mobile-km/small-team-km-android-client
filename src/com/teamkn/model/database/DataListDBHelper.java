@@ -30,11 +30,10 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    db.close();
 		return dataList;
   }
-  public static DataList remove_by_server_id(DataList dataList){
+  public static void remove_by_server_id(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
 	    db.delete(Constants.TABLE_DATA_LISTS,Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
 	    db.close();
-		return dataList;
   }
   public static DataList update_by_server_id(DataList dataList){
 	    SQLiteDatabase db = get_write_db();  
@@ -80,6 +79,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    db.close();
 }
   public static List<DataList> all(String data_list_type,String data_list_public) throws Exception {
+	  System.out.println("all type:public = " + data_list_type + " : " + data_list_public);
 	  SQLiteDatabase db = get_read_db();
       List<DataList> datalists = new ArrayList<DataList>();
       Cursor cursor;
@@ -93,8 +93,8 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  }else if(data_list_public.equals("fork")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > ? AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?", 
-                      new String[]{0+"",UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > 0 AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?", 
+                      new String[]{UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
@@ -105,7 +105,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }
     	  
-      }else{
+      }else{	
     	  if(data_list_public.equals("true")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
@@ -115,8 +115,8 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  }else if(data_list_public.equals("fork")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > ? AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?",
-                      new String[]{data_list_type,data_list_public,0+"",UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
+                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > 0 AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?",
+                      new String[]{data_list_type,data_list_public,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
@@ -285,5 +285,32 @@ public class DataListDBHelper extends BaseModelDBHelper {
 				remove_by_server_id(oldItem);
 			}
 		}
-	}
+  }
+  public static List<DataList> deleteDataList(List<DataList> requestList,String data_list_type,String data_list_public) throws Exception{
+	  List<DataList> oldList = all(data_list_type,data_list_public);
+	  List<DataList> deleteList = new ArrayList<DataList>();
+	  for(DataList oldItem : oldList){
+			boolean has = false;
+			for(DataList requstItem : requestList){
+				if(oldItem.server_data_list_id==requstItem.server_data_list_id){
+					has = true;
+					break;
+				}
+			}
+			if(!has){
+//				remove_by_server_id(oldItem);
+				deleteList.add(oldItem);
+			}
+		}
+		return deleteList; 
+  }
+  public static boolean is_delete(List<DataList> dataLists , DataList list){
+	  for(DataList item : dataLists){
+		  if(list.toString().equals(item.toString())){
+			  return true;
+		  }
+		  
+	  }
+	return false;  
+  }
 }

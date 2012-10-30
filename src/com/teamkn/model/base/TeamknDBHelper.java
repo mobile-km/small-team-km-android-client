@@ -102,7 +102,7 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
     		Constants.TABLE_DATA_ITEMS_URL + " text , "+
     		Constants.TABLE_DATA_ITEMS_KIND + " text , "+
     		Constants.TABLE_DATA_ITEMS_DATA_LIST_ID + " integer, "+
-            Constants.TABLE_DATA_ITEMS_POSITION + " integer ,"+
+            Constants.TABLE_DATA_ITEMS_POSITION + " text ,"+
     		Constants.TABLE_DATA_ITEMS_SERVER_DATA_ITEM_ID + " integer,"+
     		Constants.TABLE_DATA_ITEMS_SEED + " text);";
     

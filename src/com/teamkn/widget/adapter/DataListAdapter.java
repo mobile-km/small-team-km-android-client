@@ -85,6 +85,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         if((item.public_boolean.equals("false")
         		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
         		&& MainActivity.RequestCode.data_list_public.equals("false")
+        		|| MainActivity.RequestCode.data_list_public.equals("fork")
         		){
         	
         	view_holder.show_is_no_public_relativelayout.setVisibility(View.VISIBLE);

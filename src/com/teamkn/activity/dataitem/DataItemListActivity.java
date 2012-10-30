@@ -2,6 +2,7 @@ package com.teamkn.activity.dataitem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -99,6 +100,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	//是否显示show_step
 	boolean show_step;
 	boolean is_reading; // 判断step列表是否度过
+	Map<Object, Object> map;
     int step_new = 0;  //显示step的步骤，默认是0
     
     boolean is_curretn_user_data_list; // 是否是当前用户的data_list
@@ -453,7 +455,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			public List<DataItem> do_in_background(Void... params)
 					throws Exception {
 				if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-					is_reading = HttpApi.DataItem.pull(dataList);
+					
+					map= HttpApi.DataItem.pull(dataList);
+					is_reading = (Boolean) map.get("read");
 					dataItems = DataItemDBHelper.all(dataList.id);
 				}else{
 					BaseUtils.toast("无法连接到网络，请检查网络配置");
@@ -485,11 +489,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					show_step = false;
 				}
 				//判断是否 是 协作列表 显示原始用户名
-				if(data_list_public.equals("fork")){
+				if(data_list_public.equals("fork") && map.get("user")!=null){
 					data_item_original_user_name.setVisibility(View.VISIBLE);
-					DataList forked = DataListDBHelper.find_by_server_data_list_id(dataList.forked_from_id);
-					User user = UserDBHelper.find(forked.user_id);
-					System.out.println("datalist toString " + dataList.toString());
+//					DataList forked = DataListDBHelper.find_by_server_data_list_id(dataList.forked_from_id);
+//					User user = UserDBHelper.find(forked.user_id);
+					User user = (User) map.get("user");
+//					System.out.println("forked toString " +forked.toString());
+//					System.out.println("datalist toString " + dataList.toString());
 					System.out.println("fork show user name  " + user.toString());
 					data_item_original_user_name.setText(Html.fromHtml("从<font  color=blue>"
 					+user.user_name+"</font>的列表迁出"));			
@@ -685,8 +691,25 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			dataItemListAdapter.remove(from_item);
 			dataItemListAdapter.insert(from_item, to);
 			dataItemListAdapter.notifyDataSetChanged();
-			insert_into(from_item.server_data_item_id,
-					to_item.server_data_item_id);
+			
+			System.out.println("from 0: to 1= " + from + " : " + to);
+			if(to<=0){
+				insert_into(from_item.server_data_item_id,
+						"",to_item.position);
+			}else if(to>=dataItems.size()){
+				insert_into(from_item.server_data_item_id,
+						to_item.position,"");
+			}else if(from < to){
+				insert_into(from_item.server_data_item_id,
+						dataItems.get(to-1).position,dataItems.get(to+1).position);
+				System.out.println((to-1) + " : " + (to+1));
+			}else{
+				insert_into(from_item.server_data_item_id,
+						dataItems.get(to-1).position,to_item.position);
+				System.out.println((to-1) + " : " + (to));
+			}
+			System.out.println("from_item : " + from_item);
+			System.out.println("to_item : " + to_item);	
 		}
 	};
 	public void on_create_data_item_click(View view) {
@@ -717,7 +740,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 	}
 
-	private void insert_into(final int from_server, final int to_server) {
+	private void insert_into(final int from_server,final String left_position,final String right_position) {
 		new TeamknAsyncTask<Void, Void, Void>() {
 			@Override
 			public Void do_in_background(Void... params) throws Exception {
@@ -726,8 +749,9 @@ public class DataItemListActivity extends TeamknBaseActivity {
 //						MainActivity.dataListAdapter.remove_item(load_dataList);
 						System.out.println("insert_into load  = " +dataList.toString());
 						System.out.println("insert_into update = " +DataListDBHelper.find(dataList.id).toString());
+						System.out.println(from_server + " : " + left_position + " : " + right_position);
 //						MainActivity.dataListAdapter.remove_item(dataList);
-						HttpApi.DataItem.order(from_server, to_server);
+						HttpApi.DataItem.order(from_server, left_position,right_position);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -757,8 +781,14 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					DataItem to_item = dataItems.get(from_id - 1);
 					dataItemListAdapter.remove(from_item);
 					dataItemListAdapter.insert(from_item, from_id - 1);
-					insert_into(from_item.server_data_item_id,
-							to_item.server_data_item_id);
+					if(from_id==1){
+						insert_into(from_item.server_data_item_id,
+								"",to_item.position);
+					}else{
+						insert_into(from_item.server_data_item_id,
+								dataItems.get(from_id - 2).position,to_item.position);
+					}
+					
 				}
 				break;
 			case 1:// 向下移动一行
@@ -767,8 +797,14 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					DataItem to_item1 = dataItems.get(from_id + 1);
 					dataItemListAdapter.remove(from_item1);
 					dataItemListAdapter.insert(from_item1, from_id + 1);
-					insert_into(from_item1.server_data_item_id,
-							to_item1.server_data_item_id);
+					if(from_id==dataItems.size()-1){
+						insert_into(from_item1.server_data_item_id,
+								to_item1.position,"");
+					}else{
+						insert_into(from_item1.server_data_item_id,
+								to_item1.position,dataItems.get(from_id + 2).position);
+					}
+					
 				}
 				break;
 			case 2:// 编辑当前子项

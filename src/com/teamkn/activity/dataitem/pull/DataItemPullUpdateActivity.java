@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +37,9 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 	DataList dataList;
 	int committer_id;
 	
+	Button accept_or_refuse_button;
+	boolean accept_button = false;
+	
 	DataList dataList_origin;
 	List<DataItem> data_items_origin;
 	DataList dataList_forked;
@@ -57,6 +64,32 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 		
 		listView = (ListView) findViewById(R.id.list); 
 		api_load_list();
+		
+		accept_or_refuse_button = (Button)findViewById(R.id.accept_or_refuse_button);
+		accept_or_refuse_button.setText("完全保留我的列表");
+		accept_or_refuse_button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(accept_button){
+					showDialog("此操作会导致对方的列表内容完全覆盖我现在的列表");
+				}else{
+					showDialog("此操作会完全忽略对方列表内容");
+				}
+			}
+		});
+	}
+	private void showDialog(String msg){
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle("注意：");
+		builder.setMessage(msg);
+		builder.setNegativeButton("取消", null);
+		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				api_accept_or_refuse(accept_button);
+			}
+		});
+		builder.show();
 	}
     private void api_load_list(){
     	if(BaseUtils.is_wifi_active(this)){
@@ -101,11 +134,15 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 	public void click_old_button(View view){
 		data_item_old_button.setBackgroundColor(getResources().getColor(R.color.darkgrey));
 		data_item_new_button.setBackgroundColor(getResources().getColor(R.color.gainsboro));
+		accept_or_refuse_button.setText("完全保留我的列表");
+		accept_button = false;
 		load_list_UI(data_items_origin);
 	}
 	public void click_new_button(View view){
 		data_item_old_button.setBackgroundColor(getResources().getColor(R.color.gainsboro));
 		data_item_new_button.setBackgroundColor(getResources().getColor(R.color.darkgrey));
+		accept_or_refuse_button.setText("完全接受对方的列表");
+		accept_button = true;
 		load_list_UI(dataItems_forked);
 	}
 	public void click_accept_button(View view){

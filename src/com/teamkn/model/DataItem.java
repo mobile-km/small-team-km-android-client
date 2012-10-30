@@ -16,9 +16,9 @@ public class DataItem extends BaseModel {
 	  public String url;
 	  public String kind;
 	  public int data_list_id;
-	  public int position;	 
+	  public String position;	 
 	  public int server_data_item_id;
-	  public String seed;
+	  public String seed; // 字段标示 字符
 	  
 	  //添加的外链帮助字段
 	  int next_commits_count;
@@ -64,10 +64,10 @@ public class DataItem extends BaseModel {
 	public void setData_list_id(int data_list_id) {
 		this.data_list_id = data_list_id;
 	}
-	public int getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(int position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	public int getServer_data_item_id() {
@@ -113,7 +113,7 @@ public class DataItem extends BaseModel {
 		super();
 	}
 	public DataItem(int id, String title, String content, String url,
-			String kind, int data_list_id, int position,
+			String kind, int data_list_id, String position,
 			int server_data_item_id, String seed) {
 		super();
 		this.id = id;

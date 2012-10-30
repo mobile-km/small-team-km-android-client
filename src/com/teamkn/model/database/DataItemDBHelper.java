@@ -261,7 +261,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	    String url = cursor.getString(3);
 	    String kind = cursor.getString(4);
 	    int data_list_id = cursor.getInt(5);
-	    int position = cursor.getInt(6);
+	    String position = cursor.getString(6);
 	    int server_data_item_id = cursor.getInt(7);
 	    String seed = cursor.getString(8);
 	    return new DataItem(id, title, content, url, kind, data_list_id, position,server_data_item_id,seed);
@@ -280,7 +280,7 @@ public class DataItemDBHelper extends BaseModelDBHelper {
 	        Constants.TABLE_DATA_ITEMS_SEED
 	    };
 	  }
-	public static void update_position(int server_id, int position) {
+	public static void update_position(int server_id, String position) {
 		SQLiteDatabase db = get_write_db();
 		
 		DataItem dataItem = find_by_server_id(server_id);

@@ -102,7 +102,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 										msg = "创建的题目不可重复";
 									}else{
 										DataItem dataitem = 
-												new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, 0, -1,null);
+												new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, null, -1,null);
 										DataItemDBHelper.update_by_id(dataitem);
 										System.out.println("data_list_id = "+ data_list_id );
 										back = HttpApi.DataItem.create(DataItemDBHelper.fist_data_item(data_list_id));  
