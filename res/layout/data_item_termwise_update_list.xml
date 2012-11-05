@@ -15,11 +15,12 @@
             style="@style/head_bar_button_go_back"
         />
         <TextView
+            android:id="@+id/data_item_termwise_title_tv"
             style="@style/head_bar_text"
             android:layout_centerHorizontal="true"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="修改建议游览" />
+            android:text="修改条目" />
 
     </RelativeLayout>
 
@@ -50,43 +51,68 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/data_list_title_rl" 
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="120dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
     </ListView>
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
+        android:layout_height="110dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:gravity="center_vertical" >
-
-       <Button
-           android:id="@+id/accept_button"
-           android:onClick="click_accept_button"
-           android:layout_width="wrap_content"
+        <RelativeLayout 
+            android:id="@+id/buttom_top"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+             <Button
+	           android:id="@+id/accept_button"
+	           android:onClick="click_accept_button"
+	           android:layout_width="40dp"
+	           android:layout_height="40dp"
+	           android:background="@drawable/btn_check_on_pressed" />
+            <Button
+	           android:layout_width="40dp"
+	           android:layout_height="40dp"
+	           android:layout_alignParentRight="true"
+	           android:layout_alignParentTop="true"
+	           android:background="@drawable/btn_close_pressed"
+	           android:onClick="click_refuse_button" />
+        </RelativeLayout>
+         <ProgressBar  
+             android:layout_below="@+id/buttom_top"
+                android:id="@+id/progressBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"  
+                android:layout_centerHorizontal="true"
+                style="?android:attr/progressBarStyleHorizontal" 
+                android:max="100" 
+                android:progress="00" 
+                android:secondaryProgress="0" 
+            />
+       <RelativeLayout 
+           android:layout_below="@+id/progressBar"
+           android:layout_alignParentBottom="true"
+           android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:text="接受修改" />
-       <Button
-           android:onClick="click_refuse_button"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_alignParentRight="true"
-           android:text="跳过修改" />
-
-       <ProgressBar  
-		    android:id="@+id/progressBar"
-		    android:layout_width="fill_parent"
-            android:layout_height="wrap_content"  
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-		    style="?android:attr/progressBarStyleHorizontal" 
-		    android:max="100" 
-		    android:progress="00" 
-		    android:secondaryProgress="0" 
-	   /> 
+           android:layout_marginTop="10dp">
+           <Button
+	           android:id="@+id/accept_all_button"
+	           android:onClick="click_accept_all_button"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:text="接受其余修改"
+           />
+           <Button
+	          android:onClick="click_refuse_all_button"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentRight="true"
+	          android:text="跳过其余修改" 
+           />
+       </RelativeLayout>
    </RelativeLayout>
 </RelativeLayout>

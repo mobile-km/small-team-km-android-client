@@ -1,21 +1,17 @@
 package com.teamkn.activity.dataitem.pull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,7 +26,6 @@ import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
-import com.teamkn.pinyin4j.PinyinComparator;
 import com.teamkn.widget.adapter.DataItemTermWiseUpdateAdapter;
 
 public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
@@ -45,6 +40,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		public final static String REJUST = "REJUST";
 		
 	}
+	TextView data_item_termwise_title_tv;
 	TextView data_list_title_tv;
 	
 	ListView list_view;
@@ -80,6 +76,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		load_UI();
 	}
 	private void load_UI() {
+		data_item_termwise_title_tv = (TextView)findViewById(R.id.data_item_termwise_title_tv);
 		data_list_title_tv = (TextView)findViewById(R.id.data_list_title_tv);
 		data_list_title_tv.setText(dataList_origin.title);
 		list_view = (ListView)findViewById(R.id.list_view);
@@ -126,12 +123,15 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	}
 	private List<DataItem> updateOrInsert_dataItem(DataItem data_Item){
 		recordItems = dataItems;
+		String strTitle = "修改条目";
 		//创建
 		if(data_Item.getOperation().equals(RequestCode.CREATE)){
+			strTitle = "增加条目";
 			System.out.println(" create " + data_Item.toString());
 			dataItems.add(data_Item);	
 		//移动
 		}else if(data_Item.getOperation().equals(RequestCode.ORDER)){
+			strTitle = "移动条目";
 			System.out.println(" order " + data_Item.toString());
 			for (int i = 0; i < dataItems.size(); i++) {
 				System.out.println("item : " + dataItems.get(i).toString());
@@ -144,10 +144,12 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 				if(data_Item.seed.equals(dataItems.get(i).seed)){
 					System.out.println(" update or remove " + data_Item.toString());
 					if(data_Item.getOperation().equals(RequestCode.REMOVE)){
+						strTitle = "删除条目";
 						DataItem dataItem2 = dataItems.get(i);
 						dataItem2.setOperation(RequestCode.REMOVE);
 						new_dataItems.add(dataItem2);
 					}else if(data_Item.getOperation().equals(RequestCode.UPDATE)){
+						strTitle = "修改条目";
 						new_dataItems.add(data_Item);
 					}	
 				}else{
@@ -156,6 +158,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 			}
 			dataItems = new_dataItems;
 		}
+		data_item_termwise_title_tv.setText(strTitle);
 		return dataItems;
 	}
 	
@@ -171,19 +174,30 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		List<DataItem> new_item = new ArrayList<DataItem>();
 		boolean position_equal = false;
 		boolean equal_fully = false;
-		for(DataItem item : new_dataItems){
-			if(item.position.equals(data_Item.position)){
+		int index = 0 ;
+		System.out.println("data_Item " + data_Item.toString());
+		List<DataItem> order_dataItems =  new ArrayList<DataItem>();
+		order_dataItems=new_dataItems;
+		for(int i = 0 ; i< order_dataItems.size() ;i ++){
+			System.out.println(index + "item : " + order_dataItems.get(i).toString());
+			if(order_dataItems.get(i).position.equals(data_Item.position)){
 				position_equal = true;
-				if(item.seed.equals(data_Item.seed)){
+				if(order_dataItems.get(i).seed.equals(data_Item.seed)){
 					new_item.add(data_Item);
 					equal_fully = true;
 				}else{
-					new_item.add(item);
+					new_item.add(order_dataItems.get(i));
 					new_item.add(data_Item);
 				}
 			}else{
-				new_item.add(item);
+				new_item.add(order_dataItems.get(i));
+				if(order_dataItems.get(i).seed.equals(data_Item.seed) && !order_dataItems.get(i).position.equals(data_Item.position)){
+					System.out.println("befour dataItems.remove(index)" + dataItems.size() + " : " + index);
+					dataItems.remove(index);
+					System.out.println("after dataItems.remove(index)" + dataItems.size() + " : " + index);
+				}
 			}
+			index++;
 		}
 		if(equal_fully){
 			accept_button.setClickable(false);
@@ -202,7 +216,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 //			Arrays.sort(names, new PinyinComparator());
 			for(int i=names.length-1; i>=0; i--) {
 				for(int j=0; j<i; j++) {
-				    if(names[j].compareTo(names[j+1]) < 0) {
+				    if(names[j].compareTo(names[j+1]) > 0) {
 				    	String temp = names[j];
 				    	names[j] = names[j+1];
 				    	names[j+1] = temp;
@@ -210,9 +224,8 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 				}
 			}
 			system(names);
-			
-			for(int i = 0 ; i<dataItems.size() ; i++){
-				for(int j = 0;j<names.length ; j ++){
+			for(int j = 0;j<names.length ; j ++){
+				for(int i = 0 ; i<dataItems.size() ; i++){
 					if(dataItems.get(i).position.equals(names[j])){
 						boolean has = false;
 						for(DataItem item : new_item_order){
@@ -242,6 +255,53 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		    	alphaAnimation.setFillEnabled(true);
 //		    	alphaAnimation.setRepeatCount(3000);
 //		    	alphaAnimation.setFillBefore(true);
+		    	list_view.startAnimation(alphaAnimation);
+		    	alphaAnimation.setAnimationListener(new AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {	
+						adapter = new DataItemTermWiseUpdateAdapter(DataItemTermWiseUpdateActivity.this);
+						adapter.add_items(recordItems);
+						list_view.setAdapter(adapter);
+						adapter.notifyDataSetChanged();
+					}
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+					}
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						adapter = new DataItemTermWiseUpdateAdapter(DataItemTermWiseUpdateActivity.this);
+						adapter.add_items(dataItems);
+						list_view.setAdapter(adapter);
+						adapter.notifyDataSetChanged();
+					}
+				});	
+			}else if((dataItem.getOperation().equals(RequestCode.ORDER)) 
+					&& dataItem.isConflict()!=true){
+//				DataItem oldItem ,newItem;
+				
+//				for(int i = 0 ;i < dataItems.size() ;i ++){
+//					for(int m = 0 ; m < i ; m++){
+//						if(dataItems.get(i).seed .equals(dataItems.get(m).seed)){
+//							for(int j = 0 ; j <recordItems.size() ; j++){
+//								if(dataItems.get(i).position.equals(recordItems.get(j).position)){
+//									oldItem = dataItems.get(i);
+//									dataItems.remove(i);
+//									System.out.println(" oldItem " + oldItem.toString());
+//									break;
+//								}else if(dataItems.get(m).position.equals(recordItems.get(j).position)){
+//									oldItem = dataItems.get(m);
+//									dataItems.remove(m);
+//									System.out.println(" oldItem " + oldItem.toString());
+//									break;
+//								}
+//							}
+//						}
+//					}
+
+//				}
+				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.1f);
+		    	alphaAnimation.setDuration(2000);
+		    	alphaAnimation.setFillEnabled(true);
 		    	list_view.startAnimation(alphaAnimation);
 		    	alphaAnimation.setAnimationListener(new AnimationListener() {
 					@Override
@@ -293,5 +353,63 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	}
 	public void click_refuse_button(View view){
 		api_load_list(RequestCode.REJUST);
+	}
+	
+	public void click_accept_all_button(View view){
+		showDialog(true);
+	}
+	public void click_refuse_all_button(View view){
+		showDialog(false);
+	}
+	private void showDialog(final boolean accept_or_refuse){
+		String msg;
+		if(accept_or_refuse){
+			msg="此操作会完全接受其余修改动作";
+		}else{
+			msg="此操作会完全忽略其余修改动作";
+		}
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle("注意：");
+		builder.setMessage(msg);
+		builder.setNegativeButton("取消", null);
+		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				api_accept_or_refuse(accept_or_refuse);
+			}
+		});
+		builder.show();
+	}
+	private void api_accept_or_refuse(final boolean do_accept){
+		if(BaseUtils.is_wifi_active(this)){
+			new TeamknAsyncTask<Void, Void, DataList>(DataItemTermWiseUpdateActivity.this,"正在处理中") {
+				@Override
+				public DataList do_in_background(Void... params)
+						throws Exception {
+					DataList api_dataList = null;
+					if(do_accept){
+						api_dataList=HttpApi.WatchList.accept_commits(dataList_origin.server_data_list_id, committer_id);	
+						DataItemDBHelper.delete_by_data_list_id(dataList_origin.id);
+					}else{
+						api_dataList=HttpApi.WatchList.reject_commits(dataList_origin.server_data_list_id, committer_id);
+					}
+					return api_dataList;
+				}
+				@Override
+				public void on_success(DataList result) {	
+					if(result != null){
+						BaseUtils.toast("操作成功");
+						Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+						intent.putExtra("data_list_id", dataList_origin.id);
+						intent.putExtra("data_list_public", "fork");
+						startActivity(intent);
+					}else{
+						
+					}
+				}
+			}.execute();
+		}else{
+			BaseUtils.toast("无法连接网络");
+		}
 	}
 }

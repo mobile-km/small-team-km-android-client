@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
 import com.teamkn.model.Watch;
 import com.teamkn.model.base.BaseModelDBHelper;
@@ -115,8 +114,9 @@ public class DataListDBHelper extends BaseModelDBHelper {
     	  }else if(data_list_public.equals("fork")){
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
                       get_columns(),
-                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " + Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > 0 AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?",
-                      new String[]{data_list_type,data_list_public,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
+//                      Constants.TABLE_DATA_LISTS_KIND + " = ? AND  " +
+                      Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " > 0 AND " + Constants.TABLE_DATA_LISTS_USER_ID + " = ?",
+                      new String[]{data_list_public,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id+""}, null, null,
                       Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " DESC");
     	  }else{
     		  cursor= db.query(Constants.TABLE_DATA_LISTS,
@@ -306,10 +306,9 @@ public class DataListDBHelper extends BaseModelDBHelper {
   }
   public static boolean is_delete(List<DataList> dataLists , DataList list){
 	  for(DataList item : dataLists){
-		  if(list.toString().equals(item.toString())){
+		  if(list.server_data_list_id == item.server_data_list_id){
 			  return true;
-		  }
-		  
+		  }  
 	  }
 	return false;  
   }

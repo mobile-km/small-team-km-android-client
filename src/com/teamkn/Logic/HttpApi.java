@@ -714,7 +714,6 @@ public class HttpApi {
             return dataList_server;
     	}
 		public static void pull(String kind,int page , int per_page) throws Exception{  
-			System.out.println("before pull  "+System.currentTimeMillis());
 			new TeamknGetRequest<Void>(获取_data_list,
 	            new BasicNameValuePair("kind", kind),
 	            new BasicNameValuePair("page", page+""),
@@ -723,25 +722,19 @@ public class HttpApi {
 		          @Override
 		          public Void on_success(String response_text) throws Exception {
 		        	  JSONArray data_list_array = new JSONArray(response_text);
-	                  System.out.println("data_list pull response_text " + response_text);
-	                  System.out.println("before api pull  "+System.currentTimeMillis());
+		        	  System.out.println("pull response_text =  " + response_text);
 	                  for (int i = 0; i < data_list_array.length(); i++) {
-	                	    System.out.println("before json pull  "+System.currentTimeMillis());
 			                JSONObject json = data_list_array.getJSONObject(i);
 			                com.teamkn.model.DataList dataList_server =getDataList(json);		
-			                System.out.println("between json pull  "+System.currentTimeMillis());
-			                DataListDBHelper.pull(dataList_server);
-			                System.out.println("end json pull  "+System.currentTimeMillis());     
+			                DataListDBHelper.pull(dataList_server);  
+			                System.out.println("pull:dataList - " + dataList_server.toString());
 	                  }  
-	                  System.out.println("end api pull  "+System.currentTimeMillis());
 		              return null;
 		          }
 		          public Void on_unprocessable_entity(String responst_text) {
 					return null;
 			      };
-		        }.go();
-		        System.out.println("end pull  "+System.currentTimeMillis());
-		        
+		        }.go();     
         }
     	
     	public static void create(final com.teamkn.model.DataList dataList) throws Exception{
@@ -916,7 +909,7 @@ public class HttpApi {
    				                dataList_server.setId(DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
    				                dataLists.add(dataList_server);
    		                  } 
-   			        	deletForkList =  DataListDBHelper.deleteDataList(dataLists, MainActivity.RequestCode.data_list_type,  MainActivity.RequestCode.data_list_public);
+   			        	deletForkList =  DataListDBHelper.deleteDataList(dataLists,MainActivity.RequestCode.ALL,  MainActivity.RequestCode.data_list_public);
    			              return null;
    			          }
    			        }.go();
@@ -1111,6 +1104,7 @@ public class HttpApi {
 //    	在逐条处理中，拒绝 一个 data_list 中某一个推送作者推送的内容中下一个推送的内容 [编辑]
 //    			PUT /api/data_lists/:id/reject_next_commit
     	public static com.teamkn.model.DataItem reject_next_commit( final int server_data_list_id,int committer_id) throws Exception{
+    		System.out.println("reject_next_commit:"+server_data_list_id+":"+committer_id);
     		return new TeamknPutRequest<com.teamkn.model.DataItem>(拒绝data_list推送内容 + server_data_list_id + "/reject_next_commit"
     				,new PostParamText("committer_id", committer_id+"")) {
 				@Override

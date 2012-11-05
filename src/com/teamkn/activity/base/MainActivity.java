@@ -252,7 +252,10 @@ public class MainActivity extends TeamknBaseActivity {
 							HttpApi.WatchList.watch_public_timeline(RequestCode.now_page, 100);
 						}else if(RequestCode.data_list_public.equals("fork")){
 							datalists = HttpApi.DataList.forked_list(RequestCode.now_page, 100);
+							System.out.println("before dataLists.size() :  " + datalists.size());
 						}
+						
+						
 					return null;
 				}
 				@Override
@@ -276,9 +279,11 @@ public class MainActivity extends TeamknBaseActivity {
 				datalists = DataListDBHelper.all_by_watch_lists(watchs,RequestCode.data_list_type);
 			}else if(RequestCode.data_list_public.equals("fork")){	
 				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
+				
 			}else{
 				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 			}
+			System.out.println("after datalists.size() : " + datalists.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

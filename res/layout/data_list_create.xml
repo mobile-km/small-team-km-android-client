@@ -14,11 +14,12 @@
 	           style="@style/head_bar_text_center"
 	           android:text="创建列表"
         />
-        <!-- <Button
-             android:text="@string/account_edit_button"
+        <Button
+             android:id="@+id/click_data_list_save_ib"
+             android:onClick="click_data_list_save_iv"
+             android:text="@string/save_note_bn"
              style="@style/head_bar_button_right"
-             android:onClick="on_edit_account_button_click"
-        /> -->
+        />
     </RelativeLayout>
     <TableRow
         android:layout_below="@+id/head"
@@ -75,13 +76,13 @@
             android:text="列表名称已存在" 
             android:layout_marginRight="20dp"
         />
-        <ImageButton
+        <!-- <ImageButton
             android:id="@+id/click_data_list_save_ib"
-            android:layout_alignParentRight="true"
             android:onClick="click_data_list_save_iv"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/mi_save"
-        />
+        /> -->
     </RelativeLayout>
 </RelativeLayout>

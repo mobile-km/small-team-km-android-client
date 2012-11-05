@@ -131,7 +131,7 @@ public class DataList extends BaseModel {
 	@Override
 	public String toString() {
 		return id+" : "+user_id+" : "+title+" : "
-	+kind+" : "+ public_boolean+" : "+has_commits+" : "+server_data_list_id + " : "
-	+server_created_time + " : " + server_updated_time +" :  " +  forked_from_id;
+				+kind+" : "+ public_boolean+" : "+has_commits+" : "+server_data_list_id + " : "
+		+server_created_time + " : " + server_updated_time +" :  " +  forked_from_id;
 	}
 }
