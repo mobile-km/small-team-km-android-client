@@ -24,6 +24,7 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
+import com.teamkn.model.User;
 import com.teamkn.model.database.DataItemDBHelper;
 import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemTermWiseUpdateAdapter;
@@ -52,7 +53,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 	DataList dataList_origin;
 	
 	List<DataItem> dataItems;
-	List<DataItem> recordItems;
+	List<DataItem> recordItems = new ArrayList<DataItem>();
 	
 	public static DataItem dataItem;
 	int committer_id;
@@ -99,6 +100,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 					}else if(action.equals(RequestCode.REJUST)){
 						dataItem = HttpApi.WatchList.reject_next_commit(dataList_origin.server_data_list_id, committer_id);
 					}
+					recordItems = DataItemDBHelper.all(dataList_origin.id);
 					dataItems = DataItemDBHelper.all(dataList_origin.id);
 //					dataItems.add(dataItem.getNext_commits_count(), dataItem);	
 					return dataItem;
@@ -122,7 +124,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		}
 	}
 	private List<DataItem> updateOrInsert_dataItem(DataItem data_Item){
-		recordItems = dataItems;
+//		recordItems = dataItems;
 		String strTitle = "修改条目";
 		//创建
 		if(data_Item.getOperation().equals(RequestCode.CREATE)){
@@ -168,18 +170,28 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		}
 		System.out.println("order");
 	}
-	
+	private List<DataItem> updateOperation(List<DataItem> new_dataItems ,DataItem data_Item){
+		List<DataItem> new_item = new ArrayList<DataItem>();
+		for(DataItem item : new_dataItems){
+			if(item.seed.equals(data_Item.seed)){
+				item.setPosition(data_Item.position);
+			}
+			new_item.add(item);
+		}
+		
+		return new_item;
+	}
 	private List<DataItem> getDataItem(List<DataItem> new_dataItems ,DataItem data_Item){
 		
 		List<DataItem> new_item = new ArrayList<DataItem>();
 		boolean position_equal = false;
 		boolean equal_fully = false;
-		int index = 0 ;
+		
 		System.out.println("data_Item " + data_Item.toString());
 		List<DataItem> order_dataItems =  new ArrayList<DataItem>();
 		order_dataItems=new_dataItems;
 		for(int i = 0 ; i< order_dataItems.size() ;i ++){
-			System.out.println(index + "item : " + order_dataItems.get(i).toString());
+			System.out.println(i + "item : " + order_dataItems.get(i).toString());
 			if(order_dataItems.get(i).position.equals(data_Item.position)){
 				position_equal = true;
 				if(order_dataItems.get(i).seed.equals(data_Item.seed)){
@@ -192,12 +204,12 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 			}else{
 				new_item.add(order_dataItems.get(i));
 				if(order_dataItems.get(i).seed.equals(data_Item.seed) && !order_dataItems.get(i).position.equals(data_Item.position)){
-					System.out.println("befour dataItems.remove(index)" + dataItems.size() + " : " + index);
-					dataItems.remove(index);
-					System.out.println("after dataItems.remove(index)" + dataItems.size() + " : " + index);
+					System.out.println("befour dataItems.remove(index)" + dataItems.size() + " : " + i);
+					dataItems.remove(i);
+					recordItems = updateOperation(recordItems,data_Item);
+					System.out.println("after dataItems.remove(index)" + dataItems.size() + " : " + i);
 				}
 			}
-			index++;
 		}
 		if(equal_fully){
 			accept_button.setClickable(false);
@@ -277,28 +289,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 				});	
 			}else if((dataItem.getOperation().equals(RequestCode.ORDER)) 
 					&& dataItem.isConflict()!=true){
-//				DataItem oldItem ,newItem;
 				
-//				for(int i = 0 ;i < dataItems.size() ;i ++){
-//					for(int m = 0 ; m < i ; m++){
-//						if(dataItems.get(i).seed .equals(dataItems.get(m).seed)){
-//							for(int j = 0 ; j <recordItems.size() ; j++){
-//								if(dataItems.get(i).position.equals(recordItems.get(j).position)){
-//									oldItem = dataItems.get(i);
-//									dataItems.remove(i);
-//									System.out.println(" oldItem " + oldItem.toString());
-//									break;
-//								}else if(dataItems.get(m).position.equals(recordItems.get(j).position)){
-//									oldItem = dataItems.get(m);
-//									dataItems.remove(m);
-//									System.out.println(" oldItem " + oldItem.toString());
-//									break;
-//								}
-//							}
-//						}
-//					}
-
-//				}
 				AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.1f);
 		    	alphaAnimation.setDuration(2000);
 		    	alphaAnimation.setFillEnabled(true);
@@ -342,10 +333,11 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		progressBar.setProgress(count_forked-next_commits_count);
 		if(next_commits_count==0){
 //			this.finish();
-			Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
-			intent.putExtra("data_list_id", dataList_origin.id);
-			intent.putExtra("data_list_public", "fork");
-			startActivity(intent);
+//			Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+//			intent.putExtra("data_list_id", dataList_origin.id);
+//			intent.putExtra("data_list_public", "fork");
+//			startActivity(intent);
+			api_load_list();
 		}
 	}
 	public void click_accept_button(View view){
@@ -398,11 +390,12 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 				@Override
 				public void on_success(DataList result) {	
 					if(result != null){
-						BaseUtils.toast("操作成功");
-						Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
-						intent.putExtra("data_list_id", dataList_origin.id);
-						intent.putExtra("data_list_public", "fork");
-						startActivity(intent);
+//						BaseUtils.toast("操作成功");
+//						Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+//						intent.putExtra("data_list_id", dataList_origin.id);
+//						intent.putExtra("data_list_public", "fork");
+//						startActivity(intent);
+						api_load_list();
 					}else{
 						
 					}
@@ -411,5 +404,35 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 		}else{
 			BaseUtils.toast("无法连接网络");
 		}
+	}
+	private void api_load_list(){
+		new TeamknAsyncTask<Void, Void, List<User>>(DataItemTermWiseUpdateActivity.this,"正在跳转页面") {
+			@Override
+			public List<User> do_in_background(Void... params) throws Exception {
+//				userList = HttpApi.WatchList.commit_meta_list(dataList);
+				return HttpApi.WatchList.commit_meta_list(dataList_origin);
+			}
+			@Override
+			public void on_success(List<User> result) {
+				if(result!=null && result.size()>0){
+					Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+					intent.putExtra("data_list_id", dataList_origin.id);
+					intent.putExtra("data_list_public", "fork");
+					startActivity(intent);
+				}else{
+//					Intent intent = getIntent();
+//					create_data_item = intent.getBooleanExtra("create_data_item", false);//是否是创建dataItem返回
+//					Integer data_list_id = intent.getIntExtra("data_list_id", -1);//返回dataList的本地id
+//					data_list_public = intent.getStringExtra("data_list_public");//返回dataList的中公开，自己私有，协作列表中的一个
+//					update_title = intent.getBooleanExtra("is_update", false);//返回dataList的的title是否修改
+//					
+					Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
+					intent.putExtra("data_list_id", dataList_origin.id);
+					intent.putExtra("data_list_public", "fork");
+					intent.putExtra("create_data_item", true);
+					startActivity(intent);
+				}
+			}
+		}.execute();
 	}
 }

@@ -136,7 +136,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	return datalists;
   }
   public static DataList find(int id){
-	  DataList datalist;
+	DataList datalist;
     SQLiteDatabase db = get_read_db();
     Cursor cursor = db.query(Constants.TABLE_DATA_LISTS, get_columns(),
         Constants.KEY_ID + " = ?", 
@@ -179,6 +179,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
       }
 	  return datalists;
   }
+  
   public static DataList find_by_title(String title){
 	  DataList datalist;
     SQLiteDatabase db = get_read_db();

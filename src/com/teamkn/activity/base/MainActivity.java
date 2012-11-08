@@ -254,8 +254,6 @@ public class MainActivity extends TeamknBaseActivity {
 							datalists = HttpApi.DataList.forked_list(RequestCode.now_page, 100);
 							System.out.println("before dataLists.size() :  " + datalists.size());
 						}
-						
-						
 					return null;
 				}
 				@Override
@@ -278,8 +276,7 @@ public class MainActivity extends TeamknBaseActivity {
 				List<Watch> watchs = WatchDBHelper.all_by_user_id(UserDBHelper.find_by_server_user_id(current_user().user_id).id);
 				datalists = DataListDBHelper.all_by_watch_lists(watchs,RequestCode.data_list_type);
 			}else if(RequestCode.data_list_public.equals("fork")){	
-				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
-				
+				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);	
 			}else{
 				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);
 			}
@@ -306,9 +303,11 @@ public class MainActivity extends TeamknBaseActivity {
 				
 				boolean is_delete = false ;
 				if(RequestCode.data_list_public.equals("fork")){
+					System.out.println("HttpApi.DataList.deletForkList- "+ HttpApi.DataList.deletForkList.size());
 					is_delete = DataListDBHelper
 							.is_delete(HttpApi.DataList.deletForkList, item);
 				}else if(RequestCode.data_list_public.equals("watch")){
+					System.out.println("HttpApi.WatchList.deletWatchList- "+ HttpApi.WatchList.deletWatchList.size());
 					is_delete = DataListDBHelper
 							.is_delete(HttpApi.WatchList.deletWatchList, item);
 				}
@@ -322,8 +321,8 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	private void showDialog(final DataList dataList){
 		AlertDialog.Builder builder = new Builder(MainActivity.this);
-		builder.setTitle("请修改");
-		builder.setMessage("列表已经被原作者删除，是否删除该记录？");
+		builder.setTitle("注意");
+		builder.setMessage("此列表已经被原作者删除，是否删除该记录？");
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 		builder.setNegativeButton("取消", null);
 		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
