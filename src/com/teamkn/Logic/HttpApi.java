@@ -670,6 +670,7 @@ public class HttpApi {
     	
     	private static com.teamkn.model.DataList getDataList(JSONObject json) throws JSONException, IOException{
     		int server_data_list_id = json.getInt("id");
+    		
             String title  = json.getString("title");
             String kind   = json.getString("kind");
             String public_boolean  = json.getString("public");
@@ -703,6 +704,10 @@ public class HttpApi {
             long data_list_server_created_time = json.getLong("server_created_time");
             long data_list_server_updated_time = json.getLong("server_updated_time");
             
+            String forked_from_is_removed = json.getString("forked_from_is_removed");
+            
+            String is_removed = json.getString("is_removed");
+            
             User user = new User(0, server_user_id, user_name, user_avatar,avatar_url, user_server_created_time, user_server_updated_time);
             UserDBHelper.createOrUpdate(user); 
             
@@ -710,7 +715,9 @@ public class HttpApi {
             		new com.teamkn.model.DataList
             		( UserDBHelper.find_by_server_user_id(server_user_id).id, 
             				title, kind, public_boolean,has_commits,server_data_list_id,
-            				data_list_server_created_time,data_list_server_updated_time,forked_from_id);
+            				data_list_server_created_time,data_list_server_updated_time,
+            				forked_from_id,forked_from_is_removed,is_removed);
+            
             return dataList_server;
     	}
 		public static void pull(String kind,int page , int per_page) throws Exception{  
@@ -909,7 +916,7 @@ public class HttpApi {
    				                dataList_server.setId(DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
    				                dataLists.add(dataList_server);
    		                  } 
-   			        	deletForkList =  DataListDBHelper.deleteDataList(dataLists,MainActivity.RequestCode.ALL,  MainActivity.RequestCode.data_list_public);
+//   			        	deletForkList =  DataListDBHelper.deleteDataList(dataLists,MainActivity.RequestCode.ALL,  MainActivity.RequestCode.data_list_public);
    			              return null;
    			          }
    			        }.go();
@@ -930,17 +937,33 @@ public class HttpApi {
    			        	  
    			        	  JSONArray data_list_array = new JSONArray(response_text);
    			        	  System.out.println("watch_public_timeline  =  " + data_list_array.length());
+   			        	  System.out.println("watch_public_timeline response_text =  " + response_text);
    			        	  for (int i = 0; i < data_list_array.length(); i++) {
    				                JSONObject json = data_list_array.getJSONObject(i);
-   				                com.teamkn.model.DataList dataList_server =DataList.getDataList(json);		
-   				                DataListDBHelper.pull(dataList_server);
+   				                com.teamkn.model.DataList dataList_server;
+//   				                System.out.println(json.);
+   				                if(json.getString("is_removed").equals("true")){
+   				                	dataList_server=new com.teamkn.model.DataList();
+   				                	int service_id = json.getInt("id");
+   				                	String is_removed = json.getString("is_removed");
+   				                	dataList_server.setServer_data_list_id(service_id);
+   				                	dataList_server.setIs_removed(is_removed);
+   				                	dataList_server.setKind(MainActivity.RequestCode.COLLECTION);
+   				                }else{
+   				                	dataList_server=DataList.getDataList(json);	
+   				                	
+   				                	System.out.println("pull watch " + dataList_server.toString());
+   	   				                DataListDBHelper.pull(dataList_server);
+   	   				                
+   	   				                Watch watch = new Watch(-1, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id
+   	   				                , DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
+   	   				                WatchDBHelper.createOrUpdate(watch);
+   	   				                
+   	   				                dataLists.add(dataList_server);
+   				                } 
    				                
-   				                Watch watch = new Watch(-1, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id
-   				                , DataListDBHelper.find_by_server_data_list_id(dataList_server.server_data_list_id).id);
-   				                WatchDBHelper.createOrUpdate(watch);
-   				                dataLists.add(dataList_server);
    		                  }
-   			        	deletWatchList =  DataListDBHelper.deleteDataList(dataLists, MainActivity.RequestCode.data_list_type,  MainActivity.RequestCode.data_list_public);
+//   			        	deletWatchList =  DataListDBHelper.deleteDataList(dataLists, MainActivity.RequestCode.data_list_type,  MainActivity.RequestCode.data_list_public);
    			              return null;
    			          }
    			        }.go();

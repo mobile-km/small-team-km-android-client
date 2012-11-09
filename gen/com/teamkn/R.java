@@ -992,6 +992,7 @@ public final class R {
         /**  MAIN 
          */
         public static final int headbar_title=0x7f090015;
+        public static final int is_no_data=0x7f090046;
         public static final int is_wifi_active_msg=0x7f090036;
         public static final int login_auth_fail=0x7f090021;
         /**  登录页面 
@@ -1030,17 +1031,17 @@ public final class R {
         public static final int now_syning=0x7f09000a;
         public static final int now_updating=0x7f090009;
         public static final int placeholder=0x7f090011;
-        public static final int preferences_key_current_user_id=0x7f090048;
-        public static final int preferences_key_last_syn_chat_node_created_time=0x7f09004f;
-        public static final int preferences_key_last_syn_chat_updated_time=0x7f09004e;
-        public static final int preferences_key_last_syn_fail_client_time=0x7f09004d;
-        public static final int preferences_key_last_syn_server_meta_updated_time=0x7f09004a;
-        public static final int preferences_key_last_syn_success_client_time=0x7f09004c;
-        public static final int preferences_key_last_syn_success_server_time=0x7f09004b;
-        public static final int preferences_key_syn_contact_timestamp=0x7f090049;
+        public static final int preferences_key_current_user_id=0x7f090049;
+        public static final int preferences_key_last_syn_chat_node_created_time=0x7f090050;
+        public static final int preferences_key_last_syn_chat_updated_time=0x7f09004f;
+        public static final int preferences_key_last_syn_fail_client_time=0x7f09004e;
+        public static final int preferences_key_last_syn_server_meta_updated_time=0x7f09004b;
+        public static final int preferences_key_last_syn_success_client_time=0x7f09004d;
+        public static final int preferences_key_last_syn_success_server_time=0x7f09004c;
+        public static final int preferences_key_syn_contact_timestamp=0x7f09004a;
         /**  TeamknPreferences 的 keys 
          */
-        public static final int preferences_key_upload_photo_quality=0x7f090047;
+        public static final int preferences_key_upload_photo_quality=0x7f090048;
         public static final int save_note_bn=0x7f090034;
         public static final int saving=0x7f090035;
         public static final int search_contact=0x7f090045;
@@ -1065,7 +1066,7 @@ public final class R {
         public static final int to_search_contact_page=0x7f090043;
         /**  pinyin4j 
          */
-        public static final int unchecked=0x7f090046;
+        public static final int unchecked=0x7f090047;
     }
     public static final class style {
         public static final int ChoicePreferenceButton=0x7f080007;

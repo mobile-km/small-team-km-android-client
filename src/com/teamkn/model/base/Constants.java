@@ -87,7 +87,11 @@ public class Constants {
     
     public static final String TABLE_DATA_LISTS_HAS_COMMITS = "has_commits";
     public static final String TABLE_DATA_LISTS_FORKED_FROM_ID = "forked_from_id";
-//    						   TABLE_DATA_LISTS
+    
+    public static final String TABLE_DATA_LISTS_FORKED_FROM_IS_REMOVED = "forked_from_is_removed";
+    public static final String TABLE_DATA_LISTS_IS_REMOVED = "is_removed";
+    
+    //    						   TABLE_DATA_LISTS
     // data_items
     public static final String TABLE_DATA_ITEMS = "data_items";
     public static final String TABLE_DATA_ITEMS_TITLE = "title";

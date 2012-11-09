@@ -12,8 +12,10 @@ public class DataList extends BaseModel {
 	  public long server_created_time;
 	  public long server_updated_time;
 	  public int forked_from_id = -1;
-	   
-	
+	  public String forked_from_is_removed = "false";
+	  public String is_removed = "false";
+	  
+	  
     public int getId() {
 		return id;
 	}
@@ -87,6 +89,20 @@ public class DataList extends BaseModel {
 	public String getHas_commits() {
 		return has_commits;
 	}
+	
+	public String isForked_from_is_removed() {
+		return forked_from_is_removed;
+	}
+	public void setForked_from_is_removed(String forked_from_is_removed) {
+		this.forked_from_is_removed = forked_from_is_removed;
+	}
+	public String isIs_removed() {
+		return is_removed;
+	}
+	public void setIs_removed(String is_removed) {
+		this.is_removed = is_removed;
+	}
+
 
 
 	public static DataList NIL_DATA_LIST = new DataList();
@@ -96,10 +112,12 @@ public class DataList extends BaseModel {
 	
 	
 	
+	
 	public DataList(int user_id, String title, String kind,
 			String public_boolean, String has_commits, int server_data_list_id,
 			long server_created_time, long server_updated_time,
-			int forked_from_id) {
+			int forked_from_id, String forked_from_is_removed,
+			String is_removed) {
 		super();
 		this.user_id = user_id;
 		this.title = title;
@@ -110,12 +128,15 @@ public class DataList extends BaseModel {
 		this.server_created_time = server_created_time;
 		this.server_updated_time = server_updated_time;
 		this.forked_from_id = forked_from_id;
+		this.forked_from_is_removed = forked_from_is_removed;
+		this.is_removed = is_removed;
 	}
+	
 	
 	public DataList(int id, int user_id, String title, String kind,
 			String public_boolean, String has_commits, int server_data_list_id,
 			long server_created_time, long server_updated_time,
-			int forked_from_id) {
+			int forked_from_id, String forked_from_is_removed, String is_removed) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -127,11 +148,14 @@ public class DataList extends BaseModel {
 		this.server_created_time = server_created_time;
 		this.server_updated_time = server_updated_time;
 		this.forked_from_id = forked_from_id;
+		this.forked_from_is_removed = forked_from_is_removed;
+		this.is_removed = is_removed;
 	}
 	@Override
 	public String toString() {
 		return id+" : "+user_id+" : "+title+" : "
 				+kind+" : "+ public_boolean+" : "+has_commits+" : "+server_data_list_id + " : "
-		+server_created_time + " : " + server_updated_time +" :  " +  forked_from_id;
+		+server_created_time + " : " + server_updated_time +" :  " +  forked_from_id+ " :  "
+		+ forked_from_is_removed + " : " +  is_removed;
 	}
 }

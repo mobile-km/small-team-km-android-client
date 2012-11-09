@@ -72,122 +72,127 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
                                final DataList item,
                                int position) {
 //    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, item.user_id));
-    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id));
-    	boolean isReading = true;
-        if(dataListReading.id<=0){
-        	isReading = false;
-        } 
+//    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id));
+//    	boolean isReading = true;
+//        if(dataListReading.id<=0){
+//        	isReading = false;
+//        } 
     	final ViewHolder view_holder = (ViewHolder) holder;
     	view_holder.list_collect_tv_watch.setVisibility(View.GONE);
     	view_holder.data_list_forked_iv.setVisibility(View.GONE);
     	
         view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
-        if((item.public_boolean.equals("false")
-        		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
-        		&& MainActivity.RequestCode.data_list_public.equals("false")
-        		|| MainActivity.RequestCode.data_list_public.equals("fork")
-        		){
-        	
+        
+        if(item.is_removed.equals("true")){
         	view_holder.show_is_no_public_relativelayout.setVisibility(View.VISIBLE);
         	view_holder.show_is_yes_public_relativelayout.setVisibility(View.GONE);
-        	
-            view_holder.list_note_title_tv_edit.setText(item.title);
-            view_holder.list_note_title_tv_go.setText(item.id+":"+item.server_data_list_id);
-//            System.out.println(item.public_boolean);
-    		if(item.public_boolean.equals("true")){
-    			view_holder.list_data_list_eye_tv.setText("分享");
-    		}else if(item.public_boolean.equals("false")){
-    			view_holder.list_data_list_eye_tv.setText("不分享");
-    		}
-            if(item.kind.equals(MainActivity.RequestCode.STEP)){
-            	view_holder.list_type_tv.setText("步骤");
-            	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.burlywood));
-            }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
-            	view_holder.list_type_tv.setText("收集");
-            	view_holder.list_note_title_tv_go.setBackgroundColor(activity.getResources().getColor(R.color.blueviolet));
-            }
-            
-    		if(item.has_commits.equals("true")){
-    			view_holder.data_list_forked_iv.setVisibility(View.VISIBLE);
-    			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-    		}else{
-    			view_holder.data_list_forked_iv.setVisibility(View.GONE);
-    			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-    		}
+        	view_holder.list_note_title_tv_edit.setText(activity.getResources().getString(R.string.is_no_data));	
         }else{
-        	if(item.kind.equals(MainActivity.RequestCode.STEP)){
-            	view_holder.list_type_tv_public.setText("步骤");
-            }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
-            	view_holder.list_type_tv_public.setText("收集");
+
+            if((item.public_boolean.equals("false")
+            		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
+            		&& MainActivity.RequestCode.data_list_public.equals("false")
+            		|| MainActivity.RequestCode.data_list_public.equals("fork")
+            		){
+            	
+            	view_holder.show_is_no_public_relativelayout.setVisibility(View.VISIBLE);
+            	view_holder.show_is_yes_public_relativelayout.setVisibility(View.GONE);
+            	
+                view_holder.list_note_title_tv_edit.setText(item.title);
+//                view_holder.list_note_title_tv_go.setText(item.id+":"+item.server_data_list_id);
+        		if(item.public_boolean.equals("true")){
+        			view_holder.list_data_list_eye_tv.setText("分享");
+        		}else if(item.public_boolean.equals("false")){
+        			view_holder.list_data_list_eye_tv.setText("不分享");
+        		}
+                if(item.kind.equals(MainActivity.RequestCode.STEP)){
+                	view_holder.list_type_tv.setText("步骤");
+                }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
+                	view_holder.list_type_tv.setText("收集");
+                }
+                
+        		if(item.has_commits.equals("true")){
+        			view_holder.data_list_forked_iv.setVisibility(View.VISIBLE);
+        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+        		}else{
+        			view_holder.data_list_forked_iv.setVisibility(View.GONE);
+//        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+        		}
+            }else{
+            	
+            	if(item.kind.equals(MainActivity.RequestCode.STEP)){
+                	view_holder.list_type_tv_public.setText("步骤");
+                }else if(item.kind.equals(MainActivity.RequestCode.COLLECTION)){
+                	view_holder.list_type_tv_public.setText("收集");
+                }
+            	view_holder.show_is_no_public_relativelayout.setVisibility(View.GONE);
+            	view_holder.show_is_yes_public_relativelayout.setVisibility(View.VISIBLE);
+            	
+            	
+//            	if(MainActivity.RequestCode.data_list_public.equals("fork")){
+//            		
+//            		DataList forked_data_list = DataListDBHelper.find_by_server_data_list_id(item.forked_from_id);
+//            		User user = UserDBHelper.find(forked_data_list.user_id);
+//            		view_holder.data_list_item_user_name_tv.setText(user.user_name);
+//                	if(user.user_avatar!=null) {
+//                		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+//                    	Drawable drawable = new BitmapDrawable(bitmap);
+//                		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
+//                    } else {
+//                    	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+//                    }
+//            	}else{
+            		User user = UserDBHelper.find(item.user_id);
+            		view_holder.data_list_item_user_name_tv.setText(user.user_name);
+                	if (user.user_avatar!=null) {
+                		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+                    	Drawable drawable = new BitmapDrawable(bitmap);
+                		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
+                    } else {
+                    	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+                    }
+//            	}
+            	
+                view_holder.list_title_tv_public.setText(item.title);
+//                
+//                final Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
+//        		System.out.println("watch.id = " + watch.toString() + " ｉｔｅｍ　：　" + item.toString());
+//        		if(watch.id<=0){
+//        			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+//        		}else{
+//        			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+//        		}
+//                view_holder.list_collect_tv_watch.setOnClickListener(new OnClickListener() {
+//    				@Override
+//    				public void onClick(View v) {	
+//    					boolean go_watch ;
+//    					Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
+//    					
+//    					if(MainActivity.RequestCode.data_list_public.equals("watch")){
+//    						MainActivity.dataListAdapter.remove_item(item);
+//    						MainActivity.dataListAdapter.notifyDataSetChanged();
+//    					}
+//    					if(watch.id<=0){
+//    						go_watch = true;	
+//    		    		}else{
+//    		    			go_watch = false;
+//    		    		}
+//    					view_holder.onClick(item,go_watch);
+//    				}
+//    			});
+////                if(!isReading){
+////                if(false){
+////                	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
+////                	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
+////                	tp.setFakeBoldText(true);
+////                }else{
+//                	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.gainsboro));
+//                	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
+//                	tp.setFakeBoldText(false);
+////                }
             }
-        	view_holder.show_is_no_public_relativelayout.setVisibility(View.GONE);
-        	view_holder.show_is_yes_public_relativelayout.setVisibility(View.VISIBLE);
-        	
-        	
-        	
-        	if(MainActivity.RequestCode.data_list_public.equals("fork")){
-        		DataList forked_data_list = DataListDBHelper.find_by_server_data_list_id(item.forked_from_id);
-        		
-        		
-        		User user = UserDBHelper.find(forked_data_list.user_id);
-        		view_holder.data_list_item_user_name_tv.setText(user.user_name);
-            	if(user.user_avatar!=null) {
-            		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
-                	Drawable drawable = new BitmapDrawable(bitmap);
-            		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
-                } else {
-                	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-                }
-        	}else{
-        		User user = UserDBHelper.find(item.user_id);
-        		view_holder.data_list_item_user_name_tv.setText(user.user_name);
-            	if (user.user_avatar!=null) {
-            		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
-                	Drawable drawable = new BitmapDrawable(bitmap);
-            		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
-                } else {
-                	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-                }
-        	}
-        	
-            view_holder.list_title_tv_public.setText(item.title);
-            
-            final Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
-    		System.out.println("watch.id = " + watch.toString() + " ｉｔｅｍ　：　" + item.toString());
-    		if(watch.id<=0){
-    			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-    		}else{
-    			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-    		}
-            view_holder.list_collect_tv_watch.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {	
-					boolean go_watch ;
-					Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
-					
-					if(MainActivity.RequestCode.data_list_public.equals("watch")){
-						MainActivity.dataListAdapter.remove_item(item);
-						MainActivity.dataListAdapter.notifyDataSetChanged();
-					}
-					if(watch.id<=0){
-						go_watch = true;	
-		    		}else{
-		    			go_watch = false;
-		    		}
-					view_holder.onClick(item,go_watch);
-				}
-			});
-//            if(!isReading){
-//            if(false){
-//            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
-//            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
-//            	tp.setFakeBoldText(true);
-//            }else{
-            	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.gainsboro));
-            	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
-            	tp.setFakeBoldText(false);
-//            }
         }
+        
     }
     
     private class ViewHolder implements BaseViewHolder {
@@ -207,49 +212,49 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         ImageView list_collect_tv_watch;
         TextView list_type_tv_public;
         
-        public void onClick(final DataList item,final boolean go_watch) {
-        	final Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
-			final Watch fand_watch = WatchDBHelper.find(watch);
-			if (BaseUtils.is_wifi_active(activity)) {
-				new TeamknAsyncTask<Void, Void, Boolean>() {
-					@Override
-					public Boolean do_in_background(Void... params)
-							throws Exception {
-						boolean rsult=false;
-						if(fand_watch.id<=0){
-							rsult = true;
-							WatchDBHelper.createOrUpdate(watch);
-							HttpApi.WatchList.watch(item, rsult);
-						}else{
-							rsult = false;
-							WatchDBHelper.delete(watch);
-							HttpApi.WatchList.watch(item, rsult);
-						}
-						return rsult;
-					}
-					@Override
-					public void on_success(Boolean result) {
-						list_collect_tv_watch.setVisibility(View.VISIBLE);
-						data_list_forked_iv.setVisibility(View.VISIBLE);
-						if(go_watch && !MainActivity.RequestCode.data_list_public.equals("watch")){
-							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-						}else if(!MainActivity.RequestCode.data_list_public.equals("watch")){
-							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-						}
-						String msg;
-						if(result==true){
-							msg = "添加成功 ^_^";
-						}else{
-							msg = "移除成功 ^_^";
-						}
-						BaseUtils.toast(msg);
-					}	
-				}.execute();
-			}else{
-				BaseUtils.toast("无法连接到网络，请检查网络配置");
-			}
-		}
+//        public void onClick(final DataList item,final boolean go_watch) {
+//        	final Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
+//			final Watch fand_watch = WatchDBHelper.find(watch);
+//			if (BaseUtils.is_wifi_active(activity)) {
+//				new TeamknAsyncTask<Void, Void, Boolean>() {
+//					@Override
+//					public Boolean do_in_background(Void... params)
+//							throws Exception {
+//						boolean rsult=false;
+//						if(fand_watch.id<=0){
+//							rsult = true;
+//							WatchDBHelper.createOrUpdate(watch);
+//							HttpApi.WatchList.watch(item, rsult);
+//						}else{
+//							rsult = false;
+//							WatchDBHelper.delete(watch);
+//							HttpApi.WatchList.watch(item, rsult);
+//						}
+//						return rsult;
+//					}
+//					@Override
+//					public void on_success(Boolean result) {
+//						list_collect_tv_watch.setVisibility(View.VISIBLE);
+//						data_list_forked_iv.setVisibility(View.VISIBLE);
+//						if(go_watch && !MainActivity.RequestCode.data_list_public.equals("watch")){
+//							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+//							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+//						}else if(!MainActivity.RequestCode.data_list_public.equals("watch")){
+//							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+//							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
+//						}
+//						String msg;
+//						if(result==true){
+//							msg = "添加成功 ^_^";
+//						}else{
+//							msg = "移除成功 ^_^";
+//						}
+//						BaseUtils.toast(msg);
+//					}	
+//				}.execute();
+//			}else{
+//				BaseUtils.toast("无法连接到网络，请检查网络配置");
+//			}
+//		}
     }
 }

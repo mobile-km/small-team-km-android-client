@@ -242,7 +242,13 @@ public class DataListDBHelper extends BaseModelDBHelper {
     long server_created_time = cursor.getLong(7);
     long server_updated_time = cursor.getLong(8);
     int forked_from_id = cursor.getInt(9);
-    return new DataList(id,user_id,title,kind,public_boolean,has_commits,server_data_list_id,server_created_time,server_updated_time,forked_from_id);
+    String forked_from_is_removed = cursor.getString(10);
+    String is_removed = cursor.getString(11);
+    return new DataList(id,user_id,title,
+    		kind,public_boolean,has_commits,
+    		server_data_list_id,server_created_time,
+    		server_updated_time,forked_from_id,
+    		forked_from_is_removed,is_removed);
   }
 
   private static String[] get_columns() {
@@ -256,7 +262,9 @@ public class DataListDBHelper extends BaseModelDBHelper {
         Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID,
         Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,
         Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME,
-        Constants.TABLE_DATA_LISTS_FORKED_FROM_ID
+        Constants.TABLE_DATA_LISTS_FORKED_FROM_ID,
+        Constants.TABLE_DATA_LISTS_FORKED_FROM_IS_REMOVED,
+        Constants.TABLE_DATA_LISTS_IS_REMOVED
     };
   }
   private static ContentValues get_contentvalues(DataList dataList){
@@ -270,6 +278,8 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME,dataList.server_created_time);
 	    values.put(Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME,dataList.server_updated_time);
 	    values.put(Constants.TABLE_DATA_LISTS_FORKED_FROM_ID,dataList.forked_from_id);
+	    values.put(Constants.TABLE_DATA_LISTS_FORKED_FROM_IS_REMOVED,dataList.forked_from_is_removed);
+	    values.put(Constants.TABLE_DATA_LISTS_IS_REMOVED,dataList.is_removed);
 		return values;
   }
   public static void remove_old(List<DataList> requestList,String data_list_type,String data_list_public) throws Exception{

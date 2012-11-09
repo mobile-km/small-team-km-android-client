@@ -101,6 +101,7 @@
     <string name="search_contact_page_header">搜索联系人</string>
     <string name="search_contact">搜索</string>
     
+    <string name="is_no_data">该列表已经被原作者删除</string>
     
     <!-- view.getTag(key,value) 中的 key -->
     <!-- 笔记列表项的 tag key -->

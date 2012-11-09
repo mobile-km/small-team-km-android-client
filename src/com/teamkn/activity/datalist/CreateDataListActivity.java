@@ -91,7 +91,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 							long current_seconds = System.currentTimeMillis();
 							dataList= new DataList(UserDBHelper.find_by_server_user_id(current_user().user_id).id ,
 									add_data_list_et_str, RequestCode.data_list_type, RequestCode.data_list_public,"false",
-									-1,current_seconds,current_seconds,-1);
+									-1,current_seconds,current_seconds,-1,"false","false");
 							DataList datalist = DataListDBHelper.update(dataList);
 							HttpApi.DataList.create(datalist);
 							

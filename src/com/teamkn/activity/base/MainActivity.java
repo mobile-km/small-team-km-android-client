@@ -274,7 +274,9 @@ public class MainActivity extends TeamknBaseActivity {
 		try {
 			if(RequestCode.data_list_public.equals("watch")){
 				List<Watch> watchs = WatchDBHelper.all_by_user_id(UserDBHelper.find_by_server_user_id(current_user().user_id).id);
+				System.out.println("watch watchs.size() " + watchs.size());
 				datalists = DataListDBHelper.all_by_watch_lists(watchs,RequestCode.data_list_type);
+				System.out.println("watch dataLists.size() " + datalists.size());
 			}else if(RequestCode.data_list_public.equals("fork")){	
 				datalists = DataListDBHelper.all(RequestCode.data_list_type,RequestCode.data_list_public);	
 			}else{
@@ -301,25 +303,15 @@ public class MainActivity extends TeamknBaseActivity {
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
 				System.out.println("mainactivity setonclick  = " +item.toString());
 				
-				boolean is_delete = false ;
-				if(RequestCode.data_list_public.equals("fork")){
-					System.out.println("HttpApi.DataList.deletForkList- "+ HttpApi.DataList.deletForkList.size());
-					is_delete = DataListDBHelper
-							.is_delete(HttpApi.DataList.deletForkList, item);
-				}else if(RequestCode.data_list_public.equals("watch")){
-					System.out.println("HttpApi.WatchList.deletWatchList- "+ HttpApi.WatchList.deletWatchList.size());
-					is_delete = DataListDBHelper
-							.is_delete(HttpApi.WatchList.deletWatchList, item);
-				}
-				if(is_delete){
-					showDialog(item);
+				if(item.is_removed.equals("true")){
+					showDialog(item,item_id);
 				}else{
 					startActivityForResult(intent, RequestCode.SHOW_BACK);
 				}
 			}
 		});
 	}
-	private void showDialog(final DataList dataList){
+	private void showDialog(final DataList dataList,final int id ){
 		AlertDialog.Builder builder = new Builder(MainActivity.this);
 		builder.setTitle("注意");
 		builder.setMessage("此列表已经被原作者删除，是否删除该记录？");
@@ -328,9 +320,10 @@ public class MainActivity extends TeamknBaseActivity {
 		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				DataListDBHelper.remove_by_server_id(dataList);
-				dataListAdapter.remove_item(dataList);
-				dataListAdapter.notifyDataSetChanged();
+//				DataListDBHelper.remove_by_server_id(dataList);
+//				dataListAdapter.remove_item(dataList);
+//				dataListAdapter.notifyDataSetChanged();
+				remove_data_list(dataList,id,true);
 			}
 		});
 		builder.show();
@@ -348,10 +341,10 @@ public class MainActivity extends TeamknBaseActivity {
 			break;
 		case RequestCode.SHOW_BACK:
 			System.out.println("DataItemListActivity.update_title " + DataItemListActivity.update_title);
-			if(DataItemListActivity.update_title ==true){
+//			if(DataItemListActivity.update_title ==true){
 				set_title();
 				load_list();
-			}
+//			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -655,7 +648,7 @@ public class MainActivity extends TeamknBaseActivity {
 			builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new AlertDialog.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					remove_data_list(datalists.get(id),id);
+					remove_data_list(datalists.get(id),id,false);
 				}
 			});
 			builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), null);
@@ -666,13 +659,19 @@ public class MainActivity extends TeamknBaseActivity {
 		}
 		return super.onContextItemSelected(item);
 	}
-    private void remove_data_list(final DataList dataList,final int data_list_id){
+    private void remove_data_list(final DataList dataList,final int data_list_id,final boolean is_delete_watch){
     	if(BaseUtils.is_wifi_active(this)){
     		new TeamknAsyncTask<Void, Void, Boolean>(MainActivity.this,getResources().getString(R.string.now_deleting)) {
 				@Override
 				public Boolean do_in_background(Void... params)
 						throws Exception {
-					HttpApi.DataList.remove(dataList);
+					if(is_delete_watch){
+						Watch watch_update = new Watch(-1,UserDBHelper.find_by_server_user_id(current_user().user_id).id , dataList.id);
+						WatchDBHelper.delete(watch_update);
+						HttpApi.WatchList.watch(dataList, false);
+					}else{
+						HttpApi.DataList.remove(dataList);
+					}
 					return true;
 				}
 				@Override

@@ -92,7 +92,9 @@ public class TeamknDBHelper extends SQLiteOpenHelper {
             Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " integer ,"+
             Constants.TABLE_DATA_LISTS_SERVER_CREATED_TIME + " integer ,"+
             Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " integer ,"+
-            Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " integer);";
+            Constants.TABLE_DATA_LISTS_FORKED_FROM_ID + " integer,"+
+            Constants.TABLE_DATA_LISTS_FORKED_FROM_IS_REMOVED + " text , "+ 
+            Constants.TABLE_DATA_LISTS_IS_REMOVED +	" text);";
     
     private static final String create_data_items = "create table "+
             Constants.TABLE_DATA_ITEMS + " ( " + 

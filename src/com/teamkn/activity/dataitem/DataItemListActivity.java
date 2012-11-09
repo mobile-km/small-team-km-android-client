@@ -479,6 +479,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				
 				//判断是否是 要显示 步骤列表
 				DataListReading reading = DataListReadingDBHelper.find(new DataListReading(-1,dataList.id,UserDBHelper.find_by_server_user_id(current_user().user_id).id));
+				System.out.println("datalist " + dataList.toString());
 				if((data_list_public.equals("true") 
 						|| data_list_public.equals("watch") 
 						|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
@@ -491,17 +492,22 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				//判断是否 是 协作列表 显示原始用户名
 				if(data_list_public.equals("fork") && map.get("user")!=null){
 					data_item_original_user_name.setVisibility(View.VISIBLE);
-//					DataList forked = DataListDBHelper.find_by_server_data_list_id(dataList.forked_from_id);
-//					User user = UserDBHelper.find(forked.user_id);
-					User user = (User) map.get("user");
-//					System.out.println("forked toString " +forked.toString());
-//					System.out.println("datalist toString " + dataList.toString());
-					System.out.println("fork show user name  " + user.toString());
-					data_item_original_user_name.setText(Html.fromHtml("从<font  color=blue>"
-					+user.user_name+"</font>的列表迁出"));			
+					
+					if(dataList.forked_from_is_removed.equals("true")){
+						data_item_original_user_name.setText(getResources().getString(R.string.is_no_data));
+					}else{
+						User user = (User) map.get("user");
+						data_item_original_user_name.setText(Html.fromHtml("从<font  color=blue>"
+						+user.user_name+"</font>的列表迁出"));
+					}
+								
+				}else if(data_list_public.equals("fork") && dataList.forked_from_is_removed.equals("true")){
+					data_item_original_user_name.setVisibility(View.VISIBLE);
+					data_item_original_user_name.setText(getResources().getString(R.string.is_no_data));
 				}else{
 					data_item_original_user_name.setVisibility(View.GONE);
 				}
+				
 				//判断列表是否有数据
 				if(dataItems.size()==0){
 					tlv.setVisibility(View.GONE);
