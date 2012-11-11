@@ -17,12 +17,12 @@ public class SharedParam {
 	}
 	
 	public static void savePauseParam(Context context,boolean isPause){
-		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.RESULT_OK);
 		sp.edit().putBoolean("isPause_reset", isPause);
 	}
 	
 	public static boolean getPauseParam(Context context){
-		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences("isPause_reset", Activity.RESULT_OK);
 		return sp.getBoolean("isPause_reset", false);
 	}
 }

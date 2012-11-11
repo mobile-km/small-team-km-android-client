@@ -380,10 +380,10 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 						throws Exception {
 					DataList api_dataList = null;
 					if(do_accept){
-						api_dataList=HttpApi.WatchList.accept_commits(dataList_origin.server_data_list_id, committer_id);	
+						api_dataList=HttpApi.WatchList.accept_rest_commits(dataList_origin.server_data_list_id, committer_id);	
 						DataItemDBHelper.delete_by_data_list_id(dataList_origin.id);
 					}else{
-						api_dataList=HttpApi.WatchList.reject_commits(dataList_origin.server_data_list_id, committer_id);
+						api_dataList=HttpApi.WatchList.reject_rest_commits(dataList_origin.server_data_list_id, committer_id);
 					}
 					return api_dataList;
 				}

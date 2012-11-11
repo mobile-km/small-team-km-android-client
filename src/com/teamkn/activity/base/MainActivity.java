@@ -7,7 +7,6 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,11 +22,10 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -35,9 +33,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,7 +55,7 @@ import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.base.utils.SharedParam;
+import com.teamkn.base.utils.ShowHelp;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.model.Watch;
@@ -71,7 +67,7 @@ import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.GroupAdapter;
 
 public class MainActivity extends TeamknBaseActivity {
-
+	boolean first_login;
 	View view_show;
 	static TextView teamkn_show_msg_tv;
 	LinearLayout layout;
@@ -86,6 +82,8 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 
 	public static class RequestCode {
+		public  static boolean  IS_ON_PAUSE = false;
+		
 		public final static int CREATE_DATA_LIST = 0;
 		public final static int SHOW_BACK = 9;
 
@@ -162,7 +160,9 @@ public class MainActivity extends TeamknBaseActivity {
 		// 加载node_listview
 		InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
 		Intent intent = getIntent();
-		
+		first_login = intent.getBooleanExtra("first_login", false);
+//		judge(first_login);
+
 		String data_list_public = intent.getStringExtra("data_list_public");
 		String data_list_type = intent.getStringExtra("data_list_type");
 		if (data_list_public != null && data_list_type != null) {
@@ -171,13 +171,7 @@ public class MainActivity extends TeamknBaseActivity {
 			System.out.println(RequestCode.data_list_public + " : "
 					+ RequestCode.data_list_type);
 		}	
-		
-		if(SharedParam.getPauseParam(this)){
-			load_list();
-		}else{
-			load_data_list_or_watch(RequestCode.data_list_public);
-		}
-		SharedParam.savePauseParam(this, false);
+		load_data_list_or_watch(RequestCode.data_list_public);
 	}
 	/**
 	 * 初始化动画
@@ -194,8 +188,39 @@ public class MainActivity extends TeamknBaseActivity {
 		matrix.postTranslate(offset, 0);
 		cursor.setImageMatrix(matrix);// 设置动画初始位置
 	}
+	private void judge(boolean first_login){
+		if(first_login){
+			click_collection_button= (Button)view_show.findViewById(R.id.click_collection_tv);
+			View view = click_all_button;
+			ShowHelp.showHelp(this, view, "教你玩转 TEAMKN");
+		}
+	}
 	@Override
 	protected void onResume() {
+		System.out.println("RequestCode.IS_ON_PAUSE="+RequestCode.IS_ON_PAUSE);
+		if(RequestCode.IS_ON_PAUSE){
+			RequestCode.IS_ON_PAUSE = false;
+			setContentView(R.layout.horz_scroll_with_image_menu);
+			layout = (LinearLayout) findViewById(R.id.linearlayout_loading);
+
+			LayoutInflater inflater = LayoutInflater.from(this);
+			view_show = inflater.inflate(R.layout.base_main, null);
+			layout.addView(view_show);
+	        
+			// 加载node_listview
+			InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
+			Intent intent = getIntent();
+			
+			String data_list_public = intent.getStringExtra("data_list_public");
+			String data_list_type = intent.getStringExtra("data_list_type");
+			if (data_list_public != null && data_list_type != null) {
+				RequestCode.data_list_public = data_list_public;
+				RequestCode.data_list_type = data_list_type;
+				System.out.println(RequestCode.data_list_public + " : "
+						+ RequestCode.data_list_type);
+			}	
+			load_data_list_or_watch(RequestCode.data_list_public);
+		}
 		// 设置用户头像和名字
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
@@ -221,6 +246,7 @@ public class MainActivity extends TeamknBaseActivity {
 			}
 		});
 		set_title();
+		judge(first_login);
 		super.onResume();
 	}
     private void set_title(){
@@ -343,7 +369,8 @@ public class MainActivity extends TeamknBaseActivity {
 			System.out.println("DataItemListActivity.update_title " + DataItemListActivity.update_title);
 //			if(DataItemListActivity.update_title ==true){
 				set_title();
-				load_list();
+//				load_list();
+				load_data_list_or_watch(RequestCode.data_list_public);
 //			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -693,7 +720,7 @@ public class MainActivity extends TeamknBaseActivity {
 //		Intent intent = new Intent(this,MainActivity.class);
 //		intent.putExtra("data_list_public", RequestCode.data_list_public);
 //		intent.putExtra("data_list_type", RequestCode.data_list_type);
-//		SharedParam.savePauseParam(this, true);
+		RequestCode.IS_ON_PAUSE = true;
 //		startActivity(intent);
 		super.onPause();
 	}	

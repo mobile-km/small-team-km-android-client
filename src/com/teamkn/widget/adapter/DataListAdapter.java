@@ -7,30 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
-import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
-import com.teamkn.base.task.TeamknAsyncTask;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
-import com.teamkn.model.DataListReading;
 import com.teamkn.model.User;
-import com.teamkn.model.Watch;
-import com.teamkn.model.database.DataListDBHelper;
-import com.teamkn.model.database.DataListReadingDBHelper;
 import com.teamkn.model.database.UserDBHelper;
-import com.teamkn.model.database.WatchDBHelper;
 
 public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     Activity activity ;

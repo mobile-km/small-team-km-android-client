@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.R;
+import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -67,9 +68,17 @@ public class LoginActivity extends TeamknBaseActivity {
             }
             @Override
             public void on_success(Void v) {
-                open_activity(MainActivity.class);
+            	is_first_login(true);
                 finish();
             }
         }.execute(email, password);
+    }
+    private void is_first_login(boolean is_first){
+    	if(is_first){
+    		open_activity(LoginSwitchViewDemoActivity.class);
+    	}else{
+    		open_activity(MainActivity.class);
+    	}
+    	
     }
 }

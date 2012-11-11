@@ -698,17 +698,20 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			dataItemListAdapter.insert(from_item, to);
 			dataItemListAdapter.notifyDataSetChanged();
 			
-			System.out.println("from 0: to 1= " + from + " : " + to);
+			System.out.println("from 0: to 1  : size() = " + from + " : " + to + " : " + dataItems.size());
 			if(to<=0){
 				insert_into(from_item.server_data_item_id,
 						"",to_item.position);
 			}else if(to>=dataItems.size()){
 				insert_into(from_item.server_data_item_id,
 						to_item.position,"");
-			}else if(from < to){
+			}else if(from < to && to < dataItems.size()-1){
 				insert_into(from_item.server_data_item_id,
 						dataItems.get(to-1).position,dataItems.get(to+1).position);
 				System.out.println((to-1) + " : " + (to+1));
+			}else if(from < to && to == dataItems.size()-1){
+				insert_into(from_item.server_data_item_id,
+						dataItems.get(to-1).position,"");
 			}else{
 				insert_into(from_item.server_data_item_id,
 						dataItems.get(to-1).position,to_item.position);
@@ -798,7 +801,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}
 				break;
 			case 1:// 向下移动一行
-				if (from_id < dataItems.size() - 1) {
+				System.out.println("from_id : size = " + from_id  + " : " + dataItems.size());
+				if (from_id < dataItems.size() - 2) {
 					DataItem from_item1 = dataItems.get(from_id);
 					DataItem to_item1 = dataItems.get(from_id + 1);
 					dataItemListAdapter.remove(from_item1);
@@ -811,6 +815,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 								to_item1.position,dataItems.get(from_id + 2).position);
 					}
 					
+				}else if(from_id < dataItems.size() - 1){
+					DataItem from_item1 = dataItems.get(from_id);
+					DataItem to_item1 = dataItems.get(from_id + 1);
+					dataItemListAdapter.remove(from_item1);
+					dataItemListAdapter.insert(from_item1, from_id + 1);
+					insert_into(from_item1.server_data_item_id,
+								to_item1.position,"");
 				}
 				break;
 			case 2:// 编辑当前子项

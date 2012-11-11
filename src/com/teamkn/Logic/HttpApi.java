@@ -1073,9 +1073,39 @@ public class HttpApi {
 				}
 			}.go();
     	}
+//    	一个 data_list 中，接受某个推送作者的剩下的全部修改 [编辑]
+//
+//    			PUT /api/data_lists/:id/accept_rest_commits
+    	public static com.teamkn.model.DataList accept_rest_commits( int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>(接受全部修改 + server_data_list_id + "/accept_rest_commits"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataList on_success(String response_text) throws Exception {
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataList dataList = DataList.getDataList(jsonObject);
+					DataListDBHelper.update_by_server_id(dataList);
+					return dataList;
+				}
+			}.go();
+    	}
 //    	一个 data_list 中，拒绝某个推送作者的全部修改 [编辑]
     	public static com.teamkn.model.DataList reject_commits( int server_data_list_id,int committer_id) throws Exception{
     		return new TeamknPutRequest<com.teamkn.model.DataList>(拒绝全部修改 + server_data_list_id + "/reject_commits"
+    				,new PostParamText("committer_id", committer_id+"")) {
+				@Override
+				public com.teamkn.model.DataList on_success(String response_text) throws Exception {
+					JSONObject jsonObject = new JSONObject(response_text);
+					com.teamkn.model.DataList dataList = DataList.getDataList(jsonObject);
+					DataListDBHelper.update_by_server_id(dataList);
+					return dataList;
+				}
+			}.go();
+    	}
+//    	一个 data_list 中，拒绝某个推送作者的剩下的全部修改 [编辑]
+//
+//    			PUT /api/data_lists/:id/reject_rest_commits
+    	public static com.teamkn.model.DataList reject_rest_commits( int server_data_list_id,int committer_id) throws Exception{
+    		return new TeamknPutRequest<com.teamkn.model.DataList>(拒绝全部修改 + server_data_list_id + "/reject_rest_commits"
     				,new PostParamText("committer_id", committer_id+"")) {
 				@Override
 				public com.teamkn.model.DataList on_success(String response_text) throws Exception {

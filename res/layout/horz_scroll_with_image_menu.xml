@@ -63,7 +63,8 @@
 	            android:id="@+id/list_menu_view"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"    
+                android:layout_marginRight="2dp" 
+                android:background="@color/white"   
 	        /> 
 	        
 	   </RelativeLayout>

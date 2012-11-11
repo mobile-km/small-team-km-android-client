@@ -230,7 +230,7 @@ public class DataListDBHelper extends BaseModelDBHelper {
     db.close();
     return has_value;
   }
-
+  
   private static DataList build_by_cursor(Cursor cursor) {
     int id = cursor.getInt(0);
     int user_id = cursor.getInt(1);
@@ -323,4 +323,18 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	  }
 	return false;  
   }
+  public static void create_first_login(DataList dataList){
+	  	SQLiteDatabase db = get_write_db();  
+	    ContentValues values = get_contentvalues(dataList);
+	    if(find_by_server_data_list_id(dataList.server_data_list_id).id <=0){ 
+	    	db.insert(Constants.TABLE_DATA_LISTS, null, values);
+	    	dataList = pull_last_data();
+	    	System.out.println("insert dataList= " + dataList.toString());
+	    }else{
+	    	db.update(Constants.TABLE_DATA_LISTS, values, Constants.TABLE_DATA_LISTS_SERVER_DATA_LIST_ID + " = ? ", new String[]{dataList.server_data_list_id+""});
+	    	System.out.println("update dataList= " + dataList.toString());
+	    }
+	    db.close();
+  }
+  
 }

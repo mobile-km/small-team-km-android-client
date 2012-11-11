@@ -3,7 +3,6 @@ package com.teamkn.widget.adapter;
 import java.util.Map;
 
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
