@@ -191,7 +191,7 @@ public class MainActivity extends TeamknBaseActivity {
 	private void judge(boolean first_login){
 		if(first_login){
 			click_collection_button= (Button)view_show.findViewById(R.id.click_collection_tv);
-			View view = click_all_button;
+			View view = click_collection_button;
 			ShowHelp.showHelp(this, view, "教你玩转 TEAMKN");
 		}
 	}

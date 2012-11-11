@@ -35,9 +35,12 @@ public class ShowHelp {
 	
 	public static void showHelp(Context context,View v,String str){
 //    	viewhelp.setVisibility(View.VISIBLE);
+		System.out.println("----------------------------");
+		System.out.println(context.toString());
+		System.out.println(v.toString());
+		System.out.println(str);
+		System.out.println("----------------------------"); 
 		
-		
-		 
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.popupshow_help, null);
 		view.setBackgroundColor(Color.TRANSPARENT);
@@ -46,7 +49,9 @@ public class ShowHelp {
 		
 		View click_v = (View)v;
 		int[] intXY = new int[2];
+		System.out.println(intXY[0] + " 1: " + intXY[1]);
 		click_v.getLocationOnScreen(intXY);
+		System.out.println(intXY[0] + " 2: " + intXY[1]);
 		
 		TextView popupshow_str_top = (TextView)view.findViewById(R.id.popupshow_str_top);
 		TextView popupshow_str_but = (TextView)view.findViewById(R.id.popupshow_str_but);
