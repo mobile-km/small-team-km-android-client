@@ -121,6 +121,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		dataList = DataListDBHelper.find(data_list_id);
 		load_dataList = dataList; //记载进入界面时dataList
 		
+		System.out.println("data_list_public " + data_list_public);
+		
 		//判断是否是当前用户的列表 或者 是协作列表
 		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id || data_list_public.equals("fork")){
 			is_curretn_user_data_list  = true;

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
@@ -95,10 +96,11 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 							DataList datalist = DataListDBHelper.update(dataList);
 							HttpApi.DataList.create(datalist);
 							
-							Intent intent = new Intent(CreateDataListActivity.this,MainActivity.class);
-
+							Intent intent = new Intent(CreateDataListActivity.this,DataItemListActivity.class);
+							DataList list = DataListDBHelper.find_first();
 				         	intent.putExtra("data_list_public", RequestCode.data_list_public);
 				         	intent.putExtra("data_list_type", RequestCode.data_list_type);
+				         	intent.putExtra("data_list_id", list.id);
 				         	startActivity(intent);
 				         	this.finish();
 						}	

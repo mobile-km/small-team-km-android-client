@@ -189,10 +189,15 @@ public class MainActivity extends TeamknBaseActivity {
 		cursor.setImageMatrix(matrix);// 设置动画初始位置
 	}
 	private void judge(boolean first_login){
-		if(first_login){
-			click_collection_button= (Button)view_show.findViewById(R.id.click_collection_tv);
-			View view = click_collection_button;
-			ShowHelp.showHelp(this, view, "教你玩转 TEAMKN");
+		if(first_login && RequestCode.data_list_public.equals("false")){
+//			click_collection_button= (Button)view_show.findViewById(R.id.click_collection_tv);
+//			View countentview = LayoutInflater.from(this).inflate(R.layout.list_data_list_item, null);
+//			View view = dataListAdapter.getView(0, countentview, null);
+//			View view = data_list.getItemIdAtPosition(0);
+//			View view = (View) data_list.getAdapter().getItem(0);
+			ShowHelp.showHelp(this, data_list, "教你玩转 TEAMKN");
+//			ShowHelp.showHelp(this, view, "教你玩转 TEAMKN");
+			this.first_login=false;
 		}
 	}
 	@Override
@@ -246,7 +251,7 @@ public class MainActivity extends TeamknBaseActivity {
 			}
 		});
 		set_title();
-		judge(first_login);
+		
 		super.onResume();
 	}
     private void set_title(){
@@ -285,6 +290,7 @@ public class MainActivity extends TeamknBaseActivity {
 				@Override
 				public void on_success(List<DataList> datalists) {
 					load_list();
+					judge(first_login);
 				}
 			}.execute();
     	}else{
@@ -327,7 +333,7 @@ public class MainActivity extends TeamknBaseActivity {
 				Intent intent = new Intent(MainActivity.this,DataItemListActivity.class);
 				intent.putExtra("data_list_id",item.id);
 				intent.putExtra("data_list_public", RequestCode.data_list_public);
-				System.out.println("mainactivity setonclick  = " +item.toString());
+				System.out.println(RequestCode.data_list_public + " mainactivity setonclick  = " +item.toString());
 				
 				if(item.is_removed.equals("true")){
 					showDialog(item,item_id);

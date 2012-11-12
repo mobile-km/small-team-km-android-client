@@ -336,5 +336,23 @@ public class DataListDBHelper extends BaseModelDBHelper {
 	    }
 	    db.close();
   }
+	public static DataList find_first() {
+		DataList datalist;
+	    SQLiteDatabase db = get_read_db();
+//	    select * from 表 order by 成绩字段 asc limit 1
+	    String sql = "select * from " + Constants.TABLE_DATA_LISTS + " order by " + Constants.TABLE_DATA_LISTS_SERVER_UPDATED_TIME + " desc limit 1";
+	    Cursor cursor = db.rawQuery(sql, null);
+
+	    boolean has_value = cursor.moveToFirst();
+	    if(has_value){
+	    	datalist = build_by_cursor(cursor);
+	    }else{
+	    	datalist = DataList.NIL_DATA_LIST;
+	    }
+	    
+	    cursor.close();
+	    db.close();
+	    return datalist;
+	}
   
 }

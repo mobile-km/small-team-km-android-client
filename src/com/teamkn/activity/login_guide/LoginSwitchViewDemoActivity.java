@@ -98,7 +98,7 @@ public class LoginSwitchViewDemoActivity extends TeamknBaseActivity implements O
 		setCurPoint(view);
 	}
 	public void click_experience(View view){
-		Toast.makeText(this, "click_experience", Toast.LENGTH_LONG).show();
+//		Toast.makeText(this, "click_experience", Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(LoginSwitchViewDemoActivity.this,MainActivity.class);
 		intent.putExtra("first_login", true);
 		startActivity(intent);
