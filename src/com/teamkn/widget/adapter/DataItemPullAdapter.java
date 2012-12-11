@@ -8,17 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
-import com.teamkn.model.DataItem;
-import com.teamkn.model.DataList;
 import com.teamkn.model.User;
-import com.teamkn.model.database.DataListDBHelper;
-import com.teamkn.model.database.UserDBHelper;
 
 public class DataItemPullAdapter extends TeamknBaseAdapter<User> {
     public DataItemPullAdapter(TeamknBaseActivity activity) {

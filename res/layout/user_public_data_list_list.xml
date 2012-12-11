@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+       
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            >
+        <Button
+            style="@style/head_bar_button_go_back"
+        />
+        <TextView
+            android:id="@+id/user_name_tv"
+            style="@style/head_bar_text_center"
+            android:text="XXX的公开列表"
+        />
+    </RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/relativelayout_set_user_avatar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:gravity="center_vertical"
+            android:padding="10dp" >
+    
+            <ImageView
+                android:id="@+id/iv_user_avatar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/user_default_avatar_normal" />
+    
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/iv_user_avatar"
+                android:gravity="center_vertical"
+                android:onClick="click_set_user_name"
+                android:text="设置头像" />
+
+            <LinearLayout
+            android:id="@+id/follow_tv_ll"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_user_avatar"
+            android:layout_alignLeft="@+id/tv_user_name"
+            
+	        >
+		         <Button
+		            android:padding="5dp"
+		            android:id="@+id/follow_tv"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/selector_follow"
+		            android:text="已FOLLOW" />
+	        </LinearLayout>
+        </RelativeLayout>
+    <LinearLayout 
+      android:id="@+id/bar"
+      android:layout_height="40dp"
+      android:layout_width="fill_parent"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:layout_marginBottom="5dp"
+      android:background="@color/lightsteelblue"
+  >
+      <Button
+          android:id="@+id/click_all_tv"
+           android:onClick="click_all_button"
+           android:layout_width="100dp"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
+           android:text="所有"
+      />
+      <Button
+           android:id="@+id/click_collection_tv"
+           android:onClick="click_collection_button"
+           android:layout_width="100dp"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
+           android:text="收集列表"
+      />
+      <Button
+          android:id="@+id/click_step_tv"
+           android:onClick="click_step_button"
+           android:layout_width="100dp"
+           android:layout_height="fill_parent"
+           android:background="@color/lightsteelblue"
+           android:text="步骤列表"
+      />
+  </LinearLayout>
+  <ImageView
+       android:id="@+id/cursor"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:scaleType="matrix"
+       android:src="@drawable/line" 
+       android:layout_marginBottom="5dp"
+  />
+  <ListView 
+      android:id="@+id/list_view"
+      android:divider="#00000000"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent">
+  </ListView>
+</LinearLayout>

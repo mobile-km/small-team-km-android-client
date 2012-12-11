@@ -20,7 +20,7 @@
         />
     </RelativeLayout>
     <ScrollView 
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
     >  
        <LinearLayout
@@ -28,82 +28,82 @@
            android:layout_height="wrap_content"
            android:orientation="vertical" 
        >
-		   <LinearLayout 
-		       android:id="@+id/ll_setting"
-		       android:layout_width="fill_parent"
-		       android:layout_height="wrap_content"
-		       android:padding="10dp"
-		       android:orientation="vertical"
-		   >
-		       
-		       <TextView
-		           android:text="上传图片质量"
-		           android:textColor="#fff"
-		           android:layout_width="fill_parent"
-		           android:layout_height="wrap_content" 
-		           android:textSize="20dp"
-		           android:layout_marginBottom="5dp"
-		       />
-		       <TextView
-		           android:layout_marginBottom="5dp"
-		           android:text="发送主题时，上传的图片的质量"
-		           android:textColor="#fff"
-		           android:layout_width="fill_parent"
-		           android:layout_height="wrap_content" 
-		           android:textSize="15dp"
-		       />
-		       <TextView
-	               android:background="#fff"
-	               android:layout_width="fill_parent"
-	               android:layout_height="0.1dp"
-	           />
-		    </LinearLayout>
-		    
-		    <LinearLayout 
-	           android:onClick="click_go_account_manage_activity"
-	           android:layout_width="fill_parent"
-	           android:layout_height="wrap_content"
-	           android:padding="10dp"
-	           android:orientation="vertical"
-	         >
-	           
-	           <TextView
-	               android:text="账号管理"
-	               android:textColor="#fff"
-	               android:layout_width="fill_parent"
-	               android:layout_height="wrap_content" 
-	               android:textSize="20dp"
-	               android:layout_marginBottom="5dp"
-	           />
-	           <TextView
-	               android:background="#fff"
-	               android:layout_width="fill_parent"
-	               android:layout_height="0.1dp"
-	           />
-	        </LinearLayout>
-	        <LinearLayout 
-	           android:onClick="click_go_about_teamkn_activity"
-	           android:layout_width="fill_parent"
-	           android:layout_height="wrap_content"
-	           android:padding="10dp"
-	           android:orientation="vertical"
-	        >
-	           
-	           <TextView
-	               android:text="关于"
-	               android:textColor="#fff"
-	               android:layout_width="fill_parent"
-	               android:layout_height="wrap_content" 
-	               android:textSize="20dp"
-	               android:layout_marginBottom="5dp"
-	           />
-	           <TextView
-	               android:background="#fff"
-	               android:layout_width="fill_parent"
-	               android:layout_height="0.1dp"
-	           />
-	        </LinearLayout>
-	    </LinearLayout>
+           <LinearLayout 
+               android:id="@+id/ll_setting"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:padding="10dp"
+               android:orientation="vertical"
+           >
+               
+               <TextView
+                   android:text="上传图片质量"
+                   android:textColor="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content" 
+                   android:textSize="20dp"
+                   android:layout_marginBottom="5dp"
+               />
+               <TextView
+                   android:layout_marginBottom="5dp"
+                   android:text="发送主题时，上传的图片的质量"
+                   android:textColor="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content" 
+                   android:textSize="15dp"
+               />
+               <TextView
+                   android:background="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="0.1dp"
+               />
+            </LinearLayout>
+            
+            <LinearLayout 
+               android:onClick="click_go_account_manage_activity"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:padding="10dp"
+               android:orientation="vertical"
+             >
+               
+               <TextView
+                   android:text="账号管理"
+                   android:textColor="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content" 
+                   android:textSize="20dp"
+                   android:layout_marginBottom="5dp"
+               />
+               <TextView
+                   android:background="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="0.1dp"
+               />
+            </LinearLayout>
+            <LinearLayout 
+               android:onClick="click_go_about_teamkn_activity"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:padding="10dp"
+               android:orientation="vertical"
+            >
+               
+               <TextView
+                   android:text="关于软件"
+                   android:textColor="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content" 
+                   android:textSize="20dp"
+                   android:layout_marginBottom="5dp"
+               />
+               <TextView
+                   android:background="#fff"
+                   android:layout_width="fill_parent"
+                   android:layout_height="0.1dp"
+               />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
     <ListView 
         android:layout_width="fill_parent"

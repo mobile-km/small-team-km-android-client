@@ -7,9 +7,10 @@
         android:background="#ddd"
         >
     <!-- 新增 图标 -->
+
     <ImageView
             android:id="@+id/current_account"
-            android:src="@drawable/account_add"
+            android:src="@drawable/blue_add"
             android:layout_height="20dp"
             android:layout_width="20dp"
             android:layout_margin="9dp"

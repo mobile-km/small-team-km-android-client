@@ -1,7 +1,6 @@
 package com.teamkn.base.activity;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -32,13 +30,12 @@ import com.teamkn.activity.base.AccountManagerActivity;
 import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.TeamknSettingActivity;
-import com.teamkn.activity.note.EditNoteActivity;
+import com.teamkn.activity.social_circle.SocialCircleActivity;
+import com.teamkn.activity.usermsg.UserManagerActivity;
 import com.teamkn.application.TeamknApplication;
-import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.cache.image.ImageCache;
 import com.teamkn.model.AccountUser;
-import com.teamkn.model.database.NoteDBHelper;
 import com.teamkn.widget.adapter.MenuListAdapter;
 
 abstract public class TeamknBaseActivity extends Activity {
@@ -65,7 +62,11 @@ abstract public class TeamknBaseActivity extends Activity {
 		if( TeamknApplication.current_show_activity!=null 
 				&& TeamknApplication.current_show_activity
       		  .equals("com.teamkn.activity.base.MainActivity")){
-			System.out.println("----------------------------------------");
+			return true;
+        }
+		if( TeamknApplication.current_show_activity!=null 
+				&& TeamknApplication.current_show_activity
+      		  .equals("com.teamkn.activity.social_circle.SocialCircleActivity")){
 			return true;
         }
 		if( TeamknApplication.current_show_activity!=null 
@@ -75,7 +76,7 @@ abstract public class TeamknBaseActivity extends Activity {
         }
 		if( TeamknApplication.current_show_activity!=null 
 				&& TeamknApplication.current_show_activity
-      		  .equals("com.teamkn.activity.usermsg.UserMsgActivity")){
+      		  .equals("com.teamkn.activity.usermsg.UserManagerActivity")){
 			return true;
         }
 //		if( TeamknApplication.current_show_activity!=null 
@@ -85,6 +86,7 @@ abstract public class TeamknBaseActivity extends Activity {
 //        }
 		return is_menu;
 	}
+	
 	private void load_list(){
 		menu_user_avater_iv = (ImageView)findViewById(R.id.menu_user_avater_iv);
 		menu_user_name_tv = (TextView)findViewById(R.id.menu_user_name_tv);
@@ -101,7 +103,8 @@ abstract public class TeamknBaseActivity extends Activity {
 			menu_user_avater_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
 		menu_user_name_tv.setText(name);
-		
+		menu_user_avater_iv.setOnClickListener(setUserManagerClick);
+		menu_user_name_tv.setOnClickListener(setUserManagerClick);
 		
 		list = ArrayListMenu.getData();
 		adapter = new MenuListAdapter(this);
@@ -112,48 +115,54 @@ abstract public class TeamknBaseActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long position) {
 				switch (arg2) {
-				case 0:  // 公共列表
-					Intent public_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
-					public_intent.putExtra("data_list_public", "true");
-					public_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(public_intent);
+				case 0: //我的首页  follow  的首页
+					Intent follow_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
+					follow_intent.putExtra("data_list_public", MainActivity.RequestCode.我的首页);
+					follow_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+					startActivity(follow_intent);
 					break;
 				case 1: // 我的列表
 					Intent my_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
-					my_intent.putExtra("data_list_public", "false");
+					my_intent.putExtra("data_list_public", MainActivity.RequestCode.我的列表);
 					my_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
 					startActivity(my_intent);
 					break;
-				case 2: // 我的书签
-					Intent watch_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
-					watch_intent.putExtra("data_list_public", "watch");
-					watch_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(watch_intent);
+				case 2:  // 公共的列表  
+					Intent public_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
+					public_intent.putExtra("data_list_public", MainActivity.RequestCode.公开的列表);
+					public_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+					startActivity(public_intent);
 					break;
-				case 3:  // 列表协作
-					Intent fork_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
-					fork_intent.putExtra("data_list_public", "fork");
-					fork_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(fork_intent);
+				case 3:  // 社交管理
+					Intent social_intent = new Intent(TeamknBaseActivity.this,SocialCircleActivity.class);
+					startActivity(social_intent);
 					break;
 				case 4:  // 设置选项
 					open_activity(TeamknSettingActivity.class);
 					break;
 				case 5:  //用户信息
 //					open_activity(UserMsgActivity.class);
-					break;
-				case 6: // 注销用户
-					open_activity(AccountManagerActivity.class);
-					break;
-				case 7: // 退出登录
 					click_exit_teamkn_activity();
 					break;
+//				case 6: // 注销用户
+////					open_activity(AccountManagerActivity.class);
+//					break;
+//				case 7: // 退出登录
+//					click_exit_teamkn_activity();
+//					break;
 				default:
 					break;
 				}
 			}
 		});
 	}
+	android.view.View.OnClickListener setUserManagerClick = new android.view.View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(TeamknBaseActivity.this , UserManagerActivity.class);
+			startActivity(intent);
+		}
+	};
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -236,12 +245,7 @@ abstract public class TeamknBaseActivity extends Activity {
 	}
 	 
 	
-	final public void click_go_edit_node_activity(View view){
-		Intent intent = new Intent();
-		intent.setClass(this, EditNoteActivity.class);
-		intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.TEXT);
-		startActivityForResult(intent,TeamknBaseActivity.RequestCode.NEW_TEXT);
-	}
+
 	final public void click_go_edit_node_album_camera_activity(View view){
 		
 		new AlertDialog.Builder(this)
@@ -280,32 +284,7 @@ abstract public class TeamknBaseActivity extends Activity {
 		if(resultCode != Activity.RESULT_OK){
 			return;
 		}
-		switch(requestCode){
-		  case TeamknBaseActivity.RequestCode.NEW_TEXT:
-		    BaseUtils.toast("创建成功");
-		    break;
-		  case TeamknBaseActivity.RequestCode.FROM_ALBUM:
-		    String image_path = BaseUtils.get_file_path_from_image_uri(data.getData());
-		    
-		    start_edit_note_activity_by_image_path(image_path);
-		    break;
-		  case TeamknBaseActivity.RequestCode.FROM_CAMERA:
-			  String file_path = CameraLogic.IMAGE_CAPTURE_TEMP_FILE.getAbsolutePath();
-	          try {
-	             Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), file_path, null, null));
-	             start_edit_note_activity_by_image_path(file_path); 
-	          } catch (FileNotFoundException e) {
-	             e.printStackTrace();
-	          }
-		    break;
-		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-	private void start_edit_note_activity_by_image_path(String image_path){
-	    Intent intent = new Intent(TeamknBaseActivity.this, EditNoteActivity.class);
-	    intent.putExtra(EditNoteActivity.Extra.NOTE_KIND, NoteDBHelper.Kind.IMAGE);
-	    intent.putExtra(EditNoteActivity.Extra.NOTE_IMAGE_PATH, image_path);
-	    startActivity(intent);
 	}
 	
 	@Override

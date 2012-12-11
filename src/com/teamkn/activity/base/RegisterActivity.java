@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -42,8 +43,11 @@ public class RegisterActivity extends TeamknBaseActivity{
 				public void on_success(Integer client_chat_node_id) {
 					
 					if(questError==null ){
-						open_activity(MainActivity.class);
-		                finish();
+						open_activity(LoginSwitchViewDemoActivity.class);
+						System.out.println("register++++++++++++++++current_user()++++begin+++++++++++++++");
+		            	System.out.println(current_user().toString());
+		            	System.out.println("register++++++++++++++++current_user()++++end+++++++++++++++");
+						finish();
 					}else{
 						ll_show.setVisibility(View.VISIBLE);
 						tv_email_repead.setVisibility(View.VISIBLE);

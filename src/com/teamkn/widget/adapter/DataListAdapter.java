@@ -3,11 +3,13 @@ package com.teamkn.widget.adapter;
 import java.io.ByteArrayInputStream;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +17,10 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.social_circle.UserPublicDataListActivity;
+import com.teamkn.activity.social_circle.UserPublicDataListActivity.RequestCode;
+import com.teamkn.activity.usermsg.UserMsgActivity;
+import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.DataList;
@@ -78,16 +84,23 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         	view_holder.list_note_title_tv_edit.setText(activity.getResources().getString(R.string.is_no_data));	
         }else{
 
-            if((item.public_boolean.equals("false")
+            if(   (  (item.public_boolean.equals(MainActivity.RequestCode.我的列表)
             		|| item.user_id == UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id)
-            		&& MainActivity.RequestCode.data_list_public.equals("false")
-            		|| MainActivity.RequestCode.data_list_public.equals("fork")
-            		){
+            		&& MainActivity.RequestCode.data_list_public.equals(MainActivity.RequestCode.我的列表)
+            		|| MainActivity.RequestCode.data_list_public.equals(MainActivity.RequestCode.协作列表)
+            		|| MainActivity.RequestCode.data_list_public.equals(MainActivity.RequestCode.被协作列表)
+            	  )
+            ){
             	
             	view_holder.show_is_no_public_relativelayout.setVisibility(View.VISIBLE);
             	view_holder.show_is_yes_public_relativelayout.setVisibility(View.GONE);
             	
-                view_holder.list_note_title_tv_edit.setText(item.title);
+            	String title = item.title;
+            	if(title.length()>15){
+                	title = title.substring(0, 12) + "..";
+                }
+                view_holder.list_note_title_tv_edit.setText(title);
+                
 //                view_holder.list_note_title_tv_go.setText(item.id+":"+item.server_data_list_id);
         		if(item.public_boolean.equals("true")){
         			view_holder.list_data_list_eye_tv.setText("分享");
@@ -102,7 +115,7 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
                 
         		if(item.has_commits.equals("true")){
         			view_holder.data_list_forked_iv.setVisibility(View.VISIBLE);
-        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
+        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.star_blue));
         		}else{
         			view_holder.data_list_forked_iv.setVisibility(View.GONE);
 //        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
@@ -117,68 +130,29 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
             	view_holder.show_is_no_public_relativelayout.setVisibility(View.GONE);
             	view_holder.show_is_yes_public_relativelayout.setVisibility(View.VISIBLE);
             	
-            	
-//            	if(MainActivity.RequestCode.data_list_public.equals("fork")){
-//            		
-//            		DataList forked_data_list = DataListDBHelper.find_by_server_data_list_id(item.forked_from_id);
-//            		User user = UserDBHelper.find(forked_data_list.user_id);
-//            		view_holder.data_list_item_user_name_tv.setText(user.user_name);
-//                	if(user.user_avatar!=null) {
-//                		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
-//                    	Drawable drawable = new BitmapDrawable(bitmap);
-//                		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
-//                    } else {
-//                    	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-//                    }
-//            	}else{
-            		User user = UserDBHelper.find(item.user_id);
-            		view_holder.data_list_item_user_name_tv.setText(user.user_name);
-                	if (user.user_avatar!=null) {
-                		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
-                    	Drawable drawable = new BitmapDrawable(bitmap);
-                		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
-                    } else {
-                    	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-                    }
-//            	}
-            	
-                view_holder.list_title_tv_public.setText(item.title);
-//                
-//                final Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
-//        		System.out.println("watch.id = " + watch.toString() + " ｉｔｅｍ　：　" + item.toString());
-//        		if(watch.id<=0){
-//        			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-//        		}else{
-//        			view_holder.list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-//        		}
-//                view_holder.list_collect_tv_watch.setOnClickListener(new OnClickListener() {
-//    				@Override
-//    				public void onClick(View v) {	
-//    					boolean go_watch ;
-//    					Watch watch = WatchDBHelper.find(new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id));
-//    					
-//    					if(MainActivity.RequestCode.data_list_public.equals("watch")){
-//    						MainActivity.dataListAdapter.remove_item(item);
-//    						MainActivity.dataListAdapter.notifyDataSetChanged();
-//    					}
-//    					if(watch.id<=0){
-//    						go_watch = true;	
-//    		    		}else{
-//    		    			go_watch = false;
-//    		    		}
-//    					view_holder.onClick(item,go_watch);
-//    				}
-//    			});
-////                if(!isReading){
-////                if(false){
-////                	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.white));
-////                	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
-////                	tp.setFakeBoldText(true);
-////                }else{
-//                	view_holder.show_is_yes_public_relativelayout.setBackgroundColor(activity.getResources().getColor(R.color.gainsboro));
-//                	TextPaint tp = view_holder.list_title_tv_public.getPaint(); 
-//                	tp.setFakeBoldText(false);
-////                }
+        		final User user = UserDBHelper.find(item.user_id);
+        		view_holder.data_list_item_user_name_tv.setText(user.user_name);
+            	if (user.user_avatar!=null) {
+            		Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.user_avatar));
+                	Drawable drawable = new BitmapDrawable(bitmap);
+            		view_holder.data_list_item_user_avatar_iv.setBackgroundDrawable(drawable);
+                } else {
+                	view_holder.data_list_item_user_avatar_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
+                }
+            	view_holder.data_list_item_user_avatar_iv.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(activity,UserMsgActivity.class);
+						intent.putExtra("service_user_id", user.user_id);
+						activity.startActivity(intent);
+					}
+				});
+
+            	String title = item.title;
+                if(title.length()>9){
+                	title = title.substring(0, 9) + "..";
+                }
+                view_holder.list_title_tv_public.setText(title);
             }
         }
         

@@ -368,5 +368,12 @@
         <item name="android:listViewStyle">@style/teamkn_list_theme</item>
         <item name="android:focusableInTouchMode">true</item>  
     </style>
-
+    
+    <style name="MyVersionDialog" parent="@android:Theme.Dialog">         
+        <item name="android:windowFrame">@null</item>        
+        <item name="android:windowNoTitle">true</item>          
+        <item name="android:windowBackground">@drawable/logo_about</item>         
+        <item name="android:windowIsFloating">true</item>         
+        <item name="android:windowContentOverlay">@null</item>    
+    </style> 
 </resources>

@@ -16,7 +16,7 @@
         />
         <ImageView
              android:id="@+id/data_item_add_iv"
-             android:src="@drawable/mi_data_item_add"
+             android:src="@drawable/add_bold"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
@@ -93,7 +93,7 @@
             android:id="@+id/data_item_step_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/mi_item_step"
+            android:background="@drawable/round_yellow_bold"
             android:gravity="center"
             android:text="1"
             android:textColor="@color/blue"
@@ -158,7 +158,7 @@
            android:layout_width="40dp"
            android:layout_height="40dp"
            android:layout_alignParentRight="true"
-           android:background="@drawable/mi_collect_no"
+           android:background="@drawable/star_gray"
            android:text="加书签" />
 
        <ImageView
@@ -168,9 +168,8 @@
            android:layout_centerVertical="true"
            android:layout_marginRight="14dp"
            android:layout_toLeftOf="@+id/data_list_image_iv_watch"
-           android:background="@drawable/mi_fork_no"
-           android:clickable="false"
-           android:visibility="gone" />
+           android:background="@drawable/gray_pencil"
+           android:clickable="false" />
 
        <TextView
            android:id="@+id/data_item_original_user_name"
@@ -195,7 +194,7 @@
         <ImageView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/mi_show_ti"
+            android:src="@drawable/gray_android_bg"
         />
         <TextView
             android:layout_width="wrap_content"

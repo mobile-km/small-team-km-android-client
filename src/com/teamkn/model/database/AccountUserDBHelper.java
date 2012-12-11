@@ -23,7 +23,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                             Constants.KEY_ID,
                             Constants.TABLE_ACCOUNT_USERS__COOKIES,
                             Constants.TABLE_ACCOUNT_USERS__INFO,
-                            Constants.TABLE_ACCOUNT_USERS__AVATAR
+                            Constants.TABLE_ACCOUNT_USERS__AVATAR,
+                            Constants.TABLE_ACCOUNT_USERS__IS_SHOW_TIP
                     }, null, null, null, null,
                     Constants.KEY_ID + " ASC"
             );
@@ -33,7 +34,9 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                 String cookies = cursor.getString(1);
                 String info = cursor.getString(2);
                 byte[] avatar = cursor.getBlob(3);
-                users.add(new AccountUser(cookies, info, avatar));
+                String is_show_tip_str = cursor.getString(4);
+                boolean is_show_tip = Boolean.parseBoolean(is_show_tip_str);
+                users.add(new AccountUser(cookies, info, avatar, is_show_tip));
             }
 
             return users;
@@ -106,15 +109,15 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             values.put(Constants.TABLE_ACCOUNT_USERS__COOKIES, account_user.cookies);
             values.put(Constants.TABLE_ACCOUNT_USERS__INFO, account_user.info);
             values.put(Constants.TABLE_ACCOUNT_USERS__AVATAR,account_user.avatar);
-
+            values.put(Constants.TABLE_ACCOUNT_USERS__IS_SHOW_TIP,account_user.is_show_tip);
+           
             AccountUser o_user = find(account_user.user_id);
-
+           
             if (o_user.is_nil()) {
                 db.insert(Constants.TABLE_ACCOUNT_USERS, null, values);
             } else {
                 db.update(Constants.TABLE_ACCOUNT_USERS, values, Constants.TABLE_ACCOUNT_USERS__USER_ID + " = " + account_user.user_id, null);
             }
-
             return true;
         } catch (Exception e) {
             Log.e("AccountUserDBHelper", "save", e);
@@ -134,7 +137,8 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                     Constants.TABLE_ACCOUNT_USERS__USER_ID,
                     Constants.TABLE_ACCOUNT_USERS__COOKIES,
                     Constants.TABLE_ACCOUNT_USERS__INFO,
-                    Constants.TABLE_ACCOUNT_USERS__AVATAR
+                    Constants.TABLE_ACCOUNT_USERS__AVATAR,
+                    Constants.TABLE_ACCOUNT_USERS__IS_SHOW_TIP
             },
                     Constants.TABLE_ACCOUNT_USERS__USER_ID + " = " + user_id,
                     null, null, null, null
@@ -146,7 +150,12 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
                 String cookies = cursor.getString(2);
                 String info = cursor.getString(3);
                 byte[] avatar = cursor.getBlob(4);
-                return new AccountUser(cookies, info, avatar);
+                String is_show_tip_str = cursor.getString(5);
+                boolean is_show_tip = false;
+                if(is_show_tip_str.equals("1")){
+                	is_show_tip = true;
+                }
+                return new AccountUser(cookies, info, avatar,is_show_tip);
             } else {
                 return AccountUser.NIL_ACCOUNT_USER;
             }
@@ -158,4 +167,38 @@ public class AccountUserDBHelper extends BaseModelDBHelper {
             db.close();
         }
     }
+    // 保存
+    final public static boolean update_show_help(final AccountUser account_user) {
+
+        Log.d("teamkn", account_user.is_nil() + "");
+
+        if (account_user.is_nil()) return false;
+        SQLiteDatabase db = get_write_db();
+
+        try {
+            // 保存数据库信息
+            ContentValues values = new ContentValues();
+            values.put(Constants.TABLE_ACCOUNT_USERS__USER_ID, account_user.user_id);
+            values.put(Constants.TABLE_ACCOUNT_USERS__NAME, account_user.name);
+            values.put(Constants.TABLE_ACCOUNT_USERS__COOKIES, account_user.cookies);
+            values.put(Constants.TABLE_ACCOUNT_USERS__INFO, account_user.info);
+            values.put(Constants.TABLE_ACCOUNT_USERS__AVATAR,account_user.avatar);
+            values.put(Constants.TABLE_ACCOUNT_USERS__IS_SHOW_TIP,account_user.is_show_tip);
+           
+            AccountUser o_user = find(account_user.user_id); 
+            if (o_user.is_nil()) {
+                db.insert(Constants.TABLE_ACCOUNT_USERS, null, values);
+            } else {
+                db.update(Constants.TABLE_ACCOUNT_USERS, values, Constants.TABLE_ACCOUNT_USERS__USER_ID + " = " + account_user.user_id, null);
+            }
+
+            return true;
+        } catch (Exception e) {
+            Log.e("AccountUserDBHelper", "save", e);
+            return false;
+        } finally {
+            db.close();
+        }
+    }
+    
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/show_is_no_public_relativelayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:padding="10dp" >
+    <RelativeLayout 
+        android:padding="10dp"
+        android:background="@color/gainsboro"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+   
+        <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+        <TextView
+            android:id="@+id/list_note_title_tv_edit"
+            style="@style/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="title"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/list_note_title_tv_go"
+            style="@style/text"
+            android:layout_width="1dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/burlywood"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="id:s_id"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/mi_list_data_list_eye_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/list_note_title_tv_edit"
+            android:layout_marginTop="10dp"
+            android:text="分享"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/list_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/mi_list_data_list_eye_tv"
+            android:layout_alignBottom="@+id/mi_list_data_list_eye_tv"
+            android:layout_alignParentRight="true"
+            android:text="步骤"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/data_list_forked_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignTop="@+id/list_type_tv"
+            android:layout_toLeftOf="@+id/list_type_tv"
+            android:background="@drawable/star_blue" />
+ </RelativeLayout>
+</RelativeLayout>

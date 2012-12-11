@@ -14,31 +14,25 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
-import com.teamkn.model.database.DataItemDBHelper;
-import com.teamkn.model.database.DataListDBHelper;
 
 public class CreateDataItemActivity extends TeamknBaseActivity{
 	TextView show_page_title;
 	TextView data_list_title_tv;
 	ImageView click_data_item_save_iv;
 	EditText create_data_item_title_et,create_data_item_content_et;
-	
-	Integer data_list_id;
-	Integer data_item_id;
+
 	String data_list_public;
 	DataList dataList;
 	DataItem dataItem;
-	boolean is_update = false;
 	
 	TextView create_data_list_msg_tv;
-	String msg = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_create);
 		Intent intent = getIntent();
-		data_list_id = intent.getIntExtra("data_list_id", -1);
-		data_item_id = intent.getIntExtra("data_item_id", -1);
+		dataList = (DataList) intent.getSerializableExtra("data_list");
+		dataItem = (DataItem) intent.getSerializableExtra("data_item");
 		data_list_public = intent.getStringExtra("data_list_public");
 
 		load_UI();
@@ -49,23 +43,18 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		create_data_item_title_et = (EditText)findViewById(R.id.create_data_item_title_et);
 		create_data_item_content_et = (EditText)findViewById(R.id.create_data_item_content_et);
 		
-		if( data_list_id !=-1){
-			dataList = DataListDBHelper.find(data_list_id);
-			is_update = false;
-			show_page_title.setText("创建条目");
-			data_list_title_tv.setText(dataList.title);
+		if(dataItem==null){
+			show_page_title.setText("创建条目");	
 		}else{ 
-			dataItem = DataItemDBHelper.find(data_item_id);
-			dataList = DataListDBHelper.find(dataItem.data_list_id);
-			is_update = true;
 			show_page_title.setText("编辑条目");
-			data_list_title_tv.setText(dataList.title);
 			create_data_item_title_et.setText(dataItem.title);
 			create_data_item_content_et.setText(dataItem.content);
 		}
+		data_list_title_tv.setText(dataList.title);
 		
 		create_data_list_msg_tv = (TextView)findViewById(R.id.create_data_list_msg_tv);
 		create_data_list_msg_tv.setText("");
+		
 	}
 	public void click_data_item_save_iv(View view){
 		final String title_str = create_data_item_title_et.getText().toString();
@@ -74,7 +63,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		if(juast(title_str,content_str)){
          	if(BaseUtils.is_wifi_active(CreateDataItemActivity.this)){
          			String show_str;
-         			if(is_update){
+         			if(dataItem != null ){
          				show_str = "修改中...";
          			}else{
          				show_str = "创建中...";
@@ -84,55 +73,39 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 						@Override
 						public String do_in_background(Void... params)
 								throws Exception {
-							
+							String back =null ;
 							try {
-								String back = "" ;
-								if(is_update){
+								if(dataItem != null ){
 									dataItem.setTitle(title_str);
 									dataItem.setContent(content_str);	
-									if(DataItemDBHelper.find(title_str , dataItem.data_list_id).id>=0 && DataItemDBHelper.find(title_str , dataItem.data_list_id).id != dataItem.id){
-										msg = "题目不可重复";
-									}else{
-										DataItemDBHelper.update_by_id(dataItem);
-										back = HttpApi.DataItem.update(dataItem); 
-										DataItemListActivity.update_title = true;
-									}
+									back = HttpApi.DataItem.update(dataItem); 
 								}else{
-									if(DataItemDBHelper.find(title_str , data_list_id).id>=0){
-										msg = "创建的题目不可重复";
-									}else{
-										DataItem dataitem = 
-												new DataItem(-1, title_str, content_str, null, DataItemDBHelper.Kind.TEXT, data_list_id, null, -1,null);
-										DataItemDBHelper.update_by_id(dataitem);
-										System.out.println("data_list_id = "+ data_list_id );
-										back = HttpApi.DataItem.create(DataItemDBHelper.fist_data_item(data_list_id));  
-										msg = back;
-									}
+									DataItem dataitem =
+											new DataItem(-1, title_str, content_str, 
+													     null, DataItem.Kind.TEXT, 
+													dataList.server_data_list_id, null, -1,null);
+									back = HttpApi.DataItem.create(dataitem);  
 								}	
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							return msg;
+							return back;
 						}
 
 						@Override
 						public void on_success(String result) {
-							System.out.println(is_update + " : " + msg + " : " + result);
-							if(BaseUtils.is_str_blank(msg)){
-								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
-					    		intent.putExtra("data_list_id", dataList.id);
-					    		intent.putExtra("data_list_public", data_list_public);
-					    		if(is_update){
-					    			intent.putExtra("create_data_item", false);
-					    			intent.putExtra("is_update", true);
-					    		}else{
-					    			intent.putExtra("create_data_item", true);
-					    		}
-					    		startActivity(intent);
+							
+							if(BaseUtils.is_str_blank(result)){
+//								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
+//					    		intent.putExtra("data_list", dataList);
+//					    		intent.putExtra("data_list_public", data_list_public);
+//					    		startActivity(intent);
 					         	finish();
+					         	BaseUtils.toast(getResources().getString(R.string.save_succeed_show));
 							}else{
-								BaseUtils.toast(msg);
+								BaseUtils.toast(result);
 							}
+							
 						}
 					}.execute();
 			}else{

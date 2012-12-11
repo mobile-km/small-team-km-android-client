@@ -18,7 +18,6 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
 import com.teamkn.model.User;
-import com.teamkn.model.database.DataListDBHelper;
 import com.teamkn.widget.adapter.DataItemPullAdapter;
 
 public class DataItemPullListActivity extends TeamknBaseActivity{
@@ -34,10 +33,7 @@ public class DataItemPullListActivity extends TeamknBaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_pull_list);
 		Intent intent = getIntent();
-		Integer data_item_id = intent.getIntExtra("data_list_id", -1);
-		if(data_item_id>=0){
-			dataList = DataListDBHelper.find(data_item_id);
-		}
+		dataList = (DataList) intent.getSerializableExtra("data_list");
 		TextView data_list_title_tv = (TextView) findViewById(R.id.data_list_title_tv);
 		data_list_title_tv.setText(dataList.title);
 		pull_listview = (ListView)findViewById(R.id.pull_listview);
@@ -74,8 +70,8 @@ public class DataItemPullListActivity extends TeamknBaseActivity{
 					TextView info_tv = (TextView) list_item.findViewById(R.id.info_tv);
 					User item = (User) info_tv.getTag(R.id.tag_note_uuid);
 					Intent intent = new Intent(DataItemPullListActivity.this,DataItemPullUpdateActivity.class);
-					intent.putExtra("data_list_id",dataList.id);
-					intent.putExtra("committer_id",item.user_id);
+					intent.putExtra("data_list",dataList);
+					intent.putExtra("committer",item);
 
 					System.out.println("mainactivity setonclick  = " +item.toString());
 					startActivityForResult(intent, RequestCode.CREATE_DATA_LIST);

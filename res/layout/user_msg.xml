@@ -16,78 +16,174 @@
                 android:text="个人信息"
         />
     </RelativeLayout>
+<ScrollView 
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+>
+   <RelativeLayout 
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent">
+    <RelativeLayout
+        android:id="@+id/relativelayout_set_user_avatar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#fff"
+        android:gravity="center_vertical"
+        android:padding="10dp" >
+
+        <ImageView
+            android:id="@+id/iv_user_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/user_default_avatar_normal" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/iv_user_avatar"
+            android:gravity="center_vertical"
+            android:text="设置头像" />
+
+        <LinearLayout
+            android:id="@+id/follow_tv_ll"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_user_avatar"
+            android:layout_alignLeft="@+id/tv_user_name"
+            
+        >
+         <Button
+            android:padding="5dp"
+            android:id="@+id/follow_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_follow"
+            android:text="已FOLLOW" />
+        </LinearLayout>
+        
+    </RelativeLayout>
     
     <RelativeLayout 
-            android:id="@+id/relativelayout_set_user_avatar" 
-            android:background="#fff" 
+            android:id="@+id/fan_center"
+             android:layout_below="@+id/relativelayout_set_user_avatar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:padding="10dp" 
             android:layout_margin="10dp"
-            android:onClick="click_set_user_avatar"
-     >     
-          <ImageView
-              android:id="@+id/iv_user_avatar"
-              android:background="@drawable/user_default_avatar_normal"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"  
-          />
-          <TextView
-              android:text="设置头像"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" 
-              android:layout_marginLeft="20dp" 
-              android:layout_marginTop="20dp"
-              android:gravity="center_vertical"
-              android:layout_toRightOf="@+id/iv_user_avatar"
-          /> 
-          <ImageView
-              android:src="@drawable/user_avatar_gt"
-              android:layout_width="20dp"
-              android:layout_height="20dp" 
-              android:layout_alignParentRight="true"
-              android:layout_marginRight="20dp"
-              android:layout_marginTop="20dp"
-          /> 
-    </RelativeLayout>
-    <RelativeLayout 
-            android:background="#fff" 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="10dp" 
-            android:layout_margin="10dp"
+            android:background="@drawable/no_background_border_bg"
      >     
            <RelativeLayout 
-	            android:id="@+id/relativelayout_set_user_name" 
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:onClick="click_set_user_name"
-           >
-	          <TextView
-	              android:id="@+id/user_name_"
-	              android:text="名字"
-	              android:layout_marginRight="50dp"
-	              android:layout_width="wrap_content"
-	              android:layout_height="wrap_content"  
-	          />
-	          <TextView
-	              android:id="@+id/tv_user_name"
-	              android:text="用户名称"
-	              android:layout_width="wrap_content"
-	              android:layout_height="wrap_content" 
-	              android:layout_marginLeft="20dp" 
-	              android:gravity="center_vertical"
-	              android:layout_toRightOf="@+id/user_name_"
-	          /> 
-	          <ImageView
-	              android:src="@drawable/user_avatar_gt"
-	              android:layout_width="20dp"
-	              android:layout_height="20dp" 
-	              android:layout_alignParentRight="true"
-	              android:layout_marginRight="20dp"
-	          /> 
-	       </RelativeLayout>
-    </RelativeLayout> 
+               android:id="@+id/msg_sex_like"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content">
+               
+               <TextView
+                   android:layout_marginLeft="50dp"
+                   android:text="性别  ："
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+               />
+               <TextView
+                   android:layout_marginRight="50dp"
+                   android:text="爱好  ："
+                   android:layout_alignParentRight="true"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+               />
+           </RelativeLayout>
+           
+           <RelativeLayout 
+               android:layout_below="@+id/msg_sex_like"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_marginTop="10dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentTop="true"
+                   android:layout_marginRight="48dp"
+                   android:text="更多信息" />
+
+           </RelativeLayout>
+           
+    </RelativeLayout>
+    
+    
+    
+    <RelativeLayout 
+        android:layout_below="@+id/fan_center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_margin="10dp"
+     >     
+           <TableLayout 
+               android:layout_width="fill_parent"
+               android:layout_height="120dp" 
+               android:background="@drawable/grey_rectangular_bg">
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+            >
+              
+               <TextView 
+                   android:textColor="@color/black" 
+                   android:text="关注" 
+                   android:layout_width="120dp"
+                   android:layout_height="60dp"
+                   android:padding="3dip" 
+                   android:gravity="center"
+               />
+              
+               <TextView 
+                   android:textColor="@color/black" 
+                   android:text="粉丝" 
+                   android:layout_width="120dp"
+                   android:layout_height="60dp"
+                   android:padding="3dip" 
+                   android:gravity="center"
+               />
+              
+            </TableRow> 
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+            >
+              
+               <Button 
+                    android:onClick="click_user_public_data_list"
+                    android:id="@+id/public_list_tv"
+                    android:textColor="@color/black" 
+                    android:text="刘总的公开列表" 
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dp" 
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:background="@drawable/title_back"
+              />
+        
+               <!-- <TextView 
+                   android:textColor="@color/black" 
+                   android:text="协作" 
+                   android:layout_width="120dp"
+                   android:layout_height="60dp"
+                   android:padding="3dip" 
+                   android:gravity="center"
+               /> -->
+              
+            </TableRow> 
+         </TableLayout>    
+    </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
 </LinearLayout>

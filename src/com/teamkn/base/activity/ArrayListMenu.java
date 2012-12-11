@@ -10,8 +10,8 @@ public class ArrayListMenu {
 	public static ArrayList<Map<String, Object>> getData() {
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("title", "公共列表");
-		map.put("img", R.drawable.mi_menu_friendly);
+		map.put("title", "我的首页");
+		map.put("img", R.drawable.mi_menu_home);
 		
 		list.add(map);
 		
@@ -22,14 +22,14 @@ public class ArrayListMenu {
 		list.add(map);
 		
 		map = new HashMap<String, Object>();
-		map.put("title", "我的书签");
-		map.put("img", R.drawable.mi_menu_lable);
+		map.put("title", "公开的列表");
+		map.put("img", R.drawable.mi_menu_friendly);
 		
 		list.add(map);
 		
 		map = new HashMap<String, Object>();
-		map.put("title", "协作列表");
-		map.put("img", R.drawable.mi_fork_yes);
+		map.put("title", "社交中心");
+		map.put("img", R.drawable.mi_menu_exchange_manager);
 		
 		list.add(map);
 
@@ -39,16 +39,19 @@ public class ArrayListMenu {
 
 		list.add(map);
 
-		map = new HashMap<String, Object>();
-		map.put("title", "用户信息");
-		map.put("img", R.drawable.mi_menu_usermsg);
-
-		list.add(map);
-		map = new HashMap<String, Object>();
-		map.put("title", "注销登录");
-		map.put("img", R.drawable.mi_menu_account_re);
-
-		list.add(map);
+		
+		
+//		-----------------------------------------------------
+//		map = new HashMap<String, Object>();
+//		map.put("title", "用户信息");
+//		map.put("img", R.drawable.mi_menu_usermsg);
+//
+//		list.add(map);
+//		map = new HashMap<String, Object>();
+//		map.put("title", "注销登录");
+//		map.put("img", R.drawable.mi_menu_account_re);
+//
+//		list.add(map);
 
 		map = new HashMap<String, Object>();
 		map.put("title", "退出应用");

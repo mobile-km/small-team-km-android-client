@@ -2,6 +2,7 @@ package com.teamkn.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 
 import android.graphics.Bitmap;
 
@@ -9,21 +10,32 @@ import com.teamkn.Logic.CompressPhoto;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.base.BaseModel;
-public class DataItem extends BaseModel {
+public class DataItem extends BaseModel implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2L;
+	public static class Kind {
+        public static final String TEXT = "TEXT";
+        public static final String IMAGE = "IMAGE";
+        public static final String URL = "URL";
+    }
+	
 	  public int id = -1;	 
 	  public String title;
 	  public String content;
 	  public String url;
 	  public String kind;
-	  public int data_list_id;
+	  public int server_data_list_id;
 	  public String position;	 
 	  public int server_data_item_id;
-	  public String seed; // 字段标示 字符
+	  public String seed; // 字段标示 字符 
 	  
 	  //添加的外链帮助字段
-	  int next_commits_count;
-	  String operation;
-	  boolean conflict;
+	  int next_commits_count;  // 剩余还有几项
+	  String operation;   // # CREATE UPDATE REMOVE ORDER
+	  boolean conflict;  //  是否有冲突
 	  
 	  public static DataItem NIL_DATA_ITEM = new DataItem();
 	  
@@ -59,10 +71,10 @@ public class DataItem extends BaseModel {
 		this.kind = kind;
 	}
 	public int getData_list_id() {
-		return data_list_id;
+		return server_data_list_id;
 	}
-	public void setData_list_id(int data_list_id) {
-		this.data_list_id = data_list_id;
+	public void setData_list_id(int server_data_list_id) {
+		this.server_data_list_id = server_data_list_id;
 	}
 	public String getPosition() {
 		return position;
@@ -113,7 +125,7 @@ public class DataItem extends BaseModel {
 		super();
 	}
 	public DataItem(int id, String title, String content, String url,
-			String kind, int data_list_id, String position,
+			String kind, int server_data_list_id, String position,
 			int server_data_item_id, String seed) {
 		super();
 		this.id = id;
@@ -121,7 +133,7 @@ public class DataItem extends BaseModel {
 		this.content = content;
 		this.url = url;
 		this.kind = kind;
-		this.data_list_id = data_list_id;
+		this.server_data_list_id = server_data_list_id;
 		this.position = position;
 		this.server_data_item_id = server_data_item_id;
 		this.seed = seed;
@@ -156,7 +168,7 @@ public class DataItem extends BaseModel {
 	public String toString() {
 		String to = id + " : " +  title + " : " 
 	+  content + " : " +  url + " : " +  kind 
-	+ " : " +  data_list_id + " : " +  position 
+	+ " : " +  server_data_list_id + " : " +  position 
 	+ " : " +  server_data_item_id + " : " + seed;
 		
 		return to;

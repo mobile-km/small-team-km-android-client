@@ -13,11 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.Logic.AccountManager;
-import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.model.DataItem;
-import com.teamkn.model.database.DataListDBHelper;
-import com.teamkn.model.database.UserDBHelper;
 
 public class DataItemListAdapter extends ArrayAdapter<DataItem> {
 	ArrayList<DataItem> dataItems;
@@ -59,13 +55,13 @@ public class DataItemListAdapter extends ArrayAdapter<DataItem> {
 		view_holder.data_item_title_iv_frush = (ImageView)row.findViewById(R.id.data_item_title_iv_frush);
 		
 //		System.out.println("DataItemListActivity.is_fork " + DataItemListActivity.is_fork + " dataItems " + dataItems.get(position).toString());
-		if(UserDBHelper.find(DataListDBHelper.find(dataItems.get(position).data_list_id).user_id).user_id == AccountManager.current_user().user_id
-				){
-//			|| DataItemListActivity.is_fork
+//		if(UserDBHelper.find(DataListDBHelper.find(dataItems.get(position).data_list_id).user_id).user_id == AccountManager.current_user().user_id
+//				){
+////			|| DataItemListActivity.is_fork
 			view_holder.data_item_title_iv_frush.setVisibility(View.VISIBLE);
-		}else{
-			view_holder.data_item_title_iv_frush.setVisibility(View.GONE);
-		}
+//		}else{
+//			view_holder.data_item_title_iv_frush.setVisibility(View.GONE);
+//		}
 		System.out.println("aa" + dataItems.get(position).toString());
 		return row;
 	}

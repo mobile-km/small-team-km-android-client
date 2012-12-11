@@ -27,7 +27,7 @@
            android:layout_alignParentLeft="true"
            android:layout_alignParentTop="true"
            android:gravity="center"
-           android:src="@drawable/mi_data_item_ic" 
+           android:src="@drawable/top_but_move" 
        />
        <TextView
            android:layout_marginLeft="50dp"

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.teamkn.R;
+import com.teamkn.activity.base.AboutActivity;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
@@ -21,6 +22,7 @@ public class LoginSwitchViewDemoActivity extends TeamknBaseActivity implements O
 	private int mViewCount;	
 	private int mCurSel;
 	
+	public static boolean is_login_go_to = true; 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +101,14 @@ public class LoginSwitchViewDemoActivity extends TeamknBaseActivity implements O
 	}
 	public void click_experience(View view){
 //		Toast.makeText(this, "click_experience", Toast.LENGTH_LONG).show();
-		Intent intent = new Intent(LoginSwitchViewDemoActivity.this,MainActivity.class);
-		intent.putExtra("first_login", true);
+		Intent intent = null ;
+		if(is_login_go_to){
+			intent = new Intent(LoginSwitchViewDemoActivity.this,MainActivity.class);
+			intent.putExtra("data_list_public", MainActivity.RequestCode.我的列表);
+			intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+		}else{
+			intent = new Intent(LoginSwitchViewDemoActivity.this,AboutActivity.class);
+		}
 		startActivity(intent);
 		this.finish();
 	}

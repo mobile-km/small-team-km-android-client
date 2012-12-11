@@ -26,7 +26,6 @@
 		</intent-filter>
 	</activity>
 	<activity android:name=".activity.login_guide.LoginSwitchViewDemoActivity"/>
-	<activity android:name=".activity.base.BrowseSDCard" />
 	<activity android:name=".activity.base.LoginActivity" android:windowSoftInputMode="stateVisible"></activity>
 	<activity android:name=".activity.base.MainActivity"  android:label="HorzScrollWithImageMenu" android:windowSoftInputMode="stateHidden"></activity>
 	<activity android:name=".activity.base.AboutActivity"></activity>
@@ -44,49 +43,15 @@
 	<activity android:name=".activity.dataitem.pull.DataItemPullUpdateActivity"></activity>
 	<activity android:name=".activity.dataitem.pull.DataItemTermWiseUpdateActivity"></activity>
     
-	<activity android:name=".activity.note.NoteListActivity" android:windowSoftInputMode="adjustResize">
-	</activity>
-	<activity android:name=".activity.note.ShowNodeActivity" android:windowSoftInputMode="adjustResize">
-    </activity>
-    <activity android:name=".activity.bitmapshow.BitmapShowActivity" android:windowSoftInputMode="adjustResize">
-    </activity>
-        
-	<activity android:name=".activity.note.EditNoteActivity" android:windowSoftInputMode="adjustResize">
-	    <intent-filter>  
-			<action android:name="android.intent.action.SEND"/>  
-			<category android:name="android.intent.category.DEFAULT"/> 
-			<data android:mimeType="text/plain"/>
-		</intent-filter>
-		<intent-filter>
-               <action android:name="android.intent.action.SEND" />
-               <category android:name="android.intent.category.DEFAULT"></category>
-               <data android:mimeType="image/*"></data>
-           </intent-filter> 	
-	</activity>
-	<activity android:name=".activity.note.SearchActivity"></activity>
+    <!-- 社交圈子 -->
+    <activity android:name=".activity.social_circle.SocialCircleActivity"></activity>
+    <activity android:name=".activity.social_circle.UserPublicDataListActivity"></activity>
+    <activity android:name=".activity.usermsg.SearchUserActivity"></activity>
     
-    <activity android:name=".activity.contact.ContactsActivity"></activity>
-    <activity android:name=".activity.contact.SearchContactActivity"></activity>
-    <activity 
-        android:name=".activity.contact.UserInfoActivity"
-        android:theme="@style/user_info_panel"
-    />
-    
-    <!-- 对话串 -->
-    <activity android:name=".activity.chat.SelectChatMemberActivity"></activity>
-    <activity android:name=".activity.chat.ChatActivity" 
-        android:windowSoftInputMode="adjustPan" android:screenOrientation="portrait"></activity>
-    <activity android:name=".activity.chat.ChatListActivity"></activity>
-	
 	<!-- 用户信息 -->
+	<activity android:name=".activity.usermsg.UserManagerActivity"></activity>
     <activity android:name=".activity.usermsg.UserMsgActivity"></activity>
-    <activity android:name=".activity.usermsg.UserMsgAvatarSetActivity"></activity>
     <activity android:name=".activity.usermsg.UserMsgNameSetActivity"></activity>
-    	
-	<service android:name=".service.SynNoteService"></service>
-    <service android:name=".service.RefreshContactStatusService"></service>
-    <service android:name=".service.IndexService"></service>
-    <service android:name=".service.SynChatService"></service>
-    <service android:name=".service.FaceCommentService"></service>
+   
   </application>
 </manifest>

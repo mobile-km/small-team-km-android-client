@@ -12,6 +12,7 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class TeamknSettingActivity extends TeamknBaseActivity{
 	 View setting;
+	 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

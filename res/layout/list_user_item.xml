@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+>
+    
+    <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+    />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gainsboro"
+        android:layout_margin="10dp" >
+		   <ImageView
+		       android:id="@+id/user_avatar_iv"
+		       android:layout_width="50dp"
+		       android:layout_height="50dp"
+		       android:background="@drawable/default_avatar" />
+		
+		   <TextView
+		       android:id="@+id/user_name_tv"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+		       android:layout_alignBottom="@+id/user_avatar_iv"
+		       android:layout_marginBottom="16dp"
+		       android:layout_marginLeft="24dp"
+		       android:layout_toRightOf="@+id/user_avatar_iv"
+		       android:text="用户名" />
+
+		   <Button
+		       android:id="@+id/user_follow_bt"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+		       android:layout_alignBaseline="@+id/user_name_tv"
+		       android:layout_alignBottom="@+id/user_name_tv"
+		       android:layout_alignParentRight="true"
+		       android:layout_marginRight="33dp"
+		       android:text="Follow" />
+
+    </RelativeLayout>
+</RelativeLayout>

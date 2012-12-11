@@ -114,7 +114,7 @@ public class SearchDataActivity extends TeamknBaseActivity{
 	 */
 	private void InitImageView() {
 		cursor = (ImageView) findViewById(R.id.cursor);
-		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.a)
+		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.line)
 				.getWidth();// 获取图片宽度
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -218,9 +218,7 @@ public class SearchDataActivity extends TeamknBaseActivity{
 		}
 		switch (requestCode) {
 		case RequestCode.SHOW_BACK:
-			if(DataItemListActivity.update_title ==true){
 				load_list();
-			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

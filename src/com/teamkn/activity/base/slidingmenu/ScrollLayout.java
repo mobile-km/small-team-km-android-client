@@ -1,8 +1,5 @@
 package com.teamkn.activity.base.slidingmenu;
 
-import com.teamkn.activity.contact.ContactsActivity;
-import com.teamkn.application.TeamknApplication;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -117,17 +114,7 @@ public class ScrollLayout extends ViewGroup {
     	// get the valid layout page
     	whichScreen = Math.max(0, Math.min(whichScreen, getChildCount()-1));
     	if (getScrollX() != (whichScreen*getWidth())) {
-    		 if( TeamknApplication.current_show_activity!=null && TeamknApplication.current_show_activity
-           		  .equals("com.teamkn.activity.contact.ContactsActivity")){
-//    			System.out.println("com.teamkn.activity.contact.ContactsActivity  " + whichScreen  + " : " + mCurScreen);
-             	if(whichScreen == 0 && mCurScreen ==1){
-             		ContactsActivity.isShow_Scroll = true;
-             	}else if(whichScreen == 0 && mCurScreen == 0){}else{
-             		ContactsActivity.isShow_Scroll = false;
-             	}
-             }
-    		
-    		
+
     		final int delta = whichScreen*getWidth()-getScrollX();
     		if(whichScreen == 0 && mCurScreen ==1){
     			mScroller.startScroll(getScrollX(), 0, 

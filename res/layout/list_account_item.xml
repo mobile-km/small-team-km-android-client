@@ -7,7 +7,7 @@
     <!-- 当前用户 图标 -->
     <ImageView
             android:id="@+id/current_account_icon"
-            android:src="@drawable/account_current"
+            android:src="@drawable/green_select"
             android:layout_height="20dp"
             android:layout_width="20dp"
             android:layout_margin="9dp"

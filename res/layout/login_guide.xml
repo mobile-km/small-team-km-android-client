@@ -12,32 +12,32 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/a1" >
+            android:background="@drawable/star1" >
         </LinearLayout>
         
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/a2" >
+            android:background="@drawable/star2" >
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/a3" >
+            android:background="@drawable/star3" >
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/a4" >
+            android:background="@drawable/star4" >
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:background="@drawable/a5" >
+            android:background="@drawable/star5" >
             <Button
                 android:onClick="click_experience"
                 android:layout_width="wrap_content"

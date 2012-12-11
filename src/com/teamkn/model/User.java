@@ -1,9 +1,15 @@
 package com.teamkn.model;
 
+import java.io.Serializable;
+
 import com.teamkn.model.base.BaseModel;
 
-public class User extends BaseModel {
-  final public static User NIL_USER = new User();
+public class User extends BaseModel implements Serializable{
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3L;
+final public static User NIL_USER = new User();
   public int id;
   public int user_id;
   public String user_name;
@@ -11,8 +17,8 @@ public class User extends BaseModel {
   public String avatar_url;
   public long server_created_time;
   public long server_updated_time;
-
-  public int count;
+  
+  public int count;  // 记录有几条修改建议
   
   private User() {
       set_nil();

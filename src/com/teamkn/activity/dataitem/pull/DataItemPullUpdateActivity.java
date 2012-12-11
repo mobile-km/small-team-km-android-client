@@ -22,8 +22,7 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
-import com.teamkn.model.database.DataItemDBHelper;
-import com.teamkn.model.database.DataListDBHelper;
+import com.teamkn.model.User;
 import com.teamkn.widget.adapter.DataItemPullUpdateAdapter;
 
 public class DataItemPullUpdateActivity extends TeamknBaseActivity{
@@ -35,7 +34,7 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 	TextView data_list_title_tv;
 	ListView listView;
 	DataList dataList;
-	int committer_id;
+	User committer;
 	
 	Button accept_or_refuse_button;
 	boolean accept_button = false;
@@ -49,9 +48,8 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.data_item_pull_update_list);
 		Intent intent = getIntent();
-		Integer data_list_id = intent.getIntExtra("data_list_id", -1);
-		committer_id = intent.getIntExtra("committer_id", -1);
-		dataList = DataListDBHelper.find(data_list_id);
+		dataList = (DataList) intent.getSerializableExtra("data_list");
+		committer = (User) intent.getSerializableExtra("committer");
 		load_UI();
 	}
 	
@@ -97,9 +95,8 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 				@SuppressWarnings("unchecked")
 				@Override
 				public Void do_in_background(Void... params) throws Exception {
-					System.out.println(dataList.server_data_list_id +"  :  "+ committer_id);
 					
-					Map<Object, Object> map = HttpApi.WatchList.diff(dataList.server_data_list_id, committer_id);
+					Map<Object, Object> map = HttpApi.WatchList.diff(dataList.server_data_list_id, committer.user_id);
 					
 					dataList_origin = (DataList) map.get("dataList_origin");
 					System.out.println(dataList_origin.toString());
@@ -159,10 +156,10 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 						throws Exception {
 					DataList api_dataList = null;
 					if(do_accept){
-						api_dataList=HttpApi.WatchList.accept_commits(dataList.server_data_list_id, committer_id);	
-						DataItemDBHelper.delete_by_data_list_id(dataList.id);
+						api_dataList=HttpApi.WatchList.accept_commits(dataList.server_data_list_id, committer.user_id);	
+//						DataItemDBHelper.delete_by_data_list_id(dataList.id);
 					}else{
-						api_dataList=HttpApi.WatchList.reject_commits(dataList.server_data_list_id, committer_id);
+						api_dataList=HttpApi.WatchList.reject_commits(dataList.server_data_list_id, committer.user_id);
 					}
 					return api_dataList;
 				}
@@ -182,10 +179,8 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 	}
 	public void click_termwise_button(View view){
 		Intent intent = new Intent(DataItemPullUpdateActivity.this,DataItemTermWiseUpdateActivity.class);
-		intent.putExtra("server_dataList_forked_id",dataList_forked.server_data_list_id);
-		intent.putExtra("server_dataList_origin_id", dataList_origin.server_data_list_id);
-		intent.putExtra("committer_id",committer_id);
-		intent.putExtra("seeds", getDataItems_forked_Seeds());
+		intent.putExtra("committer",committer);
+		intent.putExtra("data_list",dataList);
 		startActivityForResult(intent, RequestCode.BACK);
 	}
 	@Override

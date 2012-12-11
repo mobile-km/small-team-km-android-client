@@ -1,22 +1,37 @@
 package com.teamkn.model;
+import java.io.Serializable;
+
 import com.teamkn.model.base.BaseModel;
 
-public class DataList extends BaseModel {
+public class DataList extends BaseModel implements Serializable{
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	  public int id = -1;
 	  public int user_id;
 	  public String title;
 	  public String kind;
 	  public String public_boolean;
-	  public String has_commits;
+	  public String has_commits;  // 是否有被  迁出的人
 	  public int server_data_list_id=-1;	
 	  public long server_created_time;
 	  public long server_updated_time;
-	  public int forked_from_id = -1;
-	  public String forked_from_is_removed = "false";
-	  public String is_removed = "false";
+	  public int forked_from_id = -1;  // 迁出的这个列表来自哪
+	  public String forked_from_is_removed = "false"; // 协作列表 已经 被原作者删除了
+	  public String is_removed = "false";  // 是否被移除了
+	  public boolean watched;  // 是否被收藏
 	  
+//	  forked : true|false,
+	  public boolean forked;//是否被迁出
 	  
-    public int getId() {
+    public boolean isForked() {
+		return forked;
+	}
+	public void setForked(boolean forked) {
+		this.forked = forked;
+	}
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -101,6 +116,15 @@ public class DataList extends BaseModel {
 	}
 	public void setIs_removed(String is_removed) {
 		this.is_removed = is_removed;
+	}
+
+	
+
+	public boolean isWatched() {
+		return watched;
+	}
+	public void setWatched(boolean watched) {
+		this.watched = watched;
 	}
 
 

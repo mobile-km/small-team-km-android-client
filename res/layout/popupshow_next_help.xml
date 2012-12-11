@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff" >
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+    >
+    
+        <LinearLayout 
+           android:id="@+id/linearlayout_help_top"
+           android:orientation="vertical"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content">
+       </LinearLayout>
+        
+       <LinearLayout 
+           android:orientation="horizontal"
+           android:layout_width="fill_parent"
+           android:layout_height="100dp"
+       >
+            <LinearLayout 
+               android:id="@+id/linearlayout_help_left"
+               android:orientation="vertical"
+               android:layout_width="wrap_content"
+               android:background="@drawable/translucence_cube"
+               android:layout_height="100dp"
+           >
+           </LinearLayout>
+           <TextView
+                android:id="@+id/popupshow_yuan"
+                android:background="@drawable/translucence_round"
+                android:layout_width="100dp"
+                android:layout_height="100dp" 
+           />
+           <TextView
+                android:background="@drawable/translucence_cube"
+                android:layout_width="500dp"
+                android:layout_height="100dp" 
+           />
+       </LinearLayout>
+        
+       <TextView
+           android:background="@drawable/translucence_cube" 
+           android:layout_marginTop="0dp"
+           android:layout_width="fill_parent"
+           android:layout_height="800dp"
+       />
+   
+   </LinearLayout>
+   <RelativeLayout 
+       android:id="@+id/popupshow_str_top_rl"
+       android:layout_marginTop="160dp"
+       android:gravity="center_horizontal"
+       android:layout_width="200dp"
+       android:layout_height="wrap_content"
+       android:layout_gravity="top"
+       android:layout_marginLeft="50dp"
+       android:background="@color/yellow"
+       android:padding="10dp"
+   >
+       <TextView  
+           android:id="@+id/popupshow_str_top"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textColor="@color/black" 
+           android:text="TOP SHOW HELP"
+       />
+       <RelativeLayout 
+           android:layout_marginTop="20dp"
+           android:layout_below="@+id/popupshow_str_top"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+       >
+           <Button
+               android:id="@+id/popupshow_cancel_prompt_top"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="取消提示" 
+           />
+
+           <Button
+               android:id="@+id/popupshow_not_prompt_top"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentRight="true"
+               android:layout_alignParentTop="true"
+               android:text="不再提示" />
+
+       </RelativeLayout>
+   </RelativeLayout>
+   
+   <RelativeLayout 
+       android:id="@+id/popupshow_str_but_rl"
+       android:layout_marginBottom="60dp"
+       android:gravity="center_horizontal"
+       android:layout_width="200dp"
+       android:layout_height="wrap_content"
+       android:layout_gravity="bottom"
+       android:layout_marginLeft="50dp"
+       android:background="@color/yellow"
+       android:padding="10dp"
+   >
+       <TextView  
+          android:id="@+id/popupshow_str_but"
+          android:textColor="@color/black"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"  
+          android:text="BUTTON SHOW HELP"
+       />
+       <RelativeLayout 
+           android:layout_below="@+id/popupshow_str_but"
+           android:layout_marginTop="20dp"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+       >
+           <Button
+               android:id="@+id/popupshow_cancel_prompt_but"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="取消提示" 
+           />
+
+           <Button
+               android:id="@+id/popupshow_not_prompt_but"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentRight="true"
+               android:layout_alignParentTop="true"
+               android:text="不再提示" />
+
+       </RelativeLayout>
+   </RelativeLayout>
+   <ImageView  
+       android:id="@+id/popupshow_image_top"
+       android:src="@drawable/translucence_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_gravity="top|right"
+       android:visibility="gone"
+       android:layout_marginTop="50dp"
+       android:layout_marginRight="7dp"
+   />
+   <ImageView  
+       android:id="@+id/popupshow_image_but"
+       android:src="@drawable/translucence_close"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_gravity="bottom|right"
+       android:visibility="gone"
+        android:layout_margin="7dp"
+   />
+</FrameLayout>

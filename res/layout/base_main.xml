@@ -44,11 +44,12 @@
    
         </LinearLayout>
         <ImageButton
-             android:src="@drawable/mi_data_list_add"
+            android:id="@+id/mi_data_list_add"
+             android:src="@drawable/add_bold_cube"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
-             android:background="@drawable/bg_button_head_bar"
+             android:background="@drawable/add_bold_cube"
              android:onClick="click_add_data_list_iv"
         />
     </RelativeLayout>    
@@ -112,40 +113,6 @@
                 />
             </LinearLayout>
         </RelativeLayout>
-        
-      <ImageView
-            android:id="@+id/manual_syn_bn"
-            android:src="@drawable/refresh"
-            android:contentDescription="@string/manual_syn_bn"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:onClick="click_manual_syn" 
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="15dp"
-            android:visibility="gone"
-        />
-        <ProgressBar
-            android:id="@+id/main_data_syn_progress_bar"
-            style="@android:style/Widget.ProgressBar.Inverse"
-            android:layout_height="50dp"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="15dp"
-            android:visibility="gone"
-        />
-        <TextView
-            android:id="@+id/progress_set_num"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="27dp"
-            android:textSize="10dp"
-            android:textColor="#000"
-            android:text=""
-        />
     </RelativeLayout>
   <LinearLayout 
       android:id="@+id/bar"
@@ -189,7 +156,7 @@
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:scaleType="matrix"
-       android:src="@drawable/a" 
+       android:src="@drawable/line" 
        android:layout_marginBottom="5dp"
   />
   <RelativeLayout
