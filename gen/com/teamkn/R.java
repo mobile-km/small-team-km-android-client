@@ -498,7 +498,7 @@ public final class R {
         public static final int default_avatar=0x7f02000b;
         /**   <color name="darkgray">#A9A9A9</color> 
          */
-        public static final int feed_bn_pressed=0x7f020040;
+        public static final int feed_bn_pressed=0x7f020045;
         public static final int gray_android_bg=0x7f02000c;
         public static final int gray_bg_icon=0x7f02000d;
         public static final int gray_pencil=0x7f02000e;
@@ -540,17 +540,22 @@ public final class R {
         public static final int tkn_nav_item_icon=0x7f020032;
         public static final int tkn_nav_right_shadow=0x7f020033;
         public static final int tkn_top_bar_bg=0x7f020034;
-        public static final int top_but_move=0x7f020035;
-        public static final int top_menu_spinner=0x7f020036;
-        public static final int tramslucence_add=0x7f020037;
-        public static final int translucence_close=0x7f020038;
-        public static final int translucence_cube=0x7f020039;
-        public static final int translucence_cube_gray=0x7f02003a;
-        public static final int translucence_cut=0x7f02003b;
-        public static final int translucence_hand=0x7f02003c;
-        public static final int translucence_round=0x7f02003d;
-        public static final int user_default_avatar_normal=0x7f02003e;
-        public static final int version_check_dialog_bg=0x7f02003f;
+        public static final int tkn_top_bar_bg_png=0x7f020035;
+        public static final int tkn_top_bar_menu_btn=0x7f020036;
+        public static final int tkn_top_bar_menu_btn_png=0x7f020037;
+        public static final int tkn_top_bar_menu_btn_pressed=0x7f020038;
+        public static final int tkn_top_bar_menu_btn_selector=0x7f020039;
+        public static final int top_but_move=0x7f02003a;
+        public static final int top_menu_spinner=0x7f02003b;
+        public static final int tramslucence_add=0x7f02003c;
+        public static final int translucence_close=0x7f02003d;
+        public static final int translucence_cube=0x7f02003e;
+        public static final int translucence_cube_gray=0x7f02003f;
+        public static final int translucence_cut=0x7f020040;
+        public static final int translucence_hand=0x7f020041;
+        public static final int translucence_round=0x7f020042;
+        public static final int user_default_avatar_normal=0x7f020043;
+        public static final int version_check_dialog_bg=0x7f020044;
     }
     public static final class id {
         public static final int ScrollLayout=0x7f0b0081;
