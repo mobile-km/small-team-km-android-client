@@ -23,6 +23,8 @@
 
     <string name="button_go_back">返回</string>
     <string name="placeholder">占位</string>
+    <string name="image_description">图片描述</string>
+    
     
     <string name="contact_list_linkman">联系人</string>
     <string name="contact_list_send_invite">发出的邀请</string>

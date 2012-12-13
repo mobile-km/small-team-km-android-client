@@ -1,6 +1,5 @@
 package com.teamkn.base.activity;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +9,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -22,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
@@ -47,15 +41,15 @@ abstract public class TeamknBaseActivity extends Activity {
     MenuListAdapter adapter = null;
 	ArrayList<Map<String, Object>> list;
 	Map<String, Object> map = new HashMap<String, Object>();
-	ListView list_menu_view;
 	
-	ImageView menu_user_avater_iv;
-	TextView  menu_user_name_tv ;
+	ListView list_menu_view; // 包含菜单项的列表
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActivitiesStackSingleton.tidy_and_push_activity(this);
 	}
+	
 	private boolean just_menu_actvity(){
 		boolean is_menu = false;
 		System.out.println(" just_menu_activity : " +TeamknApplication.current_show_activity);
@@ -87,33 +81,16 @@ abstract public class TeamknBaseActivity extends Activity {
 		return is_menu;
 	}
 	
-	private void load_list(){
-		menu_user_avater_iv = (ImageView)findViewById(R.id.menu_user_avater_iv);
-		menu_user_name_tv = (TextView)findViewById(R.id.menu_user_name_tv);
-		// 设置用户头像和名字
-		AccountUser user = current_user();
-		byte[] avatar = user.avatar;
-		String name = current_user().name;
-		if (avatar != null) {
-			Bitmap bitmap = BitmapFactory
-					.decodeStream(new ByteArrayInputStream(avatar));
-			Drawable drawable = new BitmapDrawable(bitmap);
-			menu_user_avater_iv.setBackgroundDrawable(drawable);
-		} else {
-			menu_user_avater_iv.setBackgroundResource(R.drawable.user_default_avatar_normal);
-		}
-		menu_user_name_tv.setText(name);
-		menu_user_avater_iv.setOnClickListener(setUserManagerClick);
-		menu_user_name_tv.setOnClickListener(setUserManagerClick);
-		
+	private void load_list(){		
 		list = ArrayListMenu.getData();
 		adapter = new MenuListAdapter(this);
 		adapter.add_items(list);
 		list_menu_view.setAdapter(adapter);
+		list_menu_view.setDivider(null);
+		
 		list_menu_view.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long position) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long position) {
 				switch (arg2) {
 				case 0: //我的首页  follow  的首页
 					Intent follow_intent = new Intent(TeamknBaseActivity.this,MainActivity.class);
@@ -140,16 +117,9 @@ abstract public class TeamknBaseActivity extends Activity {
 				case 4:  // 设置选项
 					open_activity(TeamknSettingActivity.class);
 					break;
-				case 5:  //用户信息
-//					open_activity(UserMsgActivity.class);
+				case 5:  // 退出应用
 					click_exit_teamkn_activity();
 					break;
-//				case 6: // 注销用户
-////					open_activity(AccountManagerActivity.class);
-//					break;
-//				case 7: // 退出登录
-//					click_exit_teamkn_activity();
-//					break;
 				default:
 					break;
 				}

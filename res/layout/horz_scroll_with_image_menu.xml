@@ -1,61 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
->
-	<com.teamkn.activity.base.slidingmenu.ScrollLayout
-	  android:id="@+id/ScrollLayoutTest"
-	  android:layout_width="fill_parent"
-	  android:layout_height="fill_parent">
-	  
-	 <RelativeLayout 
-		android:id="@+id/menu"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:paddingLeft="50dp"
-		android:layout_marginRight="2dp" 
-	 >   
-	        <RelativeLayout 
-               android:id="@+id/menu_title"
-               android:layout_marginTop="10dp"
-               android:layout_marginBottom="10dp"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:visibility="gone"
-            >
-               <ImageView
-                   android:id="@+id/menu_user_avater_iv"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:background="@drawable/default_avatar" 
-               />
+    android:layout_height="fill_parent" >
 
-               <TextView
-                   android:id="@+id/menu_user_name_tv"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="80dp"
-                   android:text="小强"
-                   android:textColor="@color/black"
-                   android:textSize="20dp" />
+    <com.teamkn.activity.base.slidingmenu.ScrollLayout
+        android:id="@+id/ScrollLayoutTest"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/tkn_nav_bg" >
 
-            </RelativeLayout>
-            <ListView 
-                android:layout_below="@+id/menu_title"
-                android:paddingTop="20dp"
+        <RelativeLayout
+            android:id="@+id/menu"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <ListView
                 android:id="@+id/list_menu_view"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="2dp" 
-                android:background="@color/white"   
-            /> 
-            
-	   </RelativeLayout>
-	   <LinearLayout 
-	       android:layout_width="fill_parent"
-	       android:layout_height="fill_parent"
-	       android:id="@+id/linearlayout_loading">  
-	   </LinearLayout>
-	</com.teamkn.activity.base.slidingmenu.ScrollLayout>
+                android:background="@drawable/tkn_nav_bg" />
+
+            <RelativeLayout
+                android:layout_width="15dp"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/tkn_nav_right_shadow" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_loading"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </LinearLayout>
+    </com.teamkn.activity.base.slidingmenu.ScrollLayout>
+
 </FrameLayout>

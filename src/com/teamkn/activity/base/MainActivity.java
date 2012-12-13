@@ -216,7 +216,7 @@ public class MainActivity extends TeamknBaseActivity {
 	        
 			// 加载node_listview
 			InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
-			Intent intent = getIntent();
+//			Intent intent = getIntent();
 			
 //			String data_list_public = intent.getStringExtra("data_list_public");
 //			RequestCode.data_list_public = data_list_public;	
