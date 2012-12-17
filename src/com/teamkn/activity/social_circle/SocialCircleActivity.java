@@ -9,12 +9,12 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,7 +29,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -37,13 +36,11 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.social_circle.UserPublicDataListActivity.RequestCode;
+import com.teamkn.activity.base.slidingmenu.SizeCallbackForMenu;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
-import com.teamkn.activity.usermsg.UserMsgActivity;
 import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
@@ -52,8 +49,6 @@ import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
-import com.teamkn.model.User;
-import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.widget.adapter.UserAdapter;
 
 public class SocialCircleActivity extends TeamknBaseActivity{
@@ -154,13 +149,13 @@ public class SocialCircleActivity extends TeamknBaseActivity{
     	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
     	ImageView btnSlide = (ImageView) head_view.findViewById(R.id.iv_foot_view);
         
-        btnSlide.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        btnSlide.setOnClickListener(new ClickListenerForScrolling(scrollView, foot_view));
      
         View transparent = new TextView(SocialCircleActivity.this);
         final View[] children = new View[] { transparent, show_view };
         int scrollToViewIdx = 1;
 
-        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(btnSlide));
+        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
         
 		InitImageView();
 		load_ui();

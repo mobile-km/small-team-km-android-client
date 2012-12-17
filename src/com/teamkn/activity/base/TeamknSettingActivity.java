@@ -5,17 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.teamkn.R;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.social_circle.SocialCircleActivity;
-import com.teamkn.activity.social_circle.SocialCircleActivity.RequestCode;
+import com.teamkn.activity.base.slidingmenu.SizeCallbackForMenu;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class TeamknSettingActivity extends TeamknBaseActivity{
@@ -52,13 +51,13 @@ public class TeamknSettingActivity extends TeamknBaseActivity{
     	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
     	ImageView btnSlide = (ImageView) head_view.findViewById(R.id.iv_foot_view);
         
-        btnSlide.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+        btnSlide.setOnClickListener(new ClickListenerForScrolling(scrollView, foot_view));
      
         View transparent = new TextView(TeamknSettingActivity.this);
         final View[] children = new View[] { transparent, show_view };
         int scrollToViewIdx = 1;
 
-        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(btnSlide));
+        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
         
         LinearLayout ll_setting = (LinearLayout)show_view.findViewById(R.id.ll_setting);
 	     ll_setting.setOnClickListener(new OnClickListener() {

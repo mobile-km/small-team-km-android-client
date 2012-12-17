@@ -11,8 +11,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.HorizontalScrollView;
 
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu.ListenerScroll;
-
 /**
  * A HorizontalScrollView (HSV) implementation that disallows touch events (so
  * no scrolling can be done by the user).
@@ -113,7 +111,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			} else if (move_deltaX < -10 && Math.abs(move_deltaY) < 50) {
 				// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320-
 				// (int)x, 0);
-				ListenerScroll.set_smooth_scroll_to(MainActivity.scrollView,
+				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView,
 						320 - (int) x, 0);
 			}
 			break;
@@ -130,16 +128,16 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			int velocityY = (int) velocityTracker.getYVelocity();
 
 			if (velocityX > SNAP_VELOCITY) {
-				ListenerScroll.listener_click(MainActivity.scrollView,
+				ClickListenerForScrolling.listener_click(MainActivity.scrollView,
 						MainActivity.foot_view);
 				// result = false;
 			} else if (velocityX < -SNAP_VELOCITY) {
-				ListenerScroll.listener_click(MainActivity.scrollView,
+				ClickListenerForScrolling.listener_click(MainActivity.scrollView,
 						MainActivity.foot_view);
 				// result = false;
 			} else if (Math.abs(up_deltaX) > 50) {
 				// HorzScrollWithImageMenu.scrollView.smoothScrollTo(0, 0);
-				ListenerScroll.set_smooth_scroll_to(MainActivity.scrollView, 0,
+				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView, 0,
 						0);
 			}
 
