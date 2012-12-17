@@ -264,5 +264,7 @@ abstract public class TeamknBaseActivity extends Activity {
 		 }
 		 return super.onKeyDown(keyCode, event);
 	}
-	
+	public void click_nil(View view){
+		 
+	}
 }

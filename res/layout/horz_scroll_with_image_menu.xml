@@ -3,12 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.teamkn.activity.base.slidingmenu.ScrollLayout
-        android:id="@+id/ScrollLayoutTest"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/tkn_nav_bg" >
-
         <RelativeLayout
             android:id="@+id/menu"
             android:layout_width="fill_parent"
@@ -17,7 +11,7 @@
             <ListView
                 android:id="@+id/list_menu_view"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:background="@drawable/tkn_nav_bg" />
 
             <RelativeLayout
@@ -28,11 +22,28 @@
                 android:background="@drawable/tkn_nav_right_shadow" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/linearlayout_loading"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+        <com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView 
+	       android:id="@+id/myScrollView"
+	       android:layout_width="fill_parent" 
+	       android:layout_height="fill_parent" 
+	       android:background="#00ffffff" 
+	       android:padding="0px"
+	       android:layout_margin="0px" 
+	       android:fadingEdge="none" 
+	       android:fadingEdgeLength="0px" 
+	       android:scrollbars="none"
+  	    >
+	        <LinearLayout 
+	            android:id="@+id/top" 
+	            android:layout_height="fill_parent" 
+	            android:layout_width="fill_parent"
+	            android:orientation="horizontal" 
+	            android:background="#00ffffff" 
+	            android:padding="0px" 
+	            android:layout_margin="0px"
+	        >
+	        <!-- The views inside here will be added programmatically. -->
         </LinearLayout>
-    </com.teamkn.activity.base.slidingmenu.ScrollLayout>
 
+    </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
 </FrameLayout>

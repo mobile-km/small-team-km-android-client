@@ -17,10 +17,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.AccountManager;
 import com.teamkn.activity.base.MainActivity;
-import com.teamkn.activity.social_circle.UserPublicDataListActivity;
-import com.teamkn.activity.social_circle.UserPublicDataListActivity.RequestCode;
 import com.teamkn.activity.usermsg.UserMsgActivity;
-import com.teamkn.application.TeamknApplication;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.adapter.TeamknBaseAdapter;
 import com.teamkn.model.DataList;
@@ -48,7 +45,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         //个人列表
         view_holder.show_is_no_public_relativelayout = (RelativeLayout) view.findViewById(R.id.show_is_no_public_relativelayout);
         view_holder.list_note_title_tv_edit    = (TextView)  view.findViewById(R.id.list_note_title_tv_edit);
-        view_holder.list_note_title_tv_go    = (TextView)  view.findViewById(R.id.list_note_title_tv_go);
         view_holder.list_data_list_eye_tv = (TextView) view.findViewById(R.id.mi_list_data_list_eye_tv);
         view_holder.list_type_tv = (TextView)view.findViewById(R.id.list_type_tv);
         view_holder.data_list_forked_iv = (ImageView)view.findViewById(R.id.data_list_forked_iv);
@@ -66,12 +62,8 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     public void fill_with_data(BaseViewHolder holder,
                                final DataList item,
                                int position) {
-//    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, item.user_id));
-//    	DataListReading dataListReading = DataListReadingDBHelper.find(new DataListReading(-1, item.id, UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id));
-//    	boolean isReading = true;
-//        if(dataListReading.id<=0){
-//        	isReading = false;
-//        } 
+    	System.out.println("item ： " + item.toString());
+    	System.out.println(item.server_updated_time);
     	final ViewHolder view_holder = (ViewHolder) holder;
     	view_holder.list_collect_tv_watch.setVisibility(View.GONE);
     	view_holder.data_list_forked_iv.setVisibility(View.GONE);
@@ -101,7 +93,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
                 }
                 view_holder.list_note_title_tv_edit.setText(title);
                 
-//                view_holder.list_note_title_tv_go.setText(item.id+":"+item.server_data_list_id);
         		if(item.public_boolean.equals("true")){
         			view_holder.list_data_list_eye_tv.setText("分享");
         		}else if(item.public_boolean.equals("false")){
@@ -118,7 +109,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.star_blue));
         		}else{
         			view_holder.data_list_forked_iv.setVisibility(View.GONE);
-//        			view_holder.data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
         		}
             }else{
             	
@@ -163,7 +153,6 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
     	// 个人列表子项显示
     	RelativeLayout show_is_no_public_relativelayout;
         TextView list_note_title_tv_edit;   
-        TextView list_note_title_tv_go;
         TextView list_data_list_eye_tv;
         TextView list_type_tv;
         ImageView data_list_forked_iv;
@@ -174,50 +163,5 @@ public class DataListAdapter extends TeamknBaseAdapter<DataList> {
         TextView list_title_tv_public;
         ImageView list_collect_tv_watch;
         TextView list_type_tv_public;
-        
-//        public void onClick(final DataList item,final boolean go_watch) {
-//        	final Watch watch = new Watch(-1,UserDBHelper.find_by_server_user_id(AccountManager.current_user().user_id).id , item.id);
-//			final Watch fand_watch = WatchDBHelper.find(watch);
-//			if (BaseUtils.is_wifi_active(activity)) {
-//				new TeamknAsyncTask<Void, Void, Boolean>() {
-//					@Override
-//					public Boolean do_in_background(Void... params)
-//							throws Exception {
-//						boolean rsult=false;
-//						if(fand_watch.id<=0){
-//							rsult = true;
-//							WatchDBHelper.createOrUpdate(watch);
-//							HttpApi.WatchList.watch(item, rsult);
-//						}else{
-//							rsult = false;
-//							WatchDBHelper.delete(watch);
-//							HttpApi.WatchList.watch(item, rsult);
-//						}
-//						return rsult;
-//					}
-//					@Override
-//					public void on_success(Boolean result) {
-//						list_collect_tv_watch.setVisibility(View.VISIBLE);
-//						data_list_forked_iv.setVisibility(View.VISIBLE);
-//						if(go_watch && !MainActivity.RequestCode.data_list_public.equals("watch")){
-//							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-//							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_yes));
-//						}else if(!MainActivity.RequestCode.data_list_public.equals("watch")){
-//							list_collect_tv_watch.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-//							data_list_forked_iv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.mi_collect_no));
-//						}
-//						String msg;
-//						if(result==true){
-//							msg = "添加成功 ^_^";
-//						}else{
-//							msg = "移除成功 ^_^";
-//						}
-//						BaseUtils.toast(msg);
-//					}	
-//				}.execute();
-//			}else{
-//				BaseUtils.toast("无法连接到网络，请检查网络配置");
-//			}
-//		}
     }
 }

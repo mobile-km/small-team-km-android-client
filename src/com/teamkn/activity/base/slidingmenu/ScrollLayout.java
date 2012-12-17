@@ -159,6 +159,8 @@ public class ScrollLayout extends ViewGroup {
 		// TODO Auto-generated method stub
 		
 		if (mVelocityTracker == null) {
+			//用来跟踪触摸速度的类 
+			//使用getXVelocity ()、getYVelocity ()函数来获得当前的速度
 			mVelocityTracker = VelocityTracker.obtain();
 		}
 		mVelocityTracker.addMovement(event);
@@ -197,7 +199,7 @@ public class ScrollLayout extends ViewGroup {
 		case MotionEvent.ACTION_UP: 
             // if (mTouchState == TOUCH_STATE_SCROLLING) {   
             final VelocityTracker velocityTracker = mVelocityTracker;   
-            velocityTracker.computeCurrentVelocity(1000);   
+            velocityTracker.computeCurrentVelocity(1000);   //使用computeCurrentVelocity (int units)函数来计算当前的速度
             int velocityX = (int) velocityTracker.getXVelocity();   
 //            向左是负的
 //            向右是正的
@@ -277,5 +279,4 @@ public class ScrollLayout extends ViewGroup {
 		}
 		return mTouchState != TOUCH_STATE_REST;
 	}
-	
 }

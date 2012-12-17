@@ -8,12 +8,13 @@
         android:id="@+id/head"
         style="@style/head_bar" >
 
-        <ImageView
+        <Button
             android:id="@+id/iv_foot_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/sliding_menu" />
+            android:layout_width="48dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/tkn_top_bar_menu_btn_selector" />
 
         <LinearLayout
             android:id="@+id/main_user_name_rl"
@@ -28,15 +29,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:shadowColor="#99000000"
+                android:shadowDx="-1"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
                 android:text="@string/main_user_name_default"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="20dp" />
 
             <ImageView
                 android:id="@+id/main_user_name_iv"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
-                android:background="@android:drawable/arrow_down_float" 
+                android:background="@android:drawable/arrow_down_float"
                 android:contentDescription="@string/image_description" />
         </LinearLayout>
 
@@ -45,12 +51,12 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/add_bold_cube"
-            android:onClick="click_add_data_list_iv"
-            android:src="@drawable/add_bold_cube"
-            android:layout_marginTop="3dp"
             android:layout_marginRight="3dp"
-            android:contentDescription="@string/image_description" />
+            android:layout_marginTop="3dp"
+            android:background="@drawable/add_bold_cube"
+            android:contentDescription="@string/image_description"
+            android:onClick="click_add_data_list_iv"
+            android:src="@drawable/add_bold_cube" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -75,29 +81,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/main_user_avatar" >
-
-            <!--
-            <TextView 
-               android:id="@+id/main_user_name"
-               android:text="@string/main_user_name_default"
-               android:layout_width="fill_parent"
-               android:layout_height="30dp"
-               android:layout_alignParentTop="true"
-               android:textSize="20dp"
-               android:gravity="center_vertical"
-               android:layout_marginBottom="20dp"
-            />
-            -->
-            <!--
-            <TextView
-	           android:id="@+id/main_data_syn_text"
-	           android:layout_height="20dp"
-	           android:layout_width="fill_parent"
-	           android:textSize="13dp"
-	           android:text="同步更新时间显示在此"
-	           android:layout_below="@+id/main_user_name"
-            />
-            -->
 
             <LinearLayout
                 android:layout_width="fill_parent"

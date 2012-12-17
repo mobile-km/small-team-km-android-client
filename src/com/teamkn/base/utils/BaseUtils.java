@@ -37,7 +37,7 @@ public class BaseUtils {
         sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(time));
     }
-    public static String date_curront_time_String(long createTime){ 
+    public static String date_current_time_string(long createTime){ 
     	Calendar ca = Calendar.getInstance();
     	long nowTime = ca.getTimeInMillis();
     	long ss=(nowTime-createTime)/(1000); //共计秒数
@@ -45,7 +45,7 @@ public class BaseUtils {
     	int hh=(int)ss/3600;  //共计小时数
     	int dd=(int)hh/24;   //共计天数 
     	
-    	String ji= "刚发布" ;
+    	String ji= "刚发布";
     	if(dd>2){
     		ji = date_string(createTime);
     	}else if(dd>=1){
