@@ -47,7 +47,6 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.base.slidingmenu.SizeCallbackForMenu;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.activity.datalist.SearchDataActivity;
@@ -176,7 +175,7 @@ public class MainActivity extends TeamknBaseActivity {
         final View[] children = new View[] { transparent, show_view };
         int scrollToViewIdx = 1;
 
-        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
+        scrollView.initViews(children, scrollToViewIdx, btnSlide);
         
         // 加载node_listview
      	InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标

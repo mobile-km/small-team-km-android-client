@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.base.slidingmenu.SizeCallbackForMenu;
 import com.teamkn.base.activity.TeamknBaseActivity;
 
 public class TeamknSettingActivity extends TeamknBaseActivity{
@@ -57,7 +56,7 @@ public class TeamknSettingActivity extends TeamknBaseActivity{
         final View[] children = new View[] { transparent, show_view };
         int scrollToViewIdx = 1;
 
-        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
+        scrollView.initViews(children, scrollToViewIdx, btnSlide);
         
         LinearLayout ll_setting = (LinearLayout)show_view.findViewById(R.id.ll_setting);
 	     ll_setting.setOnClickListener(new OnClickListener() {

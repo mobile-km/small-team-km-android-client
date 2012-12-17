@@ -38,7 +38,6 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
-import com.teamkn.activity.base.slidingmenu.SizeCallbackForMenu;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
 import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
@@ -155,7 +154,7 @@ public class SocialCircleActivity extends TeamknBaseActivity{
         final View[] children = new View[] { transparent, show_view };
         int scrollToViewIdx = 1;
 
-        scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnSlide));
+        scrollView.initViews(children, scrollToViewIdx, btnSlide);
         
 		InitImageView();
 		load_ui();

@@ -8,6 +8,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 
 import com.teamkn.activity.base.MainActivity;
@@ -59,7 +60,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 	 *            A SizeCallback to interact with the HSV.
 	 */
 	public void initViews(View[] children, int scrollToViewIdx,
-			SizeCallback sizeCallback) {
+			View button_view) {
 		// A ViewGroup MUST be the only child of the HSV
 		ViewGroup parent = (ViewGroup) getChildAt(0);
 
@@ -73,7 +74,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		// Add a layout listener to this HSV
 		// This listener is responsible for arranging the child views.
 		OnGlobalLayoutListener listener = new MyOnGlobalLayoutListener(parent,
-				children, scrollToViewIdx, sizeCallback);
+				children, scrollToViewIdx, button_view);
 		getViewTreeObserver().addOnGlobalLayoutListener(listener);
 	}
 
@@ -190,7 +191,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		View[] children;
 		int scrollToViewIdx;
 		int scrollToViewPos = 0;
-		SizeCallback sizeCallback;
+		View button_view;
 
 		/**
 		 * @param parent
@@ -203,11 +204,11 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		 *            A SizeCallback to interact with the HSV.
 		 */
 		public MyOnGlobalLayoutListener(ViewGroup parent, View[] children,
-				int scrollToViewIdx, SizeCallback sizeCallback) {
+				int scrollToViewIdx, View button_view) {
 			this.parent = parent;
 			this.children = children;
 			this.scrollToViewIdx = scrollToViewIdx;
-			this.sizeCallback = sizeCallback;
+			this.button_view = button_view;
 		}
 
 		@Override
@@ -219,11 +220,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			// The listener will remove itself as a layout listener to the HSV
 			me.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 
-			// Allow the SizeCallback to 'see' the Views before we remove them
-			// and re-add them.
-			// This lets the SizeCallback prepare View sizes, ahead of calls to
-			// SizeCallback.getViewSize().
-			sizeCallback.onGlobalLayout();
 
 			parent.removeViewsInLayout(0, children.length);
 
@@ -238,9 +234,16 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			scrollToViewPos = 0;
 			// 放之前首先移除之前所有的
 			parent.removeAllViews();
-
+			
+			
+			int btn_width = button_view.getMeasuredWidth();
 			for (int i = 0; i < children.length; i++) {
-				sizeCallback.getViewSize(i, w, h, dims);
+				dims[0] = w;
+				dims[1] = h;
+				final int menuIdx = 0;
+				if (i == menuIdx) {
+					dims[0] = w - btn_width;
+				}
 
 				System.out.println("addView w=" + dims[0] + ", h=" + dims[1]);
 
