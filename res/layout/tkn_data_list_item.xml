@@ -1,63 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/list_item"  
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"     
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_data_list_item_rl"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:descendantFocusability="beforeDescendants"
->
-    <!-- android:clickable="true" -->
-    <RelativeLayout 
-        android:id="@+id/show_relativelayout"
+    android:orientation="vertical"
+    android:background="#f7f7f7" >
+
+    <TextView
+        android:id="@+id/info_tv"
         android:layout_width="fill_parent"
-        android:background="@color/burlywood"
-        android:layout_height="wrap_content">
-       <TextView
-               android:id="@+id/data_item_info_tv"
-               android:visibility="gone"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-       />
-       <ImageView
-           android:id="@+id/data_item_title_iv_frush"
-           android:layout_width="50dp"
-           android:layout_height="40dp"
-           android:layout_alignParentLeft="true"
-           android:layout_alignParentTop="true"
-           android:gravity="center"
-           android:src="@drawable/top_but_move" 
-       />
-       <TextView
-           android:layout_marginLeft="50dp"
-           android:id="@+id/data_item_title_tv"
-           style="@style/text"
-           android:layout_width="fill_parent"
-           android:layout_height="40dp"
-           android:textColor="@color/black"
-           android:text="@string/app_name"
-           android:padding="10dp"
-           android:background="@color/gainsboro"
-      />
-<!--       android:singleLine="true"
-		   android:focusable="true"
-		   android:ellipsize="marquee"
-		   android:marqueeRepeatLimit="marquee_forever"
-		   android:focusableInTouchMode="true" -->
-       
-       <TextView
-           android:id="@+id/data_item_title_tv_go"
-           style="@style/text"
-           android:layout_width="80dp"
-           android:gravity="center"
-           android:textColor="@color/black"
-           android:text="@string/app_name"
-           android:padding="10dp"
-           android:visibility="gone"
-           android:background="@color/burlywood"
-           android:layout_alignParentRight="true"
-       />
-    </RelativeLayout>
-    
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="9dp" >
+
+        <LinearLayout
+            android:id="@+id/tknlist_avatar_box"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp" >
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/tkn_data_list_avatar_bg"
+                android:padding="4dp" >
+
+                <ImageView
+                    android:id="@+id/tknlist_author_avatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/tkn_avatar_png"
+                    android:contentDescription="@string/image_description" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tknlist_updated_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="3dp"
+                android:text="@string/placeholder_time"
+                android:textColor="#999"
+                android:textSize="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tknlist_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placeholder_long"
+                    android:textColor="#000"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tknlist_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/placeholder"
+                    android:textColor="#999"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="9dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tknlist_is_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_private"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_has_been_forked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_fork"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_is_created_by_fork"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_by_fork"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_is_faved_by_me"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_fav"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/green"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_kind_step"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#DADDE0" />
+
+</LinearLayout>

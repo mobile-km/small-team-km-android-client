@@ -46,17 +46,15 @@
                 android:contentDescription="@string/image_description" />
         </LinearLayout>
 
-        <ImageButton
+        <Button
             android:id="@+id/mi_data_list_add"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="48dp"
+            android:layout_height="36dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="3dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/add_bold_cube"
-            android:contentDescription="@string/image_description"
-            android:onClick="click_add_data_list_iv"
-            android:src="@drawable/add_bold_cube" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/tkn_top_bar_add_btn_selector"
+            android:onClick="click_add_data_list_iv" />
     </RelativeLayout>
 
     <RelativeLayout
