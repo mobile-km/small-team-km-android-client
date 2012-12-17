@@ -2,6 +2,7 @@ package com.teamkn.model;
 import java.io.Serializable;
 
 import com.teamkn.model.base.BaseModel;
+import com.teamkn.model.database.UserDBHelper;
 
 public class DataList extends BaseModel implements Serializable{
 	  /**
@@ -126,7 +127,10 @@ public class DataList extends BaseModel implements Serializable{
 	public void setWatched(boolean watched) {
 		this.watched = watched;
 	}
-
+	public User get_user(){
+		return UserDBHelper.find(this.user_id);
+	}
+	
 
 
 	public static DataList NIL_DATA_LIST = new DataList();

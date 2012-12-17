@@ -1,11 +1,32 @@
 package com.teamkn.base.utils;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,51 +35,56 @@ import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.Toast;
+
 import com.teamkn.application.TeamknApplication;
 
-import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 public class BaseUtils {
-
 
     public static int dp_to_px(int dip) {
         Resources r = TeamknApplication.context.getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
     }
 
-    public static String date_string(long time) {
+    public static String date_string(long time_seconds) {
         SimpleDateFormat sdf = new SimpleDateFormat();
-        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(time));
+        sdf.applyPattern("MM月d日");
+        return sdf.format(new Date(time_seconds * 1000));
     }
-    public static String date_curront_time_String(long createTime){ 
-    	Calendar ca = Calendar.getInstance();
-    	long nowTime = ca.getTimeInMillis();
-    	long ss=(nowTime-createTime)/(1000); //共计秒数
-    	int MM = (int)ss/60;   //共计分钟数
-    	int hh=(int)ss/3600;  //共计小时数
-    	int dd=(int)hh/24;   //共计天数 
-    	
-    	String ji= "刚发布" ;
-    	if(dd>2){
-    		ji = date_string(createTime);
-    	}else if(dd>=1){
-    		ji = dd+" 天前";
-    	}else if(hh >=1){
-    		ji = hh+" 小时前";
-    	}else if(MM >= 1){
-    		ji = MM+" 分前";
-    	}else{
-    		ji = ss+" 秒前";
-    	}
-    	return ji;
+    
+    public static String time_string(long time_seconds){
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("HH:mm");
+        return sdf.format(new Date(time_seconds * 1000));
     }
+    
+	public static String friendly_time_string(long time_seconds) {
+		Date date = new Date(time_seconds * 1000);
+		Date now = new Date();
+		
+		// 如果不是当年的，显示年份
+		if ( now.getYear() != date.getYear() ){
+			return (date.getYear() + 1900) + "年";
+		}
+		
+		// 是当年的，显示可读的日期，或时间，或x分钟前
+		long seconds_delta = (now.getTime() - date.getTime()) / 1000; // 相差秒数
+		int MM = (int) seconds_delta / 60; // 相差分钟数
+		int hh = (int) MM / 60; // 相差小时数
+		int dd = (int) hh / 24; // 相差天数
+		
+		String re;
+		if (dd >= 1) {
+			re = date_string(time_seconds);
+		} else if (hh >= 1) {
+			re = time_string(time_seconds);
+		} else if (MM >= 1) {
+			re = MM + "分钟前";
+		} else {
+			re = "1分钟前";
+		}
+		return re;
+	}
+    
     // yyyy-MM-ddTHH:mm:ssZ
     public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat();

@@ -12,12 +12,6 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/info_tv"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
             android:id="@+id/list_title_tv"
             android:layout_width="fill_parent"
             android:layout_height="50dp"

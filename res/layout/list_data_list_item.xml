@@ -1,134 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_data_list_item_rl"
-    style="@style/list_item"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="10dp"
-    android:descendantFocusability="beforeDescendants" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#f7f7f7" >
 
     <TextView
         android:id="@+id/info_tv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/show_is_no_public_relativelayout"
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gainsboro"
-        android:padding="10dp" >
+        android:orientation="horizontal"
+        android:padding="9dp" >
 
-        <TextView
-            android:id="@+id/list_note_title_tv_edit"
-            style="@style/text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="title"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/list_note_title_tv_go"
-            style="@style/text"
-            android:layout_width="1dp"
-            android:layout_alignParentRight="true"
-            android:background="@color/burlywood"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="id:s_id"
-            android:textColor="@color/black"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/mi_list_data_list_eye_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/list_note_title_tv_edit"
-            android:layout_marginTop="10dp"
-            android:text="分享"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/list_type_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/mi_list_data_list_eye_tv"
-            android:layout_alignBottom="@+id/mi_list_data_list_eye_tv"
-            android:layout_alignParentRight="true"
-            android:text="步骤"
-            android:textColor="@color/black" />
-
-        <ImageView
-            android:id="@+id/data_list_forked_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignTop="@+id/list_type_tv"
-            android:layout_toLeftOf="@+id/list_type_tv"
-            android:background="@drawable/star_blue" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/show_is_yes_public_relativelayout"
-        android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gainsboro"
-        android:padding="10dp">
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/tknlist_avatar_box"
             android:layout_width="50dp"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp" >
 
-            <ImageView
-                android:id="@+id/data_list_item_user_avatar_iv"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/default_avatar" />
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/tkn_data_list_avatar_bg"
+                android:padding="4dp" >
+
+                <ImageView
+                    android:id="@+id/tknlist_author_avatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/tkn_avatar_png"
+                    android:contentDescription="@string/image_description" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/data_list_item_user_name_tv"
-                android:layout_width="fill_parent"
+                android:id="@+id/tknlist_updated_time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/data_list_item_user_avatar_iv"
-                android:text="小强" />
-        </RelativeLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="3dp"
+                android:text="@string/placeholder_time"
+                android:textColor="#999"
+                android:textSize="8dp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/list_title_tv_public"
-            style="@style/text"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="@string/app_name"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/list_type_tv_public"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:text="步骤"
-            android:textColor="@color/black" />
-         <ImageView
-	        android:id="@+id/list_collect_tv_watch"
-	        android:layout_width="40dp"
-	        android:layout_height="40dp"
-	        android:layout_alignParentRight="true"
-	        android:layout_alignTop="@+id/show_is_no_public_relativelayout"
-	        android:background="@drawable/star_gray"
-	        android:text="移除书签"
-	        android:textColor="@color/black" />
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-</RelativeLayout>
+                <TextView
+                    android:id="@+id/tknlist_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placeholder_long"
+                    android:textColor="#000"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tknlist_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/placeholder"
+                    android:textColor="#999"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="9dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tknlist_is_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_private"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_has_been_forked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_fork"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_is_created_by_fork"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_by_fork"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_is_faved_by_me"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/red"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_fav"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/tknlist_kind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/green"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingTop="1dp"
+                        android:text="@string/tknlist_kind_step"
+                        android:textColor="#fff"
+                        android:textSize="11dp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#DADDE0" />
+
+</LinearLayout>

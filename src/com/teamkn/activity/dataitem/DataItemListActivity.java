@@ -594,7 +594,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 		dataItemListAdapter = new DataItemListAdapter(
 				DataItemListActivity.this,
-				R.layout.list_data_item_list_item, dataItems);
+				R.layout.tkn_data_list_item, dataItems);
 		tlv.setAdapter(dataItemListAdapter);
 		tlv.setDropListener(onDrop);
 		tlv.getAdapter();

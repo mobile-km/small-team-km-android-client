@@ -34,7 +34,7 @@ public class DataItemListAdapter extends ArrayAdapter<DataItem> {
 		View row = convertView;
 		if (row == null) {
 			LayoutInflater inflater = activity.getLayoutInflater();
-			row = inflater.inflate(R.layout.list_data_item_list_item, parent,
+			row = inflater.inflate(R.layout.tkn_data_list_item, parent,
 					false);
 		}
 		ViewHolder view_holder = new ViewHolder();

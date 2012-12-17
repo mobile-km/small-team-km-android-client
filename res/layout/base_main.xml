@@ -179,10 +179,9 @@
 
         <ListView
             android:id="@+id/data_list"
-            style="@style/no_padding_body"
-            android:descendantFocusability="beforeDescendants"
-            android:divider="#00000000"
-            android:paddingTop="5dp" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@null" />
     </RelativeLayout>
 
 </RelativeLayout>

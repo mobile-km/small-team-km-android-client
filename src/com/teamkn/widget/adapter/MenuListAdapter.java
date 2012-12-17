@@ -23,21 +23,17 @@ public class MenuListAdapter extends TeamknBaseAdapter<Map<String,Object>>{
 	public BaseViewHolder build_view_holder(View view) {
 		ViewHolder view_holder = new ViewHolder();
 		
-        view_holder.info_tv          = (TextView)  view.findViewById(R.id.info_tv);
-        view_holder.list_title_tv    = (TextView) view.findViewById(R.id.list_title_tv);
+        view_holder.list_title_tv = (TextView) view.findViewById(R.id.list_title_tv);
         return view_holder;
 	}
 	
 	@Override
 	public void fill_with_data(BaseViewHolder holder,Map<String, Object> item, int position) {		
 		 ViewHolder view_holder = (ViewHolder) holder;
-		 
-	     view_holder.info_tv.setTag(R.id.tag_note_uuid, item);
 	     view_holder.list_title_tv.setText(item.get("title").toString());
 	}
 	
 	private class ViewHolder implements BaseViewHolder {
 		TextView list_title_tv;
-        TextView info_tv;
     }
 }
