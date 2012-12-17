@@ -425,6 +425,8 @@ public class HttpApi {
             
             String is_removed = json.getString("is_removed");
             
+//            System.out.println(data_list_server_created_time + " :  " + data_list_server_updated_time);
+            
             User user = new User(0, server_user_id, user_name, user_avatar,avatar_url, user_server_created_time, user_server_updated_time);
             UserDBHelper.createOrUpdate(user); 
             
@@ -628,6 +630,7 @@ public class HttpApi {
    				                JSONObject json = data_list_array.getJSONObject(i);
    				                com.teamkn.model.DataList dataList_server =getDataList(json);		
    				                dataLists.add(dataList_server);
+   				                System.out.println("dataList_server " + dataList_server.toString());
    		                  }
    			        	  return null;
    			          }

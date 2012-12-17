@@ -19,10 +19,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -35,6 +37,9 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.base.MainActivity;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.social_circle.UserPublicDataListActivity.RequestCode;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
@@ -52,7 +57,15 @@ import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.widget.adapter.UserAdapter;
 
 public class SocialCircleActivity extends TeamknBaseActivity{
-	View view_show;
+	LayoutInflater inflater;
+	public static MyHorizontalScrollView scrollView;
+	public static View foot_view;  //底层  图层 隐形部分
+    View show_view;  //显示的View
+    boolean menuOut = false;
+    Handler handler = new Handler();
+    int btnWidth;
+	
+//	View view_show;
 	public static class RequestCode{
 		public static String social_type = RequestCode.MIMSG;
 		public final static String MIMSG = "MIMSG";
@@ -127,23 +140,40 @@ public class SocialCircleActivity extends TeamknBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.horz_scroll_with_image_menu);
-		LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
-	        
-	    LayoutInflater inflater = LayoutInflater.from(this);
-		view_show = inflater.inflate(R.layout.base_social_circle, null);
-		layout.addView(view_show);
+		inflater= LayoutInflater.from(this);
+        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
+
+        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+        foot_view = findViewById(R.id.menu);
+        
+        setView(); 	
+		
+	}
+	private  void setView(){
+    	show_view = inflater.inflate(R.layout.base_social_circle, null);
+    	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
+    	ImageView btnSlide = (ImageView) head_view.findViewById(R.id.iv_foot_view);
+        
+        btnSlide.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+     
+        View transparent = new TextView(SocialCircleActivity.this);
+        final View[] children = new View[] { transparent, show_view };
+        int scrollToViewIdx = 1;
+
+        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(btnSlide));
+        
 		InitImageView();
 		load_ui();
 		RequestCode.social_type =  RequestCode.MIMSG;
 		load_usermsg_or_list_httpApi(RequestCode.social_type);
 		
-	}
+    }
 	private void load_ui() {
-		user_msg = (ScrollView)view_show.findViewById(R.id.user_msg);
-	    iv_user_avatar = (ImageView)view_show.findViewById(R.id.iv_user_avatar);
-		tv_user_name = (TextView)view_show.findViewById(R.id.tv_user_name);
-		list_view = (ListView)view_show.findViewById(R.id.list_view);
-		public_list_tv = (Button)findViewById(R.id.public_list_tv);
+		user_msg = (ScrollView)show_view.findViewById(R.id.user_msg);
+	    iv_user_avatar = (ImageView)show_view.findViewById(R.id.iv_user_avatar);
+		tv_user_name = (TextView)show_view.findViewById(R.id.tv_user_name);
+		list_view = (ListView)show_view.findViewById(R.id.list_view);
+		public_list_tv = (Button)show_view.findViewById(R.id.public_list_tv);
 	}
 	private void load_usermsg_or_list_httpApi(final String social_type){
     	if (BaseUtils.is_wifi_active(SocialCircleActivity.this)) {

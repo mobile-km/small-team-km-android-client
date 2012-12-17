@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -24,12 +25,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,6 +45,8 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.base.slidingmenu.HorzScrollWithListMenu;
+import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.activity.datalist.SearchDataActivity;
@@ -57,10 +62,17 @@ import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.GroupAdapter;
 
 public class MainActivity extends TeamknBaseActivity {
+	LayoutInflater inflater;
+	public static MyHorizontalScrollView scrollView;
+	public static View foot_view;  //底层  图层 隐形部分
+    View show_view;  //显示的View
+    boolean menuOut = false;
+    Handler handler = new Handler();
+    int btnWidth;
+	
 	static boolean first_create = true;
-	View view_show;
-	static TextView teamkn_show_msg_tv;
-	LinearLayout layout;
+//	View view_show;
+//	LinearLayout layout;
 
 	public static class RequestCode {
 		public  static boolean  IS_ON_PAUSE= false;
@@ -136,29 +148,45 @@ public class MainActivity extends TeamknBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.horz_scroll_with_image_menu);
-		layout = (LinearLayout) findViewById(R.id.linearlayout_loading);
-
-		LayoutInflater inflater = LayoutInflater.from(this);
-		view_show = inflater.inflate(R.layout.base_main, null);
-		layout.addView(view_show);
-        
-		// 加载node_listview
-		InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
 		Intent intent = getIntent();
-		
 		String data_list_public = intent.getStringExtra("data_list_public");
 //		String data_list_type = intent.getStringExtra("data_list_type");
 		if (data_list_public != null) {
 			RequestCode.data_list_public = data_list_public;
-		}	
-		load_data_list_or_watch(RequestCode.data_list_public);
+		}
+		
+		inflater= LayoutInflater.from(this);
+        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
+
+        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+        foot_view = findViewById(R.id.menu);
+        
+        setView(); 	
+		
 	}
+	private  void setView(){
+    	show_view = inflater.inflate(R.layout.base_main, null);
+    	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
+        Button btnSlide = (Button) head_view.findViewById(R.id.iv_foot_view);
+        
+        btnSlide.setOnClickListener(new HorzScrollWithListMenu.ClickListenerForScrolling(scrollView, foot_view));
+     
+        View transparent = new TextView(MainActivity.this);
+        final View[] children = new View[] { transparent, show_view };
+        int scrollToViewIdx = 1;
+
+        scrollView.initViews(children, scrollToViewIdx, new HorzScrollWithListMenu.SizeCallbackForMenu(btnSlide));
+        
+        // 加载node_listview
+     	InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
+     	load_data_list_or_watch(RequestCode.data_list_public);
+    }
+	
 	/**
 	 * 初始化动画
 	 */
 	private void InitImageView() {
-		cursor = (ImageView) findViewById(R.id.cursor);
+		cursor = (ImageView) show_view.findViewById(R.id.cursor);
 		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.line)
 				.getWidth();// 获取图片宽度
 		DisplayMetrics dm = new DisplayMetrics();
@@ -204,31 +232,13 @@ public class MainActivity extends TeamknBaseActivity {
 	}
 	@Override
 	protected void onResume() {
-		System.out.println("RequestCode.IS_ON_PAUSE="+RequestCode.IS_ON_PAUSE);
-		if(RequestCode.IS_ON_PAUSE){
-			RequestCode.IS_ON_PAUSE = false;
-			setContentView(R.layout.horz_scroll_with_image_menu);
-			layout = (LinearLayout) findViewById(R.id.linearlayout_loading);
 
-			LayoutInflater inflater = LayoutInflater.from(this);
-			view_show = inflater.inflate(R.layout.base_main, null);
-			layout.addView(view_show);
-	        
-			// 加载node_listview
-			InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
-//			Intent intent = getIntent();
-			
-//			String data_list_public = intent.getStringExtra("data_list_public");
-//			RequestCode.data_list_public = data_list_public;	
-//			load_data_list_or_watch(RequestCode.data_list_public);
-			load_list();
-		}
 		// 设置用户头像和名字
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
 		String name = current_user().name;
-		RelativeLayout rl = (RelativeLayout) view_show
-				.findViewById(R.id.main_user_avatar);
+		RelativeLayout rl = (RelativeLayout) show_view.
+				findViewById(R.id.main_user_avatar);
 		if (avatar != null) {
 			Bitmap bitmap = BitmapFactory
 					.decodeStream(new ByteArrayInputStream(avatar));
@@ -237,8 +247,7 @@ public class MainActivity extends TeamknBaseActivity {
 		} else {
 			rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
-		user_name_tv= (TextView) view_show
-				.findViewById(R.id.main_user_name);
+		user_name_tv= (TextView) show_view.findViewById(R.id.main_user_name);
 		user_name_tv.setText(name+"的列表");
 		main_user_name_iv = (ImageView)findViewById(R.id.main_user_name_iv);
 		if(RequestCode.data_list_public .equals(RequestCode.我的列表) 
@@ -318,7 +327,7 @@ public class MainActivity extends TeamknBaseActivity {
 		datalists = DataListHelper.by_type(record_datalists, RequestCode.data_list_type);
 		
 		request_pageselected();
-		data_list = (ListView) layout.findViewById(R.id.data_list);	
+		data_list = (ListView) show_view.findViewById(R.id.data_list);	
 		dataListAdapter = new DataListAdapter(MainActivity.this);
 		dataListAdapter.add_items(datalists);
 		data_list.setAdapter(dataListAdapter);

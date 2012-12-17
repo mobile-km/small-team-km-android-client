@@ -83,25 +83,25 @@ public class UserManagerActivity extends TeamknBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.user_manager);
-		setContentView(R.layout.horz_scroll_with_image_menu);
-		LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
-	        
-	    LayoutInflater inflater = LayoutInflater.from(this);
-		view_show = inflater.inflate(R.layout.base_user_manager, null);
-		layout.addView(view_show);
-		
-		load_ui();	
-		
-		// 设置用户头像和名字
-	    AccountUser user = current_user();
-	    if(user.avatar != null){
-	      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.avatar));
-	      Drawable drawable = new BitmapDrawable(bitmap);
-	      iv_user_avatar.setBackgroundDrawable(drawable);
-	    }else{
-	      iv_user_avatar.setBackgroundResource(R.drawable.user_default_avatar_normal);
-	    }
-	    tv_user_name.setText(user.name);		
+//		setContentView(R.layout.horz_scroll_with_image_menu);
+//		LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout_loading);
+//	        
+//	    LayoutInflater inflater = LayoutInflater.from(this);
+//		view_show = inflater.inflate(R.layout.base_user_manager, null);
+//		layout.addView(view_show);
+//		
+//		load_ui();	
+//		
+//		// 设置用户头像和名字
+//	    AccountUser user = current_user();
+//	    if(user.avatar != null){
+//	      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.avatar));
+//	      Drawable drawable = new BitmapDrawable(bitmap);
+//	      iv_user_avatar.setBackgroundDrawable(drawable);
+//	    }else{
+//	      iv_user_avatar.setBackgroundResource(R.drawable.user_default_avatar_normal);
+//	    }
+//	    tv_user_name.setText(user.name);		
 	}
 	private void load_ui(){
 		iv_user_avatar = (ImageView)view_show.findViewById(R.id.iv_user_avatar);

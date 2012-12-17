@@ -7,3 +7,4 @@ project.properties
 out
 *.iml
 R.java
+.DS_*
