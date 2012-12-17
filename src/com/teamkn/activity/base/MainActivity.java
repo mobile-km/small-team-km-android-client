@@ -25,14 +25,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,12 +43,10 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
+import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.activity.datalist.SearchDataActivity;
-import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.ShowHelp;
@@ -61,11 +57,9 @@ import com.teamkn.model.database.UserDBHelper;
 import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.GroupAdapter;
 
-public class MainActivity extends TeamknBaseActivity {
+public class MainActivity extends TeamknSlidingMenuActivity {
 	LayoutInflater inflater;
-	public static MyHorizontalScrollView scrollView;
-	public static View foot_view;  //底层  图层 隐形部分
-    View show_view;  //显示的View
+    View content_view;  //显示的View
     boolean menuOut = false;
     Handler handler = new Handler();
     int btnWidth;
@@ -157,25 +151,12 @@ public class MainActivity extends TeamknBaseActivity {
 		
 		inflater= LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-        foot_view = findViewById(R.id.menu);
         
         setView(); 	
 		
 	}
 	private  void setView(){
-    	show_view = inflater.inflate(R.layout.base_main, null);
-    	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
-        Button btnSlide = (Button) head_view.findViewById(R.id.iv_foot_view);
-        
-        btnSlide.setOnClickListener(new ClickListenerForScrolling(scrollView, foot_view));
-     
-        View transparent = new TextView(MainActivity.this);
-        final View[] children = new View[] { transparent, show_view };
-        int scrollToViewIdx = 1;
-
-        scrollView.initViews(children, scrollToViewIdx, btnSlide);
+        content_view = init_sliding_menu(R.layout.base_main);
         
         // 加载node_listview
      	InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
@@ -186,7 +167,7 @@ public class MainActivity extends TeamknBaseActivity {
 	 * 初始化动画
 	 */
 	private void InitImageView() {
-		cursor = (ImageView) show_view.findViewById(R.id.cursor);
+		cursor = (ImageView) content_view.findViewById(R.id.cursor);
 		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.line)
 				.getWidth();// 获取图片宽度
 		DisplayMetrics dm = new DisplayMetrics();
@@ -237,7 +218,7 @@ public class MainActivity extends TeamknBaseActivity {
 		AccountUser user = current_user();
 		byte[] avatar = user.avatar;
 		String name = current_user().name;
-		RelativeLayout rl = (RelativeLayout) show_view.
+		RelativeLayout rl = (RelativeLayout) content_view.
 				findViewById(R.id.main_user_avatar);
 		if (avatar != null) {
 			Bitmap bitmap = BitmapFactory
@@ -247,7 +228,7 @@ public class MainActivity extends TeamknBaseActivity {
 		} else {
 			rl.setBackgroundResource(R.drawable.user_default_avatar_normal);
 		}
-		user_name_tv= (TextView) show_view.findViewById(R.id.main_user_name);
+		user_name_tv= (TextView) content_view.findViewById(R.id.main_user_name);
 		user_name_tv.setText(name+"的列表");
 		main_user_name_iv = (ImageView)findViewById(R.id.main_user_name_iv);
 		if(RequestCode.data_list_public .equals(RequestCode.我的列表) 
@@ -327,7 +308,7 @@ public class MainActivity extends TeamknBaseActivity {
 		datalists = DataListHelper.by_type(record_datalists, RequestCode.data_list_type);
 		
 		request_pageselected();
-		data_list = (ListView) show_view.findViewById(R.id.data_list);	
+		data_list = (ListView) content_view.findViewById(R.id.data_list);	
 		dataListAdapter = new DataListAdapter(MainActivity.this);
 		dataListAdapter.add_items(datalists);
 		data_list.setAdapter(dataListAdapter);

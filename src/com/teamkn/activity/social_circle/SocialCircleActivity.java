@@ -24,7 +24,6 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -36,12 +35,11 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.slidingmenu.ClickListenerForScrolling;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
+import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
 import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
-import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
@@ -50,7 +48,7 @@ import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.widget.adapter.UserAdapter;
 
-public class SocialCircleActivity extends TeamknBaseActivity{
+public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 	LayoutInflater inflater;
 	public static MyHorizontalScrollView scrollView;
 	public static View foot_view;  //底层  图层 隐形部分
@@ -144,17 +142,7 @@ public class SocialCircleActivity extends TeamknBaseActivity{
 		
 	}
 	private  void setView(){
-    	show_view = inflater.inflate(R.layout.base_social_circle, null);
-    	ViewGroup head_view = (ViewGroup) show_view.findViewById(R.id.head);
-    	ImageView btnSlide = (ImageView) head_view.findViewById(R.id.iv_foot_view);
-        
-        btnSlide.setOnClickListener(new ClickListenerForScrolling(scrollView, foot_view));
-     
-        View transparent = new TextView(SocialCircleActivity.this);
-        final View[] children = new View[] { transparent, show_view };
-        int scrollToViewIdx = 1;
-
-        scrollView.initViews(children, scrollToViewIdx, btnSlide);
+		show_view = init_sliding_menu(R.layout.base_social_circle);
         
 		InitImageView();
 		load_ui();

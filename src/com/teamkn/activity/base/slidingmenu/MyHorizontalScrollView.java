@@ -8,10 +8,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
-
-import com.teamkn.activity.base.MainActivity;
 /**
  * A HorizontalScrollView (HSV) implementation that disallows touch events (so
  * no scrolling can be done by the user).
@@ -21,13 +18,6 @@ import com.teamkn.activity.base.MainActivity;
  * initViews() method.
  */
 public class MyHorizontalScrollView extends HorizontalScrollView {
-
-	private VelocityTracker mVelocityTracker;
-	private float mLastMotionX;
-	private float mLastMotionY;
-
-	private static final int SNAP_VELOCITY = 600;
-	private static final int SNAP_VELOCITY_Y = 10;
 
 	public MyHorizontalScrollView(Context context, AttributeSet attrs,
 			int defStyle) {
@@ -76,109 +66,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		OnGlobalLayoutListener listener = new MyOnGlobalLayoutListener(parent,
 				children, scrollToViewIdx, button_view);
 		getViewTreeObserver().addOnGlobalLayoutListener(listener);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320- (int)x, 0);
-		// ListenerScroll.listener_click(HorzScrollWithImageMenu.scrollView,
-		// HorzScrollWithImageMenu.foot_view);
-
-		if (mVelocityTracker == null) {
-			// 用来跟踪触摸速度的类
-			// 使用getXVelocity ()、getYVelocity ()函数来获得当前的速度
-			mVelocityTracker = VelocityTracker.obtain();
-		}
-		mVelocityTracker.addMovement(event);
-
-		final int action = event.getAction();
-		final float x = event.getX();
-		final float y = event.getY();
-
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			mLastMotionX = x;
-			mLastMotionY = y;
-			break;
-
-		case MotionEvent.ACTION_MOVE:
-			int move_deltaX = (int) (mLastMotionX - x);
-			int move_deltaY = (int) (mLastMotionY - y);
-
-			int scrollView_scrollX = MainActivity.scrollView.getScrollX();
-			System.out.println(move_deltaX + " : " + move_deltaY);
-			if (scrollView_scrollX < 100 && move_deltaX > 50
-					&& Math.abs(move_deltaY) < 50) {
-			} else if (move_deltaX < -10 && Math.abs(move_deltaY) < 50) {
-				// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320-
-				// (int)x, 0);
-				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView,
-						320 - (int) x, 0);
-			}
-			break;
-		// 在触摸抬起时
-		case MotionEvent.ACTION_UP:
-			int up_deltaX = (int) (mLastMotionX - x);
-			int up_deltaY = (int) (mLastMotionY - y);
-
-			final VelocityTracker velocityTracker = mVelocityTracker;
-			velocityTracker.computeCurrentVelocity(1000); // 使用computeCurrentVelocity
-															// (int
-															// units)函数来计算当前的速度
-			int velocityX = (int) velocityTracker.getXVelocity();
-			int velocityY = (int) velocityTracker.getYVelocity();
-
-			if (velocityX > SNAP_VELOCITY) {
-				ClickListenerForScrolling.listener_click(MainActivity.scrollView,
-						MainActivity.foot_view);
-				// result = false;
-			} else if (velocityX < -SNAP_VELOCITY) {
-				ClickListenerForScrolling.listener_click(MainActivity.scrollView,
-						MainActivity.foot_view);
-				// result = false;
-			} else if (Math.abs(up_deltaX) > 50) {
-				// HorzScrollWithImageMenu.scrollView.smoothScrollTo(0, 0);
-				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView, 0,
-						0);
-			}
-
-			if (mVelocityTracker != null) {
-				mVelocityTracker.recycle();
-				mVelocityTracker = null;
-			}
-			break;
-		case MotionEvent.ACTION_CANCEL:
-			break;
-		}
-
-		// 对应三种情况 通过控制 onTouch 事件 的返回值 来 划分
-		// return ListenerScroll.result;
-		// return true;
-		return false;
-
-		// 在垂直方向的移动距离在 50 之内 才会有响应
-		// if(Math.abs(deltaY) < 50){
-		// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320- (int)x, 0);
-		// }
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {
-		final int action = event.getAction();
-		final float x = event.getX();
-		final float y = event.getY();
-
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			break;
-		case MotionEvent.ACTION_MOVE:
-			break;
-		case MotionEvent.ACTION_UP:
-			break;
-		case MotionEvent.ACTION_CANCEL:
-			break;
-		}
-		return false;
 	}
 
 	/**
@@ -267,28 +154,95 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		}
 	}
 
-	/**
-	 * Callback interface to interact with the HSV.
-	 */
-	public interface SizeCallback {
-		/**
-		 * Used to allow clients to measure Views before re-adding them.
-		 */
-		public void onGlobalLayout();
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320- (int)x, 0);
+		// ListenerScroll.listener_click(HorzScrollWithImageMenu.scrollView,
+		// HorzScrollWithImageMenu.foot_view);
 
-		/**
-		 * Used by clients to specify the View dimensions.
-		 * 
-		 * @param idx
-		 *            Index of the View.
-		 * @param w
-		 *            Width of the parent View.
-		 * @param h
-		 *            Height of the parent View.
-		 * @param dims
-		 *            dims[0] should be set to View width. dims[1] should be set
-		 *            to View height.
-		 */
-		public void getViewSize(int idx, int w, int h, int[] dims);
+		VelocityTracker mVelocityTracker = null;
+		float mLastMotionX = 0;
+		float mLastMotionY = 0;
+		int SNAP_VELOCITY = 600;
+		
+		if (mVelocityTracker == null) {
+			// 用来跟踪触摸速度的类
+			// 使用getXVelocity ()、getYVelocity ()函数来获得当前的速度
+			mVelocityTracker = VelocityTracker.obtain();
+		}
+		mVelocityTracker.addMovement(event);
+
+		final int action = event.getAction();
+		final float x = event.getX();
+		final float y = event.getY();
+
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			mLastMotionX = x;
+			mLastMotionY = y;
+			break;
+
+		case MotionEvent.ACTION_MOVE:
+			int move_deltaX = (int) (mLastMotionX - x);
+			int move_deltaY = (int) (mLastMotionY - y);
+
+//			int scrollView_scrollX = MainActivity.scrollView.getScrollX();
+			int scrollView_scrollX = this.getScrollX();
+			
+			System.out.println(move_deltaX + " : " + move_deltaY);
+			if (scrollView_scrollX < 100 && move_deltaX > 50
+					&& Math.abs(move_deltaY) < 50) {
+			} else if (move_deltaX < -10 && Math.abs(move_deltaY) < 50) {
+				// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320-
+				// (int)x, 0);
+//				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView, 320 - (int) x, 0);
+				ClickListenerForScrolling.set_smooth_scroll_to(this, 320 - (int) x, 0);
+			}
+			break;
+		// 在触摸抬起时
+		case MotionEvent.ACTION_UP:
+			int up_deltaX = (int) (mLastMotionX - x);
+			int up_deltaY = (int) (mLastMotionY - y);
+
+			final VelocityTracker velocityTracker = mVelocityTracker;
+			velocityTracker.computeCurrentVelocity(1000); // 使用computeCurrentVelocity
+															// (int
+															// units)函数来计算当前的速度
+			int velocityX = (int) velocityTracker.getXVelocity();
+			int velocityY = (int) velocityTracker.getYVelocity();
+
+			if (velocityX > SNAP_VELOCITY) {
+//				ClickListenerForScrolling.listener_click(MainActivity.scrollView, MainActivity.foot_view);
+				ClickListenerForScrolling.listener_click(this);
+				// result = false;
+			} else if (velocityX < -SNAP_VELOCITY) {
+//				ClickListenerForScrolling.listener_click(MainActivity.scrollView, MainActivity.foot_view);
+				ClickListenerForScrolling.listener_click(this);
+				// result = false;
+			} else if (Math.abs(up_deltaX) > 50) {
+				// HorzScrollWithImageMenu.scrollView.smoothScrollTo(0, 0);
+//				ClickListenerForScrolling.set_smooth_scroll_to(MainActivity.scrollView, 0, 0);
+				ClickListenerForScrolling.set_smooth_scroll_to(this, 0, 0);
+			}
+
+			if (mVelocityTracker != null) {
+				mVelocityTracker.recycle();
+				mVelocityTracker = null;
+			}
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			break;
+		}
+
+		// 对应三种情况 通过控制 onTouch 事件 的返回值 来 划分
+		// return ListenerScroll.result;
+		// return true;
+		return false;
+
+		// 在垂直方向的移动距离在 50 之内 才会有响应
+		// if(Math.abs(deltaY) < 50){
+		// HorzScrollWithImageMenu.scrollView.smoothScrollTo( 320- (int)x, 0);
+		// }
 	}
+	
 }

@@ -1,7 +1,10 @@
 package com.teamkn.activity.base.slidingmenu;
 
+import android.content.Context;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 
 public class ClickListenerForScrolling implements OnClickListener {
@@ -22,16 +25,17 @@ public class ClickListenerForScrolling implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ClickListenerForScrolling.listener_click(scrollView, menu);
+		ClickListenerForScrolling.listener_click(scrollView);
 	}
 
 
-	public static void listener_click(HorizontalScrollView scrollView,
-			View menu) {
-		// Context context = menu.getContext();
-		int menuWidth = menu.getMeasuredWidth();
-		// Ensure menu is visible
-		menu.setVisibility(View.VISIBLE);
+	public static void listener_click(HorizontalScrollView scrollView) {
+		
+		WindowManager wm = (WindowManager) scrollView.getContext().getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		int menuWidth = display.getWidth();
+		
+		
 		int left = 0;
 		if (!menuOut) {
 			left = 0;
