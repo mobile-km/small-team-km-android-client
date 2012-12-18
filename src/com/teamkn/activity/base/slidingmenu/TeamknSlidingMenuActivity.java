@@ -1,7 +1,9 @@
 package com.teamkn.activity.base.slidingmenu;
 
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.teamkn.R;
@@ -11,6 +13,7 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 	
 	public View init_sliding_menu(int content_view_layout_xml){
 		LayoutInflater inflater = LayoutInflater.from(this);
+		
 		// 1 获取实际内容模版View
 		View content_view = inflater.inflate(content_view_layout_xml, null);
 		
@@ -18,13 +21,28 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		View button = content_view.findViewById(R.id.iv_foot_view);
 		
 		// 3 注册按钮事件
-        MyHorizontalScrollView scroll_view = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-        View menu_view = findViewById(R.id.menu);
-        button.setOnClickListener(new ClickListenerForScrolling(scroll_view, menu_view));
+        final MyHorizontalScrollView scroll_view = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+        
+        button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Display display = getWindowManager().getDefaultDisplay();
+				int menu_width = display.getWidth();
+				
+				Boolean is_open = (Boolean) scroll_view.getTag();
+				if(null == is_open) is_open = false;
+				
+				int left = is_open ? menu_width : 0;
+				scroll_view.smoothScrollTo(left, 0);
+				
+				scroll_view.setTag(!is_open);
+			}
+        	
+        });
 		
 		// 4 初始化菜单视图
-        View transparent = new TextView(this);
-        scroll_view.initViews(new View[] { transparent, content_view }, 1, button);
+        scroll_view.initViews(new TextView(this), content_view, button);
         
         return content_view;
 	}
