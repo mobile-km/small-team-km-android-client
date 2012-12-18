@@ -12,7 +12,7 @@
         />
         <TextView
 	           style="@style/head_bar_text_center"
-	           android:text="创建列表"
+	           android:text="@string/tkndata_list_create_title"
         />
         <Button
              android:id="@+id/click_data_list_save_ib"
@@ -35,13 +35,13 @@
 			    android:layout_width="wrap_content"    
 			    android:layout_height="wrap_content"
 			    android:checked="true"
-			    android:text="收集列表" /> 
+			    android:text="@string/tkndata_list_create_collection_list" /> 
 			 <RadioButton    
 			    android:id="@+id/radiobutton_STEP"
 			    android:layout_marginLeft="40dp"
 			    android:layout_width="wrap_content"    
 			    android:layout_height="wrap_content"
-			    android:text="步骤列表" />
+			    android:text="@string/tkndata_list_create_step_list" />
 		 </RadioGroup>
     </TableRow>
     <TableRow
@@ -53,7 +53,7 @@
 	          android:layout_gravity="center"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
-	          android:text="分享给所有人"
+	          android:text="@string/tkndata_list_create_share"
 	          android:id="@+id/data_list_public_checkbox"
          />
     </TableRow>
@@ -73,16 +73,9 @@
             android:id="@+id/create_data_list_msg_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="列表名称已存在" 
+            android:text="@string/tkndata_list_create_title_hint" 
             android:layout_marginRight="20dp"
         />
-        <!-- <ImageButton
-            android:id="@+id/click_data_list_save_ib"
-            android:onClick="click_data_list_save_iv"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mi_save"
-        /> -->
+
     </RelativeLayout>
 </RelativeLayout>

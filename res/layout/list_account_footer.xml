@@ -16,9 +16,10 @@
             android:layout_margin="9dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@string/image_description"
             />
     <TextView
-            android:text="增加账号"
+            android:text="@string/setting_account_manager_add_account"
             android:layout_height="50dp"
             android:layout_width="wrap_content"
             android:textSize="16dp"

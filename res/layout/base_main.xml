@@ -100,6 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="click_search_ib"
+                    android:contentDescription="@string/image_description"
                     android:src="@android:drawable/ic_search_category_default" />
             </LinearLayout>
         </RelativeLayout>
@@ -122,7 +123,7 @@
             android:layout_height="fill_parent"
             android:background="@color/lightsteelblue"
             android:onClick="click_all_button"
-            android:text="所有" />
+            android:text="@string/tknlist_kind_all_list" />
 
         <Button
             android:id="@+id/click_collection_tv"
@@ -130,7 +131,7 @@
             android:layout_height="fill_parent"
             android:background="@color/lightsteelblue"
             android:onClick="click_collection_button"
-            android:text="收集列表" />
+            android:text="@string/tknlist_kind_collection_list" />
 
         <Button
             android:id="@+id/click_step_tv"
@@ -138,7 +139,7 @@
             android:layout_height="fill_parent"
             android:background="@color/lightsteelblue"
             android:onClick="click_step_button"
-            android:text="步骤列表" />
+            android:text="@string/tknlist_kind_step_list" />
     </LinearLayout>
 
     <ImageView
@@ -148,6 +149,7 @@
         android:layout_below="@+id/bar"
         android:layout_marginBottom="5dp"
         android:scaleType="matrix"
+        android:contentDescription="@string/image_description"
         android:src="@drawable/line" />
 
     <RelativeLayout
@@ -170,6 +172,7 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:onClick="click_search_ib"
+            android:contentDescription="@string/image_description"
             android:src="@android:drawable/ic_search_category_default" />
     </RelativeLayout>
     <!-- data_list -->

@@ -41,7 +41,7 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		
 		// 4 初始化菜单视图
         View transparent = new TextView(this);
-        scroll_view.initViews(new View[] { transparent, content_view }, 1, button);
+        scroll_view.initViews(transparent, content_view , button);
         
         return content_view;
 	}
@@ -57,7 +57,6 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 			
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long position) {
-				ClickListenerForScrolling.menuOut = !ClickListenerForScrolling.menuOut;
 				switch (arg2) {
 				case 0: //我的首页  follow  的首页
 					Intent follow_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);

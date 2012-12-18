@@ -21,6 +21,7 @@
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
              android:onClick="on_create_data_item_click"
+             android:contentDescription="@string/image_description"
         />
 
         <TextView
@@ -31,7 +32,7 @@
             android:layout_alignBottom="@+id/go_back_button"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
-            android:text="查看列表" />
+            android:text="@string/tkndata_item_look_list" />
 
     </RelativeLayout>
 
@@ -51,7 +52,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:hint="列表浏览-名称"
+            android:hint="@string/tkndata_item_title_hint"
             android:gravity="center"
             android:layout_marginRight="30dp"
             android:textSize="22dp" />
@@ -62,6 +63,7 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/data_list_title_tv"
+            android:contentDescription="@string/image_description"
             android:src="@android:drawable/ic_menu_edit" />
 
     </RelativeLayout>
@@ -127,14 +129,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="上一步" />
+                    android:text="@string/placeholder" />
 
                 <Button
                     android:id="@+id/data_item_next_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="下一步" /> 
+                    android:text="@string/placeholder" /> 
             </RelativeLayout>
     </RelativeLayout>
    <RelativeLayout
@@ -152,14 +154,15 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:visibility="gone"
-           android:text="以清单模式查看" />
+           android:text="@string/placeholder" />
        <ImageView
            android:id="@+id/data_list_image_iv_watch"
            android:layout_width="40dp"
            android:layout_height="40dp"
            android:layout_alignParentRight="true"
            android:background="@drawable/star_gray"
-           android:text="加书签" />
+           android:contentDescription="@string/image_description"
+           android:text="@string/placeholder" />
 
        <ImageView
            android:id="@+id/data_item_push_iv"
@@ -169,6 +172,7 @@
            android:layout_marginRight="14dp"
            android:layout_toLeftOf="@+id/data_list_image_iv_watch"
            android:background="@drawable/gray_pencil"
+           android:contentDescription="@string/image_description"
            android:clickable="false" />
 
        <TextView
@@ -178,7 +182,7 @@
            android:layout_alignBottom="@+id/data_item_push_iv"
            android:layout_toLeftOf="@+id/data_item_push_iv"
            android:visibility="gone"
-           android:text="用户名" />
+           android:text="@string/placeholder" />
 
    </RelativeLayout>
    <LinearLayout
@@ -195,11 +199,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/gray_android_bg"
+            android:contentDescription="@string/image_description"
         />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="列表没有数据" 
+            android:text="@string/tkndata_item_list_no_data" 
         />
    </LinearLayout>
 </RelativeLayout>

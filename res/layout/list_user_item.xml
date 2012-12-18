@@ -30,7 +30,7 @@
 		       android:layout_marginBottom="16dp"
 		       android:layout_marginLeft="24dp"
 		       android:layout_toRightOf="@+id/user_avatar_iv"
-		       android:text="用户名" />
+		       android:text="@string/placeholder" />
 
 		   <Button
 		       android:id="@+id/user_follow_bt"
@@ -40,7 +40,7 @@
 		       android:layout_alignBottom="@+id/user_name_tv"
 		       android:layout_alignParentRight="true"
 		       android:layout_marginRight="33dp"
-		       android:text="Follow" />
+		       android:text="@string/placeholder" />
 
     </RelativeLayout>
 </RelativeLayout>

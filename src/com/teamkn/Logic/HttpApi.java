@@ -515,7 +515,7 @@ public class HttpApi {
 			        	  System.out.println(response_text);
 			        	  JSONArray data_list_array = new JSONArray(response_text);
 		            	  for (int i = 0; i < data_list_array.length(); i++) {
-				              int server_id = data_list_array.getInt(i);
+//				              int server_id = data_list_array.getInt(i);
 		                  }  
 			              return null;
 			          }
@@ -532,7 +532,7 @@ public class HttpApi {
 			        	  System.out.println(response_text);
 			        	  JSONArray data_list_array = new JSONArray(response_text);
 		            	  for (int i = 0; i < data_list_array.length(); i++) {
-				              int server_id = data_list_array.getInt(i);
+//				              int server_id = data_list_array.getInt(i);
 		                  }  
 			              return null;
 			          }
@@ -549,7 +549,7 @@ public class HttpApi {
 			        	  System.out.println(response_text);
 			        	  JSONArray data_list_array = new JSONArray(response_text);
 		            	  for (int i = 0; i < data_list_array.length(); i++) {
-				              int server_id = data_list_array.getInt(i);
+//				              int server_id = data_list_array.getInt(i);
 		                  }  
 			              return null;
 			          }
@@ -970,8 +970,8 @@ public class HttpApi {
              if (kind.equals(com.teamkn.model.DataItem.Kind.IMAGE)) {
                  HttpApi.DataItem.pull_image(server_id+"", image_url);
              }
-             JSONObject json_data_list = json.getJSONObject("data_list");
-             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
+//             JSONObject json_data_list = json.getJSONObject("data_list");
+//             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
              
             com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed);
 			return dataItem;
@@ -1036,7 +1036,7 @@ public class HttpApi {
 		          public List<com.teamkn.model.DataItem> on_success(String response_text) throws Exception {
 		        	  System.out.println(" data_item pull response_text " + response_text);
 		        	  JSONObject data_list_json = new JSONObject(response_text);
-		        	  boolean read = data_list_json.getBoolean("read");
+//		        	  boolean read = data_list_json.getBoolean("read");
 		        	  JSONArray data_list_array = data_list_json.getJSONArray("data_items");
 		        	  List<com.teamkn.model.DataItem> list = new ArrayList<com.teamkn.model.DataItem>();
 	                  for (int i = 0; i < data_list_array.length(); i++) {
@@ -1073,10 +1073,10 @@ public class HttpApi {
     						@Override
     						public Void on_success(String response_text)
     								throws Exception {
-    							  JSONObject json_result = new JSONObject(response_text);
-    							  String new_position = json_result.getString("new_position");
-    					          JSONObject data_list_time = json_result.getJSONObject("data_list");
-    			            	  long data_list_server_updated_time = data_list_time.getLong("server_updated_time");
+//    							  JSONObject json_result = new JSONObject(response_text);
+//    							  String new_position = json_result.getString("new_position");
+//    					          JSONObject data_list_time = json_result.getJSONObject("data_list");
+//    			            	  long data_list_server_updated_time = data_list_time.getLong("server_updated_time");
     							return null;
     						}
     			}.go();
@@ -1119,8 +1119,8 @@ public class HttpApi {
 	              @Override
 	              public Void on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
-		                JSONObject json = new JSONObject(response_text);
-		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_list_id);
+//		                JSONObject json = new JSONObject(response_text);
+//		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_list_id);
 					    return null;   	
 	              }
 	     }.go();
@@ -1153,8 +1153,8 @@ public class HttpApi {
         new TeamknDeleteRequest<Void>( 删除_data_item + server_data_item_id){
               @Override
               public Void on_success(String response_text) throws Exception {
-            	JSONObject data_list_time = new JSONObject(response_text);
-          	    long data_list_server_updated_time = data_list_time.getLong("data_list_time");
+//            	JSONObject data_list_time = new JSONObject(response_text);
+//          	    long data_list_server_updated_time = data_list_time.getLong("data_list_time");
                 return null;
               }
         }.go();

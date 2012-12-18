@@ -18,7 +18,7 @@ public class ClickListenerForScrolling implements OnClickListener {
 	public ClickListenerForScrolling(HorizontalScrollView scrollView,
 			View menu) {
 		super();
-		this.scrollView = scrollView;
+		ClickListenerForScrolling.scrollView = scrollView;
 		this.menu = menu;
 	}
 
