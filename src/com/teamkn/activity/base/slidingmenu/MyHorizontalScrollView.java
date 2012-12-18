@@ -77,6 +77,8 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		OnGlobalLayoutListener listener = new MyOnGlobalLayoutListener(parent,
 				children, scrollToViewIdx, sizeCallback);
 		getViewTreeObserver().addOnGlobalLayoutListener(listener);
+//		当一个视图树中的一些组件发生滚动时，所要调用的回调函数的接口类
+//		注册一个回调函数，当在一个视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变时调用这个回调函数。
 	}
 
 	@Override
@@ -219,6 +221,9 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 			final HorizontalScrollView me = MyHorizontalScrollView.this;
 
 			// The listener will remove itself as a layout listener to the HSV
+//			移除之前已经注册的全局布局回调函数。
+//			参数
+//			victim 将要被移除的回调函数
 			me.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 
 			// Allow the SizeCallback to 'see' the Views before we remove them
