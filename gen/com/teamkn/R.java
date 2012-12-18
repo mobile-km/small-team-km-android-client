@@ -665,7 +665,7 @@ public final class R {
         public static final int mi_data_list_add=0x7f0b000e;
         public static final int mi_list_data_list_eye_tv=0x7f0b00a3;
         public static final int msg_sex_like=0x7f0b002c;
-        public static final int myScrollView=0x7f0b005e;
+        public static final int my_scroll_view=0x7f0b005e;
         public static final int password_et=0x7f0b0006;
         public static final int popupshow_cancel_prompt_but=0x7f0b007f;
         public static final int popupshow_cancel_prompt_top=0x7f0b007b;

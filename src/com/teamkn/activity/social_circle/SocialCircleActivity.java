@@ -50,8 +50,6 @@ import com.teamkn.widget.adapter.UserAdapter;
 
 public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 	LayoutInflater inflater;
-	public static MyHorizontalScrollView scrollView;
-	public static View foot_view;  //底层  图层 隐形部分
     View show_view;  //显示的View
     boolean menuOut = false;
     Handler handler = new Handler();
@@ -133,13 +131,8 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.horz_scroll_with_image_menu);
 		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        scrollView = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
-        foot_view = findViewById(R.id.menu);
-        
-        setView(); 	
-		
+        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));        
+        setView(); 		
 	}
 	private  void setView(){
 		show_view = init_sliding_menu(R.layout.base_social_circle);

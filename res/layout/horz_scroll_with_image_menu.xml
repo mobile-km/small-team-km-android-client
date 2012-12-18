@@ -16,7 +16,7 @@
     </RelativeLayout>
 
     <com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView
-        android:id="@+id/myScrollView"
+        android:id="@+id/my_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_margin="0px"
@@ -26,18 +26,19 @@
         android:padding="0px"
         android:scrollbars="none" >
 
-
-
         <LinearLayout
             android:id="@+id/top"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="0px"
-            android:background="#33ffffff"
+            android:background="#00ffffff"
             android:orientation="horizontal"
             android:padding="0px" >
 
-            <!-- The views inside here will be added programmatically. -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="#660000ff" />
         </LinearLayout>
     </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
 
