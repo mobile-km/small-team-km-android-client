@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -45,18 +46,21 @@ public class BaseUtils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
     }
 
-    public static String date_string(long time_seconds) {
+    @SuppressLint("SimpleDateFormat")
+	public static String date_string(long time_seconds) {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("MM月d日");
         return sdf.format(new Date(time_seconds * 1000));
     }
     
-    public static String time_string(long time_seconds){
+    @SuppressLint("SimpleDateFormat")
+	public static String time_string(long time_seconds){
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("HH:mm");
         return sdf.format(new Date(time_seconds * 1000));
     }
     
+	@SuppressLint("SimpleDateFormat")
 	public static String friendly_time_string(long time_seconds) {
 		Date date = new Date(time_seconds * 1000);
 		Date now = new Date();
@@ -86,7 +90,8 @@ public class BaseUtils {
 	}
     
     // yyyy-MM-ddTHH:mm:ssZ
-    public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
+    @SuppressLint("SimpleDateFormat")
+	public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd'T'HH:mm:ssZ");
         return sdf.parse(iso_time_string).getTime();

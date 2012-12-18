@@ -97,6 +97,7 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 					}
 					return map;
 				}
+				@SuppressWarnings("unchecked")
 				@Override
 				public void on_success(Map<Object, Object> result) {
 					dataItem = (DataItem) map.get("dataItem");

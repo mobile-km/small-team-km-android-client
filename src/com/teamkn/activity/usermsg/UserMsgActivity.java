@@ -1,30 +1,18 @@
 package com.teamkn.activity.usermsg;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
@@ -32,8 +20,6 @@ import com.teamkn.activity.social_circle.UserPublicDataListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.base.utils.CameraLogic;
-import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.AccountUser;
 
 public class UserMsgActivity extends TeamknBaseActivity{

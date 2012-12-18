@@ -27,24 +27,6 @@ import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
-/*   
-
- 添加     popupshow_help.xml 
- 
-图片    camera_close.png  right.png  yuan.png
-
-viewhelp 把下面的代码放在当前的xml中
-
-show_type 显示页面 如 创建 登陆 等
-
-context  显示的当前 的  activity
-
-View  显示的view
-
-String 显示的内容
-
-*/
-import com.teamkn.model.DataList;
 
 public class ShowHelp {
 	

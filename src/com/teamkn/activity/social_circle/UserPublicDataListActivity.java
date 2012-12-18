@@ -30,14 +30,12 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
-import com.teamkn.activity.usermsg.UserMsgActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataListHelper;
-import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.UserPublicDataListAdapter;
 
 public class UserPublicDataListActivity extends TeamknBaseActivity{

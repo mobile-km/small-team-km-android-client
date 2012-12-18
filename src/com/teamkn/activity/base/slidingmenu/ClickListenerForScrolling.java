@@ -9,8 +9,7 @@ import android.widget.HorizontalScrollView;
 
 public class ClickListenerForScrolling implements OnClickListener {
 	public static boolean menuOut = false;
-	public static boolean result = true;
-	HorizontalScrollView scrollView;
+	static HorizontalScrollView scrollView;
 	View menu;
 
 	/**
@@ -25,38 +24,26 @@ public class ClickListenerForScrolling implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ClickListenerForScrolling.listener_click(scrollView);
+		listener_click();
 	}
 
-
-	public static void listener_click(HorizontalScrollView scrollView) {
+	public static void listener_click() {
 		
 		WindowManager wm = (WindowManager) scrollView.getContext().getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 		int menuWidth = display.getWidth();
-		
-		
+
 		int left = 0;
 		if (!menuOut) {
 			left = 0;
-			// scrollView.smoothScrollTo(left, 0);
 		} else {
 			left = menuWidth;
-			// scrollView.smoothScrollTo(left, 0);
 		}
 		set_smooth_scroll_to(scrollView, left, 0);
-		// menuOut = !menuOut;
 	}
 
-	public static void set_smooth_scroll_to(
-			HorizontalScrollView scrollView, int x, int y) {
+	public static void set_smooth_scroll_to(HorizontalScrollView scrollView, int x, int y) {
 		scrollView.smoothScrollTo(x, y);
 		menuOut = !menuOut;
-		if (menuOut) {
-			result = false;
-		} else {
-			result = true;
-		}
-		// MyHorizontalScrollView.result = !MyHorizontalScrollView.result;
 	}
 }

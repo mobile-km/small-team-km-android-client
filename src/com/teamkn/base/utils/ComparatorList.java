@@ -2,7 +2,7 @@ package com.teamkn.base.utils;
 
 import java.util.Comparator;
 
-public class ComparatorList  implements Comparator{
+public class ComparatorList  implements Comparator<Object>{
 	  private String funcName;
 
 	 public ComparatorList()
@@ -25,8 +25,8 @@ public class ComparatorList  implements Comparator{
 	}
 	 public int compare(ComparatorList o1, ComparatorList o2)
 	 {
-	            String fname1 = o1.getFuncName();
-	            String fname2 = o2.getFuncName();
+//	            String fname1 = o1.getFuncName();
+//	            String fname2 = o2.getFuncName();
 				
 
 	            //下面对fname和fnam2进行比较  

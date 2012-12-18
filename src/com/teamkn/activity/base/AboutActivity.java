@@ -19,8 +19,6 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
-import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.DataList;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.widget.adapter.AboutListAdapter;
 import com.teamkn.widget.view.MyVersionDialog;

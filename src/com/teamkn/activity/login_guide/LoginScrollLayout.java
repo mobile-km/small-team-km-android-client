@@ -71,7 +71,7 @@ public class LoginScrollLayout  extends ViewGroup{
 		// TODO Auto-generated method stub
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);		
 		final int width = MeasureSpec.getSize(widthMeasureSpec);       
-	    final int widthMode = MeasureSpec.getMode(widthMeasureSpec);      
+//	    final int widthMode = MeasureSpec.getMode(widthMeasureSpec);      
 	    		
 		final int count = getChildCount();       
         for (int i = 0; i < count; i++) {       
@@ -118,7 +118,7 @@ public class LoginScrollLayout  extends ViewGroup{
 		// TODO Auto-generated method stub           	            
 	        final int action = event.getAction();    
 	        final float x = event.getX();    
-	        final float y = event.getY();    
+//	        final float y = event.getY();    
 	            
 	        switch (action) {    
 	        case MotionEvent.ACTION_DOWN: 	        	

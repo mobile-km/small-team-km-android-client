@@ -1,19 +1,16 @@
 package com.teamkn.activity.base;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import com.teamkn.Logic.HttpApi;
+
 import com.teamkn.R;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.AccountUser;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.widget.view.MyVersionDialog;
 

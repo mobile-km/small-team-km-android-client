@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 主界面，包含功能选择 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/body" >
-
+    style="@style/body" 
+    android:background="@color/white"
+>
+	<RelativeLayout 
+	    style="@style/body"
+	    android:onClick="click_nil"
+	/>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/head"
@@ -181,5 +186,4 @@
             android:layout_height="fill_parent"
             android:divider="@null" />
     </RelativeLayout>
-
 </RelativeLayout>

@@ -39,7 +39,10 @@
     <string name="tknlist_fav">收藏</string>
     <string name="tknlist_kind_step">步骤</string>
     <string name="tknlist_kind_collection">收集</string>
-    
+    <!-- SETTING -->
+    <string name="setting_head_title">设置</string>
+    <!-- SOCIAL_CIRCLE -->
+    <string name="social_circle_head_title">社交圈子</string>
     <!-- MAIN -->
     <string name="headbar_title">TEAMKN</string>
     <string name="main_user_name_default">这里是用户名</string>

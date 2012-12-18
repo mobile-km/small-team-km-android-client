@@ -25,9 +25,7 @@
         android:fadingEdgeLength="0px"
         android:padding="0px"
         android:scrollbars="none" >
-
-
-
+		
         <LinearLayout
             android:id="@+id/top"
             android:layout_width="fill_parent"
@@ -39,6 +37,7 @@
 
             <!-- The views inside here will be added programmatically. -->
         </LinearLayout>
+        
     </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
 
 </FrameLayout>

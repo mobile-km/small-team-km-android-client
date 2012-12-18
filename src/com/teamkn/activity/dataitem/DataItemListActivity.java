@@ -34,7 +34,6 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.dataitem.pull.DataItemPullListActivity;
-import com.teamkn.activity.social_circle.UserPublicDataListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -451,6 +450,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	private void load_data_item_list(){
 		dataItems = new ArrayList<DataItem>();
 		new TeamknAsyncTask<Void, Void, List<DataItem>>(DataItemListActivity.this,"内容加载中") {
+			@SuppressWarnings("unchecked")
 			@Override
 			public List<DataItem> do_in_background(Void... params)
 					throws Exception {
