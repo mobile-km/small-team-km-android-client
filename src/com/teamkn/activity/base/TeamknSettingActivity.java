@@ -8,7 +8,6 @@ import android.view.View;
 import com.teamkn.R;
 import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
-import com.teamkn.activity.social_circle.SocialCircleActivity.RequestCode;
 
 public class TeamknSettingActivity extends TeamknSlidingMenuActivity {
 	LayoutInflater inflater;
