@@ -33,6 +33,15 @@
     <string name="contact_list_send_invite">发出的邀请</string>
     <string name="contact_list_get_invite">接收</string>
     
+    <string name="search_friendly">查找朋友</string>
+    
+    <string name="delete_success">删除成功</string>
+    <string name="success_add_watch">成功加入书签 ^_^</string>
+    <string name="success_remove_watch">移除书签成功 ^_^</string>
+    
+    <string name="up">上一步</string>
+    <string name="next">下一步</string>
+    
     <string name="tknlist_kind_all_list">所有</string>
     <string name="tknlist_kind_step_list">步骤列表</string>
     <string name="tknlist_kind_collection_list">收集列表</string>
@@ -148,7 +157,7 @@
     <string name="save_note_bn">保存</string>
     <string name="saving">正在保存...</string>
 
-    <string name="is_wifi_active_msg">无法连接网络</string>
+    <string name="is_wifi_active_msg">无法连接到网络，请检查网络配置</string>
     <!-- 显示照片页面 -->
     <string name="show_capture_image_back">返回</string>
     <!-- 选择收集册页面 -->

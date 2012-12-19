@@ -8,7 +8,6 @@
     <RelativeLayout
 	     style="@style/head_bar"
      >
-    
         <TextView
            style="@style/head_bar_text_center"
            android:text="@string/about_app"

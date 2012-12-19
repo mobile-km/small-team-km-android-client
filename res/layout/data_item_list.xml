@@ -124,14 +124,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/placeholder" />
+                    android:text="@string/up" />
 
                 <Button
                     android:id="@+id/data_item_next_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="@string/placeholder" /> 
+                    android:text="@string/next" /> 
             </RelativeLayout>
     </RelativeLayout>
    <RelativeLayout

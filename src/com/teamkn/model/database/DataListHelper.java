@@ -9,12 +9,14 @@ import com.teamkn.model.DataList;
 public class DataListHelper {
 	public static List<DataList> by_type(List<DataList> data_list , String type){
 		List<DataList> list = new ArrayList<DataList>();
-		if(type.equals(MainActivity.RequestCode.ALL)){
-			list = data_list ;
-		}else{
-			for(DataList item : data_list){
-				if(item.kind .equals(type)){
-					list.add(item);
+		if(data_list!=null){
+			if(type.equals(MainActivity.RequestCode.ALL)){
+				list = data_list ;
+			}else{
+				for(DataList item : data_list){
+					if(item.kind .equals(type)){
+						list.add(item);
+					}
 				}
 			}
 		}

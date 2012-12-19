@@ -139,7 +139,8 @@ public class SearchDataActivity extends TeamknBaseActivity{
 	}
 	private void search_list(final String search_str){
 		System.out.println("search_str  " + search_str + " : " + RequestCode.data_list_public + " : " + RequestCode.data_list_type);
-			new TeamknAsyncTask<Void, Void, List<DataList>>(SearchDataActivity.this,"正在搜索") {
+		if (BaseUtils.is_wifi_active(this)) {	
+		new TeamknAsyncTask<Void, Void, List<DataList>>(SearchDataActivity.this,"正在搜索") {
 				@Override
 				public List<DataList> do_in_background(Void... params) throws Exception {
 					search_datalists = new ArrayList<DataList>();
@@ -167,7 +168,10 @@ public class SearchDataActivity extends TeamknBaseActivity{
 				public void on_success(List<DataList> datalists) {
 					load_list();
 				}
-			}.execute();	
+			}.execute();
+		}else{
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+		}
 	}
 	public List<DataList> screen_data_list(List<DataList> search_datalists,String data_list_type){
 		List<DataList> screen_datalist = new ArrayList<DataList>() ;

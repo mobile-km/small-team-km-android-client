@@ -8,12 +8,9 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
     >
-        <Button
-                style="@style/head_bar_button_go_back"
-        />
         <TextView
-                style="@style/head_bar_text_center"
-                android:text="@string/user_msg_title"
+            style="@style/head_bar_text_center"
+            android:text="@string/user_msg_title"
         />
     </RelativeLayout>
 <ScrollView 

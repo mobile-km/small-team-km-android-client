@@ -6,16 +6,14 @@
     android:orientation="vertical" >
        
     <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/head_bar"
-            >
-        <Button
-            style="@style/head_bar_button_go_back"
-        />
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    style="@style/head_bar"
+    >
+        
         <TextView
             android:id="@+id/user_name_tv"
             style="@style/head_bar_text_center"
-            android:text="查找朋友"
+            android:text="@string/search_friendly"
         />
     </RelativeLayout>
     <RelativeLayout
@@ -37,6 +35,7 @@
 		         android:layout_width="wrap_content"
 		         android:layout_alignParentRight="true"
 		         android:onClick="click_search_ib"
+		         android:contentDescription="@string/image_description"
 		         android:src="@android:drawable/ic_search_category_default" 
 	       /> 
   </RelativeLayout>

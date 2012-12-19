@@ -19,6 +19,7 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
+import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.widget.adapter.AboutListAdapter;
 import com.teamkn.widget.view.MyVersionDialog;
@@ -65,20 +66,24 @@ public class AboutActivity extends TeamknBaseActivity{
 //    	BaseUtils.toast("about click item id = " + id);
     }
     private void click_item_version(){
-    	new TeamknAsyncTask<Void, Void, VersionCheck>(AboutActivity.this,"正在检测") {
-			@Override
-			public VersionCheck do_in_background(Void... params)
-					throws Exception {
-				 String version = getResources().getString(R.string.app_version);
-//	             version = "0.51";
-				 return HttpApi.get_version(version);
-			}
-			@Override
-			public void on_success(VersionCheck check) {
-				Dialog dialog = new MyVersionDialog(MyVersionDialog.ActivityCheck.ABOUT_ACTIVITY ,AboutActivity.this, R.style.MyVersionDialog,check);                   
-				dialog.show();
-			}
-    	}.execute();
+    	if (BaseUtils.is_wifi_active(this)) {
+	    	new TeamknAsyncTask<Void, Void, VersionCheck>(AboutActivity.this,"正在检测") {
+				@Override
+				public VersionCheck do_in_background(Void... params)
+						throws Exception {
+					 String version = getResources().getString(R.string.app_version);
+	//	             version = "0.51";
+					 return HttpApi.get_version(version);
+				}
+				@Override
+				public void on_success(VersionCheck check) {
+					Dialog dialog = new MyVersionDialog(MyVersionDialog.ActivityCheck.ABOUT_ACTIVITY ,AboutActivity.this, R.style.MyVersionDialog,check);                   
+					dialog.show();
+				}
+	    	}.execute();
+    	}else{
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+		}
     }
 	public void open_teamkn_website(View view) {
         Uri uri = Uri.parse("http://www.teamkn.com");

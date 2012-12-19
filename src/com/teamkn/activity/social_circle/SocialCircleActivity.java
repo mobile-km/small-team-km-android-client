@@ -150,7 +150,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 		public_list_tv = (Button)show_view.findViewById(R.id.public_list_tv);
 	}
 	private void load_usermsg_or_list_httpApi(final String social_type){
-    	if (BaseUtils.is_wifi_active(SocialCircleActivity.this)) {
+    	if (BaseUtils.is_wifi_active(this)) {
 	    	new TeamknAsyncTask<Void, Void, List<DataList>>(SocialCircleActivity.this,"内容加载中") {
 				@Override
 				public List<DataList> do_in_background(Void... params)
@@ -308,6 +308,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 			    startPhotoZoom(data.getData());  
 			    break;
 		  case UserManagerActivity.RequestCode.FROM_CAMERA:
+			  if (BaseUtils.is_wifi_active(this)) {
                 new TeamknAsyncTask<Void, Void, Void>(SocialCircleActivity.this,"请稍等") {
 					@Override
 					public Void do_in_background(Void... params)
@@ -324,7 +325,10 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 					public void on_success(Void result) {
 						startPhotoZoom(uri); 
 					}
-				}.execute();       
+				}.execute();   
+			  }else{
+					BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+				}
             break;
 
 		  case 9:  
@@ -382,24 +386,26 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 //            final File image_file = FileDirs.getFileFromBytes(bytes,
 //            		Environment .getExternalStorageDirectory()+"/"+current_user().user_id+".jpg" );
             image_file = FileDirs.getFileFromBytes(bytes,FileDirs.TEAMKN_CAPTURE_TEMP_DIR+  "/IMG_TEMP.jpg");
-            new TeamknAsyncTask<Void, Void, Integer>(SocialCircleActivity.this,"信息提交") {
-    			@Override
-    			public Integer do_in_background(Void... params) throws Exception {
-    				if(BaseUtils.is_wifi_active(SocialCircleActivity.this)){
-    			    	HttpApi.user_set_avatar(image_file);
-    			    }
-    			    return 1;
-    			}
-    			@Override
-    			public void on_success(Integer client_chat_node_id) {
-    				if(requestError!=null){
-    					Toast.makeText(SocialCircleActivity.this, requestError, Toast.LENGTH_LONG).show();
-    				}
-    				open_activity(UserManagerActivity.class);
-    				System.out.println("image_file  = " + image_file.getPath());
-    				finish();
-    		    }
-           }.execute();     
+            if (BaseUtils.is_wifi_active(this)) {
+	            new TeamknAsyncTask<Void, Void, Integer>(SocialCircleActivity.this,"信息提交") {
+	    			@Override
+	    			public Integer do_in_background(Void... params) throws Exception {
+	    			    	HttpApi.user_set_avatar(image_file);
+	    			    return 1;
+	    			}
+	    			@Override
+	    			public void on_success(Integer client_chat_node_id) {
+	    				if(requestError!=null){
+	    					Toast.makeText(SocialCircleActivity.this, requestError, Toast.LENGTH_LONG).show();
+	    				}
+	    				open_activity(UserManagerActivity.class);
+	    				System.out.println("image_file  = " + image_file.getPath());
+	    				finish();
+	    		    }
+	             }.execute();  
+            }else{
+    			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+    		}
         }
 	
     }

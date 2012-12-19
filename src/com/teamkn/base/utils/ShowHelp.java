@@ -307,7 +307,7 @@ public class ShowHelp {
 			((Activity) context).startActivityForResult(create_intent, RequestCode.SHOW_BACK);
 			break;
 		case Params.SHOW_NEXT_HELP:
-			
+			MainActivity.RequestCode.SHOW_HELP = MainActivity.RequestCode.SHOW_NOT_HELP;
 			break;
 		case Params.SHOW_PUBLIC_HELP:
 			Intent public_intent = new Intent(context,MainActivity.class);
@@ -342,31 +342,27 @@ public class ShowHelp {
 			break;
 			default:
 				break;
-			}
-			
-		}
-		
+			}	
+		}	
 	}
-	static boolean is_success;
-	private static void set_Help_Show(Context context){
-//		is_success = false;
+
+	private static void set_Help_Show(final Context context){
 		if (BaseUtils.is_wifi_active(context)) {
 	    	new TeamknAsyncTask<Void, Void, Boolean>((TeamknBaseActivity)context,"正在处理") {
 				@Override
 				public Boolean do_in_background(Void... params)
 						throws Exception {
 					HttpApi.change_show_tip(false);	
+					((TeamknBaseActivity)context).current_user().setIs_show_tip(false);
 					return null;
 				}
 				@Override
 				public void on_success(Boolean v) {
-//					is_success = true;
 					popWin.dismiss();
 				}
 			}.execute();
     	}else{
 			BaseUtils.toast("无法连接到网络，请检查网络配置");
 		}
-//		return is_success;
     }	
 }

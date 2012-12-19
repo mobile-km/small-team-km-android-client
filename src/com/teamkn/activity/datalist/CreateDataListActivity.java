@@ -107,6 +107,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 			         	CreateDataListActivity.this.finish();
     				}
     			}.execute();	
+			}else{
+				BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 			}
          }else{
         	 BaseUtils.toast("列表名称不可以为空");

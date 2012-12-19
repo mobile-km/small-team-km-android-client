@@ -215,12 +215,13 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		user_name_tv= (TextView) content_view.findViewById(R.id.main_user_name);
 		user_name_tv.setText(name+"的列表");
 		main_user_name_iv = (ImageView)findViewById(R.id.main_user_name_iv);
-		if(RequestCode.data_list_public .equals(RequestCode.我的列表) 
-				|| RequestCode.data_list_public .equals(RequestCode.公开的列表)
-				|| RequestCode.data_list_public .equals(RequestCode.被协作列表)
-				|| RequestCode.data_list_public .equals(RequestCode.协作列表)
-				|| RequestCode.data_list_public .equals(RequestCode.我的书签)
-				){
+		//是 显示浮动窗的列表
+		boolean show_popwindow = RequestCode.data_list_public .equals(RequestCode.我的列表) 
+								|| RequestCode.data_list_public .equals(RequestCode.公开的列表)
+								|| RequestCode.data_list_public .equals(RequestCode.被协作列表)
+								|| RequestCode.data_list_public .equals(RequestCode.协作列表)
+								|| RequestCode.data_list_public .equals(RequestCode.我的书签) ;
+		if(show_popwindow){
 			user_name_rl= (LinearLayout)findViewById(R.id.main_user_name_rl);
 			user_name_rl.setOnClickListener(new OnClickListener() {
 				@Override
@@ -243,8 +244,8 @@ public class MainActivity extends TeamknSlidingMenuActivity {
     		user_name_tv.setText("列表广场");
     	}else if(RequestCode.data_list_public.equals(RequestCode.我的列表)){
     		String user_name_sub = current_user().name;
-    		if(user_name_sub.length()>14){
-    			user_name_sub = user_name_sub.substring(0, 14) + "..";
+    		if(user_name_sub.length()>5){
+    			user_name_sub = user_name_sub.substring(0, 5) + "..";
     		}
     		user_name_tv.setText("原创"+user_name_sub + "的列表");
     	}else if(RequestCode.data_list_public.equals(RequestCode.协作列表)){
@@ -256,7 +257,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
     	}
     }
     private void load_data_list_or_watch(String watch_or_public){
-    	if (BaseUtils.is_wifi_active(MainActivity.this)) {
+    	if (BaseUtils.is_wifi_active(this)) {
 	    	new TeamknAsyncTask<Void, Void, List<DataList>>(MainActivity.this,"内容加载中") {
 				@Override
 				public List<DataList> do_in_background(Void... params)
@@ -283,14 +284,13 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 				}
 			}.execute();
     	}else{
-			BaseUtils.toast("无法连接到网络，请检查网络配置");
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 		}
     }
 	// 加载data_listview
 	private void load_list() {
-		
 		datalists = DataListHelper.by_type(record_datalists, RequestCode.data_list_type);
-		
+		 
 		request_pageselected();
 		data_list = (ListView) content_view.findViewById(R.id.data_list);	
 		dataListAdapter = new DataListAdapter(MainActivity.this);
@@ -328,9 +328,6 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-//				DataListDBHelper.remove_by_server_id(dataList);
-//				dataListAdapter.remove_item(dataList);
-//				dataListAdapter.notifyDataSetChanged();
 				remove_data_list(dataList,id,true);
 			}
 		});
@@ -441,7 +438,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
             lv_group = (ListView) view.findViewById(R.id.lvGroup);  
             // 加载数据  
             if(RequestCode.data_list_public .equals(RequestCode.我的列表)
-            		|| RequestCode.data_list_public .equals(RequestCode.被协作列表)){
+               || RequestCode.data_list_public .equals(RequestCode.被协作列表)){
             	groups = new ArrayList<String>();  
             	groups.add("原创列表");  
                 groups.add("被协作列表");  
@@ -650,7 +647,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 					datalists.remove(data_list_id);
 					dataListAdapter.remove_item(dataList);
 					dataListAdapter.notifyDataSetChanged();
-					BaseUtils.toast("删除成功");
+					BaseUtils.toast(getResources().getString(R.string.delete_success));
 				}
 			}.execute();
     	}else{

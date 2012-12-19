@@ -24,7 +24,8 @@
         android:fadingEdge="none"
         android:fadingEdgeLength="0px"
         android:padding="0px"
-        android:scrollbars="none" >
+        android:scrollbars="none" 
+    >
 
         <LinearLayout
             android:id="@+id/top"
