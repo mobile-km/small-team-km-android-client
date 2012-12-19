@@ -59,6 +59,13 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		super.onTouchEvent(ev);
+		if(ev.getAction() == MotionEvent.ACTION_UP){
+			if(this.getScrollX() > this.transparent_width/2){
+				close();
+			}else{
+				open();
+			}
+		}
 		return false;
 	}
 	
