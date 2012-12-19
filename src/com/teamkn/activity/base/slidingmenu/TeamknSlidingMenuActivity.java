@@ -1,6 +1,5 @@
 package com.teamkn.activity.base.slidingmenu;
 
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

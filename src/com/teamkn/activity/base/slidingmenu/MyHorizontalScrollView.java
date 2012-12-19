@@ -2,6 +2,7 @@ package com.teamkn.activity.base.slidingmenu;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import com.teamkn.base.utils.BaseUtils;
 public class MyHorizontalScrollView extends HorizontalScrollView {
 	
 	private boolean is_open = false;
+	protected boolean is_init = false;
 	
 	private int screen_width;
 	private int screen_height;
@@ -49,6 +51,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 				new Handler().post(new Runnable() {
 					@Override
 					public void run() {
+						MyHorizontalScrollView.this.is_init  = true;
 						MyHorizontalScrollView.this.scrollBy(transparent_width, 0);
 					}
 				});
@@ -69,6 +72,23 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		return false;
 	}
 	
+	@Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		// 程序第一次被打开的时候不需要震动
+		if(this.is_init == true){
+			this.is_init = false;
+			return;
+		}
+		if(l == this.transparent_width || l == 0){
+			Vibrator vibrator = (Vibrator) MyHorizontalScrollView.this.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+			// 0 秒后 震动 30 毫秒
+			long[] pattern = {0, 30};
+			//-1不重复，非-1为从pattern的指定下标开始重复
+			vibrator.vibrate(pattern, -1);
+		}
+	}
+
 	private void _get_screen_size(){
 		WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
