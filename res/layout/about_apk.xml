@@ -6,14 +6,13 @@
     android:orientation="vertical" >
        
     <RelativeLayout
-            style="@style/head_bar"
-            >
-        <Button
-            style="@style/head_bar_button_go_back"
-        />
+	     style="@style/head_bar"
+     >
+    
         <TextView
            style="@style/head_bar_text_center"
-           android:text="@string/about_app"/>	</RelativeLayout>
+           android:text="@string/about_app"
+       	/>	</RelativeLayout>
     <RelativeLayout
         android:layout_marginTop="10dp"
         android:layout_width="fill_parent"

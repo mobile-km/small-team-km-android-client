@@ -681,7 +681,7 @@ public class HttpApi {
   		            ){
   			          @Override
   			          public Void on_success(String response_text) throws Exception {
-  			        	  System.out.println(response_text);
+  			        	  System.out.println("be_forked_list:"+response_text);
   			        	  JSONArray data_list_array = new JSONArray(response_text);
   			        	  for (int i = 0; i < data_list_array.length(); i++) {
   				                JSONObject json = data_list_array.getJSONObject(i);

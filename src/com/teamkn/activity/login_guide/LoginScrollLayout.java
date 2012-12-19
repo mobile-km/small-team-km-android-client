@@ -80,7 +80,7 @@ public class LoginScrollLayout  extends ViewGroup{
         scrollTo(mCurScreen * width, 0);		
 	}
 
-	 public void snapToDestination() {    
+	 public void snapToDestination() {   
 	        final int screenWidth = getWidth();    
 	        final int destScreen = (getScrollX()+ screenWidth/2)/screenWidth;    
 	        snapToScreen(destScreen);    

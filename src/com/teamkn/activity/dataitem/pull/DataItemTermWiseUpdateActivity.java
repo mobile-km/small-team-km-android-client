@@ -390,12 +390,6 @@ public class DataItemTermWiseUpdateActivity extends TeamknBaseActivity{
 					intent.putExtra("data_list_public", "fork");
 					startActivity(intent);
 				}else{
-//					Intent intent = getIntent();
-//					create_data_item = intent.getBooleanExtra("create_data_item", false);//是否是创建dataItem返回
-//					Integer data_list_id = intent.getIntExtra("data_list_id", -1);//返回dataList的本地id
-//					data_list_public = intent.getStringExtra("data_list_public");//返回dataList的中公开，自己私有，协作列表中的一个
-//					update_title = intent.getBooleanExtra("is_update", false);//返回dataList的的title是否修改
-//					
 					Intent intent = new Intent(DataItemTermWiseUpdateActivity.this,DataItemPullListActivity.class);
 					intent.putExtra("data_list", dataList);
 					intent.putExtra("data_list_public", "fork");

@@ -5,6 +5,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,10 +30,6 @@ public class ListViewInterceptor extends ListView {
 								// coordinates in this view
 
 	private Rect mTempRect = new Rect();
-//	private final int mTouchSlop;
-//	private int mHeight;
-//	private int mUpperBound;
-//	private int mLowerBound;
 	private WindowManager mWindowManager;
 	private WindowManager.LayoutParams mWindowParams;
 	private int dragndropBackgroundColor = 0x00000000;
@@ -88,30 +85,6 @@ public class ListViewInterceptor extends ListView {
 						doExpansion();
 						Log.v(">>>doExpansion", ">>>>>>>>>>doExpansion");
 					}
-//					int speed = 0;
-//					adjustScrollBounds(y);
-//					if (y > mLowerBound) {
-//						// scroll the list up a bit
-//						speed = y > (mHeight + mLowerBound) / 2 ? 16 : 4;
-//					} else if (y < mUpperBound) {
-//						// scroll the list down a bit
-//						speed = y < mUpperBound / 2 ? -16 : -4;
-//					}
-//					if (speed != 0) {
-//						int ref = pointToPosition(0, mHeight / 2);
-//						if (ref == AdapterView.INVALID_POSITION) {
-//							// we hit a divider or an invisible view, check
-//							// somewhere else
-//							ref = pointToPosition(0, mHeight / 2
-//									+ getDividerHeight() + 64);
-//						}
-//						View v = getChildAt(ref - getFirstVisiblePosition());
-//						if (v != null) {
-//							int pos = v.getTop();
-//							setSelectionFromTop(ref, pos - speed);
-//
-//						}
-//					}
 				}
 				break;
 			}
@@ -236,15 +209,6 @@ public class ListViewInterceptor extends ListView {
 		return pos;
 	}
 
-	/*private void adjustScrollBounds(int y) {
-		if (y >= mHeight / 3) {
-			mUpperBound = mHeight / 3;
-		}
-		if (y <= mHeight * 2 / 3) {
-			mLowerBound = mHeight * 2 / 3;
-		}
-	}*/
-
 	/*
 	 * Restore size and visibility for all listitems
 	 */
@@ -283,10 +247,15 @@ public class ListViewInterceptor extends ListView {
 	 * screen, only expand the item below the current insertpoint.
 	 */
 	private void doExpansion() {
-		int[] screen = DataItemListActivity.screen;
-		if(screen[0] == 320){
+		WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		
+		int screen_width      = display.getWidth();
+//		int screen_height     = display.getHeight();
+		
+		if(screen_width == 320){
 			mItemHeightNormal = 64;
-		}else if(screen[0] == 480){
+		}else if(screen_width == 480){
 			mItemHeightNormal = 94;
 		}
 		int childnum = mDragPos - getFirstVisiblePosition();

@@ -9,10 +9,7 @@
             style="@style/head_bar"
             android:id="@+id/head"
             >
-        <Button
-            android:id="@+id/go_back_button"
-            style="@style/head_bar_button_go_back"
-        />
+            
         <TextView
             android:id="@+id/data_item_termwise_title_tv"
             style="@style/head_bar_text"

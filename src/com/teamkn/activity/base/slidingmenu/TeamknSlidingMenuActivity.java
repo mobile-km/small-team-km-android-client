@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
@@ -35,13 +34,13 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		// 2 获取按钮
 		View button = content_view.findViewById(R.id.iv_foot_view);
 		// 3 注册按钮事件
-        MyHorizontalScrollView scroll_view = (MyHorizontalScrollView) findViewById(R.id.myScrollView);
+        MyHorizontalScrollView scroll_view = (MyHorizontalScrollView) findViewById(R.id.my_scroll_view);
         View menu_view = findViewById(R.id.menu);
         button.setOnClickListener(new ClickListenerForScrolling(scroll_view, menu_view));
 		
 		// 4 初始化菜单视图
-        View transparent = new TextView(this);
-        scroll_view.initViews(transparent, content_view , button);
+//        View transparent = new TextView(this);
+        scroll_view.init(content_view );
         
         return content_view;
 	}

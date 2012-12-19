@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -55,7 +54,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		public static final String 我的书签 = "watch";
 		public static final String 个人的公开的列表 = "user_public_data_list";
 	}
-	Button go_back_button;  //返回的按钮
 	TextView data_list_user_name_tv;
 	ImageView data_item_add_iv;
 	/*
@@ -104,8 +102,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
     
     boolean is_curretn_user_data_list; // 是否是当前用户的data_list
     String public_boolean = "true";//修改中用到
-    
-    public static int[] screen = new int[2];
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,26 +112,12 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_public = intent.getStringExtra("data_list_public");//返回dataList的中公开，自己私有，协作列表中的一个
 		dataList = (DataList)intent.getSerializableExtra("data_list");//返回dataList
 		
-//		MainActivity
-
 		//判断是否是当前用户的列表 或者 是协作列表
-		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-				|| data_list_public.equals(MainActivity.RequestCode.协作列表)
-		){
-			is_curretn_user_data_list  = true;
-		}else{
-			is_curretn_user_data_list  = false;
-		}	
+		is_curretn_user_data_list  = UserDBHelper.find(dataList.user_id).user_id == current_user().user_id;	
+		
 		//加载ui元素以及数据
 		load_UI();
 		load_data_item_list();
-		
-		
-		//用于控制不同分辨率的问题 item 的高度控制
-		DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screen[0] = dm.widthPixels;
-        screen[1] = dm.heightPixels;
 	}
 	private void load_UI(){
 		//top的中间显示当前是谁的列表
@@ -144,18 +127,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			user_name_sub = user_name_sub.substring(0, 7) + "..";
 		}
 		data_list_user_name_tv.setText(user_name_sub+"的列表");
-		
-		//控制显示返回按钮的显示分为公共和自己
-		go_back_button = (Button)findViewById(R.id.go_back_button);
-		if(data_list_public.equals(MainActivity.RequestCode.公开的列表)){
-			go_back_button.setText("公共");
-		}else if(data_list_public.equals(MainActivity.RequestCode.我的列表)){
-			go_back_button.setText("返回");
-		}else if(data_list_public.equals(MainActivity.RequestCode.协作列表)){
-			go_back_button.setText("协作");
-		}else if(data_list_public.equals(MainActivity.RequestCode.我的书签)){
-			go_back_button.setText("书签");
-		}
 
 		//title
 		data_list_title_rl=(RelativeLayout)findViewById(R.id.data_list_title_rl);//dataList的title文本RelativeLayout
@@ -193,6 +164,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					data_list_title_rl.setBackgroundColor(getResources().getColor(R.color.darkgrey));
 				}
 			});
+			
 		}else{
 			data_list_image_iv_edit.setVisibility(View.GONE);
 			data_item_add_iv.setVisibility(View.GONE);
@@ -283,9 +255,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 		});
 		
-		System.out.println("dataList.toString() " + dataList.user_id);
+		System.out.println("dataList.toString() " + dataList.toString());
 		System.out.println("current_user.toString() " + current_user().user_id);
 		User user = UserDBHelper.find(dataList.user_id);
+		
+		// 公开的列表 我的首页 我的书签  别人的列表中 我已经迁出的  
 		if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
 				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
 				||data_list_public.equals(MainActivity.RequestCode.我的书签))
@@ -294,17 +268,23 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.hell_pencil));
 			data_item_push_iv.setClickable(false);
 			data_item_push_iv.setFocusable(false);
+			
+			// 公开的列表 我的首页 我的书签  别人的列表中 没有迁出的
 		}else if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
 				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
 				||data_list_public.equals(MainActivity.RequestCode.我的书签))
 				&& dataList.forked==false  && user.user_id!=current_user().user_id){
 			data_item_push_iv.setVisibility(View.VISIBLE);
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_pencil));
+			
+			// 公开的列表 我的首页 我的书签  中 我的列表
 		}else if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
 				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
 				||data_list_public.equals(MainActivity.RequestCode.我的书签))
 				&& user.user_id == current_user().user_id){
 			data_item_push_iv.setVisibility(View.GONE);
+			
+			//我协作的列表 分为 原作者 已删除  是否
 		}else if(data_list_public.equals(MainActivity.RequestCode.协作列表)){
 			if(map.get("user")!=null){
 				//判断是否 是 协作列表 显示原始用户名
@@ -323,11 +303,15 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				data_item_original_user_name.setText(getResources().getString(R.string.is_no_data));
 			}
 			
+			//  自己的列表中有 被迁出的 并且被修改了
+			//  在我的列表，或 被协作列表
 		}else if((data_list_public.equals(MainActivity.RequestCode.我的列表)
 				|| data_list_public.equals(MainActivity.RequestCode.被协作列表) 
 				) && dataList.has_commits .equals("true") ){
 			data_item_push_iv.setVisibility(View.VISIBLE);
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.sym_action_chat));
+			
+			//	其他的情况不显示
 		}else{
 			data_item_push_iv.setClickable(false);
 			data_item_push_iv.setFocusable(false);
@@ -421,12 +405,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 								}
 								@Override
 								public void on_success(Void result) {
-//								  	data_list_title_tv.post(new Runnable() {
-//										@Override
-//										public void run() {
-										data_list_title_tv.setText(add_data_list_et_str);
-//										}
-//								    });
+									data_list_title_tv.setText(add_data_list_et_str);
 								}
 							}.execute();
 						}else{
@@ -876,6 +855,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	// 钩子，自行重载
 	public void on_go_back() {
+		System.out.println("dataitemlistactivity on_go_back()");
 		if(current_user().is_show_tip){
 			if(MainActivity.RequestCode.SHOW_STEP_HELP==MainActivity.RequestCode.SHOW_HELP){
 				MainActivity.RequestCode.SHOW_NEXT = MainActivity.RequestCode.SHOW_COLLECTION_HELP_CASE ;

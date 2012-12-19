@@ -376,9 +376,9 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 					}
 				}
 				
-//				if(data.getStringExtra("data_list_public")!=null){
+				if(data!=null && data.getStringExtra("data_list_public")!=null){
 					RequestCode.data_list_public = data.getStringExtra("data_list_public");
-//				}
+				}
 				set_title();
 				load_data_list_or_watch(RequestCode.data_list_public);
 		}

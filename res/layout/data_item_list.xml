@@ -10,10 +10,6 @@
             style="@style/head_bar"
             android:id="@+id/head"
             >
-        <Button
-            android:id="@+id/go_back_button"
-            style="@style/head_bar_button_go_back"
-        />
         <ImageView
              android:id="@+id/data_item_add_iv"
              android:src="@drawable/add_bold"
@@ -29,7 +25,6 @@
             style="@style/head_bar_text"
             android:layout_height="fill_parent"
             android:layout_width="wrap_content"
-            android:layout_alignBottom="@+id/go_back_button"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
             android:text="@string/tkndata_item_look_list" />

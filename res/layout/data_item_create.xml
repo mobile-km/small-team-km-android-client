@@ -7,9 +7,7 @@
             style="@style/head_bar"
             android:id="@+id/head"
             >
-        <Button
-            style="@style/head_bar_button_go_back"
-        />
+            
         <TextView
             android:id="@+id/show_page_title"
            style="@style/head_bar_text_center"
