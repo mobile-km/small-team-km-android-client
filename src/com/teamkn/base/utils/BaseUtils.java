@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -92,32 +93,15 @@ public class BaseUtils {
         return sdf.parse(iso_time_string).getTime();
     }
 
-    public static boolean is_wifi_active(Context context) {
-        Context acontext = context.getApplicationContext();
-        ConnectivityManager connectivity = (ConnectivityManager) acontext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            
-            if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-//                	info[i].getType()
-                    if (info[i].getTypeName().equals("WIFI")
-                            && info[i].isConnected()) {
-                        return true;
-                    }
-                    if(info[i].getTypeName().equals("GPRS")
-                            && info[i].isConnected()){
-                    	 return true;
-                    }
-                }
-                if(connectivity.getActiveNetworkInfo().isAvailable()){
-                	return true;
-                }
-            }    
-        }
-        return false;
-    }
+	public static boolean is_wifi_active(Context context) {
+		ConnectivityManager mgrConn = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		TelephonyManager mgrTel = (TelephonyManager) context
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		return ((mgrConn.getActiveNetworkInfo() != null && mgrConn
+				.getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED) || mgrTel
+				.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS);
+	}
     
 //   　如果拟开发一个网络应用的程序，首先考虑是否接入网络，在Android手机中判断是否联网可以通过 ConnectivityManager 类
 //    的isAvailable()方法判断，首先获取网络通讯类的实例

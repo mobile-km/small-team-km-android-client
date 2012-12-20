@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:paddingLeft="44dp"
+            android:paddingLeft="12dp"
             android:shadowColor="#000000"
             android:shadowDx="-1"
             android:shadowDy="-1"
@@ -30,7 +30,7 @@
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="13dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="58dp"
             android:background="@drawable/tkn_nav_item_icon" />
     </RelativeLayout>
     
