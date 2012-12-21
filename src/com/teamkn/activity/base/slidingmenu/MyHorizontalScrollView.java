@@ -198,5 +198,5 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 		smoothScrollTo(transparent_width, 0);
 		this.is_open = false;
 		this.will_shake = will_shake;
-	}	
+	}
 }

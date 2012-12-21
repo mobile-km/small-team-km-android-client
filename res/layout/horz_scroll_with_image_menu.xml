@@ -15,45 +15,12 @@
             android:background="@drawable/tkn_nav_bg" />
     </RelativeLayout>
 
-    <com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView
-        android:id="@+id/my_scroll_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="0px"
-        android:background="#00ffffff"
-        android:fadingEdge="none"
-        android:fadingEdgeLength="0px"
-        android:padding="0px"
-        android:scrollbars="none" >
-
-        <LinearLayout
-            android:id="@+id/top"
-            android:layout_width="fill_parent"
+    <LinearLayout
+            android:id="@+id/content_container"
+            android:layout_width="50dp" 
             android:layout_height="fill_parent"
-            android:layout_margin="0px"
-            android:background="#00ffffff"
-            android:orientation="horizontal"
-            android:padding="0px" >
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:background="#000000ff" >
-
-                <RelativeLayout
-                    android:layout_width="15dp"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@drawable/tkn_nav_right_shadow" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/content_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tkn_nav_bg" />
-        </LinearLayout>
-    </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>
+            android:background="@color/white" />
+    
+    <!-- 宽度值将会被程序修改 -->
 
 </FrameLayout>
