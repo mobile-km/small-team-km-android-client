@@ -53,7 +53,7 @@ public class MyVersionDialog extends Dialog{
 		dialog_button_ok.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				MyVersionDialog.this.dismiss();
 			}
 		});
 		dialog_button_cancel.setOnClickListener(new android.view.View.OnClickListener() {
@@ -73,7 +73,7 @@ public class MyVersionDialog extends Dialog{
 				default:
 					break;
 				}
-		    	
+			    MyVersionDialog.this.dismiss();
 			}
 		});
 		

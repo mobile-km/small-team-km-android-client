@@ -39,6 +39,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
         android:layout_width="fill_parent"
         android:background="@drawable/no_background_border_bg"
         android:padding="5dp"

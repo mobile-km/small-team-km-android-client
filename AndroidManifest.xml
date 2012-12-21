@@ -35,6 +35,8 @@
 	<activity android:name=".activity.base.AccountManagerActivity"></activity>
 	<activity android:name=".activity.base.RegisterActivity"></activity>
 	
+	<activity android:name=".activity.search.SearchActivity"></activity>
+	
 	<activity android:name=".activity.datalist.CreateDataListActivity" />
 	<activity android:name=".activity.datalist.SearchDataActivity"  android:windowSoftInputMode="stateHidden"/>
 	<activity android:name=".activity.dataitem.DataItemListActivity"  android:windowSoftInputMode="adjustResize"/>

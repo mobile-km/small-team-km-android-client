@@ -14,6 +14,7 @@
     <string name="now_deleting">正在删除…</string>
     <string name="now_updating">正在修改…</string>
     <string name="now_syning">正在同步数据…</string>
+    <string name="now_search">正在搜索…</string>
 
     <string name="app_method_not_define_exception">功能方法未定义</string>
     <string name="app_intent_connection_exception">网络连接错误</string>
@@ -45,6 +46,24 @@
     <string name="tknlist_kind_all_list">所有</string>
     <string name="tknlist_kind_step_list">步骤列表</string>
     <string name="tknlist_kind_collection_list">收集列表</string>
+    <!-- SEARCH -->
+    <string name="search_title">搜索</string>
+    <string name="search_list">搜索列表</string>
+    <string name="search_user">搜索用户</string>
+    <string name="search_no_data">没有搜索到数据</string>
+    <!-- BASE_REGISTER -->
+    <string name="base_register_email">Email</string>
+    <string name="base_register_name">用户名</string>
+    <string name="base_register_password">密码</string>
+    <string name="base_register_affirm_password">确认密码</string>
+    <string name="base_register_register">创建账号</string>
+    <string name="base_register_error_msg">账户创建失败，原因如下 :</string>
+    <string name="base_register_error_intent">. 网络无法连接</string>
+    <string name="base_register_error_email_repeat">. 这个邮箱已经注册过了</string>
+    <string name="base_register_error_email_no">. 没有填写邮箱</string>
+    <string name="base_register_error_name_no">. 没有填写用户名</string>
+    <string name="base_register_error_password_no">. 没有填写密码</string>
+    <string name="base_register_error_affirm_password_no">. 没有填写确认密码</string>
     <!-- BASE_SOCIAL_CIRCLE -->
     <string name="base_social_circle_mi_msg">我的信息</string>
     <string name="base_social_circle_mi_follow">我的FOLLOW</string>

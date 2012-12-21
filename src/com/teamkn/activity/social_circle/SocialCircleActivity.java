@@ -54,7 +54,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
     Handler handler = new Handler();
     int btnWidth;
 	
-//	View view_show;
+    //	View view_show;
 	public static class RequestCode{
 		public static String social_type = RequestCode.MIMSG;
 		public final static String MIMSG = "MIMSG";
@@ -65,7 +65,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 	/*
 	 * 收集，步骤，所有
 	 */
-//	Button click_collection_button, click_step_button, click_all_button;
+	//	Button click_collection_button, click_step_button, click_all_button;
     /*
      * cursor imageview 页卡头标
      * */
@@ -140,8 +140,8 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
 		load_ui();
 		RequestCode.social_type =  RequestCode.MIMSG;
 		load_usermsg_or_list_httpApi(RequestCode.social_type);
-		
     }
+	
 	private void load_ui() {
 		user_msg = (ScrollView)show_view.findViewById(R.id.user_msg);
 	    iv_user_avatar = (ImageView)show_view.findViewById(R.id.iv_user_avatar);

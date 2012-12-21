@@ -3,10 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/body"
 >	
-	<RelativeLayout 
-	    style="@style/body"
-	    android:onClick="click_nil"
-	/>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/head"
@@ -84,7 +80,6 @@
                android:padding="10dp"
                android:orientation="vertical"
             >
-               
                <TextView
                    android:text="@string/setting_about_softerware"
                    android:textColor="#fff"

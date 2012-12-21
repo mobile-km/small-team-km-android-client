@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.teamkn.R;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.TeamknSettingActivity;
+import com.teamkn.activity.search.SearchActivity;
 import com.teamkn.activity.social_circle.SocialCircleActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
 import com.teamkn.base.activity.ArrayListMenu;
@@ -105,5 +106,8 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 	protected void onResume() {
 	  load_list();
 	  super.onResume();
+	}
+	public void click_search_ib(View view){
+		open_activity(SearchActivity.class);
 	}
 }

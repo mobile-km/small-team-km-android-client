@@ -30,7 +30,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,7 +44,6 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.activity.datalist.CreateDataListActivity;
-import com.teamkn.activity.datalist.SearchDataActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.ShowHelp;
@@ -296,7 +294,6 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		dataListAdapter = new DataListAdapter(MainActivity.this);
 		dataListAdapter.add_items(datalists);
 		data_list.setAdapter(dataListAdapter);
-		dataListAdapter.notifyDataSetChanged();
 		//注册上下文菜单
 	    registerForContextMenu(data_list);
 	    
@@ -380,18 +377,6 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 				load_data_list_or_watch(RequestCode.data_list_public);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	public void click_search_ib(View view) {
-		EditText search_box = (EditText)findViewById(R.id.search_box);
-		String search_str = search_box.getText().toString();
-		if(!BaseUtils.is_str_blank(search_str)){
-			Intent intent = new Intent(MainActivity.this,SearchDataActivity.class);
-			intent.putExtra("search_str", search_str);
-			intent.putExtra("data_list_type", RequestCode.data_list_type);
-			intent.putExtra("data_list_public", RequestCode.data_list_public);
-			startActivity(intent);
-		}
 	}
 
 	public void click_add_data_list_iv(View view) {

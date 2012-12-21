@@ -4,10 +4,6 @@
     style="@style/body" 
     android:background="@color/white"
 >
-	<RelativeLayout 
-	    style="@style/body"
-	    android:onClick="click_nil"
-	/>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/head"
@@ -151,37 +147,14 @@
         android:scaleType="matrix"
         android:contentDescription="@string/image_description"
         android:src="@drawable/line" />
-
-    <RelativeLayout
-        android:id="@+id/search_rl"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cursor"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" >
-
-        <EditText
-            android:id="@+id/search_box"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:hint="@string/search_prompt" />
-
-        <ImageButton
-            android:id="@+id/search_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:onClick="click_search_ib"
-            android:contentDescription="@string/image_description"
-            android:src="@android:drawable/ic_search_category_default" />
-    </RelativeLayout>
+    
     <!-- data_list -->
 
     <RelativeLayout
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/search_rl" >
+        android:layout_below="@+id/cursor" >
 
         <ListView
             android:id="@+id/data_list"
@@ -189,4 +162,15 @@
             android:layout_height="fill_parent"
             android:divider="@null" />
     </RelativeLayout>
+    <ImageButton
+        android:onClick="click_search_ib"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/icon"
+        android:contentDescription="@string/image_description"
+    />
 </RelativeLayout>

@@ -81,44 +81,4 @@ public class AccountManagerActivity extends TeamknBaseActivity{
             button.setText(R.string.account_edit_button_close);
         }
     }
-//
-//    @Override
-//    // 硬返回按钮
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            on_account_manager_activity_go_back();
-//            this.finish();
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
-//
-//    // 软返回回调
-//    @Override
-//    public void on_go_back() {
-//        super.on_go_back();
-//        on_account_manager_activity_go_back();
-//    }
-//
-//    private void on_account_manager_activity_go_back() {
-//        // 由于可能在删除用户时，删除了当前正登录的用户，所以 is_logged_in()会返回false
-//        try {
-//            if (!is_logged_in()) {
-//                if (AccountUserDBHelper.count() > 0) {
-//                    // 如果还有用户，则选择所有用户中的第一个，切换之
-//                    AccountManager.switch_account(AccountUserDBHelper.all().get(0));
-//                    // open main_activity 堆栈会被TeamknBaseActivity自动清理
-//                    open_activity(MainActivity.class);
-//                } else {
-//                    // 如果没有用户了，则关闭所有已经打开的界面，再打开登录界面
-//                    restart_to_login();
-//                }
-//            }
-//        } catch (Exception e) {
-//            Log.e("AccountManagerActivity", "on_account_manager_activity_go_back", e);
-//            BaseUtils.toast("账号数据加载错误");
-//            restart_to_login();
-//        }
-//    }
-//    
 }
