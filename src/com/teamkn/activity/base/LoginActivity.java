@@ -55,7 +55,7 @@ public class LoginActivity extends TeamknBaseActivity {
             BaseUtils.toast(R.string.login_password_valid_blank);
             return false;
         }
-
+        
         return true;
     }
 

@@ -4,13 +4,12 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
@@ -21,6 +20,7 @@ import com.teamkn.base.utils.FileDirs;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.widget.adapter.DataListAdapter;
+import com.teamkn.widget.adapter.SearchAdapter;
 import com.teamkn.widget.adapter.UserAdapter;
 
 public class SearchActivity extends TeamknBaseActivity{
@@ -39,6 +39,7 @@ public class SearchActivity extends TeamknBaseActivity{
 	DataListAdapter listAdapter;
 	List<AccountUser> users;
 	UserAdapter userAdapter;
+	
 	List<String> search_history_list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,12 +141,11 @@ public class SearchActivity extends TeamknBaseActivity{
         search_box.setText(text);
     }
 	private void load_search_history() {
-        LinearLayout search_history =
-                (LinearLayout) findViewById(R.id.search_history);
-        search_history.setOrientation(LinearLayout.VERTICAL);
+		ListView search_history =
+                (ListView) findViewById(R.id.search_history);
         add_records(search_history);
     }
-	private void add_records(ViewGroup layout) {
+	private void add_records(ListView search_history) {
 		// 获取信息
 		if(search_list){
 			search_history_list = FileDirs.readTxtFileList(FileDirs.TEAMKN_SEARCH_LIST);
@@ -153,24 +153,28 @@ public class SearchActivity extends TeamknBaseActivity{
 			search_history_list = FileDirs.readTxtFileList(FileDirs.TEAMKN_SEARCH_USER);
 		}
         if (!search_history_list.isEmpty()) {
-        	layout.removeAllViews();
-            for (String record_text: search_history_list) {
-                Button record = new Button(this);
-                record.setText(record_text);
-                layout.addView(record);
-                record.setOnClickListener(new SearchHistoryRecordClickListener());
-            }
-        }
-    }
-	private class SearchHistoryRecordClickListener implements View.OnClickListener {
+//        	layout.removeAllViews();
+//            for (String record_text: search_history_list) {
+//                Button record = new Button(this);
+//                record.setText(record_text);
+//                layout.addView(record);
+//                record.setOnClickListener(new SearchHistoryRecordClickListener());
+//            }
+        	SearchAdapter adapter = new SearchAdapter(this);
+        	adapter.add_items(search_history_list);
+        	search_history.setAdapter(adapter);
+        	search_history.setOnItemClickListener(new OnItemClickListener() {
 
-        @Override
-        public void onClick(View view) {
-            Button record = (Button) view;
-            String record_string = (String) record.getText();
-            search_box_set_text(record_string);
-            load_search_history();
-            httpApi(record_string);
+				@Override
+				public void onItemClick(AdapterView<?> list_view, View list_item,
+						int item_id, long position) {
+					TextView info_tv = (TextView) list_item.findViewById(R.id.info_tv);
+					String record_string = (String) info_tv.getTag(R.id.tag_note_uuid);
+		            search_box_set_text(record_string);
+		            load_search_history();
+		            httpApi(record_string);
+				}
+			});
         }
     }
 }

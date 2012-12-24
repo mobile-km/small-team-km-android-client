@@ -84,8 +84,6 @@ public abstract class TeamknAsyncTask<TParams, TProgress, TResult> {
             on_progress_update(values);
         }
 
-        ;
-
         protected void publish_progress(TProgress... values) {
             publishProgress(values);
         }
