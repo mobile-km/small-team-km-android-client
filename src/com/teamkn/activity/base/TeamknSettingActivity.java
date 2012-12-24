@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.teamkn.R;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 
 public class TeamknSettingActivity extends TeamknSlidingMenuActivity {
@@ -23,13 +22,7 @@ public class TeamknSettingActivity extends TeamknSlidingMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-	        setContentView(R.layout.horz_scroll_with_image_menu);
-
-	    setContentView(R.layout.horz_scroll_with_image_menu);
-		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        setView(); 		
+        setView();
 	}
 	private  void setView(){
 		show_view = init_sliding_menu(R.layout.setting);

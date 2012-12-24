@@ -144,13 +144,9 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		String data_list_public = intent.getStringExtra("data_list_public");
-//		String data_list_type = intent.getStringExtra("data_list_type");
 		if (data_list_public != null) {
 			RequestCode.data_list_public = data_list_public;
 		}
-		
-		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
         
         setView(); 	
 		

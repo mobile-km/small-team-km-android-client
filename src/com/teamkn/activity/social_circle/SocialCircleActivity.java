@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
-import com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
@@ -128,10 +127,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
     } 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.horz_scroll_with_image_menu);
-		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));        
+		super.onCreate(savedInstanceState);  
         setView(); 		
 	}
 	private  void setView(){
