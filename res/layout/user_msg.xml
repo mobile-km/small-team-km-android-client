@@ -8,12 +8,9 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
     >
-        <Button
-                style="@style/head_bar_button_go_back"
-        />
         <TextView
-                style="@style/head_bar_text_center"
-                android:text="个人信息"
+            style="@style/head_bar_text_center"
+            android:text="@string/user_msg_title"
         />
     </RelativeLayout>
 <ScrollView 
@@ -36,6 +33,7 @@
             android:id="@+id/iv_user_avatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/user_default_avatar_normal" />
 
         <TextView
@@ -44,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/iv_user_avatar"
-            android:gravity="center_vertical"
-            android:text="设置头像" />
+            android:gravity="center_vertical"/>
 
         <LinearLayout
             android:id="@+id/follow_tv_ll"
@@ -60,8 +57,7 @@
             android:id="@+id/follow_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_follow"
-            android:text="已FOLLOW" />
+            android:background="@drawable/selector_follow" />
         </LinearLayout>
         
     </RelativeLayout>
@@ -83,13 +79,13 @@
                
                <TextView
                    android:layout_marginLeft="50dp"
-                   android:text="性别  ："
+                   android:text="@string/user_msg_sex"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                />
                <TextView
                    android:layout_marginRight="50dp"
-                   android:text="爱好  ："
+                   android:text="@string/user_msg_like"
                    android:layout_alignParentRight="true"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
@@ -108,7 +104,7 @@
                    android:layout_alignParentRight="true"
                    android:layout_alignParentTop="true"
                    android:layout_marginRight="48dp"
-                   android:text="更多信息" />
+                   android:text="@string/user_msg_more_msg" />
 
            </RelativeLayout>
            
@@ -135,7 +131,7 @@
               
                <TextView 
                    android:textColor="@color/black" 
-                   android:text="关注" 
+                   android:text="@string/user_msg_attention" 
                    android:layout_width="120dp"
                    android:layout_height="60dp"
                    android:padding="3dip" 
@@ -144,7 +140,7 @@
               
                <TextView 
                    android:textColor="@color/black" 
-                   android:text="粉丝" 
+                   android:text="@string/user_msg_fan" 
                    android:layout_width="120dp"
                    android:layout_height="60dp"
                    android:padding="3dip" 
@@ -162,7 +158,6 @@
                     android:onClick="click_user_public_data_list"
                     android:id="@+id/public_list_tv"
                     android:textColor="@color/black" 
-                    android:text="刘总的公开列表" 
                     android:layout_width="fill_parent"
                     android:layout_height="60dp"
                     android:paddingLeft="10dip"
@@ -172,15 +167,6 @@
                     android:background="@drawable/title_back"
               />
         
-               <!-- <TextView 
-                   android:textColor="@color/black" 
-                   android:text="协作" 
-                   android:layout_width="120dp"
-                   android:layout_height="60dp"
-                   android:padding="3dip" 
-                   android:gravity="center"
-               /> -->
-              
             </TableRow> 
          </TableLayout>    
     </RelativeLayout>

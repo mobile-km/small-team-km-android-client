@@ -8,13 +8,13 @@
     android:layout_marginRight="10dp"
     android:padding="10dp" >
     <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@color/gainsboro"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
+    >  
    
-        <TextView
+        <TextView	
         android:id="@+id/info_tv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -25,9 +25,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="title"
             android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/list_note_title_tv_go"
@@ -38,7 +37,6 @@
             android:clickable="true"
             android:gravity="center"
             android:padding="10dp"
-            android:text="id:s_id"
             android:textColor="@color/black"
             android:visibility="gone" />
 
@@ -50,7 +48,6 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/list_note_title_tv_edit"
             android:layout_marginTop="10dp"
-            android:text="分享"
             android:textColor="@color/black" />
 
         <TextView
@@ -60,7 +57,6 @@
             android:layout_alignBaseline="@+id/mi_list_data_list_eye_tv"
             android:layout_alignBottom="@+id/mi_list_data_list_eye_tv"
             android:layout_alignParentRight="true"
-            android:text="步骤"
             android:textColor="@color/black" />
 
         <ImageView
@@ -69,6 +65,7 @@
             android:layout_height="24dp"
             android:layout_alignTop="@+id/list_type_tv"
             android:layout_toLeftOf="@+id/list_type_tv"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/star_blue" />
  </RelativeLayout>
 </RelativeLayout>

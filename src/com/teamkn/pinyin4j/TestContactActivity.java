@@ -1,28 +1,6 @@
 package com.teamkn.pinyin4j;
 
-import java.util.Arrays;
-
-import com.teamkn.R;
-
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.PixelFormat;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class TestContactActivity extends Activity {
 //    /** Called when the activity is first created. */

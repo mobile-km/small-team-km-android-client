@@ -7,7 +7,7 @@
         style="@style/body"
         >
     <TextView
-            android:text="@string/now_loading"
-            style="@style/loading_layout_text"
-            />
+       android:text="@string/now_loading"
+       style="@style/loading_layout_text"
+    />
 </LinearLayout>

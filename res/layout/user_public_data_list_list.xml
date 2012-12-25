@@ -9,13 +9,10 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
             >
-        <Button
-            style="@style/head_bar_button_go_back"
-        />
         <TextView
             android:id="@+id/user_name_tv"
             style="@style/head_bar_text_center"
-            android:text="XXX的公开列表"
+            android:text="@string/placeholder"
         />
     </RelativeLayout>
     <RelativeLayout
@@ -30,6 +27,7 @@
                 android:id="@+id/iv_user_avatar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:contentDescription="@string/image_description"
                 android:background="@drawable/user_default_avatar_normal" />
     
             <TextView
@@ -39,8 +37,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/iv_user_avatar"
                 android:gravity="center_vertical"
-                android:onClick="click_set_user_name"
-                android:text="设置头像" />
+                android:onClick="click_set_user_name" />
 
             <LinearLayout
             android:id="@+id/follow_tv_ll"
@@ -55,8 +52,7 @@
 		            android:id="@+id/follow_tv"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:background="@drawable/selector_follow"
-		            android:text="已FOLLOW" />
+		            android:background="@drawable/selector_follow" />
 	        </LinearLayout>
         </RelativeLayout>
     <LinearLayout 
@@ -74,7 +70,7 @@
            android:layout_width="100dp"
            android:layout_height="fill_parent"
            android:background="@color/lightsteelblue"
-           android:text="所有"
+           android:text="@string/tknlist_kind_all_list"
       />
       <Button
            android:id="@+id/click_collection_tv"
@@ -82,7 +78,7 @@
            android:layout_width="100dp"
            android:layout_height="fill_parent"
            android:background="@color/lightsteelblue"
-           android:text="收集列表"
+           android:text="@string/tknlist_kind_collection_list"
       />
       <Button
           android:id="@+id/click_step_tv"
@@ -90,11 +86,12 @@
            android:layout_width="100dp"
            android:layout_height="fill_parent"
            android:background="@color/lightsteelblue"
-           android:text="步骤列表"
+           android:text="@string/tknlist_kind_step_list"
       />
   </LinearLayout>
   <ImageView
        android:id="@+id/cursor"
+       android:contentDescription="@string/image_description"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:scaleType="matrix"

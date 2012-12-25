@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -46,18 +47,21 @@ public class BaseUtils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
     }
 
-    public static String date_string(long time_seconds) {
+    @SuppressLint("SimpleDateFormat")
+	public static String date_string(long time_seconds) {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("MM月d日");
         return sdf.format(new Date(time_seconds * 1000));
     }
     
-    public static String time_string(long time_seconds){
+    @SuppressLint("SimpleDateFormat")
+	public static String time_string(long time_seconds){
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("HH:mm");
         return sdf.format(new Date(time_seconds * 1000));
     }
     
+	@SuppressLint("SimpleDateFormat")
 	public static String friendly_time_string(long time_seconds) {
 		Date date = new Date(time_seconds * 1000);
 		Date now = new Date();
@@ -87,12 +91,12 @@ public class BaseUtils {
 	}
     
     // yyyy-MM-ddTHH:mm:ssZ
-    public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
+    @SuppressLint("SimpleDateFormat")
+	public static long parse_iso_time_string_to_long(String iso_time_string) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd'T'HH:mm:ssZ");
         return sdf.parse(iso_time_string).getTime();
     }
-
 	public static boolean is_wifi_active(Context context) {
 		ConnectivityManager mgrConn = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -102,7 +106,6 @@ public class BaseUtils {
 				.getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED) || mgrTel
 				.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS);
 	}
-    
 //   　如果拟开发一个网络应用的程序，首先考虑是否接入网络，在Android手机中判断是否联网可以通过 ConnectivityManager 类
 //    的isAvailable()方法判断，首先获取网络通讯类的实例
 //    ConnectivityManager cwjManager=

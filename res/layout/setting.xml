@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/body"
->
+>	
     <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/head_bar"
-            android:id="@+id/head"
-    >
-        <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/head"
+        style="@style/head_bar" >
+
+        <Button
             android:id="@+id/iv_foot_view"
-            android:src="@drawable/sliding_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/app_name"
-        />
-        <TextView
+            android:layout_width="48dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/tkn_top_bar_menu_btn_selector" />
+
+        <LinearLayout
+            android:id="@+id/main_user_name_rl"
             style="@style/head_bar_text_center"
-            android:text="@string/menu_setting"
-        />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="80dp" >
+
+            <TextView
+                android:id="@+id/main_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:shadowColor="#99000000"
+                android:shadowDx="-1"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
+                android:text="@string/setting_head_title"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+        </LinearLayout>
     </RelativeLayout>
     <ScrollView 
+        android:layout_below="@+id/head"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:background="@color/black"
@@ -30,36 +50,6 @@
            android:layout_height="wrap_content"
            android:orientation="vertical" 
        >
-           <LinearLayout 
-               android:id="@+id/ll_setting"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:padding="10dp"
-               android:orientation="vertical"
-           >
-               
-               <TextView
-                   android:text="上传图片质量"
-                   android:textColor="#fff"
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content" 
-                   android:textSize="20dp"
-                   android:layout_marginBottom="5dp"
-               />
-               <TextView
-                   android:layout_marginBottom="5dp"
-                   android:text="发送主题时，上传的图片的质量"
-                   android:textColor="#fff"
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content" 
-                   android:textSize="15dp"
-               />
-               <TextView
-                   android:background="#fff"
-                   android:layout_width="fill_parent"
-                   android:layout_height="0.1dp"
-               />
-            </LinearLayout>
             
             <LinearLayout 
                android:onClick="click_go_account_manage_activity"
@@ -70,7 +60,7 @@
              >
                
                <TextView
-                   android:text="账号管理"
+                   android:text="@string/setting_account_manager"
                    android:textColor="#fff"
                    android:layout_width="fill_parent"
                    android:layout_height="wrap_content" 
@@ -90,9 +80,8 @@
                android:padding="10dp"
                android:orientation="vertical"
             >
-               
                <TextView
-                   android:text="关于软件"
+                   android:text="@string/setting_about_softerware"
                    android:textColor="#fff"
                    android:layout_width="fill_parent"
                    android:layout_height="wrap_content" 
@@ -107,8 +96,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <ListView 
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-    />
-</LinearLayout>
+</RelativeLayout>

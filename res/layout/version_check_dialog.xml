@@ -5,20 +5,23 @@
     android:background="@drawable/version_check_dialog_bg"
     android:layout_gravity="center"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dip"
-        android:paddingTop="10dip" >
+        android:paddingTop="10dip"
+    >
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="应用更新提示" />
+            android:text="@string/version_check_dialog_title_msg" 
+        />
 
     </RelativeLayout>
 
@@ -27,9 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
-        android:text="Title"
+        android:text="@string/version_check_dialog_title"
         android:textColor="#000000"
-        android:textSize="25sp" />
+        android:textSize="25sp" 
+    />
 
     <TextView
         android:layout_marginLeft="50dp"
@@ -37,11 +41,12 @@
         android:layout_width="fill_parent"
         android:layout_height="1dip"
         android:layout_marginTop="5dip"
-        android:background="@drawable/line" />
+        android:background="@drawable/line" 
+    />
 
     <LinearLayout
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_weight="0.66"
         android:gravity="center_horizontal"
         android:paddingBottom="10dip"
@@ -55,24 +60,27 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            android:text="最新版本："
-            android:textColor="#000000" />
+            android:text="@string/version_check_dialog_new_version"
+            android:textColor="#000000" 
+         />
 
         <TextView
             android:id="@+id/add_function_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            android:text="新增功能："
-            android:textColor="#000000" />
+            android:text="@string/version_check_dialog_new_function"
+            android:textColor="#000000" 
+        />
 
         <TextView
             android:id="@+id/app_big_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            android:text="安装包大小：2.8 MB"
-            android:textColor="#000000" />
+            android:text="@string/version_check_dialog_new_apk_big"
+            android:textColor="#000000" 
+        />
     </LinearLayout>
 
     <RelativeLayout
@@ -80,14 +88,16 @@
         android:layout_height="wrap_content"
         android:gravity="bottom|center_horizontal"
         android:paddingBottom="20dip"
-        android:paddingTop="10dip" >
+        android:paddingTop="10dip" 
+    >
 
         <Button
             android:id="@+id/dialog_button_ok"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="下载安装" />
+            android:text="@string/version_check_dialog_download" 
+        />
 
         <Button
             android:id="@+id/dialog_button_cancel"
@@ -95,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="35dip"
             android:layout_toRightOf="@+id/dialog_button_ok"
-            android:text="以后再说" />
+            android:text="@string/version_check_dialog_cancel" 
+        />
     </RelativeLayout>
 
 </LinearLayout> 

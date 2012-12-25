@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 全局 -->
+    <string name="about_app">关于 TEAMKN</string>
     <string name="app_name">teamkn</string>
     <string name="app_version">0.50</string>
     <string name="app_version_full">android客户端 0.52 pre</string>
@@ -13,6 +14,7 @@
     <string name="now_deleting">正在删除…</string>
     <string name="now_updating">正在修改…</string>
     <string name="now_syning">正在同步数据…</string>
+    <string name="now_search">正在搜索…</string>
 
     <string name="app_method_not_define_exception">功能方法未定义</string>
     <string name="app_intent_connection_exception">网络连接错误</string>
@@ -32,6 +34,57 @@
     <string name="contact_list_send_invite">发出的邀请</string>
     <string name="contact_list_get_invite">接收</string>
     
+    <string name="search_friendly">查找朋友</string>
+    
+    <string name="delete_success">删除成功</string>
+    <string name="success_add_watch">成功加入书签 ^_^</string>
+    <string name="success_remove_watch">移除书签成功 ^_^</string>
+    
+    <string name="up">上一步</string>
+    <string name="next">下一步</string>
+    
+    <string name="tknlist_kind_all_list">所有</string>
+    <string name="tknlist_kind_step_list">步骤列表</string>
+    <string name="tknlist_kind_collection_list">收集列表</string>
+    <!-- SEARCH -->
+    <string name="search_title">搜索</string>
+    <string name="search_list">搜索列表</string>
+    <string name="search_user">搜索用户</string>
+    <string name="search_no_data">没有搜索到数据</string>
+    <!-- BASE_REGISTER -->
+    <string name="base_register_email">Email</string>
+    <string name="base_register_name">用户名</string>
+    <string name="base_register_password">密码</string>
+    <string name="base_register_affirm_password">确认密码</string>
+    <string name="base_register_register">创建账号</string>
+    <string name="base_register_error_msg">账户创建失败，原因如下 :</string>
+    <string name="base_register_error_intent">. 网络无法连接</string>
+    <string name="base_register_error_email_repeat">. 这个邮箱已经注册过了</string>
+    <string name="base_register_error_email_no">. 没有填写邮箱</string>
+    <string name="base_register_error_name_no">. 没有填写用户名</string>
+    <string name="base_register_error_password_no">. 没有填写密码</string>
+    <string name="base_register_error_affirm_password_no">. 没有填写确认密码</string>
+    <!-- BASE_SOCIAL_CIRCLE -->
+    <string name="base_social_circle_mi_msg">我的信息</string>
+    <string name="base_social_circle_mi_follow">我的FOLLOW</string>
+    <string name="base_social_circle_mi_fan">我的粉丝</string>
+    <!-- DATA_ITEM -->
+    <string name="tkndata_item_accept_onther_update">接受其余修改</string>
+    <string name="tkndata_item_skip_onther_update">跳过其余修改</string>
+    <string name="tkndata_item_list_contrast">列表对比</string>
+    <string name="tkndata_item_list_status">列表状态</string>
+    <string name="tkndata_item_list_opposite_list">对方的</string>
+    <string name="tkndata_item_list_mi_list">我的</string>
+    <string name="tkndata_item_accord_term_update">手动逐项处理</string>
+    <string name="tkndata_item_title_hint">列表浏览-名称</string>
+    <string name="tkndata_item_update_offer_list">修改建议游览</string>
+    <string name="tkndata_item_look_list">查看列表</string>
+    <string name="tkndata_item_list_no_data">列表没有数据</string>
+    <!-- DATA_ITEM_CREATE -->
+    <string name="tkndata_item_create_head_title">新建列表</string>
+    <string name="tkndata_item_create_title">子项标题</string>
+    <string name="tkndata_item_create_content">内容 ：</string>
+    <string name="tkndata_item_create_list_name_repead">列表名称已存在</string>
     <!-- 列表集合的列表项 -->
     <string name="tknlist_private">私有</string>
     <string name="tknlist_fork">被签有改</string>
@@ -39,7 +92,38 @@
     <string name="tknlist_fav">收藏</string>
     <string name="tknlist_kind_step">步骤</string>
     <string name="tknlist_kind_collection">收集</string>
-    
+    <!-- DATA_LIST_EDIT_TITLE -->
+    <string name="tkndata_list_edit_title_hint">修改标题的内容在此</string>
+    <string name="tkndata_list_edit_title_share">分享给所有人</string>
+    <!-- DATA_LIST_CREATE -->
+    <string name="tkndata_list_create_title">创建列表</string>
+    <string name="tkndata_list_create_step_list">步骤列表</string>
+    <string name="tkndata_list_create_collection_list">收集列表</string>
+    <string name="tkndata_list_create_share">分享给所有人</string>
+    <string name="tkndata_list_create_title_hint">列表名称已存在</string>
+    <!-- SETTING -->
+    <string name="setting_head_title">设置</string>
+    <string name="setting_account_manager">账号管理</string>
+    <string name="setting_about_softerware">关于软件</string>
+    <string name="setting_account_manager_add_account">增加账号</string>
+    <!-- USER_MSG -->
+    <string name="user_msg_title">个人信息</string>
+    <string name="user_msg_sex">性别  ：</string>
+    <string name="user_msg_like">爱好  ：</string>
+    <string name="user_msg_more_msg">更多信息</string>
+    <string name="user_msg_attention">关注</string>
+    <string name="user_msg_fan">粉丝</string>
+    <!-- VERSION_CHECK_DIALOG -->
+    <string name="version_check_dialog_title_msg">应用更新提示</string>
+    <string name="version_check_dialog_new_version">最新版本：</string>
+    <string name="version_check_dialog_new_function">新增功能：</string>
+    <string name="version_check_dialog_new_apk_big">安装包大小：</string>
+    <string name="version_check_dialog_download">下载安装</string>
+    <string name="version_check_dialog_cancel">以后再说</string>
+    <string name="version_check_dialog_title">TITLE</string>
+
+    <!-- SOCIAL_CIRCLE -->
+    <string name="social_circle_head_title">社交圈子</string>
     <!-- MAIN -->
     <string name="headbar_title">TEAMKN</string>
     <string name="main_user_name_default">这里是用户名</string>
@@ -92,7 +176,7 @@
     <string name="save_note_bn">保存</string>
     <string name="saving">正在保存...</string>
 
-    <string name="is_wifi_active_msg">无法连接网络</string>
+    <string name="is_wifi_active_msg">无法连接到网络，请检查网络配置</string>
     <!-- 显示照片页面 -->
     <string name="show_capture_image_back">返回</string>
     <!-- 选择收集册页面 -->

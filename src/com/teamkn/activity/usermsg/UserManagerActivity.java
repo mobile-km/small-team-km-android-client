@@ -1,6 +1,5 @@
 package com.teamkn.activity.usermsg;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,31 +7,24 @@ import java.io.FileNotFoundException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
 import com.teamkn.base.utils.FileDirs;
-import com.teamkn.model.AccountUser;
 
 public class UserManagerActivity extends TeamknBaseActivity{
 	View view_show;
@@ -75,10 +67,6 @@ public class UserManagerActivity extends TeamknBaseActivity{
     	.setNegativeButton("取消", null)
     	.show();
     }
-    public void click_set_user_name(View view){
-    	Intent intent = new Intent(UserManagerActivity.this,UserMsgNameSetActivity.class);
-    	startActivity(intent);
-    }
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,10 +91,10 @@ public class UserManagerActivity extends TeamknBaseActivity{
 //	    }
 //	    tv_user_name.setText(user.name);		
 	}
-	private void load_ui(){
-		iv_user_avatar = (ImageView)view_show.findViewById(R.id.iv_user_avatar);
-		tv_user_name = (TextView)view_show.findViewById(R.id.tv_user_name);
-	}
+//	private void load_ui(){
+//		iv_user_avatar = (ImageView)view_show.findViewById(R.id.iv_user_avatar);
+//		tv_user_name = (TextView)view_show.findViewById(R.id.tv_user_name);
+//	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode != Activity.RESULT_OK){

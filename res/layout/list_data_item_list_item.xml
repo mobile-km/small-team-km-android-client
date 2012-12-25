@@ -40,11 +40,6 @@
            android:padding="10dp"
            android:background="@color/gainsboro"
       />
-<!--       android:singleLine="true"
-		   android:focusable="true"
-		   android:ellipsize="marquee"
-		   android:marqueeRepeatLimit="marquee_forever"
-		   android:focusableInTouchMode="true" -->
        
        <TextView
            android:id="@+id/data_item_title_tv_go"

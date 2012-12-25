@@ -10,10 +10,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/head_bar"
     >
-        <Button
-            style="@style/head_bar_button_go_back_register"
-            android:onClick="click_headbar_button_back"
-        />
+        
    </RelativeLayout>    
    <LinearLayout
             style="@style/padding_10_body"
@@ -30,16 +27,17 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textColorHint="#000"
-           android:hint="Email "
+           android:hint="@string/base_register_email"
            android:layout_marginTop="0dp"
            android:imeOptions="actionDone"
+           android:inputType="textEmailAddress"
        />
        <EditText
            android:id="@+id/register_edittext_name"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textColorHint="#000"
-           android:hint="用户名 "
+           android:hint="@string/base_register_name"
            android:layout_marginTop="5dp"
            android:imeOptions="actionDone"
        />
@@ -48,7 +46,7 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textColorHint="#000"
-           android:hint="密码 "
+           android:hint="@string/base_register_password"
            android:inputType="textPassword"
            android:layout_marginTop="5dp"
            android:imeOptions="actionDone"
@@ -58,7 +56,7 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textColorHint="#000"
-           android:hint="确认密码 "
+           android:hint="@string/base_register_affirm_password"
            android:inputType="textPassword"
            android:layout_marginTop="5dp"
            android:imeOptions="actionDone"
@@ -66,7 +64,7 @@
       <Button
            android:id="@+id/register_button"
            style="@style/login_layout_button"
-           android:text="创建账号"
+           android:text="@string/base_register_register"
            android:onClick="click_register_button"
        />
     </LinearLayout>
@@ -87,14 +85,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text="账户创建失败，原因如下 ： "
+            android:text="@string/base_register_error_msg"
         />
         <TextView
             android:id="@+id/register_tv_error_show_intent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 网络无法连接"
+            android:text="@string/base_register_error_intent"
             android:visibility="gone"
         />
         <TextView
@@ -102,7 +100,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 这个邮箱已经注册过了"
+            android:text="@string/base_register_error_email_repeat"
             android:visibility="gone"
         />
         
@@ -111,7 +109,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 没有填写邮箱"
+            android:text="@string/base_register_error_email_no"
             android:visibility="gone"
         />
         <TextView
@@ -119,7 +117,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 没有填写用户名"
+            android:text="@string/base_register_error_name_no"
             android:visibility="gone"
         />
         <TextView
@@ -127,7 +125,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 没有填写密码"
+            android:text="@string/base_register_error_password_no"
             android:visibility="gone"
         />
         <TextView
@@ -135,7 +133,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFF"
-            android:text=". 没有填写确认密码"
+            android:text="@string/base_register_error_affirm_password_no"
             android:visibility="gone"
         />
     </LinearLayout>

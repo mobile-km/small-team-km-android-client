@@ -1,19 +1,16 @@
 package com.teamkn.activity.base;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import com.teamkn.Logic.HttpApi;
+
 import com.teamkn.R;
+import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.AccountUser;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.widget.view.MyVersionDialog;
 
@@ -58,36 +55,40 @@ public class LoginActivity extends TeamknBaseActivity {
             BaseUtils.toast(R.string.login_password_valid_blank);
             return false;
         }
-
+        
         return true;
     }
 
     //显示正在登录，并在一个线程中进行登录
     private void do_login() {
-        new TeamknAsyncTask<String, Void, VersionCheck>(this, R.string.login_now_login) {
-            @Override
-            public VersionCheck do_in_background(String... params) throws Exception {
-                // 为了在不联网的情况下使用，注释掉
-                String email = params[0];
-                String password = params[1];
-                HttpApi.user_authenticate(email, password);
-                String version = getResources().getString(R.string.app_version);
-//                version = "0.51";
-                return HttpApi.get_version(version);
-            }
-            @Override
-            public void on_success(VersionCheck check) {
-            	if(check.action.equals(VersionCheck.Action.NEWEST)){
-            		is_first_login();
-                    finish();
-            	}else{
-//            		show_version_check(check);
-            		//初始化一个自定义的Dialog                 
-            		Dialog dialog = new MyVersionDialog(MyVersionDialog.ActivityCheck.LOGIN_ACTIVITY,LoginActivity.this, R.style.MyVersionDialog,check);                   
-            		dialog.show();     
-            	}	
-            }
-        }.execute(email, password);
+    	if (BaseUtils.is_wifi_active(this)) {
+	        new TeamknAsyncTask<String, Void, VersionCheck>(this, R.string.login_now_login) {
+	            @Override
+	            public VersionCheck do_in_background(String... params) throws Exception {
+	                // 为了在不联网的情况下使用，注释掉
+	                String email = params[0];
+	                String password = params[1];
+	                HttpApi.user_authenticate(email, password);
+	                String version = getResources().getString(R.string.app_version);
+	//                version = "0.51";
+	                return HttpApi.get_version(version);
+	            }
+	            @Override
+	            public void on_success(VersionCheck check) {
+	            	if(check.action.equals(VersionCheck.Action.NEWEST)){
+	            		is_first_login();
+	                    finish();
+	            	}else{
+	//            		show_version_check(check);
+	            		//初始化一个自定义的Dialog                 
+	            		Dialog dialog = new MyVersionDialog(MyVersionDialog.ActivityCheck.LOGIN_ACTIVITY,LoginActivity.this, R.style.MyVersionDialog,check);                   
+	            		dialog.show();     
+	            	}	
+	            }
+	        }.execute(email, password);
+    	}else{
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+		}
     }
     private void is_first_login(){
     	if(current_user().is_show_tip){

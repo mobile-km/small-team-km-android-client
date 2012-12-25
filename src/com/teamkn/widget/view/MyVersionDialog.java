@@ -1,19 +1,18 @@
 package com.teamkn.widget.view;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.teamkn.R;
 import com.teamkn.activity.base.AboutActivity;
 import com.teamkn.activity.base.LoginActivity;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.login_guide.LoginSwitchViewDemoActivity;
-import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.model.VersionCheck;
-
-import android.app.Dialog; 
-import android.content.Context; 
-import android.os.Bundle; 
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 public class MyVersionDialog extends Dialog{
 	public static final class ActivityCheck{
 		public static final int LOGIN_ACTIVITY = 0;
@@ -54,7 +53,7 @@ public class MyVersionDialog extends Dialog{
 		dialog_button_ok.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				MyVersionDialog.this.dismiss();
 			}
 		});
 		dialog_button_cancel.setOnClickListener(new android.view.View.OnClickListener() {
@@ -74,7 +73,7 @@ public class MyVersionDialog extends Dialog{
 				default:
 					break;
 				}
-		    	
+			    MyVersionDialog.this.dismiss();
 			}
 		});
 		

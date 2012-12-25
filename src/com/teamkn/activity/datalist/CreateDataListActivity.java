@@ -19,7 +19,6 @@ import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataList;
-import com.teamkn.model.User;
 import com.teamkn.model.database.UserDBHelper;
 
 public class CreateDataListActivity extends TeamknBaseActivity{
@@ -108,6 +107,8 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 			         	CreateDataListActivity.this.finish();
     				}
     			}.execute();	
+			}else{
+				BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 			}
          }else{
         	 BaseUtils.toast("列表名称不可以为空");
@@ -116,7 +117,7 @@ public class CreateDataListActivity extends TeamknBaseActivity{
 	// 钩子，自行重载
 	public void on_go_back() {
 		Intent intent = new Intent(CreateDataListActivity.this,DataItemListActivity.class);
-		User user = UserDBHelper.find_by_server_user_id(current_user().user_id);
+//		User user = UserDBHelper.find_by_server_user_id(current_user().user_id);
      	intent.putExtra("data_list_public", RequestCode.data_list_public);
      	intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
      	MainActivity.RequestCode.SHOW_NEXT = MainActivity.RequestCode.SHOW_CREATE_NEXT_HELP_CASE;

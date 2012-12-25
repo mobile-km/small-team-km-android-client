@@ -42,7 +42,7 @@
                 android:onClick="click_experience"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="进入体验"
+                android:text = "@string/placeholder"
             />
         </LinearLayout>
     </com.teamkn.activity.login_guide.LoginScrollLayout>
@@ -62,6 +62,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:padding="15.0dip"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/btn_radio_off" />
 
         <ImageView
@@ -70,6 +71,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:padding="15.0dip"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/btn_radio_off" />
 
         <ImageView
@@ -78,6 +80,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:padding="15.0dip"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/btn_radio_off" />
 
         <ImageView
@@ -86,6 +89,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:padding="15.0dip"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/btn_radio_off" />
 
         <ImageView
@@ -94,6 +98,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:padding="15.0dip"
+            android:contentDescription="@string/image_description"
             android:background="@drawable/btn_radio_off" />
     </LinearLayout>
 

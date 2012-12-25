@@ -197,11 +197,4 @@ public class DataItemPullUpdateActivity extends TeamknBaseActivity{
 			break;
 		}
 	}
-	private String[] getDataItems_forked_Seeds(){
-		String[] seeds = new String[dataItems_forked.size()];
-		for(int i = 0 ; i < dataItems_forked.size() ;i ++){
-			seeds[i] = dataItems_forked.get(i).seed;
-		}
-		return seeds;
-	}
 }

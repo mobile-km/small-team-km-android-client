@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 笔记列表 -->
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/body"
@@ -10,17 +9,14 @@
             style="@style/head_bar"
             android:id="@+id/head"
             >
-        <Button
-            android:id="@+id/go_back_button"
-            style="@style/head_bar_button_go_back"
-        />
+            
         <TextView
             android:id="@+id/data_item_termwise_title_tv"
             style="@style/head_bar_text"
             android:layout_centerHorizontal="true"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="修改条目" />
+            android:text="@string/placeholder" />
 
     </RelativeLayout>
 
@@ -40,7 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:hint="列表浏览-名称"
+            android:hint="@string/placeholder"
             android:gravity="center"
             android:textSize="22dp" />
     </RelativeLayout>
@@ -104,14 +100,14 @@
 	           android:onClick="click_accept_all_button"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
-	           android:text="接受其余修改"
+	           android:text="@string/tkndata_item_accept_onther_update"
            />
            <Button
 	          android:onClick="click_refuse_all_button"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:layout_alignParentRight="true"
-	          android:text="跳过其余修改" 
+	          android:text="@string/tkndata_item_skip_onther_update" 
            />
        </RelativeLayout>
    </RelativeLayout>

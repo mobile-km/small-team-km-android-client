@@ -10,17 +10,14 @@
             style="@style/head_bar"
             android:id="@+id/head"
             >
-        <Button
-            android:id="@+id/go_back_button"
-            style="@style/head_bar_button_go_back"
-        />
+       
         <TextView
             android:id="@+id/data_list_user_name_tv"
             style="@style/head_bar_text"
             android:layout_centerHorizontal="true"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="修改建议游览" />
+            android:text="@string/tkndata_item_update_offer_list" />
 
     </RelativeLayout>
 
@@ -40,7 +37,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:hint="列表浏览-名称"
+            android:hint="@string/tkndata_item_title_hint"
             android:gravity="center"
             android:textSize="22dp" />
     </RelativeLayout>

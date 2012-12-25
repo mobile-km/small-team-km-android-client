@@ -8,9 +8,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/head_bar"
             >
-        <Button
-            style="@style/head_bar_button_go_back"
-        />
         <TextView
                 style="@style/head_bar_text_center"
                 android:text="@string/account_manager_title"
@@ -19,6 +16,7 @@
                 android:text="@string/account_edit_button"
                 style="@style/head_bar_button_right"
                 android:onClick="on_edit_account_button_click"
+                android:background="@drawable/tkn_top_bar_text_btn_selector"
                 />
     </RelativeLayout>
 

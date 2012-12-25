@@ -30,14 +30,12 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
-import com.teamkn.activity.usermsg.UserMsgActivity.RequestCode;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.DataList;
 import com.teamkn.model.database.DataListHelper;
-import com.teamkn.widget.adapter.DataListAdapter;
 import com.teamkn.widget.adapter.UserPublicDataListAdapter;
 
 public class UserPublicDataListActivity extends TeamknBaseActivity{
@@ -80,9 +78,9 @@ public class UserPublicDataListActivity extends TeamknBaseActivity{
 		user = (AccountUser) intent.getSerializableExtra("user");
 		InitImageView();
 		load_ui();
+
 		load_mimsg();
-		load_httpApi(RequestCode.NOFOLLOW,user.user_id);
-		
+		load_httpApi(RequestCode.NOFOLLOW);
 	}
 	private void load_ui() {
 		user_name_tv = (TextView)findViewById(R.id.user_name_tv);
@@ -94,39 +92,44 @@ public class UserPublicDataListActivity extends TeamknBaseActivity{
 	}
 	private void load_mimsg(){	
 		list_view.setVisibility(View.GONE);
-		if(user.avatar != null){
-		      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.avatar));
-		      Drawable drawable = new BitmapDrawable(bitmap);
-		      iv_user_avatar.setBackgroundDrawable(drawable);
-	    }else{
-	    	  iv_user_avatar.setBackgroundResource(R.drawable.user_default_avatar_normal);
-	    }
-	    tv_user_name.setText(user.name);
-	    
-	    if(user.user_id == current_user().user_id){
-	    	follow_tv.setVisibility(View.GONE);
-	    }
-	    if(user.followed){
-	    	follow_tv.setText("已Follow");
-	    	follow_tv_ll.setBackgroundColor(getResources().getColor(R.color.green));
-	    }else{
-	    	follow_tv.setText("未Follow");
-	    	follow_tv_ll.setBackgroundColor(getResources().getColor(R.color.yellow));
-	    }
+		if(user!=null){
+	
+			if(user.avatar != null){
+			      Bitmap bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(user.avatar));
+			      Drawable drawable = new BitmapDrawable(bitmap);
+			      iv_user_avatar.setBackgroundDrawable(drawable);
+		    }else{
+		    	  iv_user_avatar.setBackgroundResource(R.drawable.user_default_avatar_normal);
+		    }
+		    tv_user_name.setText(user.name);
+		    
+		    if(user.user_id == current_user().user_id){
+		    	follow_tv.setVisibility(View.GONE);
+		    }
+		    if(user.followed){
+		    	follow_tv.setText("已Follow");
+		    	follow_tv_ll.setBackgroundColor(getResources().getColor(R.color.green));
+		    }else{
+		    	follow_tv.setText("未Follow");
+		    	follow_tv_ll.setBackgroundColor(getResources().getColor(R.color.yellow));
+		    }
+		    user_name_tv.setText(user.name + "的公开列表");
+		}
+		
 	    follow_tv.setOnClickListener(new android.view.View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
 				 if(user.followed){
-					 load_httpApi(RequestCode.UNFOLLOW,user.user_id);
+					 load_httpApi(RequestCode.UNFOLLOW);
 			     }else{
-			    	 load_httpApi(RequestCode.FOLLOW,user.user_id); 
+			    	 load_httpApi(RequestCode.FOLLOW); 
 			     }
 			}
 		});  
-	    user_name_tv.setText(user.name + "的公开列表");
+
 	}
-	private void load_httpApi(final char is_load_follow, final int service_user_id){
-		if (BaseUtils.is_wifi_active(UserPublicDataListActivity.this)) {
+	private void load_httpApi(final char is_load_follow){
+		if (BaseUtils.is_wifi_active(this)) {
 	    	new TeamknAsyncTask<Void, Void, List<DataList>>(UserPublicDataListActivity.this,"内容加载中") {
 				@Override
 				public List<DataList> do_in_background(Void... params)
@@ -135,11 +138,11 @@ public class UserPublicDataListActivity extends TeamknBaseActivity{
 					switch (is_load_follow) {
 					case RequestCode.FOLLOW:
 						user.setFollowed(true);
-						HttpApi.follow_or_unfollow(service_user_id,true);
+						HttpApi.follow_or_unfollow(user.user_id,true);
 						break;
 					case RequestCode.UNFOLLOW:
 						user.setFollowed(false);
-						HttpApi.follow_or_unfollow(service_user_id,false);
+						HttpApi.follow_or_unfollow(user.user_id,false);
 						break;
 					case RequestCode.NOFOLLOW:
 						record_datalists = HttpApi.DataList.user_public_data_lists(1,100 , user.user_id);	
@@ -161,7 +164,7 @@ public class UserPublicDataListActivity extends TeamknBaseActivity{
 				}
 			}.execute();
     	}else{
-			BaseUtils.toast("无法连接到网络，请检查网络配置");
+    		BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 		}
 	}
 	private void load_list(){
@@ -200,9 +203,6 @@ public class UserPublicDataListActivity extends TeamknBaseActivity{
 		builder.setPositiveButton("确定", new AlertDialog.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-//				DataListDBHelper.remove_by_server_id(dataList);
-//				dataListAdapter.remove_item(dataList);
-//				dataListAdapter.notifyDataSetChanged();
 				remove_data_list(dataList,id,true);
 			}
 		});

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -28,13 +27,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.dataitem.pull.DataItemPullListActivity;
-import com.teamkn.activity.social_circle.UserPublicDataListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -56,7 +53,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		public static final String 我的书签 = "watch";
 		public static final String 个人的公开的列表 = "user_public_data_list";
 	}
-	Button go_back_button;  //返回的按钮
+	
 	TextView data_list_user_name_tv;
 	ImageView data_item_add_iv;
 	/*
@@ -105,8 +102,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
     
     boolean is_curretn_user_data_list; // 是否是当前用户的data_list
     String public_boolean = "true";//修改中用到
-    
-    public static int[] screen = new int[2];
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,26 +112,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		data_list_public = intent.getStringExtra("data_list_public");//返回dataList的中公开，自己私有，协作列表中的一个
 		dataList = (DataList)intent.getSerializableExtra("data_list");//返回dataList
 		
-//		MainActivity
-
 		//判断是否是当前用户的列表 或者 是协作列表
-		if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-				|| data_list_public.equals(MainActivity.RequestCode.协作列表)
-		){
-			is_curretn_user_data_list  = true;
-		}else{
-			is_curretn_user_data_list  = false;
-		}	
+		is_curretn_user_data_list  = UserDBHelper.find(dataList.user_id).user_id == current_user().user_id;	
+		
 		//加载ui元素以及数据
 		load_UI();
 		load_data_item_list();
 		
-		
-		//用于控制不同分辨率的问题 item 的高度控制
-		DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screen[0] = dm.widthPixels;
-        screen[1] = dm.heightPixels;
 	}
 	private void load_UI(){
 		//top的中间显示当前是谁的列表
@@ -145,18 +128,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			user_name_sub = user_name_sub.substring(0, 7) + "..";
 		}
 		data_list_user_name_tv.setText(user_name_sub+"的列表");
-		
-		//控制显示返回按钮的显示分为公共和自己
-		go_back_button = (Button)findViewById(R.id.go_back_button);
-		if(data_list_public.equals(MainActivity.RequestCode.公开的列表)){
-			go_back_button.setText("公共");
-		}else if(data_list_public.equals(MainActivity.RequestCode.我的列表)){
-			go_back_button.setText("返回");
-		}else if(data_list_public.equals(MainActivity.RequestCode.协作列表)){
-			go_back_button.setText("协作");
-		}else if(data_list_public.equals(MainActivity.RequestCode.我的书签)){
-			go_back_button.setText("书签");
-		}
 
 		//title
 		data_list_title_rl=(RelativeLayout)findViewById(R.id.data_list_title_rl);//dataList的title文本RelativeLayout
@@ -194,6 +165,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					data_list_title_rl.setBackgroundColor(getResources().getColor(R.color.darkgrey));
 				}
 			});
+			
 		}else{
 			data_list_image_iv_edit.setVisibility(View.GONE);
 			data_item_add_iv.setVisibility(View.GONE);
@@ -243,29 +215,33 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}else{
 				msg = "正添加书签";
 			}
-			new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,msg) {
-				@Override
-				public Void do_in_background(Void... params) throws Exception {
-					if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-						HttpApi.WatchList.watch(dataList, !dataList.watched);
-					}else{
-						BaseUtils.toast("无法连接到网络，请检查网络配置");
+			if (BaseUtils.is_wifi_active(this)) {
+				new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,msg) {
+					@Override
+					public Void do_in_background(Void... params) throws Exception {
+						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+							HttpApi.WatchList.watch(dataList, !dataList.watched);
+						}else{
+							BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+						}
+						return null;
 					}
-					return null;
-				}
-				@Override
-				public void on_success(Void result) {
-					//请求成功后，图片变化显示
-					if(!dataList.watched){
-						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_blue));
-						BaseUtils.toast("成功加入书签 ^_^");
-					}else{	
-						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_gray));
-						BaseUtils.toast("移除书签成功 ^_^");
-					}
-					dataList.setWatched(!dataList.watched);
-				}	
-			}.execute();
+					@Override
+					public void on_success(Void result) {
+						//请求成功后，图片变化显示
+						if(!dataList.watched){
+							data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_blue));
+							BaseUtils.toast(getResources().getString(R.string.success_add_watch));
+						}else{	
+							data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_gray));
+							BaseUtils.toast(getResources().getString(R.string.success_remove_watch));
+						}
+						dataList.setWatched(!dataList.watched);
+					}	
+				}.execute();
+			}else{
+				BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+			}
 	}
 	// 加载推送的按钮
 	private void load_push_UI(){
@@ -284,29 +260,57 @@ public class DataItemListActivity extends TeamknBaseActivity {
 			}
 		});
 		
-		System.out.println("dataList.toString() " + dataList.user_id);
+		System.out.println("dataList.toString() " + dataList.toString());
 		System.out.println("current_user.toString() " + current_user().user_id);
+		
 		User user = UserDBHelper.find(dataList.user_id);
-		if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
-				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
-				||data_list_public.equals(MainActivity.RequestCode.我的书签))
-				&& dataList.forked==true && user.user_id!=current_user().user_id){
+		//显示我迁出的图标  亮色的叉号
+		boolean 我迁出的 = (data_list_public.equals(MainActivity.RequestCode.公开的列表)
+							|| data_list_public.equals(MainActivity.RequestCode.我的首页)
+							||data_list_public.equals(MainActivity.RequestCode.我的书签) 
+						  )
+						  && dataList.forked==true && user.user_id!=current_user().user_id;
+		//显示我还没有迁出的图标  灰色的叉号
+		boolean 没有迁出的 = (	data_list_public.equals(MainActivity.RequestCode.公开的列表)
+								|| data_list_public.equals(MainActivity.RequestCode.我的首页)
+								||data_list_public.equals(MainActivity.RequestCode.我的书签) 
+							)
+							&& dataList.forked==false  
+							&& user.user_id!=current_user().user_id;
+		//公开的列表 我的首页 我的书签  中 我的列表  不显示
+		boolean 我的列表 = ( data_list_public.equals(MainActivity.RequestCode.公开的列表)
+							|| data_list_public.equals(MainActivity.RequestCode.我的首页)
+							||data_list_public.equals(MainActivity.RequestCode.我的书签)
+						  )
+						  && user.user_id == current_user().user_id ;
+		//我协作的列表 分为 原作者 已删除  是否  分 从 XXX  迁出  与  已被原作者删除 
+		boolean 我协作的列表 = data_list_public.equals(MainActivity.RequestCode.协作列表) ;
+		//  自己的列表中有 被迁出的 并且被修改了
+		//  在我的列表，或 被协作列表   显示  一个 说话的状态图的 图标 
+		boolean 被协作并被修改 =  (   data_list_public.equals(MainActivity.RequestCode.我的列表)
+									|| data_list_public.equals(MainActivity.RequestCode.被协作列表) 
+								) 
+								&& dataList.has_commits .equals("true") ;
+		
+		
+		// 公开的列表 我的首页 我的书签  别人的列表中 我已经迁出的  
+		if(我迁出的){
 			data_item_push_iv.setVisibility(View.VISIBLE);
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.hell_pencil));
 			data_item_push_iv.setClickable(false);
 			data_item_push_iv.setFocusable(false);
-		}else if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
-				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
-				||data_list_public.equals(MainActivity.RequestCode.我的书签))
-				&& dataList.forked==false  && user.user_id!=current_user().user_id){
+			
+			// 公开的列表 我的首页 我的书签  别人的列表中 没有迁出的
+		}else if(没有迁出的){
 			data_item_push_iv.setVisibility(View.VISIBLE);
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_pencil));
-		}else if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
-				|| data_list_public.equals(MainActivity.RequestCode.我的首页)
-				||data_list_public.equals(MainActivity.RequestCode.我的书签))
-				&& user.user_id == current_user().user_id){
+			
+			// 公开的列表 我的首页 我的书签  中 我的列表
+		}else if(我的列表){
 			data_item_push_iv.setVisibility(View.GONE);
-		}else if(data_list_public.equals(MainActivity.RequestCode.协作列表)){
+			
+			//我协作的列表 分为 原作者 已删除  是否
+		}else if(我协作的列表){
 			if(map.get("user")!=null){
 				//判断是否 是 协作列表 显示原始用户名
 				data_item_push_iv.setVisibility(View.GONE);
@@ -324,11 +328,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				data_item_original_user_name.setText(getResources().getString(R.string.is_no_data));
 			}
 			
-		}else if((data_list_public.equals(MainActivity.RequestCode.我的列表)
-				|| data_list_public.equals(MainActivity.RequestCode.被协作列表) 
-				) && dataList.has_commits .equals("true") ){
+			//  自己的列表中有 被迁出的 并且被修改了
+			//  在我的列表，或 被协作列表
+		}else if(被协作并被修改){
 			data_item_push_iv.setVisibility(View.VISIBLE);
 			data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.sym_action_chat));
+			
+			//	其他的情况不显示
 		}else{
 			data_item_push_iv.setClickable(false);
 			data_item_push_iv.setFocusable(false);
@@ -373,7 +379,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}
 			}.execute();
 		}else{
-			BaseUtils.toast("无法连接网络");
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 		}
 	}
 	//点击title触发事件
@@ -422,16 +428,11 @@ public class DataItemListActivity extends TeamknBaseActivity {
 								}
 								@Override
 								public void on_success(Void result) {
-//								  	data_list_title_tv.post(new Runnable() {
-//										@Override
-//										public void run() {
-										data_list_title_tv.setText(add_data_list_et_str);
-//										}
-//								    });
+									data_list_title_tv.setText(add_data_list_et_str);
 								}
 							}.execute();
 						}else{
-							BaseUtils.toast("无法连接网络");
+							BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 						}
 				}
 			}
@@ -450,69 +451,62 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	private void load_data_item_list(){
 		dataItems = new ArrayList<DataItem>();
-		new TeamknAsyncTask<Void, Void, List<DataItem>>(DataItemListActivity.this,"内容加载中") {
-			@Override
-			public List<DataItem> do_in_background(Void... params)
-					throws Exception {
-					map= HttpApi.DataItem.pull(dataList);
-					is_reading = (Boolean) map.get("read");
-					dataItems = (List<DataItem>) map.get("dataItems");
-					dataList = (DataList) map.get("data_list");
-				return dataItems;
-			}
-			@Override
-			public void on_success(final List<DataItem> dataItems) {
-				//加载收藏的按钮的显示以及触发
-				load_watch_UI();
-				load_push_UI();
-				
-				//判断是否是 要显示 步骤列表
-				if((data_list_public.equals(MainActivity.RequestCode.公开的列表) 
-						|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
-						|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-					)&& dataList.kind.equals(MainActivity.RequestCode.STEP)
-					 && !is_reading){
-					show_step = true;
-				}else{
-					show_step = false;
+		if (BaseUtils.is_wifi_active(this)) {
+			new TeamknAsyncTask<Void, Void, List<DataItem>>(DataItemListActivity.this,"内容加载中") {
+				@SuppressWarnings("unchecked")
+				@Override
+				public List<DataItem> do_in_background(Void... params)
+						throws Exception {
+						map= HttpApi.DataItem.pull(dataList);
+						is_reading = (Boolean) map.get("read");
+						dataItems = (List<DataItem>) map.get("dataItems");
+						dataList = (DataList) map.get("data_list");
+					return dataItems;
 				}
-
-				//判断列表是否有数据
-				if(dataItems.size()==0){
-					tlv.setVisibility(View.GONE);
-					data_item_step_rl.setVisibility(View.GONE);
-					data_item_list_approach_button.setVisibility(View.GONE);
-					list_no_data_show.setVisibility(View.VISIBLE);
-				}else{
-					load_step_or_list(show_step);
-					list_no_data_show.setVisibility(View.GONE);
-					//判断是以那种列表展示形式 列出数据a
-					if(show_step){
-						if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
-							data_item_list_approach_button.setVisibility(View.VISIBLE);
-						}else{
-							data_item_list_approach_button.setVisibility(View.GONE);
-						}
-						data_item_list_approach_button.setText("以清单模式查看");
-						load_step();
-						
-//						ShowHelp.showHelp(ShowHelp.Params.SHOW_NEXT_HELP,this, data_item_next_button, str);
+				@Override
+				public void on_success(final List<DataItem> dataItems) {
+					//加载收藏的按钮的显示以及触发
+					load_watch_UI();
+					load_push_UI();
+	
+					//判断列表是否有数据
+					if(dataItems.size()==0){
+						tlv.setVisibility(View.GONE);
+						data_item_step_rl.setVisibility(View.GONE);
+						data_item_list_approach_button.setVisibility(View.GONE);
+						list_no_data_show.setVisibility(View.VISIBLE);
 					}else{
-						load_list();
-						if((data_list_public.equals(MainActivity.RequestCode.公开的列表)
-								|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
-								|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id) 
-								&& dataList.kind.equals(MainActivity.RequestCode.STEP)){
+						//判断是否是 要显示 步骤列表
+						show_step = (	data_list_public.equals(MainActivity.RequestCode.公开的列表) 
+										|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
+										|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+									)
+									&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+									&& !is_reading ;
+						
+						load_step_or_list(show_step);
+						list_no_data_show.setVisibility(View.GONE);
+						//判断是以那种列表展示形式 列出数据a
+						if(show_step){
+							if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+								data_item_list_approach_button.setVisibility(View.VISIBLE);
+							}else{
+								data_item_list_approach_button.setVisibility(View.GONE);
+							}
+							data_item_list_approach_button.setText("以清单模式查看");
+							load_step();
+						}else{
 							data_item_list_approach_button.setVisibility(View.VISIBLE);
 							data_item_list_approach_button.setText("以向导模式查看");
-						}else{	
-							data_item_list_approach_button.setVisibility(View.GONE);
+							load_list();
 						}
 					}
+					
 				}
-				
-			}
-		}.execute();
+			}.execute();
+		}else{
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+		}
 	}
 	
 	private void load_step(){
@@ -544,7 +538,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		});
 		data_item_next_button.setVisibility(View.VISIBLE);
 		//帮助显示
-		if(MainActivity.RequestCode.SHOW_HELP == MainActivity.RequestCode.SHOW_STEP_HELP){
+		if(current_user().is_show_tip && MainActivity.RequestCode.SHOW_HELP == MainActivity.RequestCode.SHOW_STEP_HELP){
 			ShowHelp.showHelp(ShowHelp.Params.SHOW_NEXT_HELP,this, data_item_next_button, getResources().getString(R.string.show_next_help));
 		}
 	}
@@ -570,10 +564,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 	}
 	private void load_list() {
-		if((data_list_public.equals("true")
-				|| data_list_public.equals("watch") || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id) 
-				&& dataList.kind.equals(MainActivity.RequestCode.STEP)
-				&& dataItems.size()>0){
+		boolean show_approach_but = (	data_list_public.equals(MainActivity.RequestCode.公开的列表) 
+				|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
+				|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+			) 
+			&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+			&& dataItems.size()>0;
+		if(show_approach_but){
 			data_item_list_approach_button.setVisibility(View.VISIBLE);
 			data_item_list_approach_button.setText("以向导模式查看");
 			data_item_list_approach_button.setOnClickListener(new android.view.View.OnClickListener() {
@@ -704,22 +701,26 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 
 	private void insert_into(final int from_server,final String left_position,final String right_position) {
-		new TeamknAsyncTask<Void, Void, Void>() {
-			@Override
-			public Void do_in_background(Void... params) throws Exception {
-				try {
-					if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-						HttpApi.DataItem.order(from_server, left_position,right_position);
+		if (BaseUtils.is_wifi_active(this)) {
+			new TeamknAsyncTask<Void, Void, Void>() {
+				@Override
+				public Void do_in_background(Void... params) throws Exception {
+					try {
+						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
+							HttpApi.DataItem.order(from_server, left_position,right_position);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+					return null;
 				}
-				return null;
-			}
-			@Override
-			public void on_success(Void result) {	
-			}
-		}.execute();
+				@Override
+				public void on_success(Void result) {	
+				}
+			}.execute();
+		}else{
+			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+		}
 	}
 
 	class CreateContextMenu implements OnClickListener {
@@ -774,8 +775,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				break;
 			case 2:// 编辑当前子项
 				final DataItem dataItem2 = dataItems.get(from_id);
-				Toast.makeText(DataItemListActivity.this, dataItem2.title,
-						Toast.LENGTH_SHORT).show();
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						DataItemListActivity.this);
@@ -820,7 +819,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 											}
 										}.execute();
 									}else{
-										BaseUtils.toast("无法连接网络");
+										BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 									}
 								}
 							}
@@ -862,7 +861,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 										}
 									}.execute();
 								}else{
-									BaseUtils.toast("无法连接网络");
+									BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 								}
 							}
 						});
@@ -876,6 +875,7 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}
 	// 钩子，自行重载
 	public void on_go_back() {
+		System.out.println("dataitemlistactivity on_go_back()");
 		if(current_user().is_show_tip){
 			if(MainActivity.RequestCode.SHOW_STEP_HELP==MainActivity.RequestCode.SHOW_HELP){
 				MainActivity.RequestCode.SHOW_NEXT = MainActivity.RequestCode.SHOW_COLLECTION_HELP_CASE ;
@@ -893,5 +893,5 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		intent.putExtra("data_list_public", data_list_public);
      	intent.putExtra("data_list_type", data_list_type);
 		setResult(MainActivity.RequestCode.SHOW_BACK,intent);
-	};
+	}
 }
