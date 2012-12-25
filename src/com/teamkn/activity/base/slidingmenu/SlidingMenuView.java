@@ -48,6 +48,8 @@ public class SlidingMenuView extends LinearLayout {
 	private View left_container;
 	private View right_container;
 	
+	private OnCloseListener on_close_listener = null;
+	
 	public SlidingMenuView(Context context) {
 		super(context);
 	}
@@ -148,6 +150,12 @@ public class SlidingMenuView extends LinearLayout {
 		this.will_shake = will_shake;
 	}
 	
+	public void wenyi_close(final OnCloseListener listener){
+		SlidingMenuView.this.on_close_listener = listener;
+		
+		_smooth_move_to(screen_width - X_OFFSET);
+	}
+	
 	private void _smooth_move_to(final int to_left_px){
 		int dx = to_left_px - pos_x;
 		scroller.startScroll(pos_x, 0, dx, 0, DEFAULT_DURATION);
@@ -164,6 +172,12 @@ public class SlidingMenuView extends LinearLayout {
 		
 		if (this.will_shake) {
 			_shake_phone(20);
+		}
+		
+		// 为了实现 activity 切换效果而写的逻辑，不太好，需要重构		
+		if (null != this.on_close_listener) {
+			this.on_close_listener.on_close();
+			this.on_close_listener = null;
 		}
 	}
 	
@@ -288,6 +302,14 @@ public class SlidingMenuView extends LinearLayout {
 		}
 
 		return is_dragging;
+	}
+	
+	private void set_on_close_listener(OnCloseListener listener) {
+		this.on_close_listener = listener;
+	}
+	
+	public interface OnCloseListener {
+		public void on_close();
 	}
 	
 }

@@ -83,7 +83,9 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		return content_view;
 	}
 
-	private void load_list(){	
+	private void load_list(){
+		final SlidingMenuView sliding_menu = (SlidingMenuView) findViewById(R.id.content_container);
+		
 		ListView list_menu_view = (ListView) findViewById(R.id.list_menu_view); // 包含菜单项的列表
 		ArrayList<Map<String, Object>> list = ArrayListMenu.getData();
 		MenuListAdapter adapter = new MenuListAdapter(this);
@@ -97,32 +99,59 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long position) {
 				switch (arg2) {
 				case 0: //我的首页  follow  的首页
-					Intent follow_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
-					follow_intent.putExtra("data_list_public", MainActivity.RequestCode.我的首页);
-					follow_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(follow_intent);
+					sliding_menu.wenyi_close(new SlidingMenuView.OnCloseListener() {
+						@Override
+						public void on_close() {
+							Intent follow_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
+							follow_intent.putExtra("data_list_public", MainActivity.RequestCode.我的首页);
+							follow_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+							startActivity(follow_intent);
+							overridePendingTransition(R.anim.xxxx_enter, R.anim.xxxx_exit);
+						}
+					});
 					break;
 				case 1: // 我的列表
-					Intent my_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
-					my_intent.putExtra("data_list_public", MainActivity.RequestCode.我的列表);
-					my_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(my_intent);
+					sliding_menu.wenyi_close(new SlidingMenuView.OnCloseListener() {
+						@Override
+						public void on_close() {
+							Intent my_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
+							my_intent.putExtra("data_list_public", MainActivity.RequestCode.我的列表);
+							my_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+							startActivity(my_intent);
+							overridePendingTransition(R.anim.xxxx_enter, R.anim.xxxx_exit);
+						}
+					});
 					break;
 				case 2:  // 公共的列表  
-					Intent public_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
-					public_intent.putExtra("data_list_public", MainActivity.RequestCode.公开的列表);
-					public_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
-					startActivity(public_intent);
+					sliding_menu.wenyi_close(new SlidingMenuView.OnCloseListener() {
+						@Override
+						public void on_close() {
+							Intent public_intent = new Intent(TeamknSlidingMenuActivity.this,MainActivity.class);
+							public_intent.putExtra("data_list_public", MainActivity.RequestCode.公开的列表);
+							public_intent.putExtra("data_list_type", MainActivity.RequestCode.ALL);
+							startActivity(public_intent);
+							overridePendingTransition(R.anim.xxxx_enter, R.anim.xxxx_exit);
+						}
+					});
 					break;
 				case 3:  // 社交管理
-//					Intent social_intent = new Intent(TeamknSlidingMenuActivity.this,SocialCircleActivity.class);
-//					startActivity(social_intent);
-					open_activity(SocialCircleActivity.class);
+					sliding_menu.wenyi_close(new SlidingMenuView.OnCloseListener() {
+						@Override
+						public void on_close() {
+							open_activity(SocialCircleActivity.class);
+							overridePendingTransition(R.anim.xxxx_enter, R.anim.xxxx_exit);
+						}
+					});
 					break;
 				case 4:  // 设置选项
-//					open_activity(TeamknSettingActivity.class);
-					Intent setting_intent = new Intent(TeamknSlidingMenuActivity.this,TeamknSettingActivity.class);
-					startActivity(setting_intent);
+					sliding_menu.wenyi_close(new SlidingMenuView.OnCloseListener() {
+						@Override
+						public void on_close() {
+							Intent setting_intent = new Intent(TeamknSlidingMenuActivity.this,TeamknSettingActivity.class);
+							startActivity(setting_intent);
+							overridePendingTransition(R.anim.xxxx_enter, R.anim.xxxx_exit);
+						}
+					});
 					break;
 				case 5:  // 退出应用
 					click_exit_teamkn_activity();
