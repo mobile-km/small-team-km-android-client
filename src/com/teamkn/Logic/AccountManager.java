@@ -1,5 +1,6 @@
 package com.teamkn.Logic;
 
+import com.teamkn.base.http.CookieHelper;
 import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.AccountUser;
@@ -27,26 +28,29 @@ public class AccountManager {
     }
 
     public static CookieStore get_cookie_store() {
-        BasicCookieStore cookie_store = new BasicCookieStore();
-        String cookies_string = current_user().cookies;
-        try {
-            if (!BaseUtils.is_str_blank(cookies_string)) {
-                JSONArray json_arr = new JSONArray(cookies_string);
-                for (int i = 0; i < json_arr.length(); i++) {
-                    JSONObject json = (JSONObject) json_arr.get(i);
-                    String name = (String) json.get("name");
-                    String value = (String) json.get("value");
-                    String domain = (String) json.get("domain");
-                    String path = (String) json.get("path");
-                    BasicClientCookie cookie = new BasicClientCookie(name, value);
-                    cookie.setDomain(domain);
-                    cookie.setPath(path);
-                    cookie_store.addCookie(cookie);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    	String cookies_string = current_user().cookies;
+//    	BasicCookieStore cookie_store = new BasicCookieStore();
+    	BasicCookieStore cookie_store = (BasicCookieStore) CookieHelper.parse_string_to_cookie_store(cookies_string);
+       
+//        try {
+//            if (!BaseUtils.is_str_blank(cookies_string)) {
+//                JSONArray json_arr = new JSONArray(cookies_string);
+//                for (int i = 0; i < json_arr.length(); i++) {
+//                    JSONObject json = (JSONObject) json_arr.get(i);
+//                    String name = (String) json.get("name");
+//                    String value = (String) json.get("value");
+//                    String domain = (String) json.get("domain");
+//                    String path = (String) json.get("path");
+//                    BasicClientCookie cookie = new BasicClientCookie(name, value);
+//                    cookie.setDomain(domain);
+//                    cookie.setPath(path);
+//                    cookie_store.addCookie(cookie);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        
         return cookie_store;
     }
 
