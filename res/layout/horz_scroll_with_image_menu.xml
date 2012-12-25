@@ -36,10 +36,24 @@
             android:orientation="horizontal"
             android:padding="0px" >
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:background="#660000ff" />
+                android:background="#000000ff" >
+
+                <RelativeLayout
+                    android:layout_width="15dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/tkn_nav_right_shadow" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/content_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tkn_nav_bg" />
         </LinearLayout>
         
     </com.teamkn.activity.base.slidingmenu.MyHorizontalScrollView>

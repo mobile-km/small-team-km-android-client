@@ -17,7 +17,7 @@ public class SearchAdapter extends TeamknBaseAdapter<String>{
 
     @Override
     public View inflate_view() {
-        return inflate(R.layout.tknlist_search_item, null);
+        return inflate(R.layout.tkn_search_list_item, null);
     }
 
     @Override

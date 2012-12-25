@@ -18,6 +18,7 @@
              android:onClick="click_data_item_save_iv"
              android:text="@string/save_note_bn"
              style="@style/head_bar_button_right"
+             android:background="@drawable/tkn_top_bar_text_btn_selector"
         />
     </RelativeLayout>
     <TableRow

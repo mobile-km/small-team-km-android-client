@@ -67,10 +67,6 @@ public class UserManagerActivity extends TeamknBaseActivity{
     	.setNegativeButton("取消", null)
     	.show();
     }
-    public void click_set_user_name(View view){
-    	Intent intent = new Intent(UserManagerActivity.this,UserMsgNameSetActivity.class);
-    	startActivity(intent);
-    }
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

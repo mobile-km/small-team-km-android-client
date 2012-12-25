@@ -20,7 +20,6 @@ import org.json.JSONObject;
 
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.RegisterActivity;
-import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
 import com.teamkn.base.http.PostParamFile;
 import com.teamkn.base.http.PostParamText;
 import com.teamkn.base.http.TeamknDeleteRequest;
@@ -336,7 +335,6 @@ public class HttpApi {
             
             @Override
             public Boolean on_unprocessable_entity(String responst_text) {
-            	UserMsgNameSetActivity.requestError = responst_text;
 				return false;	
             };
         }.go();

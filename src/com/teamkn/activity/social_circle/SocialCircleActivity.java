@@ -38,7 +38,6 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.usermsg.SearchUserActivity;
 import com.teamkn.activity.usermsg.UserManagerActivity;
-import com.teamkn.activity.usermsg.UserMsgNameSetActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.CameraLogic;
@@ -121,10 +120,6 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
     	.setNegativeButton("取消", null)
     	.show();
     }
-    public void click_set_user_name(View view){
-    	Intent intent = new Intent(SocialCircleActivity.this,UserMsgNameSetActivity.class);
-    	startActivity(intent);
-    } 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
