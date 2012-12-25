@@ -19,11 +19,7 @@ public class TeamknSettingActivity extends TeamknSlidingMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));
-
-        setView(); 		
+        setView();
 	}
     private  void setView(){
 		show_view = init_sliding_menu(R.layout.setting);

@@ -122,10 +122,7 @@ public class SocialCircleActivity extends TeamknSlidingMenuActivity{
     }
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.horz_scroll_with_image_menu);
-		inflater= LayoutInflater.from(this);
-        setContentView(inflater.inflate(R.layout.horz_scroll_with_image_menu, null));        
+		super.onCreate(savedInstanceState);  
         setView(); 		
 	}
 	private  void setView(){

@@ -8,3 +8,4 @@ out
 *.iml
 R.java
 .DS_*
+gen/com/teamkn/R.java
