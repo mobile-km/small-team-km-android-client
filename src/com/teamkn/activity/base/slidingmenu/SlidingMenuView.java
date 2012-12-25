@@ -28,12 +28,18 @@ public class SlidingMenuView extends LinearLayout {
 	private int screen_width;
 	private int screen_height;
 	
-	private int CLOSE_X = 0;
-	private int OPEN_X;
+	private static int X_OFFSET = BaseUtils.dp_to_px(10);
+	private static int SIDE_OFFSET = BaseUtils.dp_to_px(50);
+	
+	private int CLOSE_X = - X_OFFSET;
+	private int LEFT_OPEN_X;
+	private int RIGHT_OPEN_X;
 	
 	private int pos_x;
 	
-	private boolean is_open = false;
+	private boolean left_open = false;
+	private boolean right_open = false;
+	
 	private boolean will_shake = false;
 	
 	private boolean is_dragging = false;
@@ -65,8 +71,8 @@ public class SlidingMenuView extends LinearLayout {
 		this.screen_width  = display.getWidth();
 		this.screen_height = display.getHeight();
 		
-		this.CLOSE_X       = this.CLOSE_X - BaseUtils.dp_to_px(10);
-		this.OPEN_X        = this.screen_width - BaseUtils.dp_to_px(50) - BaseUtils.dp_to_px(10);
+		this.LEFT_OPEN_X   =   this.screen_width - SIDE_OFFSET - X_OFFSET;
+		this.RIGHT_OPEN_X  = - this.screen_width + SIDE_OFFSET - X_OFFSET;
 	}
 	
 	private void _init_container_size() {
@@ -85,23 +91,40 @@ public class SlidingMenuView extends LinearLayout {
 		this.pos_x = px;
 	}
 	
-	public void toggle() {
-		if (is_open) {
+	public void left_toggle() {
+		if (left_open) {
 			close(true);
 		} else {
-			open(true);
+			left_open(true);
 		}
 	}
 	
-	public void open(boolean will_shake) {
-		_smooth_move_to(OPEN_X);
-		this.is_open = true;
+	public void left_open(boolean will_shake) {
+		_smooth_move_to(LEFT_OPEN_X);
+		this.left_open = true;
+		this.right_open = false;
 		this.will_shake = will_shake;
 	}
-
+	
+	public void right_toggle() {
+		if (left_open) {
+			close(true);
+		} else {
+			right_open(true);
+		}
+	}
+	
+	public void right_open(boolean will_shake) {
+		_smooth_move_to(RIGHT_OPEN_X);
+		this.left_open = false;
+		this.right_open = true;
+		this.will_shake = will_shake;
+	}
+	
 	public void close(boolean will_shake) {
 		_smooth_move_to(CLOSE_X);
-		this.is_open = false;
+		this.left_open = false;
+		this.right_open = false;
 		this.will_shake = will_shake;
 	}
 	
@@ -143,8 +166,8 @@ public class SlidingMenuView extends LinearLayout {
 			int dx = (int) (x - last_drag_x);
 			last_drag_x = x;
 			int new_pos_x = pos_x + dx;
-			if (new_pos_x < CLOSE_X) new_pos_x = CLOSE_X;
-			if (new_pos_x > OPEN_X ) new_pos_x = OPEN_X;
+			if (new_pos_x < RIGHT_OPEN_X) new_pos_x = RIGHT_OPEN_X;
+			if (new_pos_x > LEFT_OPEN_X ) new_pos_x = LEFT_OPEN_X;
 			
 			_set_x(new_pos_x);
 			break;
@@ -159,24 +182,51 @@ public class SlidingMenuView extends LinearLayout {
 		// 触摸的持续时间
 		boolean is_short_touch = (evt.getEventTime() - evt.getDownTime()) < 300;		
 		
-		if (is_open) {
-			boolean is_over_boundary = pos_x < screen_width * 2 / 3;
-			boolean is_quick_touch = pos_x < OPEN_X && is_short_touch;
+		if (left_open && !right_open) {
+			System.out.println("touch 情况1");
+			boolean is_over_boundary = pos_x < (screen_width * 2 / 3) - X_OFFSET;
+			boolean is_quick_touch   = pos_x < LEFT_OPEN_X && is_short_touch;
 			
 			if (is_over_boundary || is_quick_touch) {
 				close(true);
 			} else {
-				open(false); // 此时应该不振动
+				left_open(false); // 此时应该不振动
 			}
-		} else {
-			boolean is_over_boundary = pos_x > screen_width / 3;
-			boolean is_quick_touch = pos_x > 0 && is_short_touch;
+			
+			return;
+		} 
+		
+		if (!left_open && right_open) {
+			boolean is_over_boundary = pos_x > - screen_width * 2 / 3 - X_OFFSET;
+			boolean is_quick_touch = pos_x > RIGHT_OPEN_X && is_short_touch;
 			
 			if (is_over_boundary || is_quick_touch) {
-				open(true);
+				close(true);
 			} else {
-				close(false); // 此时应该不振动
+				right_open(false); // 此时应该不振动
 			}
+			
+			return;
+		}
+		
+		if (!left_open && !right_open) {
+			boolean is_over_left_boundary  = pos_x > screen_width / 3 - X_OFFSET;
+			boolean is_over_right_boundary = pos_x < - screen_width / 3 - X_OFFSET;
+			
+			boolean is_left_quick_touch  = pos_x > 0 && is_short_touch;
+			boolean is_right_quick_touch = pos_x < 0 && is_short_touch;
+
+			if (is_over_left_boundary || is_left_quick_touch) {
+				left_open(true);
+				return;
+			} 
+			
+			if (is_over_right_boundary || is_right_quick_touch) {
+				right_open(true);
+				return;
+			}
+			
+			close(false); // 此时应该不振动
 		}
 	}
 	
@@ -205,7 +255,7 @@ public class SlidingMenuView extends LinearLayout {
 			is_dragging = !scroller.isFinished();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			final int x_diff = (int) Math.abs(x - last_drag_x);
+			int x_diff = (int) Math.abs(x - last_drag_x);
 			if (x_diff > TOUCH_SLOP) {
 				is_dragging = true;
 				last_drag_x = x;

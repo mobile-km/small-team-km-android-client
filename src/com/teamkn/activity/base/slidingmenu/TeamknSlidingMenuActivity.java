@@ -25,7 +25,7 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						sliding_menu.toggle();
+						sliding_menu.left_toggle();
 					}
 				});
 		
