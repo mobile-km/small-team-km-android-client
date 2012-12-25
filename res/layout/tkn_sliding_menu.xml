@@ -19,7 +19,8 @@
         android:id="@+id/content_container"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_gravity="left" >
 
         <LinearLayout
             android:layout_width="10dp"
