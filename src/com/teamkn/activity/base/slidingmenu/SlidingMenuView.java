@@ -45,6 +45,9 @@ public class SlidingMenuView extends LinearLayout {
 	private boolean is_dragging = false;
 	private float last_drag_x;
 	
+	private View left_container;
+	private View right_container;
+	
 	public SlidingMenuView(Context context) {
 		super(context);
 	}
@@ -62,6 +65,13 @@ public class SlidingMenuView extends LinearLayout {
 		_set_x(this.CLOSE_X);
 		
 		this.center_view.addView(content_view);
+	}
+	
+	public void init2(View content_view, View left_container, View right_container) {
+		this.init(content_view);
+		
+		this.left_container = left_container;
+		this.right_container = right_container;
 	}
 	
 	private void _compute_screen_size() {
@@ -89,6 +99,16 @@ public class SlidingMenuView extends LinearLayout {
 		lp.setMargins(px, 0, 0, 0);
 		setLayoutParams(lp);
 		this.pos_x = px;
+		
+		if (null == left_container || null == right_container) return;
+		
+		if (px > 0) {
+			left_container.setVisibility(View.VISIBLE);
+			right_container.setVisibility(View.GONE);
+		} else {
+			left_container.setVisibility(View.GONE);
+			right_container.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	public void left_toggle() {
@@ -107,7 +127,7 @@ public class SlidingMenuView extends LinearLayout {
 	}
 	
 	public void right_toggle() {
-		if (left_open) {
+		if (right_open) {
 			close(true);
 		} else {
 			right_open(true);

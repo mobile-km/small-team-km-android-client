@@ -14,7 +14,13 @@
             android:layout_height="fill_parent"
             android:background="@drawable/tkn_nav_bg" />
     </RelativeLayout>
-
+    
+    <RelativeLayout
+        android:id="@+id/right_container"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        />
+        
     <com.teamkn.activity.base.slidingmenu.SlidingMenuView
         android:id="@+id/content_container"
         android:layout_width="wrap_content"

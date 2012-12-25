@@ -136,7 +136,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		
 	}
 	private  void setView(){
-        content_view = init_sliding_menu(R.layout.base_main);
+        content_view = init_sliding_menu(R.layout.base_main,R.layout.data_list_create);
         
         // 加载data_listview
      	InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
@@ -375,11 +375,6 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 				load_data_list_or_watch(RequestCode.data_list_public);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	public void click_add_data_list_iv(View view) {
-			Intent intent = new Intent(MainActivity.this,CreateDataListActivity.class);
-			startActivityForResult(intent, RequestCode.CREATE_DATA_LIST);
 	}
 
 	public void click_collection_button(View view) {

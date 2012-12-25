@@ -54,8 +54,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:background="@drawable/tkn_top_bar_add_btn_selector"
-            android:onClick="click_add_data_list_iv" />
+            android:background="@drawable/tkn_top_bar_add_btn_selector" />
     </RelativeLayout>
 
     <RelativeLayout
