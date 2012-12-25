@@ -16,11 +16,28 @@
     </RelativeLayout>
 
     <com.teamkn.activity.base.slidingmenu.SlidingMenuView
-            android:id="@+id/content_container"
-            android:layout_width="50dp" 
+        android:id="@+id/content_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="10dp"
             android:layout_height="fill_parent"
-            android:background="@color/white" />
-    
+            android:background="@drawable/tkn_nav_left_shadow" />
+
+        <LinearLayout
+            android:id="@+id/content_container_center"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/tkn_nav_right_shadow" />
+    </com.teamkn.activity.base.slidingmenu.SlidingMenuView>
+
     <!-- 宽度值将会被程序修改 -->
 
 </FrameLayout>

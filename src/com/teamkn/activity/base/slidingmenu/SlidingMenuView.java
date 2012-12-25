@@ -8,11 +8,13 @@ import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 
+import com.teamkn.R;
 import com.teamkn.base.utils.BaseUtils;
 
 public class SlidingMenuView extends LinearLayout {
@@ -20,6 +22,7 @@ public class SlidingMenuView extends LinearLayout {
 	private static final int DEFAULT_DURATION = 250;
 	private static final int TOUCH_SLOP = 16;
 	
+	private ViewGroup center_view;
 	private Scroller scroller;
 	
 	private int screen_width;
@@ -46,11 +49,13 @@ public class SlidingMenuView extends LinearLayout {
 	
 	public void init(View content_view) {
 		this.scroller = new Scroller(getContext());
+		this.center_view = (ViewGroup) findViewById(R.id.content_container_center);
+		
 		_compute_screen_size();
 		_init_container_size();
-		_set_x(0);
+		_set_x(this.CLOSE_X);
 		
-		addView(content_view);
+		this.center_view.addView(content_view);
 	}
 	
 	private void _compute_screen_size() {
@@ -59,14 +64,16 @@ public class SlidingMenuView extends LinearLayout {
 		
 		this.screen_width  = display.getWidth();
 		this.screen_height = display.getHeight();
-		this.OPEN_X        = this.screen_width - BaseUtils.dp_to_px(50);
+		
+		this.CLOSE_X       = this.CLOSE_X - BaseUtils.dp_to_px(10);
+		this.OPEN_X        = this.screen_width - BaseUtils.dp_to_px(50) - BaseUtils.dp_to_px(10);
 	}
 	
 	private void _init_container_size() {
-		FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
+		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) center_view.getLayoutParams();
 		lp.height = screen_height;
 		lp.width  = screen_width;
-		setLayoutParams(lp);
+		center_view.setLayoutParams(lp);
 	}
 	
 	private void _set_x(int px){
