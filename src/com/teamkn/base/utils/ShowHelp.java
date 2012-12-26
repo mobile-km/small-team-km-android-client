@@ -24,7 +24,6 @@ import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.MainActivity;
 import com.teamkn.activity.base.MainActivity.RequestCode;
 import com.teamkn.activity.dataitem.DataItemListActivity;
-import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 
@@ -303,8 +302,7 @@ public class ShowHelp {
 			((Activity) context).startActivityForResult(intent, RequestCode.SHOW_BACK);
 			break;
 		case Params.SHOW_CREATE_HELP:
-			Intent create_intent = new Intent(context,CreateDataListActivity.class);
-			((Activity) context).startActivityForResult(create_intent, RequestCode.SHOW_BACK);
+			// TODO 创建列表的提示
 			break;
 		case Params.SHOW_NEXT_HELP:
 			MainActivity.RequestCode.SHOW_HELP = MainActivity.RequestCode.SHOW_NOT_HELP;

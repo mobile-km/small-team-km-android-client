@@ -11,13 +11,14 @@
 	           style="@style/head_bar_text_center"
 	           android:text="@string/tkndata_list_create_title"
         />
+
         <Button
-             android:id="@+id/click_data_list_save_ib"
-             android:onClick="click_data_list_save_iv"
+             android:id="@+id/data_list_save_bn"
              android:text="@string/save_note_bn"
              style="@style/head_bar_button_right"
              android:background="@drawable/tkn_top_bar_text_btn_selector"
         />
+
     </RelativeLayout>
     <TableRow
         android:layout_below="@+id/head"

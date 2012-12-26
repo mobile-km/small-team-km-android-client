@@ -3,10 +3,14 @@ package com.teamkn.activity.base.slidingmenu;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.lucene.util.SetOnce;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -62,7 +66,7 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		View left_container = findViewById(R.id.menu);
 		
 		sliding_menu.init2(content_view, left_container, right_container);
-
+		
 		// 2 获取按钮并注册事件
 		content_view.findViewById(R.id.iv_foot_view).setOnClickListener(
 				new OnClickListener() {
