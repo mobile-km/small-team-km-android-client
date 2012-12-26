@@ -91,6 +91,8 @@ public class CreateDataListRightSliding extends RightSlidingContainer {
 					DataListAdapter adapter = ((MainActivity)context).dataListAdapter;
 					adapter.add_item(create_dataList);
 					adapter.notifyDataSetChanged();
+					save_bn.setClickable(true);
+					create_data_list_et.setText("");
 				}
 			}.execute();
 			
