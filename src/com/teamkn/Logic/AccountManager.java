@@ -1,16 +1,12 @@
 package com.teamkn.Logic;
 
-import com.teamkn.base.http.CookieHelper;
-import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
-import com.teamkn.base.utils.BaseUtils;
-import com.teamkn.model.AccountUser;
-import com.teamkn.model.database.AccountUserDBHelper;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import com.teamkn.base.http.CookieHelper;
+import com.teamkn.base.http.TeamknHttpRequest.AuthenticateException;
+import com.teamkn.model.AccountUser;
+import com.teamkn.model.database.AccountUserDBHelper;
 
 public class AccountManager {
     public static void login(String cookies, String info) throws Exception {

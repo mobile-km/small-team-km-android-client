@@ -304,6 +304,7 @@ public class SlidingMenuView extends LinearLayout {
 		return is_dragging;
 	}
 	
+	@SuppressWarnings("unused")
 	private void set_on_close_listener(OnCloseListener listener) {
 		this.on_close_listener = listener;
 	}

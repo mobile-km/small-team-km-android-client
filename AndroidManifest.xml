@@ -38,10 +38,8 @@
 	<activity android:name=".activity.search.SearchActivity"></activity>
 	
 	<activity android:name=".activity.datalist.CreateDataListActivity" />
-	<activity android:name=".activity.datalist.SearchDataActivity"  android:windowSoftInputMode="stateHidden"/>
 	<activity android:name=".activity.dataitem.DataItemListActivity"  android:windowSoftInputMode="adjustResize"/>
 	<activity android:name=".activity.dataitem.CreateDataItemActivity" />
-	<activity android:name=".activity.dataitem.DataItemStepHelpActivity"/>
 	
 	<activity android:name=".activity.dataitem.pull.DataItemPullListActivity"></activity>
 	<activity android:name=".activity.dataitem.pull.DataItemPullUpdateActivity"></activity>
@@ -55,7 +53,6 @@
 	<!-- 用户信息 -->
 	<activity android:name=".activity.usermsg.UserManagerActivity"></activity>
     <activity android:name=".activity.usermsg.UserMsgActivity"></activity>
-    <activity android:name=".activity.usermsg.UserMsgNameSetActivity"></activity>
    
   </application>
 </manifest>

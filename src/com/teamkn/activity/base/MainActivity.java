@@ -43,7 +43,6 @@ import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
-import com.teamkn.activity.datalist.CreateDataListActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.ShowHelp;
