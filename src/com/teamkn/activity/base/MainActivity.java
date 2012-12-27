@@ -41,6 +41,7 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.base.slidingmenu.CreateDataListRightSliding;
 import com.teamkn.activity.base.slidingmenu.TeamknSlidingMenuActivity;
 import com.teamkn.activity.dataitem.DataItemListActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
@@ -100,7 +101,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
     TextView user_name_tv;
 	// data_listView_show 数据
 	ListView data_list;
-	DataListAdapter dataListAdapter;
+	public DataListAdapter dataListAdapter;
 	public static List<DataList> datalists;
 	List<DataList> record_datalists;
 	/*
@@ -137,6 +138,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 	private  void setView(){
         content_view = init_sliding_menu(R.layout.base_main,R.layout.data_list_create);
         
+        new CreateDataListRightSliding(this, R.layout.data_list_create).on_create();
         // 加载data_listview
      	InitImageView(); //初始化 cursor中的收集，步骤，所有 滑动标
      	load_data_list_or_watch(RequestCode.data_list_public);

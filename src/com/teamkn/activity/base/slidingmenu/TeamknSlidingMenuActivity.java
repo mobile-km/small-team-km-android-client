@@ -62,7 +62,7 @@ public class TeamknSlidingMenuActivity extends TeamknBaseActivity {
 		View left_container = findViewById(R.id.menu);
 		
 		sliding_menu.init2(content_view, left_container, right_container);
-
+		
 		// 2 获取按钮并注册事件
 		content_view.findViewById(R.id.iv_foot_view).setOnClickListener(
 				new OnClickListener() {
