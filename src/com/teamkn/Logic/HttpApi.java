@@ -28,6 +28,7 @@ import com.teamkn.base.http.TeamknHttpRequest;
 import com.teamkn.base.http.TeamknPostRequest;
 import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.MusicInfo;
 import com.teamkn.model.User;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.model.database.UserDBHelper;
@@ -136,6 +137,11 @@ public class HttpApi {
     public static final String 修改_data_item    =  "/api/data_items/";
     public static final String 删除_data_item    =  "/api/data_items/";
     public static final String 排序_data_item    =  "/api/data_items/";
+    
+    
+    public static final String 搜索音乐 = "/api/music_info/search";
+    
+    
     // LoginActivity
     public static VersionCheck get_version(String now_version) throws Exception{
     	return new TeamknGetRequest<VersionCheck>(
@@ -1157,6 +1163,23 @@ public class HttpApi {
               }
         }.go();
     }
+   	
+   	
+   	
+   	public static ArrayList<MusicInfo> search_music(String query) throws Exception {
+   		return new TeamknGetRequest<ArrayList<MusicInfo>>(搜索音乐 + "?query=" + query) {
+
+			@Override
+			public ArrayList<MusicInfo> on_success(String response_text) throws Exception {
+				return MusicInfo.build_by_json(response_text);
+			}
+		}.go();
+   	}
+   	
+   	
+   	
+   	
+   	
    	
     }
     
