@@ -139,7 +139,7 @@ public class HttpApi {
     public static final String 排序_data_item    =  "/api/data_items/";
     
     
-    public static final String 搜索音乐 = "/api/music_info/search";
+    public static final String 搜索音乐 = "/api/music_infos/search";
     
     
     // LoginActivity
@@ -1167,7 +1167,7 @@ public class HttpApi {
    	
    	
    	public static ArrayList<MusicInfo> search_music(String query) throws Exception {
-   		return new TeamknGetRequest<ArrayList<MusicInfo>>(搜索音乐 + "?query=" + query) {
+   		return new TeamknGetRequest<ArrayList<MusicInfo>>(搜索音乐, new BasicNameValuePair("query", query)) {
 
 			@Override
 			public ArrayList<MusicInfo> on_success(String response_text) throws Exception {
