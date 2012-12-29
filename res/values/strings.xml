@@ -46,6 +46,8 @@
     <string name="tknlist_kind_all_list">所有</string>
     <string name="tknlist_kind_step_list">步骤列表</string>
     <string name="tknlist_kind_collection_list">收集列表</string>
+    <!-- 二维码 -->
+    <string name="tkn_qrcode_but">扫描二维码/条形码</string>
     <!-- SEARCH -->
     <string name="search_title">搜索</string>
     <string name="search_list">搜索列表</string>

@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
+import com.teamkn.activity.qrcode.CaptureActivity;
+import com.teamkn.activity.qrcode_result.QRcodeResultActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -132,5 +134,11 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 			return true;
 		}
 		return false;
+	}
+	public void click_qrcode_btn(View view){
+//		open_activity(CaptureActivity.class);
+		Intent intent = new Intent(CreateDataItemActivity.this,CaptureActivity.class);
+		CaptureActivity.result_activity = CaptureActivity.class;
+		startActivity(intent);
 	}
 }

@@ -21,8 +21,16 @@
              android:background="@drawable/tkn_top_bar_text_btn_selector"
         />
     </RelativeLayout>
-    <TableRow
+    <Button 
+        android:id="@+id/qrcode_but"
         android:layout_below="@+id/head"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:onClick="click_qrcode_btn"
+        android:text="@string/tkn_qrcode_but"/>
+    <TableRow
+        android:layout_below="@+id/qrcode_but"
         android:id="@+id/radio"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">

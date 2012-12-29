@@ -11,13 +11,20 @@
   <uses-permission android:name="android.permission.READ_CONTACTS" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.VIBRATE" />
+  
+     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+	<uses-feature android:name="android.hardware.camera" />
+	<uses-feature android:name="android.hardware.camera.autofocus" />
+	<uses-permission android:name="android.permission.FLASHLIGHT"/>
 	
+		<!-- android:configChanges="orientation|keyboardHidden" -->
 	<application 
 		android:theme="@style/Theme.teamkn"
 		android:icon="@drawable/icon" 
 		android:label="@string/app_name"
-		android:name=".application.TeamknApplication"
+		android:name="com.teamkn.application.TeamknApplication"
 		android:configChanges="orientation|keyboardHidden"
+		android:screenOrientation="portrait"
 	>
 	<!-- base -->
 	<activity android:name=".activity.base.LoadingActivity" android:label="@string/app_name">
@@ -53,5 +60,14 @@
 	<activity android:name=".activity.usermsg.UserManagerActivity"></activity>
     <activity android:name=".activity.usermsg.UserMsgActivity"></activity>
    
+    <!-- 二维码 -->
+    <activity 
+        android:name=".activity.qrcode.CaptureActivity"
+        android:screenOrientation="landscape" 
+		android:configChanges="orientation|keyboardHidden"
+		android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+		android:windowSoftInputMode="stateAlwaysHidden"
+     />
+    <activity android:name=".activity.qrcode_result.QRcodeResultActivity" android:screenOrientation="portrait" />
   </application>
 </manifest>

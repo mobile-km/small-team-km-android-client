@@ -11,6 +11,20 @@
     <color name="user_info_panel_bgc">#E8E8E8</color>
     <!-- 联系人列表头 -->
     <color name="contact_user_header_bgc">#C0C0C0</color>
+    <!-- 扫描码 -->
+    <color name="viewfinder_frame">#ff000000</color>
+	<color name="contents_text">#ff000000</color>
+	<color name="encode_view">#ffffffff</color>
+	<color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+	<color name="result_minor_text">#ffc0c0c0</color>
+	<color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
+	<color name="result_text">#ffffffff</color>
+	<color name="result_view">#b0000000</color>
+	<color name="status_text">#ffffffff</color>
+	<color name="transparent">#00000000</color>
+	<color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+	<color name="viewfinder_mask">#60000000</color>
+	
     
 <color name="pink">#ffc0cb</color><!--粉红色 -->
 <color name="lightpink">#ffb6c1</color><!--亮粉红色 -->
