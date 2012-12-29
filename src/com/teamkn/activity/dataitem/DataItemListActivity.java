@@ -613,6 +613,16 @@ public class DataItemListActivity extends TeamknBaseActivity {
 						.findViewById(R.id.data_item_info_tv);
 				final DataItem item = (DataItem) info_tv
 						.getTag(R.id.tag_note_uuid);
+				
+				
+				// 如果是音乐类型，则跳转到音乐显示界面
+				if (item.kind.equals(DataItem.Kind.MUSIC)) {
+					Intent intent = new Intent(DataItemListActivity.this, MusicShowActivity.class);
+					startActivityForResult(intent, RequestCode.BACK);
+					return;
+				}
+				
+				
 				Intent intent = new Intent(DataItemListActivity.this,CreateDataItemActivity.class);
 				intent.putExtra("data_item",item);
 				intent.putExtra("data_list",dataList);

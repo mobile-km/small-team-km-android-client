@@ -20,6 +20,7 @@ public class DataItem extends BaseModel implements Serializable{
         public static final String TEXT = "TEXT";
         public static final String IMAGE = "IMAGE";
         public static final String URL = "URL";
+        public static final String MUSIC = "MUSIC";
     }
 	
 	  public int id = -1;	 
