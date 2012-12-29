@@ -37,6 +37,7 @@ public class DataItem extends BaseModel implements Serializable{
 	  int next_commits_count;  // 剩余还有几项
 	  String operation;   // # CREATE UPDATE REMOVE ORDER
 	  boolean conflict;  //  是否有冲突
+	  public MusicInfo music_info;
 	  
 	  public static DataItem NIL_DATA_ITEM = new DataItem();
 	  
@@ -127,7 +128,7 @@ public class DataItem extends BaseModel implements Serializable{
 	}
 	public DataItem(int id, String title, String content, String url,
 			String kind, int server_data_list_id, String position,
-			int server_data_item_id, String seed) {
+			int server_data_item_id, String seed, MusicInfo music_info) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -138,6 +139,8 @@ public class DataItem extends BaseModel implements Serializable{
 		this.position = position;
 		this.server_data_item_id = server_data_item_id;
 		this.seed = seed;
+		
+		this.music_info = music_info;
 	}
 	public static File data_item_image_file(String uuid) {
         File dir = new File(FileDirs.TEAMKN_DATA_ITEM_DIR, uuid);

@@ -80,10 +80,11 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 									dataItem.setContent(content_str);	
 									back = HttpApi.DataItem.update(dataItem); 
 								}else{
+									// TODO 需要修改最后一个参数 music_info
 									DataItem dataitem =
 											new DataItem(-1, title_str, content_str, 
 													     null, DataItem.Kind.TEXT, 
-													dataList.server_data_list_id, null, -1,null);
+													dataList.server_data_list_id, null, -1,null, null);
 									back = HttpApi.DataItem.create(dataitem);  
 								}	
 							} catch (Exception e) {

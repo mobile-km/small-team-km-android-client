@@ -1,14 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            android:id="@+id/head"
+            >
+        <TextView
+               style="@style/head_bar_text_center"
+               android:text="@string/tkndata_list_create_title"
+        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="music show page"
-        tools:context=".MusicShowActivity" />
 
+    </RelativeLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/music_info_page"
+        style="@style/padding_10_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        
+        <TextView
+            android:id="@+id/music_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        
+        <TextView
+            android:id="@+id/album_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        
+        <TextView
+            android:id="@+id/author_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        <ImageView
+            android:id="@+id/cover_src"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+      
+        
+    </LinearLayout>
+    
+     
 </RelativeLayout>

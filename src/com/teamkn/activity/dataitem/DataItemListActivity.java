@@ -618,6 +618,8 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				// 如果是音乐类型，则跳转到音乐显示界面
 				if (item.kind.equals(DataItem.Kind.MUSIC)) {
 					Intent intent = new Intent(DataItemListActivity.this, MusicShowActivity.class);
+					intent.putExtra("data_item",item);
+					intent.putExtra("data_list",dataList);
 					startActivityForResult(intent, RequestCode.BACK);
 					return;
 				}

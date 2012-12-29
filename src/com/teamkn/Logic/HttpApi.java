@@ -936,7 +936,9 @@ public class HttpApi {
     			boolean conflict = json.getBoolean("conflict");
     			String position = json.getString("position");
     			
-    			dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, server_data_list_id, position, -1,seed);
+    			
+    			// TODO 需要修改最后一个参数 music_info
+    			dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, server_data_list_id, position, -1,seed, null);
     			dataItem.setOperation(operation);
     			dataItem.setConflict(conflict);
     		}
@@ -969,15 +971,22 @@ public class HttpApi {
              String content  = json.getString("content");
              String url   = json.getString("url");
              String image_url  = json.getString("image_url");
+             
+             
+             String music_info_json = json.getString("music_info");
+             MusicInfo music_info = MusicInfo.build_by_json(music_info_json);
+             
              String seed = json.getString("seed");
              String position = json.getString("position");
              if (kind.equals(com.teamkn.model.DataItem.Kind.IMAGE)) {
                  HttpApi.DataItem.pull_image(server_id+"", image_url);
              }
+             
+             
 //             JSONObject json_data_list = json.getJSONObject("data_list");
 //             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
              
-            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed);
+            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed, music_info);
 			return dataItem;
     	}
     	public static Map<Object,Object> pull(final com.teamkn.model.DataList dataList) throws Exception{  
@@ -1171,7 +1180,7 @@ public class HttpApi {
 
 			@Override
 			public ArrayList<MusicInfo> on_success(String response_text) throws Exception {
-				return MusicInfo.build_by_json(response_text);
+				return MusicInfo.build_list_by_json(response_text);
 			}
 		}.go();
    	}
