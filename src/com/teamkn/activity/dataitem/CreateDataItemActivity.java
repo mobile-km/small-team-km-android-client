@@ -16,6 +16,7 @@ import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.model.DataItem;
 import com.teamkn.model.DataList;
+import com.teamkn.model.QRCodeResult;
 
 public class CreateDataItemActivity extends TeamknBaseActivity{
 	TextView show_page_title;
@@ -136,9 +137,11 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		return false;
 	}
 	public void click_qrcode_btn(View view){
-//		open_activity(CaptureActivity.class);
 		Intent intent = new Intent(CreateDataItemActivity.this,CaptureActivity.class);
-		CaptureActivity.result_activity = CaptureActivity.class;
+		QRCodeResult qrcode_result  =  new QRCodeResult(QRcodeResultActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("qrcode_result", qrcode_result);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 }

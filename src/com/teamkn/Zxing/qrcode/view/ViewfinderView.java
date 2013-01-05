@@ -103,31 +103,35 @@ public final class ViewfinderView extends View {
       // Draw a red "laser scanner" line through the middle to show decoding is active
       paint.setColor(laserColor);
       paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
+      
       scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
       int middle = frame.height() / 2 + frame.top;
-      canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
-
+      
+      int middle2 = frame.width() / 2 + frame.left;
+      
+      canvas.drawRect(middle2-2 , frame.top + 2, middle2 + 2, frame.bottom - 1, paint);
+//      canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+     //     
       Collection<ResultPoint> currentPossible = possibleResultPoints;
       Collection<ResultPoint> currentLast = lastPossibleResultPoints;
       if (currentPossible.isEmpty()) {
         lastPossibleResultPoints = null;
       } else {
-	    possibleResultPoints = new HashSet<ResultPoint>(5);
-	    lastPossibleResultPoints = currentPossible;
-	    paint.setAlpha(OPAQUE);
-	    paint.setColor(resultPointColor);
-	    for (ResultPoint point : currentPossible) {
-	      canvas.drawCircle(frame.left + point.getX(), frame.top + point.getY(), 6.0f, paint);
-	    }
+        possibleResultPoints = new HashSet<ResultPoint>(5);
+        lastPossibleResultPoints = currentPossible;
+        paint.setAlpha(OPAQUE);
+        paint.setColor(resultPointColor);
+        for (ResultPoint point : currentPossible) {
+          canvas.drawCircle(frame.top + point.getY() + 60 ,frame.left + point.getX(),  6.0f, paint);
+        }
       }
       if (currentLast != null) {
         paint.setAlpha(OPAQUE / 2);
         paint.setColor(resultPointColor);
         for (ResultPoint point : currentLast) {
-          canvas.drawCircle(frame.left + point.getX(), frame.top + point.getY(), 3.0f, paint);
+          canvas.drawCircle(frame.top + point.getY() + 60,frame.left + point.getX(),  3.0f, paint);
         }
       }
-
       // Request another update at the animation interval, but only repaint the laser line,
       // not the entire viewfinder mask.
       postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);

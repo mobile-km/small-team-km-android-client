@@ -41,24 +41,19 @@ public class CaptureActivity extends TeamknBaseActivity implements Callback {
 	private boolean playBeep;
 	private static final float BEEP_VOLUME = 0.10f;
 	private boolean vibrate;
-	public static  Class<?> result_activity ;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.qrcode);
-//		
-//		Intent intent = getIntent();
-//		String result_activity_str = intent.getStringExtra("result_activity_str");
-////		System.out.println("-----------" + result_activity_str);
-//		activity = (Class<?>) intent.getExtras().get("result_activity");
-//		
 		CameraManager.init(getApplication());
 
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		txtResult = (TextView) findViewById(R.id.txtResult);
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
+
 	}
 
 	@Override
@@ -74,7 +69,7 @@ public class CaptureActivity extends TeamknBaseActivity implements Callback {
 		}
 		decodeFormats = null;
 		characterSet = null;
-
+		
 		playBeep = true;
 		AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
 		if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
@@ -153,6 +148,9 @@ public class CaptureActivity extends TeamknBaseActivity implements Callback {
 		 playBeepSoundAndVibrate();
 		 finish_activity(obj);
 	}
+	
+	
+	// 获取 跳转 activity   并 跳转到响应activity 传值
 	private void finish_activity(Result obj){
 		txtResult.setText(obj.getBarcodeFormat().toString() + ":"
 				+ obj.getText());
@@ -160,6 +158,11 @@ public class CaptureActivity extends TeamknBaseActivity implements Callback {
 				+ obj.getText());
 		Toast.makeText(this, "txtResult :  "  + obj.getBarcodeFormat().toString() + ":"
 				+ obj.getText(), Toast.LENGTH_LONG).show();
+		
+		
+		Bundle get_bundle = getIntent().getExtras();
+		QRCodeResult qrcode_result = (QRCodeResult) get_bundle.get("qrcode_result"); 
+		Class<?> result_activity = qrcode_result.result_activity;
 		
 		Intent intent = new Intent(CaptureActivity.this,result_activity);
 		Bundle bundle = new Bundle();

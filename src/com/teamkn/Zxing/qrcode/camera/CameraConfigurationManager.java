@@ -31,7 +31,7 @@ final class CameraConfigurationManager {
   private static final String TAG = CameraConfigurationManager.class.getSimpleName();
 
   private static final int TEN_DESIRED_ZOOM = 27;
-  private static final int DESIRED_SHARPNESS = 30;
+//  private static final int DESIRED_SHARPNESS = 30;
 
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
@@ -44,7 +44,6 @@ final class CameraConfigurationManager {
   CameraConfigurationManager(Context context) {
     this.context = context;
   }
-
   /**
    * Reads, one time, values from the camera that are needed by the app.
    */
@@ -68,22 +67,22 @@ final class CameraConfigurationManager {
    * and the planar Y can be used for barcode scanning without a copy in some cases.
    */
   void setDesiredCameraParameters(Camera camera) {
-//    Camera.Parameters parameters = camera.getParameters();
-//    Log.d(TAG, "Setting preview size: " + cameraResolution);
-//    parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
-//    setFlash(parameters);
-//    setZoom(parameters);
-//    //setSharpness(parameters);
-//    camera.setParameters(parameters);
+    Camera.Parameters parameters = camera.getParameters();
+    Log.d(TAG, "Setting preview size: " + cameraResolution);
+    parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+    setFlash(parameters);
+    setZoom(parameters);
+    //setSharpness(parameters);
+    camera.setParameters(parameters);
 	  
-	  Camera.Parameters parameters = camera.getParameters();
-	  parameters.set("orientation", "portrait");
-	  
-		parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
-		setFlash(parameters);
-		setZoom(parameters);
-	  
-	  camera.setParameters(parameters);
+//	  Camera.Parameters parameters = camera.getParameters();
+//	  parameters.set("orientation", "portrait");
+//	  
+//		parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+//		setFlash(parameters);
+//		setZoom(parameters);
+//	  
+//	  camera.setParameters(parameters);
   }
 
   Point getCameraResolution() {
