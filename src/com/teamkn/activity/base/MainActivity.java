@@ -96,6 +96,7 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		static int account_page = 20;
 		static int now_page = 1;
 	}
+	
 	LinearLayout user_name_rl ;
 	ImageView main_user_name_iv;
     TextView user_name_tv;

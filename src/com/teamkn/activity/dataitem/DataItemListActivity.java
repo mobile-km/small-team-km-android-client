@@ -564,10 +564,12 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 	}
 	private void load_list() {
+		
 		boolean show_approach_but = (	data_list_public.equals(MainActivity.RequestCode.公开的列表) 
 				|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
 				|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
 			) 
+			
 			&& dataList.kind.equals(MainActivity.RequestCode.STEP)
 			&& dataItems.size()>0;
 		if(show_approach_but){

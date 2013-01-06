@@ -1160,6 +1160,17 @@ public class HttpApi {
    	
     }
     
+    public static void get_qrcode_result(String code) throws Exception{
+    	new TeamknGetRequest<Void>(获取_data_item + code){
+			@Override
+			public Void on_success(String response_text) throws Exception {
+				
+				return null;
+			}
+	   }.go();
+    }
+    
+    
     public static class IntentException extends Exception {
         private static final long serialVersionUID = -4969746083422993611L;
     }

@@ -16,11 +16,12 @@ public class DataItem extends BaseModel implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 2L;
+	
 	public static class Kind {
-        public static final String TEXT = "TEXT";
-        public static final String IMAGE = "IMAGE";
-        public static final String URL = "URL";
-    }
+	    public static final String TEXT = "TEXT";
+	    public static final String IMAGE = "IMAGE";
+	    public static final String URL = "URL";
+	}
 	
 	  public int id = -1;	 
 	  public String title;
