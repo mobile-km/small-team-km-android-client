@@ -30,17 +30,17 @@ final class PreviewCallback implements Camera.PreviewCallback {
   private final boolean useOneShotPreviewCallback;
   private Handler previewHandler;
   private int previewMessage;
-  
+
   PreviewCallback(CameraConfigurationManager configManager, boolean useOneShotPreviewCallback) {
     this.configManager = configManager;
     this.useOneShotPreviewCallback = useOneShotPreviewCallback;
   }
-  
+
   void setHandler(Handler previewHandler, int previewMessage) {
     this.previewHandler = previewHandler;
     this.previewMessage = previewMessage;
   }
-  
+
   public void onPreviewFrame(byte[] data, Camera camera) {
     Point cameraResolution = configManager.getCameraResolution();
     if (!useOneShotPreviewCallback) {
@@ -55,5 +55,5 @@ final class PreviewCallback implements Camera.PreviewCallback {
       Log.d(TAG, "Got preview callback, but no handler for it");
     }
   }
-  
+
 }

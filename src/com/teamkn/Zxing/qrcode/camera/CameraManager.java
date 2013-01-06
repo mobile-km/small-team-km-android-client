@@ -39,14 +39,11 @@ public final class CameraManager {
 
   private static final String TAG = CameraManager.class.getSimpleName();
 
-//  private static final int MIN_FRAME_WIDTH = 240;
-//  private static final int MIN_FRAME_HEIGHT = 240;
-//  private static final int MAX_FRAME_WIDTH = 480;
-//  private static final int MAX_FRAME_HEIGHT = 360;
-	private static final int MIN_FRAME_WIDTH = 240;
-	private static final int MIN_FRAME_HEIGHT = 240;
-	private static final int MAX_FRAME_WIDTH = 240;
-	private static final int MAX_FRAME_HEIGHT = 240;
+  private static final int MIN_FRAME_WIDTH = 240;
+  private static final int MIN_FRAME_HEIGHT = 240;
+  private static final int MAX_FRAME_WIDTH = 480;
+  private static final int MAX_FRAME_HEIGHT = 360;
+
   private static CameraManager cameraManager;
 
   static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
@@ -61,7 +58,6 @@ public final class CameraManager {
     SDK_INT = sdkInt;
   }
 
-  @SuppressWarnings("unused")
   private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
@@ -219,8 +215,6 @@ public final class CameraManager {
    * @return The rectangle to draw on screen in window coordinates.
    */
   public Rect getFramingRect() {
-
-	  
     Point screenResolution = configManager.getScreenResolution();
     if (framingRect == null) {
       if (camera == null) {
@@ -250,24 +244,18 @@ public final class CameraManager {
    * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
    * not UI / screen.
    */
-  
   public Rect getFramingRectInPreview() {
     if (framingRectInPreview == null) {
       Rect rect = new Rect(getFramingRect());
       Point cameraResolution = configManager.getCameraResolution();
       Point screenResolution = configManager.getScreenResolution();
-      
       rect.left = rect.left * cameraResolution.x / screenResolution.x;
       rect.right = rect.right * cameraResolution.x / screenResolution.x;
       rect.top = rect.top * cameraResolution.y / screenResolution.y;
       rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
-      
-//	  	rect.left = rect.left * cameraResolution.y / screenResolution.x;
-//	    rect.right = rect.right * cameraResolution.y / screenResolution.x;
-//	    rect.top = rect.top * cameraResolution.x / screenResolution.y;
-//	    rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y; 
-      
       framingRectInPreview = rect;
+      
+      
     }
     return framingRectInPreview;
   }

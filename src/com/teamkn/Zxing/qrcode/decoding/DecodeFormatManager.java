@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import android.content.Intent;
 import android.net.Uri;
+
 import com.google.zxing.BarcodeFormat;
 
 final class DecodeFormatManager {
