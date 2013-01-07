@@ -42,6 +42,8 @@
 	<activity android:name=".activity.dataitem.CreateDataItemActivity" />
 	<activity android:name=".activity.dataitem.DataItemStepHelpActivity"/>
 	<activity android:name=".activity.dataitem.MusicShowActivity" />
+	<activity android:name=".activity.dataitem.MusicSearchActivity" />
+	<activity android:name=".activity.dataitem.MusicSearchResultActivity" />
 	
 	
 	

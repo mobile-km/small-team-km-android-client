@@ -22,7 +22,7 @@ public class MusicShowActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_show);
+        setContentView(R.layout.music_show);
         
         Intent intent = getIntent();
         data_list = (DataList) intent.getSerializableExtra("data_list");

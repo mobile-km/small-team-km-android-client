@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/list_item"    
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="beforeDescendants"
+    android:background="@color/burlywood"
+>
+
+    <TextView
+          android:id="@+id/music_info_id"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+       />
+    
+       <TextView
+          android:id="@+id/music_title"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+       />
+      
+</RelativeLayout>
