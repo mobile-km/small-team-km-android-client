@@ -48,13 +48,21 @@ public class MusicSearchActivity extends Activity {
 	private void load_UI() {
     	v_query_text = (EditText)findViewById(R.id.query_text);
     	v_search_btn = (Button)findViewById(R.id.search_btn);
-    	v_music_result = (LinearLayout)findViewById(R.id.music_result);
+    	
     	
     	
     	Intent intent = getIntent();
         music_info = (MusicInfo) intent.getSerializableExtra("music_info");
         
+        
         if (music_info != null) {
+        	v_music_result = (LinearLayout)findViewById(R.id.music_result);
+        	v_music_title = (TextView)findViewById(R.id.music_title);
+        	v_album_title = (TextView)findViewById(R.id.album_title);
+        	v_author_name = (TextView)findViewById(R.id.author_name);
+        	v_cover_src = (ImageView)findViewById(R.id.cover_src);
+        	
+        	
         	v_music_result.setVisibility(View.VISIBLE);
         	v_music_title.setText(music_info.music_title);
         	v_album_title.setText(music_info.album_title);
