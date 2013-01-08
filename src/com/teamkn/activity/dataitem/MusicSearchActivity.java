@@ -98,6 +98,7 @@ public class MusicSearchActivity extends Activity {
 					intent.putExtra("music_info_items", music_info_items);
 					intent.putExtra("data_list", data_list);
 					startActivity(intent);
+					finish();
 				}
 			}.execute();
 		}else{
@@ -124,8 +125,9 @@ public class MusicSearchActivity extends Activity {
 				public void on_success(Void result) {
 					Intent intent = new Intent(MusicSearchActivity.this, DataItemListActivity.class);
 					intent.putExtra("data_list", data_list);
-					
-					startActivity(intent);
+					intent.putExtra("data_list_public", "follow");
+					startActivityForResult(intent, 9);
+					finish();
 				}
 			}.execute();
 		}else{

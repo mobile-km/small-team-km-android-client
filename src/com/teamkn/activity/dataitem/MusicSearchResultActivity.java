@@ -65,6 +65,7 @@ public class MusicSearchResultActivity extends TeamknBaseActivity {
 					intent.putExtra("music_info", item);
 					intent.putExtra("data_list", data_list);			
 					startActivity(intent);
+					finish();
 				}
 			});
 		} catch (Exception e) {
