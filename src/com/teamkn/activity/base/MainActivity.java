@@ -161,7 +161,6 @@ public class MainActivity extends TeamknSlidingMenuActivity {
 		cursor.setImageMatrix(matrix);// 设置动画初始位置
 	}
 
-
 	private void judge(){
 		System.out.println("current_user().is_show_tip " + current_user().is_show_tip);
 		if(current_user().is_show_tip && RequestCode.data_list_public.equals(RequestCode.我的列表)){

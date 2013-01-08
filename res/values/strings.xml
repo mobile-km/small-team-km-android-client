@@ -46,8 +46,16 @@
     <string name="tknlist_kind_all_list">所有</string>
     <string name="tknlist_kind_step_list">步骤列表</string>
     <string name="tknlist_kind_collection_list">收集列表</string>
+    <!-- product  二维码结果 -->
+    <string name="product_title">标题：</string>
+    <string name="product_name">名称：</string>
+    <string name="product_kind">型号：</string>
+    <string name="product_unit">单位：</string>
+    <string name="product_origin">产地：</string>
+    <string name="product_vendor">制造商：</string>
     <!-- 二维码 -->
     <string name="tkn_qrcode_but">扫描二维码/条形码</string>
+    <string name="tkn_now_scanning">正在扫描.....</string>
     <!-- SEARCH -->
     <string name="search_title">搜索</string>
     <string name="search_list">搜索列表</string>
@@ -176,7 +184,7 @@
     <string name="note_content_valid_blank">主题内容不能为空</string>
     <string name="note_image_valid_blank">图片不存在</string>
     <string name="save_note_bn">保存</string>
-    <string name="saving">正在保存...</string>
+    <string name="saving">正在保存..</string>
 
     <string name="is_wifi_active_msg">无法连接到网络，请检查网络配置</string>
     <!-- 显示照片页面 -->

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.teamkn.R;
 import com.teamkn.Logic.HttpApi;
 import com.teamkn.activity.qrcode.QRCodeCameraActivity;
-import com.teamkn.activity.qrcode_result.QRcodeResultActivity;
+import com.teamkn.activity.qrcode_result.QRCodeResultActivity;
 import com.teamkn.base.activity.TeamknBaseActivity;
 import com.teamkn.base.task.TeamknAsyncTask;
 import com.teamkn.base.utils.BaseUtils;
@@ -29,6 +29,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 	DataItem dataItem;
 	
 	TextView create_data_list_msg_tv;
+	QRCodeResult qrcode_result;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		dataList = (DataList) intent.getSerializableExtra("data_list");
 		dataItem = (DataItem) intent.getSerializableExtra("data_item");
 		data_list_public = intent.getStringExtra("data_list_public");
-
+		qrcode_result = (QRCodeResult)intent.getExtras().getSerializable("code_result");
 		load_UI();
 	}
 	private void load_UI() {
@@ -59,88 +60,67 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 		create_data_list_msg_tv.setText("");
 		
 	}
+	
+	
 	public void click_data_item_save_iv(View view){
 		final String title_str = create_data_item_title_et.getText().toString();
 		final String content_str = create_data_item_content_et.getText().toString();
 		
-		if(juast(title_str,content_str)){
-         	if(BaseUtils.is_wifi_active(CreateDataItemActivity.this)){
-         			String show_str;
-         			if(dataItem != null ){
-         				show_str = "修改中...";
-         			}else{
-         				show_str = "创建中...";
-         			}
-					new TeamknAsyncTask<Void, Void, String>(CreateDataItemActivity.this,show_str) {
+		if(BaseUtils.is_str_blank(title_str) || BaseUtils.is_str_blank(content_str)){
+			 BaseUtils.toast("标题和内容不可以为空");
+			 return;
+		}
+     	if(!BaseUtils.is_wifi_active(this)){
+     		BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+     		return;
+     	}
 
-						@Override
-						public String do_in_background(Void... params)
-								throws Exception {
-							String back =null ;
-							try {
-								if(dataItem != null ){
-									dataItem.setTitle(title_str);
-									dataItem.setContent(content_str);	
-									back = HttpApi.DataItem.update(dataItem); 
-								}else{
-									DataItem dataitem =
-											new DataItem(-1, title_str, content_str, 
-													     null, DataItem.Kind.TEXT, 
-													dataList.server_data_list_id, null, -1,null);
-									back = HttpApi.DataItem.create(dataitem);  
-								}	
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							return back;
-						}
+		new TeamknAsyncTask<Void, Void, String>(CreateDataItemActivity.this,"正在处理") {
 
-						@Override
-						public void on_success(String result) {
-							
-							if(BaseUtils.is_str_blank(result)){
-//								Intent intent = new Intent(CreateDataItemActivity.this,DataItemListActivity.class);
-//					    		intent.putExtra("data_list", dataList);
-//					    		intent.putExtra("data_list_public", data_list_public);
-//					    		startActivity(intent);
-					         	finish();
-					         	BaseUtils.toast(getResources().getString(R.string.save_succeed_show));
-							}else{
-								BaseUtils.toast(result);
-							}
-							
-						}
-					}.execute();
-			}else{
-				BaseUtils.toast("无法连接到网络，请检查网络配置");
+			@Override
+			public String do_in_background(Void... params)
+					throws Exception {
+				String back =null ;
+				if(dataItem != null && qrcode_result==null ){
+					dataItem.setTitle(title_str);
+					dataItem.setContent(content_str);	
+					back = HttpApi.DataItem.update(dataItem); 
+				}else{
+					DataItem dataitem =new DataItem(-1, title_str, content_str, null, DataItem.Kind.TEXT, dataList.server_data_list_id, null, -1,null);
+					back = HttpApi.DataItem.create(dataitem);  
+				}	
+				return back;
 			}
-         }else{
-        	 BaseUtils.toast("标题 和 内容 不可以为空");
-         }
-	}
-	public boolean juast(String title,String content){
-		boolean title_bl = false;
-		boolean content_bl = false;
-		if(title!=null 
-         		&& !title.equals(null)
-         		&& !BaseUtils.is_str_blank(title)){
-			title_bl = true;
-		}
-		if(content!=null 
-         		&& !content.equals(null)
-         		&& !BaseUtils.is_str_blank(content)){
-			content_bl = true;
-		}
-		if(title_bl&&content_bl){
-			return true;
-		}
-		return false;
+			@Override
+			public void on_success(String result) {
+				if(BaseUtils.is_str_blank(result)){
+		         	finish();
+		         	BaseUtils.toast(getResources().getString(R.string.save_succeed_show));
+				}else{
+					BaseUtils.toast(result);
+				}
+				
+			}
+		}.execute();
 	}
 	public void click_qrcode_btn(View view){
+		String title_str = create_data_item_title_et.getText().toString();
+		
+		if(BaseUtils.is_str_blank(title_str)){
+			BaseUtils.toast("标题不可以为空");
+			return;
+		}
+		if(dataItem == null ){
+			dataItem = new DataItem();
+		}
+		dataItem.setTitle(title_str);
 		Intent intent = new Intent(CreateDataItemActivity.this,QRCodeCameraActivity.class);
-		QRCodeResult qrcode_result  =  new QRCodeResult(QRcodeResultActivity.class);
+		QRCodeResult qrcode_result  =  new QRCodeResult(CreateDataItemActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("qrcode_result", qrcode_result);
+		bundle.putSerializable("data_item", dataItem);
+		bundle.putSerializable("data_list", dataList);
+		bundle.putString("data_list_public", data_list_public);
 		intent.putExtras(bundle);
 		startActivity(intent);
 	}

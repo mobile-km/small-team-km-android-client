@@ -115,7 +115,6 @@ public class CreateDataListRightSliding extends RightSlidingContainer {
 		
 		save_bn = right_root_view.findViewById(R.id.data_list_save_bn);
 		save_bn.setOnClickListener(save_listener);
-		
 	}
 	
 	public void data_list_public_checkbox(){

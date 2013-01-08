@@ -209,39 +209,36 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		}
 		//添加收藏 或者 移除收藏
 		private void watch_data_list(){
+			if (!BaseUtils.is_wifi_active(this)) {
+				BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
+				return;
+			}
+			
 			String msg = "";
 			if(dataList.watched){
 				msg = "正移除书签";
 			}else{
 				msg = "正添加书签";
 			}
-			if (BaseUtils.is_wifi_active(this)) {
-				new TeamknAsyncTask<Void, Void, Void>(DataItemListActivity.this,msg) {
-					@Override
-					public Void do_in_background(Void... params) throws Exception {
-						if (BaseUtils.is_wifi_active(DataItemListActivity.this)) {
-							HttpApi.WatchList.watch(dataList, !dataList.watched);
-						}else{
-							BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
-						}
-						return null;
+			new TeamknAsyncTask<Void, Void, Void>(this,msg) {
+				@Override
+				public Void do_in_background(Void... params) throws Exception {
+					HttpApi.WatchList.watch(dataList, !dataList.watched);
+					return null;
+				}
+				@Override
+				public void on_success(Void result) {
+					//请求成功后，图片变化显示
+					if(!dataList.watched){
+						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_blue));
+						BaseUtils.toast(getResources().getString(R.string.success_add_watch));
+					}else{	
+						data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_gray));
+						BaseUtils.toast(getResources().getString(R.string.success_remove_watch));
 					}
-					@Override
-					public void on_success(Void result) {
-						//请求成功后，图片变化显示
-						if(!dataList.watched){
-							data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_blue));
-							BaseUtils.toast(getResources().getString(R.string.success_add_watch));
-						}else{	
-							data_list_image_iv_watch.setBackgroundDrawable(getResources().getDrawable(R.drawable.star_gray));
-							BaseUtils.toast(getResources().getString(R.string.success_remove_watch));
-						}
-						dataList.setWatched(!dataList.watched);
-					}	
-				}.execute();
-			}else{
-				BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
-			}
+					dataList.setWatched(!dataList.watched);
+				}	
+			}.execute();
 	}
 	// 加载推送的按钮
 	private void load_push_UI(){
@@ -259,9 +256,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 				}				
 			}
 		});
-		
-		System.out.println("dataList.toString() " + dataList.toString());
-		System.out.println("current_user.toString() " + current_user().user_id);
 		
 		User user = UserDBHelper.find(dataList.user_id);
 		//显示我迁出的图标  亮色的叉号
@@ -342,46 +336,45 @@ public class DataItemListActivity extends TeamknBaseActivity {
 	}		
 	//推送操作
 	private void fork_data_list(){
-		if(BaseUtils.is_wifi_active(DataItemListActivity.this)){
-			new TeamknAsyncTask<Void, Void, DataList>(DataItemListActivity.this,"正在加载") {
-				@Override
-				public DataList do_in_background(Void... params) throws Exception {
-					
-					DataList fork_dataList = HttpApi.DataList.fork(dataList);
-//					HttpApi.DataItem.pull(fork_dataList);
-					return fork_dataList;
-				}
-				@Override
-				public void on_success(DataList result) {
-					if(result!=null){
-						data_item_push_iv.setVisibility(View.VISIBLE);
-						data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.hell_pencil));
-						data_item_push_iv.setClickable(false);
-						data_item_push_iv.setFocusable(false);
-						
-						MainActivity.RequestCode.data_list_public = RequestCode.协作列表;
-						data_list_public = MainActivity.RequestCode.data_list_public;//返回dataList的中公开，自己私有，协作列表中的一个
-						dataList = result;
-						
-						//判断是否是当前用户的列表 或者 是协作列表
-						if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-								|| data_list_public.equals("fork")
-						){
-							is_curretn_user_data_list  = true;
-						}else{
-							is_curretn_user_data_list  = false;
-						}	
-						
-						//加载ui元素以及数据
-						load_UI();
-						load_data_item_list();	
-					}
-				}
-			}.execute();
-		}else{
+		if(!BaseUtils.is_wifi_active(this)){
 			BaseUtils.toast(getResources().getString(R.string.is_wifi_active_msg));
 		}
+		new TeamknAsyncTask<Void, Void, DataList>(this,"正在加载") {
+			@Override
+			public DataList do_in_background(Void... params) throws Exception {
+				
+				DataList fork_dataList = HttpApi.DataList.fork(dataList);
+				return fork_dataList;
+			}
+			@Override
+			public void on_success(DataList result) {
+				if(result!=null){
+					data_item_push_iv.setVisibility(View.VISIBLE);
+					data_item_push_iv.setBackgroundDrawable(getResources().getDrawable(R.drawable.hell_pencil));
+					data_item_push_iv.setClickable(false);
+					data_item_push_iv.setFocusable(false);
+					
+					MainActivity.RequestCode.data_list_public = RequestCode.协作列表;
+					data_list_public = MainActivity.RequestCode.data_list_public;//返回dataList的中公开，自己私有，协作列表中的一个
+					dataList = result;
+					
+					//判断是否是当前用户的列表 或者 是协作列表
+					if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+							|| data_list_public.equals("fork")
+					){
+						is_curretn_user_data_list  = true;
+					}else{
+						is_curretn_user_data_list  = false;
+					}	
+					
+					//加载ui元素以及数据
+					load_UI();
+					load_data_item_list();	
+				}
+			}
+		}.execute();
 	}
+	
 	//点击title触发事件
 	private void data_list_title_edit(){
 		AlertDialog.Builder builder = new Builder(DataItemListActivity.this);
@@ -613,9 +606,13 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					int item_id, long position) {
 				TextView info_tv = (TextView) list_item
 						.findViewById(R.id.data_item_info_tv);
-				final DataItem item = (DataItem) info_tv
-						.getTag(R.id.tag_note_uuid);
-				Intent intent = new Intent(DataItemListActivity.this,CreateDataItemActivity.class);
+				DataItem item = (DataItem) info_tv.getTag(R.id.tag_note_uuid);
+				Class<?> result_class = item.kind.equals(DataItem.Kind.PRODUCT) ? ShowProductDataItem.class : CreateDataItemActivity.class ;
+				Intent intent = new Intent(DataItemListActivity.this,result_class);
+				if(item.product!=null){
+					intent.putExtra("product",item.product);
+					item.setProduct(null);
+				}
 				intent.putExtra("data_item",item);
 				intent.putExtra("data_list",dataList);
 				intent.putExtra("data_list_public",data_list_public);

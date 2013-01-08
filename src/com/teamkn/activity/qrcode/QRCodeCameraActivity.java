@@ -30,6 +30,8 @@ import android.os.Vibrator;
 import android.widget.FrameLayout;
 
 import com.teamkn.R;
+import com.teamkn.model.DataItem;
+import com.teamkn.model.DataList;
 import com.teamkn.model.QRCodeResult;
 
 public class QRCodeCameraActivity extends Activity {
@@ -54,7 +56,7 @@ public class QRCodeCameraActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.zbar_capture);
+		setContentView(R.layout.qrcode_zbar_capture);
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -147,7 +149,10 @@ public class QRCodeCameraActivity extends Activity {
 	private void result_symbol_set(SymbolSet syms){
 		Bundle get_bundle = getIntent().getExtras();
 		QRCodeResult qrcode_result = (QRCodeResult) get_bundle.get("qrcode_result"); 
-		Class<?> result_activity = qrcode_result.result_activity;
+		DataList data_list = (DataList) get_bundle.get("data_list");
+		DataItem data_item = (DataItem)get_bundle.get("data_item");
+		String data_list_public = get_bundle.getString("data_list_public");
+//		Class<?> result_activity = qrcode_result.result_activity;
 		
 		for (Symbol sym : syms) {
 //			Intent intent = new Intent();
@@ -155,12 +160,28 @@ public class QRCodeCameraActivity extends Activity {
 //			setResult(RESULT_OK, intent);
 //			finish();	
 			
-			Intent intent = new Intent(QRCodeCameraActivity.this,result_activity);
+			
 			Bundle bundle = new Bundle();
-//			QRCodeResult code_result = new QRCodeResult(obj.getBarcodeFormat().toString(), obj.getText());
-			QRCodeResult code_result = new QRCodeResult(sym.getData());
+			QRCodeResult code_result = new QRCodeResult(sym.getType(),sym.getData());
 			bundle.putSerializable("code_result", code_result);
+			bundle.putSerializable("data_list", data_list);
+			bundle.putSerializable("data_item", data_item);
+			bundle.putString("data_list_public", data_list_public);
+			
+			
+			Class<?> juest_activity = qrcode_result.result_activity;
+			
+			System.out.println("sym.getType() "  + sym.getType());
+			if(sym.getType() == 64 ){
+				data_item.setContent(sym.getData());
+				data_item.setKind(DataItem.Kind.TEXT);
+				juest_activity = qrcode_result.from_activity;
+			}
+			System.out.println(juest_activity.getName());
+			
+			Intent intent = new Intent(QRCodeCameraActivity.this,juest_activity);
 			intent.putExtras(bundle);
+			
 			startActivity(intent);
 			finish();
 		}

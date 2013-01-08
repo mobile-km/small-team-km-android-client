@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import android.graphics.Bitmap;
 
+import com.google.gson.annotations.Expose;
 import com.teamkn.Logic.CompressPhoto;
 import com.teamkn.base.utils.BaseUtils;
 import com.teamkn.base.utils.FileDirs;
@@ -21,17 +22,29 @@ public class DataItem extends BaseModel implements Serializable{
 	    public static final String TEXT = "TEXT";
 	    public static final String IMAGE = "IMAGE";
 	    public static final String URL = "URL";
+	    public static final String PRODUCT = "PRODUCT"; 
 	}
-	
-	  public int id = -1;	 
+	 @Expose
+	  public int id = -1;	
+	  @Expose
 	  public String title;
+	  @Expose
 	  public String content;
+	  @Expose
 	  public String url;
+	  @Expose
 	  public String kind;
+	  @Expose
 	  public int server_data_list_id;
-	  public String position;	 
+	  @Expose
+	  public String position;	
+	  @Expose
 	  public int server_data_item_id;
+	  @Expose
 	  public String seed; // 字段标示 字符 
+	  
+//	  @Expose
+	  public Product product;
 	  
 	  //添加的外链帮助字段
 	  int next_commits_count;  // 剩余还有几项
@@ -40,7 +53,14 @@ public class DataItem extends BaseModel implements Serializable{
 	  
 	  public static DataItem NIL_DATA_ITEM = new DataItem();
 	  
+	 
 	  
+	public Product getProduct() {
+		return product;
+	}
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 	public int getId() {
 		return id;
 	}

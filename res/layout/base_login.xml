@@ -34,9 +34,10 @@
                 android:gravity="center"
                 android:textColor="#fff"
                 />
+        <!-- android:text="fushang318@gmail.com" -->
         <EditText
                 android:id="@+id/email_et"
-                android:text="fushang318@gmail.com"
+                android:text="qwer"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionDone"
                 android:hint="@string/login_email"
@@ -44,7 +45,7 @@
                 ></EditText>
         <EditText
                 android:id="@+id/password_et"
-                android:text="123456"
+                android:text="qwer"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:hint="@string/login_password"

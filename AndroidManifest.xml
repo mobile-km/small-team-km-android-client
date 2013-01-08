@@ -51,6 +51,8 @@
 	<activity android:name=".activity.dataitem.pull.DataItemPullUpdateActivity"></activity>
 	<activity android:name=".activity.dataitem.pull.DataItemTermWiseUpdateActivity"></activity>
     
+	<activity android:name=".activity.dataitem.ShowProductDataItem"></activity>
+	
     <!-- 社交圈子 -->
     <activity android:name=".activity.social_circle.SocialCircleActivity"></activity>
     <activity android:name=".activity.social_circle.UserPublicDataListActivity"></activity>
@@ -62,6 +64,6 @@
    
     <!-- 二维码 -->
     <activity  android:name=".activity.qrcode.QRCodeCameraActivity" />
-    <activity android:name=".activity.qrcode_result.QRcodeResultActivity" android:screenOrientation="portrait" />
+    <activity android:name=".activity.qrcode_result.QRCodeResultActivity" android:screenOrientation="portrait" />
   </application>
 </manifest>

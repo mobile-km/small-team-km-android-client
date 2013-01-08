@@ -28,6 +28,7 @@ import com.teamkn.base.http.TeamknHttpRequest;
 import com.teamkn.base.http.TeamknPostRequest;
 import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.model.AccountUser;
+import com.teamkn.model.Product;
 import com.teamkn.model.User;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.model.database.UserDBHelper;
@@ -36,14 +37,15 @@ public class HttpApi {
 
 //    public static final String SITE = "http://192.168.1.38:9527";
 //	public static final String SITE = "http://192.168.1.26:9527";
-	public static final String SITE = "http://teamkn.mindpin.com";
+//	public static final String SITE = "http://teamkn.mindpin.com";
+	public static final String SITE = "http://dev.kaid.me";
+//	http://dev.kaid.me/api/products/search
 	
     // 各种路径常量
 	public static final String 版本检查 = "/check_version";
 	
 	//设置是否显示 指引提示
 	public static final String 设置是否显示指引提示 = "/api/account/change_show_tip";
-	
 	
     public static final String 用户注册 = "/signup_submit";
     
@@ -136,6 +138,10 @@ public class HttpApi {
     public static final String 修改_data_item    =  "/api/data_items/";
     public static final String 删除_data_item    =  "/api/data_items/";
     public static final String 排序_data_item    =  "/api/data_items/";
+    
+    //QRCode 
+    public static final String 搜索_QRCode = "/api/products/search/";
+    
     // LoginActivity
     public static VersionCheck get_version(String now_version) throws Exception{
     	return new TeamknGetRequest<VersionCheck>(
@@ -957,6 +963,7 @@ public class HttpApi {
     }
     public static class DataItem{
     	private static com.teamkn.model.DataItem getDataItem(JSONObject json , int data_list_server_id) throws JSONException{
+
     		 int server_id = json.getInt("id");
              String title  = json.getString("title");
              String kind   = json.getString("kind");
@@ -972,7 +979,14 @@ public class HttpApi {
 //             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
              
             com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed);
-			return dataItem;
+              
+    		if(!json.getJSONObject("product").isNull("name")){
+    			 JSONObject product_json =  json.getJSONObject("product");
+    			 Product product = Product.get_product_by_json(product_json);
+    			 dataItem.setProduct(product);
+    			 System.out.println("product: " + product.toString());
+    		 }
+            return dataItem;
     	}
     	public static Map<Object,Object> pull(final com.teamkn.model.DataList dataList) throws Exception{  
    		 	final Map<Object,Object>  map = new HashMap<Object, Object>();
@@ -1083,9 +1097,12 @@ public class HttpApi {
    		  String value = null;
    		  if(dataItem.kind.equals(com.teamkn.model.DataItem.Kind.URL)){
    			value = dataItem.url;
+   		  }else if(dataItem.kind.equals(com.teamkn.model.DataItem.Kind.PRODUCT)){
+   			value = dataItem.product.id+"";
    		  }else{
    			value = dataItem.content;
    		  }
+   		  
 		   return new TeamknPostRequest<String>( 创建_data_item + dataItem.server_data_list_id+ "/data_items",
 	            new PostParamText("title",dataItem.title),
 	            new PostParamText("kind",dataItem.kind),
@@ -1094,9 +1111,6 @@ public class HttpApi {
 	              @Override
 	              public String on_success(String response_text) throws Exception {
 		                System.out.println("data_list pull response_text " + response_text);
-		                JSONObject json = new JSONObject(response_text);
-		                com.teamkn.model.DataItem data_item_server = getDataItem(json,dataItem.server_data_list_id);
-		                data_item_server.setId(dataItem.id);
 					    return null;   	
 	              }
 	              public String on_unprocessable_entity(String responst_text) {
@@ -1160,14 +1174,25 @@ public class HttpApi {
    	
     }
     
-    public static void get_qrcode_result(String code) throws Exception{
-    	new TeamknGetRequest<Void>(获取_data_item + code){
+    public static List<Product> get_qrcode_search(String code) throws Exception{
+    	System.out.println("code:" + code);
+    	return new TeamknGetRequest<List<Product>>(搜索_QRCode,
+    			new BasicNameValuePair("code", code)){
 			@Override
-			public Void on_success(String response_text) throws Exception {
-				
-				return null;
+			public List<Product> on_success(String response_text) throws Exception {
+				System.out.println("------------get_qrcode_search--------------");
+				System.out.println("get_qrcode_search :  "+ response_text);
+				List<Product> products = new ArrayList<Product>();
+				JSONArray json_arr = new JSONArray(response_text);
+				for(int i = 0 ;i < json_arr.length() ;i++){
+					Product item= Product.get_product_by_json(json_arr.getJSONObject(i));
+					System.out.println(item.toString());
+					products.add(item);
+				}
+				return products;
 			}
 	   }.go();
+		
     }
     
     

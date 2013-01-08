@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+   	    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/data_item_step_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/darkgrey" >
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/data_item_step_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_yellow_bold"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/blue"/>
+
+        <TextView
+            android:id="@+id/data_item_step_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/data_item_step_tv"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/data_item_step_content_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/data_item_step_text_tv"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/data_item_step_tv"
+            android:textSize="20dp" />
+
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/data_item_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/up" />
+
+                <Button
+                    android:id="@+id/data_item_next_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/next" /> 
+            </RelativeLayout>
+    </RelativeLayout>
