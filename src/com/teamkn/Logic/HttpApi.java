@@ -1174,6 +1174,28 @@ public class HttpApi {
     }
    	
    	
+   	// 创建音乐条目
+   	public static String create_music(final com.teamkn.model.MusicInfo music_info, int data_list_id) throws Exception{
+ 		 
+		   return new TeamknPostRequest<String>( 创建_data_item + data_list_id + "/data_items",
+	            new PostParamText("title", music_info.music_title),
+	            new PostParamText("kind", "MUSIC"),
+	            new PostParamText("value", Integer.toString(music_info.id))
+		   ) {
+	              @Override
+	              public String on_success(String response_text) throws Exception {
+					return response_text;    
+	              }
+	              public String on_unprocessable_entity(String responst_text) {
+					  return responst_text; 
+	              };
+	              public String on_permission_denied(String responst_text) { 
+					return responst_text;
+	              };
+	     }.go();
+  }
+   	
+   	
    	
    	public static ArrayList<MusicInfo> search_music(String query) throws Exception {
    		return new TeamknGetRequest<ArrayList<MusicInfo>>(搜索音乐, new BasicNameValuePair("query", query)) {

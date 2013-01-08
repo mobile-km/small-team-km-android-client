@@ -700,7 +700,6 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		Intent intent = new Intent(DataItemListActivity.this,
 				MusicSearchActivity.class);
 		intent.putExtra("data_list", dataList);
-		intent.putExtra("data_list_public", data_list_public);
 		this.startActivityForResult(intent, RequestCode.CREATE_DATA_ITEM);
 	}
 

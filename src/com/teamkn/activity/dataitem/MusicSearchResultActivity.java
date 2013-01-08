@@ -29,6 +29,7 @@ import com.teamkn.widget.adapter.MusicInfoSearchAdapter;
 
 public class MusicSearchResultActivity extends TeamknBaseActivity {
 	
+	private DataList data_list;
 	private ArrayList<MusicInfo> data_items;
     private ListView search_result;
 	
@@ -46,6 +47,7 @@ public class MusicSearchResultActivity extends TeamknBaseActivity {
 		search_result = (ListView) findViewById(R.id.list);
 		
 		Intent intent = getIntent();
+		data_list = (DataList) intent.getSerializableExtra("data_list");
         data_items = (ArrayList<MusicInfo>) intent.getSerializableExtra("music_info_items");
         
      
@@ -61,9 +63,7 @@ public class MusicSearchResultActivity extends TeamknBaseActivity {
 					MusicInfo item = (MusicInfo) selected_music.getTag(R.id.music_info_id);
 					Intent intent = new Intent(MusicSearchResultActivity.this, MusicSearchActivity.class);
 					intent.putExtra("music_info", item);
-					
-					Log.d("hhhh", item.music_title);
-					
+					intent.putExtra("data_list", data_list);			
 					startActivity(intent);
 				}
 			});
