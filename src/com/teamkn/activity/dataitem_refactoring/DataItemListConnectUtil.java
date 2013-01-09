@@ -1,8 +1,9 @@
-package com.teamkn.activity.dataitem;
+package com.teamkn.activity.dataitem_refactoring;
 
 import android.view.View;
 
 import com.teamkn.R;
+import com.teamkn.activity.dataitem.ListViewInterceptor;
 import com.teamkn.widget.adapter.DataItemListAdapter;
 
 public class DataItemListConnectUtil {
