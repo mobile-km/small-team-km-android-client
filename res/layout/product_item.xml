@@ -3,47 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
     android:orientation="vertical"
+    android:id="@+id/include_product"
+    android:visibility="gone"
 >	
-	<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/head_bar"
-    >
-        
-   </RelativeLayout>
-   <TextView
-	     android:id="@+id/data_list_title_tv"
-	     android:layout_width="fill_parent"
-	     android:layout_height="50dp"
-	     android:text="@string/placeholder"
-	     android:textSize="20dp"
-	     android:layout_margin="10dp"
-	     android:background="#789"
-	     android:gravity="center"
-	 />
-	<RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin = "15dp"
-    >
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:text="@string/product_title" />
 
-        <TextView
-            android:id="@+id/product_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:layout_toRightOf="@+id/title"
-            android:text="@string/product_title" />
-    </RelativeLayout>
    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

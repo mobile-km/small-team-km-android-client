@@ -64,6 +64,6 @@
    
     <!-- 二维码 -->
     <activity  android:name=".activity.qrcode.QRCodeCameraActivity" />
-    <activity android:name=".activity.qrcode_result.QRCodeResultActivity" android:screenOrientation="portrait" />
+    <activity android:name=".activity.qrcode_result.QRCodeResultActivity" />
   </application>
 </manifest>

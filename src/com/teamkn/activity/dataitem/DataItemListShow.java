@@ -221,40 +221,40 @@ public class DataItemListShow  extends TeamknBaseActivity {
 				//加载收藏的按钮的显示以及触发
 				load_watch_UI();
 				load_push_UI();
-
+//				http_api_result();
 //				//判断列表是否有数据
 //				if(dataItems.size()==0){
 //					tlv.setVisibility(View.GONE);
 //					data_item_step_rl.setVisibility(View.GONE);
 //					data_item_list_approach_button.setVisibility(View.GONE);
 //					list_no_data_show.setVisibility(View.VISIBLE);
-//				}else{
-//					//判断是否是 要显示 步骤列表
-//					show_step = (	data_list_public.equals(MainActivity.RequestCode.公开的列表) 
-//									|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
-//									|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-//								)
-//								&& dataList.kind.equals(MainActivity.RequestCode.STEP)
-//								&& !is_reading ;
-//					
-//					load_step_or_list(show_step);
-//					list_no_data_show.setVisibility(View.GONE);
-//					//判断是以那种列表展示形式 列出数据a
-//					if(show_step){
-//						if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
-//							data_item_list_approach_button.setVisibility(View.VISIBLE);
-//						}else{
-//							data_item_list_approach_button.setVisibility(View.GONE);
-//						}
-//						data_item_list_approach_button.setText("以清单模式查看");
-//						load_step();
-//					}else{
-//						data_item_list_approach_button.setVisibility(View.VISIBLE);
-//						data_item_list_approach_button.setText("以向导模式查看");
-//						load_list();
-//					}
+//					return;
 //				}
-				
+//				
+//				//判断是否是 要显示 步骤列表
+//				show_step = (	data_list_public.equals(MainActivity.RequestCode.公开的列表) 
+//								|| data_list_public.equals(MainActivity.RequestCode.我的书签) 
+//								|| UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
+//							)
+//							&& dataList.kind.equals(MainActivity.RequestCode.STEP)
+//							&& !is_reading ;
+//				
+//				load_step_or_list(show_step);
+//				list_no_data_show.setVisibility(View.GONE);
+//				//判断是以那种列表展示形式 列出数据a
+//				if(show_step){
+//					if(is_reading || UserDBHelper.find(dataList.user_id).user_id == current_user().user_id){
+//						data_item_list_approach_button.setVisibility(View.VISIBLE);
+//					}else{
+//						data_item_list_approach_button.setVisibility(View.GONE);
+//					}
+//					data_item_list_approach_button.setText("以清单模式查看");
+//					load_step();
+//				}else{
+//					data_item_list_approach_button.setVisibility(View.VISIBLE);
+//					data_item_list_approach_button.setText("以向导模式查看");
+//					load_list();
+//				}
 			}
 		}.execute();
 	}
@@ -310,21 +310,7 @@ public class DataItemListShow  extends TeamknBaseActivity {
 	}
 	// 加载推送的按钮
 	private void load_push_UI(){
-		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//if是 当前用户，并且被推送了   显示处理推送按钮的处理事件
-				if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
-					Intent intent = new Intent(DataItemListShow.this,DataItemPullListActivity.class);
-					intent.putExtra("data_list", dataList);
-					startActivityForResult(intent, RequestCode.BACK);
-				}else{
-					//推送操作
-					fork_data_list();
-				}				
-			}
-		});
-		
+
 		User user = UserDBHelper.find(dataList.user_id);
 		//显示我迁出的图标  亮色的叉号
 		boolean 我迁出的 = (data_list_public.equals(MainActivity.RequestCode.公开的列表)
@@ -401,6 +387,21 @@ public class DataItemListShow  extends TeamknBaseActivity {
 			data_item_push_iv.setClickable(false);
 			data_item_push_iv.setFocusable(false);
 		}
+		
+		data_item_push_iv.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//if是 当前用户，并且被推送了   显示处理推送按钮的处理事件
+				if(is_curretn_user_data_list  && dataList.has_commits.equals("true")){
+					Intent intent = new Intent(DataItemListShow.this,DataItemPullListActivity.class);
+					intent.putExtra("data_list", dataList);
+					startActivityForResult(intent, RequestCode.BACK);
+				}else{
+					//推送操作
+					fork_data_list();
+				}				
+			}
+		});
 	}
 	
 	//推送操作
@@ -426,21 +427,11 @@ public class DataItemListShow  extends TeamknBaseActivity {
 					MainActivity.RequestCode.data_list_public = RequestCode.协作列表;
 					data_list_public = MainActivity.RequestCode.data_list_public;//返回dataList的中公开，自己私有，协作列表中的一个
 					dataList = result;
-					
-					//判断是否是当前用户的列表 或者 是协作列表
-					if(UserDBHelper.find(dataList.user_id).user_id == current_user().user_id 
-							|| data_list_public.equals("fork")
-					){
-						is_curretn_user_data_list  = true;
-					}else{
-						is_curretn_user_data_list  = false;
-					}	
-					
-					//加载ui元素以及数据
-					load_UI();
-					load_data_item_list();	
 				}
 			}
 		}.execute();
 	}
+	
+	
+	
 }

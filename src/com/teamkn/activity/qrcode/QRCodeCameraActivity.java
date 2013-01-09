@@ -160,26 +160,14 @@ public class QRCodeCameraActivity extends Activity {
 //			setResult(RESULT_OK, intent);
 //			finish();	
 			
-			
 			Bundle bundle = new Bundle();
 			QRCodeResult code_result = new QRCodeResult(sym.getType(),sym.getData());
 			bundle.putSerializable("code_result", code_result);
 			bundle.putSerializable("data_list", data_list);
 			bundle.putSerializable("data_item", data_item);
 			bundle.putString("data_list_public", data_list_public);
-			
-			
-			Class<?> juest_activity = qrcode_result.result_activity;
-			
-			System.out.println("sym.getType() "  + sym.getType());
-			if(sym.getType() == 64 ){
-				data_item.setContent(sym.getData());
-				data_item.setKind(DataItem.Kind.TEXT);
-				juest_activity = qrcode_result.from_activity;
-			}
-			System.out.println(juest_activity.getName());
-			
-			Intent intent = new Intent(QRCodeCameraActivity.this,juest_activity);
+
+			Intent intent = new Intent(QRCodeCameraActivity.this,qrcode_result.result_activity);
 			intent.putExtras(bundle);
 			
 			startActivity(intent);

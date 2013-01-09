@@ -2,8 +2,6 @@ package com.teamkn.model;
 
 import java.io.Serializable;
 
-import com.teamkn.activity.qrcode_result.QRCodeResultActivity;
-
 public class QRCodeResult implements Serializable{
 
 	private static final long serialVersionUID = 1L;
