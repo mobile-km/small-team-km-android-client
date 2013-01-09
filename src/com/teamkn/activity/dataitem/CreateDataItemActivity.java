@@ -126,7 +126,8 @@ public class CreateDataItemActivity extends TeamknBaseActivity{
 				String back =null;	
 				switch (RequestCode.TYPE) {
 				case RequestCode.CREATE:
-					DataItem dataitem =new DataItem(-1, title_str, content_str, null, RequestCode.KIND, dataList.server_data_list_id, null, -1,null);
+					// # TODO 临时支持 增加 MusicInfo 的构造函数，所以传个 null
+					DataItem dataitem =new DataItem(-1, title_str, content_str, null, RequestCode.KIND, dataList.server_data_list_id, null, -1,null,null);
 					if(product!=null && product.code!=null){
 						dataitem.setProduct(product);
 					}

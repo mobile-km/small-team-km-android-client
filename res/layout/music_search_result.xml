@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/head_bar"
+            android:id="@+id/head"
+            >
+        <TextView
+               style="@style/head_bar_text_center"
+               android:text="@string/tkndata_list_create_title"
+        />
+
+
+    </RelativeLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/music_search_result_page"
+        style="@style/padding_10_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        
+        
+        <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:drawSelectorOnTop="false" 
+        android:layout_marginBottom="50dp"
+    />
+        
+      
+        
+    </LinearLayout>
+
+    
+     
+</RelativeLayout>

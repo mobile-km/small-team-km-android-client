@@ -606,17 +606,29 @@ public class DataItemListActivity extends TeamknBaseActivity {
 					int item_id, long position) {
 				TextView info_tv = (TextView) list_item
 						.findViewById(R.id.data_item_info_tv);
+
+				// ##################################
 				DataItem item = (DataItem) info_tv.getTag(R.id.tag_note_uuid);
-				Class<?> result_class = item.kind.equals(DataItem.Kind.PRODUCT) ? ShowProductDataItem.class : CreateDataItemActivity.class ;
-				Intent intent = new Intent(DataItemListActivity.this,result_class);
-				if(item.product!=null){
-					intent.putExtra("product",item.product);
-					item.setProduct(null);
+
+				Class<?> result_class = null;
+				Intent intent = new Intent();
+				if(item.kind.equals(DataItem.Kind.PRODUCT)){
+					result_class = ShowProductDataItem.class;
+					if(item.product!=null){
+						intent.putExtra("product",item.product);
+						item.setProduct(null);
+					}
+				}else if(item.kind.equals(DataItem.Kind.MUSIC)){
+					result_class =  MusicShowActivity.class;
+				}else if(item.kind.equals(DataItem.Kind.TEXT)){
+					result_class = CreateDataItemActivity.class;
 				}
+				intent.setClass(DataItemListActivity.this,result_class);
 				intent.putExtra("data_item",item);
 				intent.putExtra("data_list",dataList);
 				intent.putExtra("data_list_public",data_list_public);
 				startActivityForResult(intent,RequestCode.BACK);
+				// ##################################
 			}
 		});
 		tlv.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -678,6 +690,15 @@ public class DataItemListActivity extends TeamknBaseActivity {
 		intent.putExtra("data_list", dataList);
 		intent.putExtra("data_list_public", data_list_public);
 		// this.startActivity(intent);
+		this.startActivityForResult(intent, RequestCode.CREATE_DATA_ITEM);
+	}
+	
+	
+	// 显示音乐搜索页面
+	public void search_music_info(View view) {
+		Intent intent = new Intent(DataItemListActivity.this,
+				MusicSearchActivity.class);
+		intent.putExtra("data_list", dataList);
 		this.startActivityForResult(intent, RequestCode.CREATE_DATA_ITEM);
 	}
 

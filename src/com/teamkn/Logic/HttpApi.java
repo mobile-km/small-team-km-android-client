@@ -29,6 +29,7 @@ import com.teamkn.base.http.TeamknPostRequest;
 import com.teamkn.base.http.TeamknPutRequest;
 import com.teamkn.model.AccountUser;
 import com.teamkn.model.Product;
+import com.teamkn.model.MusicInfo;
 import com.teamkn.model.User;
 import com.teamkn.model.VersionCheck;
 import com.teamkn.model.database.UserDBHelper;
@@ -139,8 +140,13 @@ public class HttpApi {
     public static final String 删除_data_item    =  "/api/data_items/";
     public static final String 排序_data_item    =  "/api/data_items/";
     
+    
     //QRCode 
     public static final String 搜索_QRCode = "/api/products/search/";
+    
+    
+    public static final String 搜索音乐 = "/api/music_infos/search";
+    
     
     // LoginActivity
     public static VersionCheck get_version(String now_version) throws Exception{
@@ -936,7 +942,9 @@ public class HttpApi {
     			boolean conflict = json.getBoolean("conflict");
     			String position = json.getString("position");
     			
-    			dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, server_data_list_id, position, -1,seed);
+    			
+    			// TODO 需要修改最后一个参数 music_info
+    			dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, server_data_list_id, position, -1,seed, null);
     			dataItem.setOperation(operation);
     			dataItem.setConflict(conflict);
     		}
@@ -970,15 +978,22 @@ public class HttpApi {
              String content  = json.getString("content");
              String url   = json.getString("url");
              String image_url  = json.getString("image_url");
+             
+             
+             String music_info_json = json.getString("music_info");
+             MusicInfo music_info = MusicInfo.build_by_json(music_info_json);
+             
              String seed = json.getString("seed");
              String position = json.getString("position");
              if (kind.equals(com.teamkn.model.DataItem.Kind.IMAGE)) {
                  HttpApi.DataItem.pull_image(server_id+"", image_url);
              }
+             
+             
 //             JSONObject json_data_list = json.getJSONObject("data_list");
 //             long data_list_server_updated_time = json_data_list.getLong("server_updated_time");
              
-            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed);
+            com.teamkn.model.DataItem dataItem = new com.teamkn.model.DataItem(-1, title, content, url, kind, data_list_server_id, position, server_id,seed, music_info);
               
     		if(!json.getJSONObject("product").isNull("name")){
     			 JSONObject product_json =  json.getJSONObject("product");
@@ -1172,6 +1187,42 @@ public class HttpApi {
         }.go();
     }
    	
+   	
+   	// 创建音乐条目
+   	public static String create_music(final com.teamkn.model.MusicInfo music_info, int data_list_id) throws Exception{
+ 		 
+		   return new TeamknPostRequest<String>( 创建_data_item + data_list_id + "/data_items",
+	            new PostParamText("title", music_info.music_title),
+	            new PostParamText("kind", "MUSIC"),
+	            new PostParamText("value", Integer.toString(music_info.id))
+		   ) {
+	              @Override
+	              public String on_success(String response_text) throws Exception {
+					return response_text;    
+	              }
+	              public String on_unprocessable_entity(String responst_text) {
+					  return responst_text; 
+	              };
+	              public String on_permission_denied(String responst_text) { 
+					return responst_text;
+	              };
+	     }.go();
+  }
+   	
+   	
+   	
+   	public static ArrayList<MusicInfo> search_music(String query) throws Exception {
+   		return new TeamknGetRequest<ArrayList<MusicInfo>>(搜索音乐, new BasicNameValuePair("query", query)) {
+
+			@Override
+			public ArrayList<MusicInfo> on_success(String response_text) throws Exception {
+				return MusicInfo.build_list_by_json(response_text);
+			}
+		}.go();
+   	}
+   	
+   	
+   	// End of DataItem
     }
     
     public static List<Product> get_qrcode_search(String code) throws Exception{
